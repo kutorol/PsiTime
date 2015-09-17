@@ -1,0 +1,66 @@
+.text-label {
+	margin-bottom: 10px;
+	padding: 5px 10px;
+	background: #ddd;
+	display: inline-block;
+}
+
+.select-hard {
+	padding: 7px;
+}
+
+.text-light { 
+	color: #216E39;
+    background-color: #A1CDA3;
+    margin: 10px;
+    font-size: 18px;
+}
+
+.text-middle {
+	color: #74460C;
+    background-color: #FEFAAD;
+    margin: 10px;
+    font-size: 18px;
+}
+
+.text-hard {
+	color: #B20101;
+    background-color: #FFAAAA;
+    margin: 10px;
+    font-size: 18px;
+}
+
+button {
+	margin: 20px 0;
+}
+
+.label {
+	font-size: 17px;
+	margin: 20px 0;
+}
+
+.table-task {
+	margin-top: 40px;
+}
+
+td {
+	width:1%;
+	padding: 10px;
+    border-bottom: 1px solid #777;
+}
+
+thead td {
+	background: #777;
+	padding: 11px;
+	color: white;
+	font-weight: 700;
+}
+
+.input-group {
+	padding-bottom: 15px;
+}
+
+
+.error{
+    font-size: 13px;
+}
