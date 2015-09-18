@@ -35,6 +35,12 @@ class Welcome_model extends CI_Model {
     }
 
 
+    /**
+     * Функция проверяет массивы это или же какой то из них массив или же оба просто значения и после делает запрос в базу
+     * This function checks arrays, or any of them, or an array of values, both just after making a request to the database
+     * @param $where
+     * @param $where_2
+     */
     private function _checkWhere($where, $where_2)
     {
         if(is_array($where))
