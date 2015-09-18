@@ -1,40 +1,4 @@
-<div class="navbar navbar-default">
-    <div class="container">
-        <div class="navbar-header ">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#responsive-menu">
-                <!-- кнопка для мобилок сворачиающее меню -->
-                <span class="sr-only">open </span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-        </div>
-        <div class="collapse navbar-collapse " id="responsive-menu">
-            <ul class="nav navbar-nav">
-                <li><a href="#">Пункт меню</a></li>
-                <li><a href="#">Пункт меню</a></li>
-                <li><a href="<?=base_url()?>welcome/logout">Выход</a></li>
-            </ul>
-        </div>
-    </div>
-</div>
-
-
-<div class="row">
-    <div class="container text-center">
-        <h2><?=$title?></h2>
-
-        <?php /*Если есть ошибка, то показываем ее*/
-        if(isset($error)):?>
-            <span class="label label-<?=$status_text?> error"><?=strip_tags($error)?></span>
-        <?php endif;?>
-        <br>
-    </div>
-</div>
-
 <hr>
-
-
 
 <div class="row">
     <div class="container">

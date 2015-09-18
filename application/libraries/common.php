@@ -18,8 +18,16 @@ class Common
     }
 
 
+    /**
+     * Получаем куки с текстом и ошибкой, и если они не пусты, то в итоге выводим их сразу на экране.
+     * Get the cookie text and error, and if they are not empty, it is a way to display them all at once on the screen.
+     * @param array $data
+     * @return array
+     */
     public function getCookie($data = [])
     {
+        //изначально ставим true (вошел в ЛК), но где нужно - изменяем на false
+        $data['auth_user'] = true;
         //куки об ошибках или просто сообщения
         $data['error'] = $this->clear($this->CI_in->input->cookie('error', true));
         $data['text'] = $this->clear($this->CI_in->input->cookie('text', true));

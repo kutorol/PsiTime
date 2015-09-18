@@ -2,34 +2,22 @@
 
 class Display_lib
 {
-    /**
-     * Страница авторизации
-     * @param $data
-     */
-	public function login_view($data)
-	{
-		$CI =& get_instance();
-
-        $CI->load->view('default/all/header.php',$data);
-        $CI->load->view('default/login/content.php',$data);
-        $CI->load->view('default/all/footer.php',$data);
-
-	}
-
 
     /**
-     * Страница авторизации
-     * @param $data
+     * Показываем вьюху юзеру.
+     * Show Vyuha user.
+     * @param $data - данные (data)
+     * @param string $name_folder - название папки, в которой находится контент (the name of the folder that contains the content)
      */
-    public function view_common($data)
+    public function display($data, $name_folder = 'login')
     {
         $CI =& get_instance();
 
         $CI->load->view('default/all/header.php',$data);
-        $CI->load->view('default/common/content.php',$data);
+        $CI->load->view('default/all/header_menu.php',$data);
+        $CI->load->view('default/all/title.php',$data);
+        $CI->load->view('default/'.$name_folder.'/content.php',$data);
         $CI->load->view('default/all/footer.php',$data);
-
     }
-
 		
 }

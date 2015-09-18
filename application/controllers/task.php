@@ -2,13 +2,14 @@
 
 /**
  * Обязательно класс называть с большой буквы, а файл с маленькой буквы!!!
+ * Be sure to call the class with a capital letter, as a file with a small letter !!!
  * Class Task
  */
 class Task extends CI_Controller {
 
     /**
-     * страница авторизации
-     * login page
+     * Главная страница личного кабинета
+     * Home private office
      */
 	public function index()
 	{
@@ -24,7 +25,7 @@ class Task extends CI_Controller {
         if(!$check)
             $this->common->redirect_to('welcome/logout/danger', 'Вам необходимо авторизироваться', 'error', 'danger');
 
-        $this->display_lib->view_common($data);
+        $this->display_lib->display($data, 'common');
 	}
 
 
