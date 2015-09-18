@@ -1,7 +1,7 @@
 <div class="navbar navbar-default">
     <div class="container">
 
-        <?php if($auth_user):?>
+        <?php if($auth_user == true):?>
             <div class="navbar-header ">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#responsive-menu">
                     <!-- кнопка для мобилок сворачиающее меню -->

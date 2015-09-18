@@ -17,6 +17,8 @@ class Welcome extends CI_Controller {
         $data['title'] = 'Добро пожаловать в TimeBig';
         //Получаем куки с текстом и ошибкой, и если они не пусты, то в итоге выводим их сразу на экране.
         $data = $this->common->getCookie($data);
+        //если это false, то человек не вошел в аккаунт
+        $data['auth_user'] = false;
 
         //если есть ошибка
         if($data['error'] != '')
@@ -25,10 +27,9 @@ class Welcome extends CI_Controller {
             return true;
         }
 
+
         //проверка зашел или нет юзер уже
         $this->common->checkAuth();
-        //если это false, то человек не вошел в аккаунт
-        $data['auth_user'] = false;
 
         //если нажата кнопка входа в форме
         if(isset($_POST['enter_to_time']))
@@ -54,11 +55,14 @@ class Welcome extends CI_Controller {
                 $this->load->model('welcome_model');
                 //проверяем совпадения в базе
                 $q = $this->welcome_model->checkUser($data['login'], $data['pass']);
-                if($q)
+
+                if(isset($q['bad_status']))
+                    $data['error'] = 'На данный момент вам нужно дождаться активации от администратора!';
+                elseif($q == true)
                 {
                     $this->session->set_userdata(['session_user'=> 'avtoriz|'.md5('02u4hash3894').'|'.$data['login']]);
-                    set_cookie('login', $data['login'], time()+9999999999);
-                    set_cookie('chech_user', '1', time()+9999999999);
+                    setcookie ("login",$data['login'],time()+9999999999,"/");
+                    setcookie ("chech_user",1,time()+9999999999,"/");
                     $this->common->redirect_to('task', 'Вы вошли под логином - '.$data['login'], 'text', 'success');
                 }
                 else
@@ -67,7 +71,6 @@ class Welcome extends CI_Controller {
             else
                 $data['error'] = 'Введите все данные в форму!';
         }
-
 
         //показываем вид юзеру
         $this->display_lib->display($data, 'login');
@@ -175,6 +178,15 @@ class Welcome extends CI_Controller {
         $this->display_lib->display($data, 'login/forgot');
     }
 
+
+    /**
+     * Функция регистрации нового юзера, он войти сразу не сможет - его нужно активировать вначале, а то левые придут какие нибудь
+     * The function of registering a new user, it will not be able to enter directly - it must be activated first, and then the left will come any day
+     */
+    public function registration()
+    {
+
+    }
 
 }
 

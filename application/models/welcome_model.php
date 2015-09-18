@@ -12,12 +12,19 @@ class Welcome_model extends CI_Model {
      */
     public function checkUser($login = '', $pass = '')
     {
-        $q = $this->db->select('id_user, hash, password')->where('login', $login)->get('users')->row_array();
+        $q = $this->db->select('id_user, hash, password, status')->where('login', $login)->get('users')->row_array();
+
         if(!empty($q))
         {
             if($q['password'] == sha1(md5($pass.$q['hash'])))
-                return true;
+            {
+                if($q['status'] == 0)
+                    return ['bad_status'=>''];
+                else
+                    return true;
+            }
         }
+
 
         return false;
     }

@@ -34,11 +34,13 @@ class Common
         if($data['text'] != '')
             $data['error'] = $data['text'];
 
-
+        delete_cookie('error');
+        delete_cookie('text');
         /**
          * В этом значении находится часть класса (чтобы показывать нужным цветом ошибки или успешные операции) для bootstrap
          */
         $data['status_text'] = $this->clear($this->CI_in->input->cookie('status_text', true));
+        delete_cookie('status_text');
         switch($data['status_text'])
         {
             case 'danger':case 'success':case 'info':case 'alert':case 'primary':case 'default':case 'warning': break;
@@ -77,6 +79,7 @@ class Common
     {
         delete_cookie('login');
         delete_cookie('chech_user');
+        $this->CI_in->session->unset_userdata('session_user');
 
         if($check)
             $this->redirect_to($url, $title, $name_cookie, $status);
@@ -96,9 +99,9 @@ class Common
         $check = $this->checkCookieSession($ajax);
 
         if($ajax)
-            return $check['check'];
+            return $check;
 
-        if($check['check'])
+        if($check['check'] == true)
         {
             $this->redirect_to(
                 'task',
@@ -115,14 +118,28 @@ class Common
     public function checkCookieSession($ajax = false)
     {
         $error = ['title_error'=>''];
+        $error['login'] = '';
+        $error['check'] = false;
 
+        //переменная отвечает за редирект (при аяксе он нах не нужен)
         $redirect = ($ajax) ? false : true;
-        $login = $check_user = '';
-        $login = $this->CI_in->input->cookie('login', true);
-        $login = $this->clear($login);
 
-        $check_user = $this->CI_in->input->cookie('chech_user', true);
-        $check_user = $this->clear($check_user);
+        $login = $check_user = '';
+        $login = $this->clear($this->CI_in->input->cookie('login', TRUE));
+        $check_user = $this->clear($this->CI_in->input->cookie('chech_user', true));
+
+
+        if($login != '')
+        {
+            $result = $this->CI_in->db->where('login', $login)->select('status')->get('users')->row_array();
+            if($result['status'] == 0)
+            {
+                $error['title_error'] = $this->dropCookie($redirect, '', 'На данный момент вам нужно дождаться активации от администратора!');
+                return $error;
+            }
+        }
+
+
 
         //проверяем сессию
         $session_user = $this->clear($this->CI_in->session->userdata('session_user'));
@@ -130,11 +147,12 @@ class Common
         if(count($session_user) == 3)
         {
             if($session_user[0] == 'avtoriz' && $session_user[1] == md5('02u4hash3894'))
-                return ['login'=>$session_user[2], 'check'=>true]; //в $session_user[2] находится логин
+                return ['login'=>$session_user[2], 'check'=>true, 'title_error'=>'']; //в $session_user[2] находится логин
         }
         //иначе удаляем сессию
         else
             $this->CI_in->session->unset_userdata('session_user');
+
 
         //если нужные куки существуют
         if($login != '' && is_string($login) && ($check_user == '' || sha1(md5($check_user)) == sha1(md5(1))))
@@ -155,7 +173,7 @@ class Common
 
                     //ставим сессию
                     $this->CI_in->session->set_userdata(['session_user'=> 'avtoriz|'.md5('02u4hash3894').'|'.$login]);
-                    return ['login'=>$login, 'check'=>true];
+                    return ['login'=>$login, 'check'=>true,'title_error'=>''];
                 }
                 else
                     $error['title_error'] = $this->dropCookie($redirect, '', 'Очень странная ошибка... Попробуйте заного авторизироваться!');
@@ -166,9 +184,9 @@ class Common
         else
             $error['title_error'] = $this->dropCookie();
 
-        $error['login'] = '';
-        $error['check'] = false;
 
+
+        return $error;
     }
 
 

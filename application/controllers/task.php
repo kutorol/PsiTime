@@ -20,10 +20,21 @@ class Task extends CI_Controller {
         $data = $this->common->getCookie($data);
 
         //проверка зашел или нет юзер уже (true для того, чтобы не редиректило если что)
-        $check = $this->common->checkAuth(true);
+        $check = $this->common->checkAuth();
+/*
+        if($check['check'] == false)
+        {
+            if($check['title_error'] == '')
+                $this->common->dropCookie(true, '', 'Вам необходимо авторизоваться!');
+            else
+                $this->common->dropCookie(true, '', $check['title_error']);
 
-        if(!$check)
-            $this->common->redirect_to('welcome/logout/danger', 'Вам необходимо авторизироваться', 'error', 'danger');
+
+        }
+*/
+
+        print_r($check);
+
 
         $this->display_lib->display($data, 'common');
 	}
