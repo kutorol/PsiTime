@@ -232,6 +232,22 @@ class Welcome extends CI_Controller {
     }
 
 
+    /**
+     * Изменяем пароль тогда, когда человек вошел в ЛК
+     */
+    public function changePassword()
+    {
+        $config = [
+            'pathToViewDir'   =>  'login/change_pass',
+            'langArray_1'   =>  'welcome_controller',
+            'langArray_2'   =>  23,
+            'authUser'   =>  true,
+            'noRedirect'   =>  true
+        ];
+        $data = $this->common->allInit($config);
 
+
+        $this->display_lib->display($data, $config['pathToViewDir']);
+    }
 	
 }

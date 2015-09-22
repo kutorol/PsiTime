@@ -30,7 +30,11 @@ class Lang_controller
                                                 'ru'    =>  ['first_link'   =>  'Первая', 'last_link' =>  'Последняя'],
                                                 'en'    =>  ['first_link'   =>  'First', 'last_link' =>  'Last'],
                                                 //'de'  =>  ['first_link'   =>  'Erste', 'last_link' =>  'Letzte'],
-                                            ]
+                                            ],
+                        'errorAuth'     =>  [
+                                                'ru'=>'Вам необходимо авторизоваться!',
+                                                'en'=>'Please log in!'
+                                            ],
                     ],
             'ru'   =>   'Русский',
             'en'   =>   'English',
@@ -79,6 +83,22 @@ class Lang_controller
                         'ru'    =>  'Восстановить',
                         'en'    =>  'Reestablish',
                     ],
+            9   =>  [
+                        'ru'    =>  'Изменить пароль',
+                        'en'    =>  'Change password'
+                    ],
+            10  =>  [
+                        'ru'    =>  'Старый пароль',
+                        'en'    =>  'Old password'
+                    ],
+            11  =>  [
+                        'ru'    =>  'Новый пароль',
+                        'en'    =>  'New password'
+                    ],
+            12  =>  [
+                        'ru'    =>  'Повторите новый пароль',
+                        'en'    =>  'Repeat new password'
+            ],
         ];
 
         /**
@@ -87,8 +107,8 @@ class Lang_controller
          */
         $lang['header_menu_lang'] = [
             0   =>  [
-                        'ru'    =>  'Главная',
-                        'en'    =>  'Main'
+                        'ru'    =>  'На Главную',
+                        'en'    =>  'To main'
                     ],
             1   =>  [
                         'ru'    =>  'Выйти',
@@ -131,7 +151,8 @@ class Lang_controller
                     ],
             20  =>  ', добро пожаловать в TimeBig!',
             21  =>  'На указанную почту было отправлено письмо с вашими данными и дальнейшими действиями!',
-            22  =>  'Ошибка! Произошел сбой при регистрации. Попробуйте еще раз!'
+            22  =>  'Ошибка! Произошел сбой при регистрации. Попробуйте еще раз!',
+            23  =>  'Страница изменения пароля',
         ];
 
 
@@ -171,7 +192,8 @@ class Lang_controller
             ],
             20  =>  ', welcome to TimeBig!',
             21  =>  'On the specified e-mail was sent an email with your data and further actions!',
-            22  =>  'Error! There was a failure in the registration. Try again!'
+            22  =>  'Error! There was a failure in the registration. Try again!',
+            23  =>  'Change Password page',
         ];
 
         $lang['lang_'.$segment]['welcome_controller'][19][2] .= $lang['lang_'.$segment]['welcome_controller'][3];
@@ -205,14 +227,44 @@ class Lang_controller
         $lang['lang_'.$segment]['common_library'][3] = $lang['lang_'.$segment]['welcome_controller'][3];
 
 
+
+
         /********************************************
-         * Перевод для Вьюх (RU)
-         * Translation for View (RU)
+         * Перевод для контроллера Welcome (RU)
+         * Transfer controller Welcome (RU)
          * ******************************************
          */
-        $lang['lang_ru']['welcome_views'] = [
-            0   =>  ''
+        $lang['lang_ru']['task_controller'] = [
+            0   =>  'Личный кабинет в TimeBig пользователя: <span class="label label-success">%login%</span>',
         ];
+
+        /********************************************
+         * Перевод для контроллера Welcome (EN)
+         * Transfer controller Welcome (EN)
+         * ******************************************
+         */
+        $lang['lang_en']['task_controller'] = [
+            0   =>  'Personal account in TimeBig user: <span class="label label-success">%login%</span>',
+        ];
+
+        /********************************************
+         * Перевод для Вьюх (RU) - task_views это для какого контроллера (task)
+         * Translation for View (RU) - task_views this for a controller (task)
+         * ******************************************
+         */
+        $lang['lang_ru']['task_views'] = [
+
+        ];
+
+        /********************************************
+         * Перевод для Вьюх (EN) - task_views это для какого контроллера (task)
+         * Translation for View (EN) - task_views this for a controller (task)
+         * ******************************************
+         */
+        $lang['lang_en']['task_views'] = [
+
+        ];
+
 
 
 

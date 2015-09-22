@@ -15,18 +15,13 @@ class Task extends CI_Controller {
 	{
 
         $folderView = 'common';
-        $data = $this->common->initApp('Личный кабинет в TimeBig пользователя: <span class="label label-success">%login%</span>', 0, $folderView, true, false, ['pattern'=>['title', 'login', '%login%']]);
+        $data = $this->common->initApp('task_controller', 0, $folderView, true, true, ['pattern'=>['title', 'login', '%login%']]);
         if(isset($data['return_notification']))
             return true;
 
-        //echo $this->uri->segment(1);
-
         if($data['checkAuth']['check'] === false)
-            $this->common->dropCookie(true, '', ($data['checkAuth']['title_error'] != '') ? $data['checkAuth']['title_error'] : 'Вам необходимо авторизоваться!');
+            $this->common->dropCookie(true, '', ($data['checkAuth']['title_error'] != '') ? $data['checkAuth']['title_error'] : $data['languages_desc'][0]['errorAuth'][$data['segment']]);
 
-        echo "<pre>";
-        print_r($data);
-exit;
 
         $this->display_lib->display($data, $folderView);
 	}

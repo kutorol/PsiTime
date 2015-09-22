@@ -284,13 +284,19 @@ class Common
     /**
      * Получаем часть url, которая идет после указателя языка, чтобы человека перекинуть на ту же страницу
      * We get a piece of url, which comes after the sign language that would throw the man to the same page
+     * @param bool $test - нужна, пока работаю на разных локалках
      */
-    public function getLangUrl()
+    public function getLangUrl($test = false)
     {
         $this->data['currentUrl'] = $_SERVER['REQUEST_URI'];
         if(trim($this->data['currentUrl']) != '')
         {
             $this->data['currentUrl'] = preg_replace('/'.$this->data['segment'].'\/|\/'.$this->data['segment'].'/i', '', $this->data['currentUrl']);
+
+            //УДАЛИТЬ ДОМА ЭТОТ ИФ
+            if($test === true)
+                $this->data['currentUrl'] = preg_replace('/time.log\/|\/time.log|time.log/i', '', $this->data['currentUrl']);
+
             $url = explode('/', $this->data['currentUrl']);
 
             foreach($url as $k=>$v)
@@ -319,7 +325,9 @@ class Common
     public  function initApp($controller_lang = 'welcome_controller', $name_lang = 0,  $folder = 'login', $auth_user = true, $ajax = false, $what_replace = ['pattern'=>''])
     {
         //тут получаем нужный нам кусок url
-        $this->getLangUrl();
+        //УБРАТЬ ДОМА ЭТОТ ПАРАМЕТР
+        $this->getLangUrl(true);
+
         //название получаем из языкового файла
         $this->data['title'] = $this->data[$controller_lang][$name_lang];
 
@@ -345,6 +353,26 @@ class Common
         $this->data['checkAuth'] = $this->checkAuth($ajax);
 
         $this->setDefaultLang($this->data['segment']);
+
+        return $this->data;
+    }
+
+    /**
+     * Просто объединил общую инициализацию еще раз
+     * Just combine general initialization again
+     *
+     * @param array $config
+     * @return array
+     */
+    public function allInit($config = [])
+    {
+        $folderView = $config['pathToViewDir'];
+        $this->data = $this->initApp($config['langArray_1'], $config['langArray_2'], $folderView, $config['authUser'], $config['noRedirect']);
+        if(isset($this->data['return_notification']))
+            exit;
+
+        if($this->data['checkAuth']['check'] === false)
+            $this->dropCookie(true, '', ($this->data['checkAuth']['title_error'] != '') ? $this->data['checkAuth']['title_error'] : $this->data['languages_desc'][0]['errorAuth'][$this->data['segment']]);
 
         return $this->data;
     }
