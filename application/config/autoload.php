@@ -37,7 +37,7 @@
 |
 */
 
-$autoload['packages'] = array();
+$autoload['packages'] = array(APPPATH . 'third_party/DevelBar');
 
 
 /*
@@ -52,7 +52,7 @@ $autoload['packages'] = array();
 |	$autoload['libraries'] = array('database', 'session', 'xmlrpc');
 */
 
-$autoload['libraries'] = array('database', 'session', 'pagination', 'common', 'display_lib', 'lang_for_js/langforjs', 'auth_lib', 'form_validation');
+$autoload['libraries'] = array('database', 'session', 'pagination', 'common', 'display_lib', 'form_validation');
 
 
 /*

@@ -13,35 +13,22 @@ class Welcome extends CI_Controller {
      */
 	public function index()
 	{
-        $data = [];
-        $data['title'] = 'Добро пожаловать в TimeBig';
-        //Получаем куки с текстом и ошибкой, и если они не пусты, то в итоге выводим их сразу на экране.
-        $data = $this->common->getCookie($data);
-        //если это false, то человек не вошел в аккаунт
-        $data['auth_user'] = false;
-
-        //если есть ошибка
-        if($data['error'] != '')
-        {
-            $this->display_lib->display($data, 'login');
+        $folderView = 'login';
+        $data = $this->common->initApp('welcome_controller', 0, $folderView, false);
+        if(isset($data['return_notification']))
             return true;
-        }
-
-
-        //проверка зашел или нет юзер уже
-        $this->common->checkAuth();
 
         //если нажата кнопка входа в форме
         if(isset($_POST['enter_to_time']))
         {
             //правила валидации данных из полей
-            $this->form_validation->set_rules('login', 'Логин', 'trim|alpha_numeric|required|min_length[5]|max_length[20]|xss_clean');
-            $this->form_validation->set_rules('pass', 'Пароль', 'trim|alpha_dash|required|min_length[5]|max_length[20]|xss_clean');
+            $this->form_validation->set_rules('login', $data['welcome_controller'][1], 'trim|alpha_numeric|required|min_length[5]|max_length[20]|xss_clean');
+            $this->form_validation->set_rules('pass', $data['welcome_controller'][2], 'trim|alpha_dash|required|min_length[5]|max_length[20]|xss_clean');
 
             //если валидация не прошла проверку - показываем вьюху, а там ошибки покажут
             if($this->form_validation->run() == FALSE)
             {
-                $this->display_lib->display($data, 'login');
+                $this->display_lib->display($data, $folderView);
                 return true;
             }
 
@@ -57,23 +44,23 @@ class Welcome extends CI_Controller {
                 $q = $this->welcome_model->checkUser($data['login'], $data['pass']);
 
                 if(isset($q['bad_status']))
-                    $data['error'] = 'На данный момент вам нужно дождаться активации от администратора!';
-                elseif($q == true)
+                    $data['error'] = $data['welcome_controller'][3];
+                elseif($q === true)
                 {
                     $this->session->set_userdata(['session_user'=> 'avtoriz|'.md5('02u4hash3894').'|'.$data['login']]);
                     setcookie ("login",$data['login'],time()+9999999999,"/");
                     setcookie ("chech_user",1,time()+9999999999,"/");
-                    $this->common->redirect_to('task', 'Вы вошли под логином - '.$data['login'], 'text', 'success');
+                    $this->common->redirect_to('task', $data['welcome_controller'][4].$data['login'], 'text', 'success');
                 }
                 else
-                    $data['error'] = 'Пользователя с таким логином и паролем не найдено!';
+                    $data['error'] = $data['welcome_controller'][5];
             }
             else
-                $data['error'] = 'Введите все данные в форму!';
+                $data['error'] = $data['welcome_controller'][6];
         }
 
         //показываем вид юзеру
-        $this->display_lib->display($data, 'login');
+        $this->display_lib->display($data, $folderView);
 	}
 
 
@@ -85,6 +72,10 @@ class Welcome extends CI_Controller {
      */
     public function logout($status = '')
     {
+        $this->load->library('language/lang_controller');
+        $data['segment'] = $this->common->getInfoSegment();
+        $data = $this->lang_controller->getLang($data['segment']);
+
         $title = $this->common->clear($this->input->cookie('error', true));
         $status = $this->common->clear($status);
 
@@ -93,7 +84,7 @@ class Welcome extends CI_Controller {
         if($title != '' && $status != '')
             $this->common->dropCookie(true, '', $title, 'text', $status);
         else
-            $this->common->dropCookie(true, '', 'Вы успешно вышли!', 'text', 'success');
+            $this->common->dropCookie(true, '', $data['welcome_controller'][7], 'text', 'success');
     }
 
     /**
@@ -102,22 +93,10 @@ class Welcome extends CI_Controller {
      */
     public function forgot()
     {
-        $data = [];
-        $data['title'] = 'Востановления пароля в TimeBig';
-        //Получаем куки с текстом и ошибкой, и если они не пусты, то в итоге выводим их сразу на экране.
-        $data = $this->common->getCookie($data);
-
-        //если есть ошибку, то показываем вьюху
-        if($data['error'] != '')
-        {
-            $this->display_lib->display($data, 'login/forgot');
+        $folderView = 'login/forgot';
+        $data = $this->common->initApp('welcome_controller', 8, $folderView, false);
+        if(isset($data['return_notification']))
             return true;
-        }
-
-        //проверка зашел или нет юзер уже
-        $this->common->checkAuth();
-        //если это false, то человек не вошел в аккаунт
-        $data['auth_user'] = false;
 
         if(isset($_POST['forgot_btn']))
         {
@@ -127,7 +106,7 @@ class Welcome extends CI_Controller {
             //если валидация не прошла проверку - показываем вьюху, а там ошибки покажут
             if($this->form_validation->run() == FALSE)
             {
-                $this->display_lib->display($data, 'login/forgot');
+                $this->display_lib->display($data, $folderView);
                 return true;
             }
 
@@ -155,27 +134,27 @@ class Welcome extends CI_Controller {
                     if($check > 0)
                     {
                         //компануем email на отправку
-                        $content = "Вы востановили пароль в TimeBig. <br>Ваш логин: <b>".$q['login']."</b><br> Ваш новый пароль: <b><i>".$new_pass."</i></b>";
-                        $header = "From: \"Admin\" <timebig@bigmsk.ru>\n";
+                        $content = $data['welcome_controller'][9][0].$q['login'].$data['welcome_controller'][9][1].$new_pass.$data['welcome_controller'][9][2];
+                        $header = "From: \"Admin\" <".$data['emailAdminSite'].">\n";
                         $header .= 'Content-type: text/html; charset="utf-8"';
 
-                        if(mail($data['email'], 'Востановления пароля в TimeBig', $content, $header))
-                            $this->common->redirect_to('welcome/forgot', 'На указанную почту было отправленно письмо с новым паролем!', 'text', 'success');
+                        if(mail($data['email'], $data['welcome_controller'][8], $content, $header))
+                            $this->common->redirect_to('welcome/forgot', $data['welcome_controller'][11], 'text', 'success');
                         else
-                            $data['error'] = 'Ошибка! Не получилось отправить письмо на указанную почту.%s%'.$content;
+                            $data['error'] = $data['welcome_controller'][12].$content;
                     }
                     else
-                        $data['error'] = 'Ошибка! Не получилось обновить данные. Попробуйте еще раз.';
+                        $data['error'] = $data['welcome_controller'][13];
                 }
                 else
-                    $data['error'] = 'Пользователя с таким email не найдено!';
+                    $data['error'] = $data['welcome_controller'][14];
             }
             else
-                $data['error'] = 'Введите ваш email в форму!';
+                $data['error'] = $data['welcome_controller'][15];
         }
 
 
-        $this->display_lib->display($data, 'login/forgot');
+        $this->display_lib->display($data, $folderView);
     }
 
 
@@ -185,8 +164,74 @@ class Welcome extends CI_Controller {
      */
     public function registration()
     {
+		$folderView = 'login/register';
+		$data = $this->common->initApp('welcome_controller', 16, $folderView, false);
+        if(isset($data['return_notification']))
+            return true;
 
+        //print_r($data);
+		if(isset($_POST['registration_btn']))
+        {
+            //правила валидации данных из полей
+            $this->form_validation->set_rules('name', $data['welcome_controller'][17], 'trim|required|min_length[2]|max_length[20]|xss_clean');
+			$this->form_validation->set_rules('login', $data['welcome_controller'][1], 'trim|alpha_numeric|required|min_length[5]|max_length[20]|xss_clean|is_unique[users.login]');
+			$this->form_validation->set_rules('email', 'Email', 'trim|required|min_length[6]|valid_email|xss_clean|is_unique[users.email]');
+			
+			$validateRulePass = 'trim|alpha_dash|required|min_length[5]|max_length[20]|xss_clean|';
+            $this->form_validation->set_rules('pass', $data['welcome_controller'][2], $validateRulePass.'matches[pass_too]');
+			$this->form_validation->set_rules('pass_too', $data['welcome_controller'][18], $validateRulePass.'matches[pass]');
+
+            //если валидация не прошла проверку - показываем вьюху, а там ошибки покажут
+            if($this->form_validation->run() === FALSE)
+            {
+                $this->display_lib->display($data, $folderView);
+                return true;
+            }
+
+            //получаем данные из формы и чистим сразу от шлака
+            $data['name'] = $this->common->clear($this->input->post('name', true));
+			$data['login'] = $this->common->clear($this->input->post('login', true));
+			$data['email'] = $this->common->clear($this->input->post('email', true));
+			$data['pass'] = $this->common->clear($this->input->post('pass', true));
+
+			//загружаем библиотеку помощи для строк
+			$this->load->helper('string');
+			$new = [];
+			$new['name'] = $data['name'];
+			$new['login'] = $data['login'];
+			$new['email'] = $data['email'];
+			//получаем хэш для пароля
+			$new['hash'] = random_string('alnum', rand(6, 17));
+			//получаем пароль
+			$new['password'] = $pass = $data['pass'];
+			$new['password'] = sha1(md5($new['password'].$new['hash']));
+				
+			//подгружаем модель
+            $this->load->model('welcome_model');	
+			$check = $this->welcome_model->insertUser($new);
+			if($check > 0)
+			{
+				//компануем email на отправку
+				$content = $data['name'].$data['welcome_controller'][19][0].$data['login'].$data['welcome_controller'][19][1].$pass.$data['welcome_controller'][19][2];
+                $header = "From: \"Admin\" <".$data['emailAdminSite'].">\n";
+				$header .= 'Content-type: text/html; charset="utf-8"';
+
+				if(mail($data['email'], $data['name'].$data['welcome_controller'][20], $content, $header))
+					$this->common->redirect_to('welcome', $data['welcome_controller'][21], 'text', 'success');
+				else
+					$data['error'] = $data['welcome_controller'][12].$content;
+			}
+			else
+				$data['error'] = $data['welcome_controller'][22];
+		   
+        }
+
+		
+		
+		$this->display_lib->display($data, $folderView);
     }
 
-}
 
+
+	
+}

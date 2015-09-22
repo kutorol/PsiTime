@@ -55,7 +55,12 @@ class Welcome_model extends CI_Model {
             if(is_array($where_2))
             {
                 foreach($where as $k=>$v)
-                    $this->db->where($where[$k], $where_2[$k]);
+                {
+                    if(isset($where_2[$k]))
+                        $this->db->where($where[$k], $where_2[$k]);
+                    else
+                        $this->db->where($where[$k], $where_2[count($where_2)-1]);
+                }
             }
             else
             {
@@ -87,6 +92,15 @@ class Welcome_model extends CI_Model {
         $this->db->update('users', $new);
         return $this->db->affected_rows();
     }
+	
+	/**
+	* Добавляем нового юзера
+	*/
+	public function insertUser($new = [])
+	{
+		$this->db->insert('users', $new);
+		return $this->db->affected_rows();
+	}
 
 
 }

@@ -39,6 +39,10 @@
 */
 
 $route['default_controller'] = "welcome";
+
+$route['(ru|en)'] = $route['default_controller'];
+$route['(ru|en)/(.+)'] = "$2";
+
 $route['404_override'] = '';
 
 

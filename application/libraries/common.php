@@ -7,6 +7,10 @@ class Common
      * The variable is an instance
      */
     private $CI_in;
+    /**
+     * @var - все начальные данные будут тут
+     */
+    private $data = [];
 
     /**
      * Получаем инстанс
@@ -15,6 +19,13 @@ class Common
     public function __construct()
     {
         $this->CI_in =& get_instance();
+        $this->CI_in->load->library('language/lang_controller');
+
+        //получаем язык страницы (ru|en etc)
+        $lang = $this->getInfoSegment();
+        //получаем все слова на нужном нам языке
+        $this->data = $this->CI_in->lang_controller->getLang($lang);
+        $this->data['segment'] = $lang;
     }
 
 
@@ -24,31 +35,42 @@ class Common
      * @param array $data
      * @return array
      */
-    public function getCookie($data = [])
+    public function getCookie()
     {
-        //изначально ставим true (вошел в ЛК), но где нужно - изменяем на false
-        $data['auth_user'] = true;
+        //получаем логин из сессии
+        $session_user = $this->clear($this->CI_in->session->userdata('session_user'));
+        $session_user = explode('|', $session_user);
+        if(count($session_user) == 3)
+            $this->data['login'] = (strlen($session_user[2]) > 20 || $session_user[2] == '') ? $this->data['common_library'][0] : $session_user[2];
+        else
+        {
+            //получаем логин если он есть в куках
+            $this->data['login'] = $this->clear($this->CI_in->input->cookie('login', true));
+            if($this->data['login'] != '')
+                $this->data['login'] = (strlen($this->data['login']) > 20) ? $this->data['common_library'][0] : $this->data['login'];
+        }
+
         //куки об ошибках или просто сообщения
-        $data['error'] = $this->clear($this->CI_in->input->cookie('error', true));
-        $data['text'] = $this->clear($this->CI_in->input->cookie('text', true));
-        if($data['text'] != '')
-            $data['error'] = $data['text'];
+        $this->data['error'] = $this->clear($this->CI_in->input->cookie('error', true));
+        $this->data['text'] = $this->clear($this->CI_in->input->cookie('text', true));
+        if($this->data['text'] != '')
+            $this->data['error'] = $this->data['text'];
 
         delete_cookie('error');
         delete_cookie('text');
         /**
          * В этом значении находится часть класса (чтобы показывать нужным цветом ошибки или успешные операции) для bootstrap
          */
-        $data['status_text'] = $this->clear($this->CI_in->input->cookie('status_text', true));
+        $this->data['status_text'] = $this->clear($this->CI_in->input->cookie('status_text', true));
         delete_cookie('status_text');
-        switch($data['status_text'])
+        switch($this->data['status_text'])
         {
             case 'danger':case 'success':case 'info':case 'alert':case 'primary':case 'default':case 'warning': break;
             default:
-                $data['status_text'] = 'danger';
+                $this->data['status_text'] = 'danger';
         }
 
-        return $data;
+        return $this->data;
     }
 
     /**
@@ -62,7 +84,7 @@ class Common
     {
         set_cookie($name_cookie,$title, 2);
         set_cookie('status_text',$status, 2);
-        redirect(base_url().$url);
+        redirect(base_url().$this->data['segment']."/".$url);
     }
 
     /**
@@ -101,11 +123,11 @@ class Common
         if($ajax)
             return $check;
 
-        if($check['check'] == true)
+        if($check['check'] === true)
         {
             $this->redirect_to(
                 'task',
-                ($check['login'] != '') ? 'Вы уже зашли под логином - '.$check['login'] : 'Вы уже зашли в TimeBig'
+                ($check['login'] != '') ? $this->data['common_library'][1].$check['login'] : $this->data['common_library'][2]
             );
         }
     }
@@ -128,17 +150,18 @@ class Common
         $login = $this->clear($this->CI_in->input->cookie('login', TRUE));
         $check_user = $this->clear($this->CI_in->input->cookie('chech_user', true));
 
-
+		/**
+		* Проверяем на активацию аккаунта
+		*/
         if($login != '')
         {
             $result = $this->CI_in->db->where('login', $login)->select('status')->get('users')->row_array();
             if($result['status'] == 0)
             {
-                $error['title_error'] = $this->dropCookie($redirect, '', 'На данный момент вам нужно дождаться активации от администратора!');
+                $error['title_error'] = $this->dropCookie($redirect, '', $this->data['common_library'][3]);
                 return $error;
             }
         }
-
 
 
         //проверяем сессию
@@ -147,12 +170,11 @@ class Common
         if(count($session_user) == 3)
         {
             if($session_user[0] == 'avtoriz' && $session_user[1] == md5('02u4hash3894'))
-                return ['login'=>$session_user[2], 'check'=>true, 'title_error'=>'']; //в $session_user[2] находится логин
+                return ['login'=>$session_user[2], 'check'=>true, 'title_error'=>'']; // в $session_user[2] находится логин
         }
         //иначе удаляем сессию
         else
             $this->CI_in->session->unset_userdata('session_user');
-
 
         //если нужные куки существуют
         if($login != '' && is_string($login) && ($check_user == '' || sha1(md5($check_user)) == sha1(md5(1))))
@@ -176,10 +198,10 @@ class Common
                     return ['login'=>$login, 'check'=>true,'title_error'=>''];
                 }
                 else
-                    $error['title_error'] = $this->dropCookie($redirect, '', 'Очень странная ошибка... Попробуйте заного авторизироваться!');
+                    $error['title_error'] = $this->dropCookie($redirect, '', $this->data['common_library'][4]);
             }
             else
-                $error['title_error'] = $this->dropCookie($redirect, '', 'Какие то не правильные куки! Попрошу не издеваться!');
+                $error['title_error'] = $this->dropCookie($redirect, '', $this->data['common_library'][5]);
         }
         else
             $error['title_error'] = $this->dropCookie();
@@ -187,6 +209,64 @@ class Common
 
 
         return $error;
+    }
+
+
+    /**
+     * Функция находит в тексте урл и преобразует их в ссылки
+     * The function is the text URL and converts them into links
+     * @param string $text
+     * @return mixed
+     */
+    public function changeTextToLink($text = '')
+    {
+        $text = preg_replace("/(^|[\n ])([\w]*?)((www|ftp)\.[^ \,\"\t\n\r<]*)/is", "$1$2<a href=\"http://$3\" target='_blank'>$3</a>", $text);
+        $text = preg_replace("/(^|[\n ])([\w]*?)((ht|f)tp(s)?:\/\/[\w]+[^ \,\"\n\r\t<]*)/is", "$1$2<a href=\"$3\" target='_blank'>$3</a>", $text);
+        return $text;
+    }
+
+    /**
+     * Подставляем нужный язык ссылок в навигации
+     * Substitute the desired language in the navigation links
+     * @param $config
+     */
+    public function getConfigPerPage(&$config)
+    {
+        $config['first_link'] = $this->data['languages_desc'][0]['perPageLang'][$this->data['segment']]['first_link'];
+        $config['last_link'] = $this->data['languages_desc'][0]['perPageLang'][$this->data['segment']]['last_link'];
+    }
+
+    /**
+     * Приватная функция замены каждого символа на латиницу.
+	 * Если уже латиница, то оставляет как есть (всякую хуйню тоже отсекает)
+	 *
+     * Privacy replacement function of each character in the Roman alphabet.
+     * If you already Latin, then leave as is (also cuts off all garbage)
+     *
+	 * @$str - строка на русском или английском языке
+	 */
+    public function sms_translit($str = '')
+    {
+        $translit = array(
+            " "=>'-',"А"=>"A","Б"=>"B","В"=>"V","Г"=>"G",
+            "Д"=>"D","Е"=>"E", "Ё"=>"E", "Ж"=>"J","З"=>"Z","И"=>"I",
+            "Й"=>"Y","К"=>"K","Л"=>"L","М"=>"M","Н"=>"N",
+            "О"=>"O","П"=>"P","Р"=>"R","С"=>"S","Т"=>"T",
+            "У"=>"U","Ф"=>"F","Х"=>"H","Ц"=>"TS","Ч"=>"CH",
+            "Ш"=>"SH","Щ"=>"SCH","Ъ"=>"","Ы"=>"YI","Ь"=>"",
+            "Э"=>"E","Ю"=>"YU","Я"=>"YA","а"=>"a","б"=>"b",
+            "в"=>"v","г"=>"g","д"=>"d","е"=>"e", "ё"=>"e","ж"=>"j",
+            "з"=>"z","и"=>"i","й"=>"y","к"=>"k","л"=>"l",
+            "м"=>"m","н"=>"n","о"=>"o","п"=>"p","р"=>"r",
+            "с"=>"s","т"=>"t","у"=>"u","ф"=>"f","х"=>"h",
+            "ц"=>"ts","ч"=>"ch","ш"=>"sh","щ"=>"sch","ъ"=>"y",
+            "ы"=>"yi","ь"=>"","э"=>"e","ю"=>"yu","я"=>"ya","."=> "",
+            "/"=> "_",","=>"_", "-"=>"_","("=>"",")"=>"","["=>"",
+            "]"=>"", "="=>"_","+"=>"_","*"=>"","?"=>"","\""=>"",
+            "'"=>"","&"=>"", "%"=>"","#"=>"","@"=>"","!"=>"",
+            ";"=>"","№"=>"","^"=>"",":"=>"","~"=>"","\\"=>""
+        );
+        return strtr($str,$translit);
     }
 
 
@@ -201,367 +281,111 @@ class Common
         return trim(strip_tags(stripslashes(mysql_real_escape_string(htmlspecialchars($input)))));
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     /**
-	* ������� ��������� ������� �� ���� � ����������
-	*
-	* (array)$array  - ��� ��, �������� � ������� ��� �������� ���������� ����
-	*/
-    public function checkActiveBlocks($langTitle, $title = 'diaries', $segment = 'ru', $ajax = 'yes')
-    {
-        switch($segment){case 'ru':break; case 'en':break; default: $segment = 'ru';}
-        $CI =& get_instance();
-        $array  = $CI->db->where('title',$title)->get('blocks')->row_array();
-        if(empty($array))
-        {
-            if($ajax == 'yes')
-                $this->my_redirect_on_vhod($langTitle,$segment, '');
-            return false;
-        }
-
-        if($array['on_off'] == 0)
-        {
-            if($ajax == 'yes')
-                $this->my_redirect_on_vhod($langTitle, $segment, '');
-            return false;
-        }
-        return true;
-    }
-
-    /**
-     * ��� �� file_get_contents, ������ � ���� �������� (�� �������)
+     * Получаем часть url, которая идет после указателя языка, чтобы человека перекинуть на ту же страницу
+     * We get a piece of url, which comes after the sign language that would throw the man to the same page
      */
-    public function curlWithPostField($url = '', $params, $lang = array(), $post = 'yes', $redirect = 'yes', $userAgent = 'no')
+    public function getLangUrl()
     {
-        $CI =& get_instance();
-        $curl = curl_init();
-        curl_setopt($curl, CURLOPT_URL, $url);
-        if($post == 'yes')
+        $this->data['currentUrl'] = $_SERVER['REQUEST_URI'];
+        if(trim($this->data['currentUrl']) != '')
         {
-            curl_setopt($curl, CURLOPT_POST, 1);
-            curl_setopt($curl, CURLOPT_POSTFIELDS, $params);
+            $this->data['currentUrl'] = preg_replace('/'.$this->data['segment'].'\/|\/'.$this->data['segment'].'/i', '', $this->data['currentUrl']);
+            $url = explode('/', $this->data['currentUrl']);
+
+            foreach($url as $k=>$v)
+                if(trim($v) == '')
+                    unset($url[$k]);
+
+            if(!empty($url))
+                $this->data['currentUrl'] = implode('/', $url);
+            else
+                $this->data['currentUrl'] = '';
         }
-
-        if($userAgent == 'yes')
-        {
-            curl_setopt($curl, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows; U; Windows NT 5.1; ru; rv:1.9.2.12) Gecko/20101026 Firefox/3.6.12');
-        }
-
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
-        $result = curl_exec($curl);
-
-        if ($result === FALSE)
-        {
-            if($redirect == 'yes')
-                $this->my_redirect_on_vhod($lang['socSetVk_error_1'], $CI->uri->segment(1), '');
-            //echo "cURL Error: " . curl_error($curl);
-        }
-
-        curl_close($curl);
-
-        return $result;
-    }
-
-
-	/**
-	* ������� ��������� �� �� �������� ��������
-	*
-	* @$id - ����������� �����
-	*/
-	public function checkId($id = 0, $check = '')
-	{		
-		if(!isset($id))
-			return false; 
-			
-		if($check === null)
-		{
-			if(!is_numeric($id) || strlen($id) > 20 || $id == '')
-				return false;
-			else
-				return true;
-		}
-		else
-		{
-			if(!is_numeric($id) || strlen($id) > 20 || $id == '' || $id <= 0)
-				return false;
-			else
-				return true;
-		}
-	}
-	
-	/**
-	* ����������� ���������� ��������� �����
-	*
-	* $n - �����, �� �������� ������� ���������
-	* $titles - ������ ���� (������, ������, �����)
-	*/
-	public function number($n, $titles) 
-	{
-		if($n == 0)
-			return $titles[2];
-		else
-			return ($titles[($n=($n=$n%100)>19? ($n%10):$n)==1?0 : (($n>1&&$n<=4)?1:2)]);
-	}
-
-    /**
-     * ����������� ������ ���� ������ � ���������
-     * @param $config
-     * @param string $segment
-     * @return mixed
-     */
-    public function getConfigPerPage($config, $segment = 'ru')
-    {
-        if($segment == 'en')
-        {
-            $config['first_link'] = 'First';
-            $config['last_link'] = 'Last';
-        }
-
-        return $config;
-    }
-	
-
-	
-
-	
-	/**
-	* ������� ������ ���� �����. �� ��������� ����� ������� ��� �����, ���� ������ �� ��������
-	*
-	* @$papka - ����� � ������� �������� ��� ��� �������
-	* @$file - ����, ������� ����� � ���� �����
-	* (array)$data - $array - ���������� ������ ���� �� ����� �������, �� �� � ���������
-	*/
-	public function views($papka = 'login', $file = 'content', $data, $titleLib = 'all_display', $library = 'admin_lib')
-	{
-		$CI =& get_instance();
-		
-		$data['papka'] = $papka;
-		$data['file_view'] = $file;
-		$CI->$library->$titleLib($data);
-	}
-	
-	/**
-	* ������� ������������� ����� � �������
-	*
-	* (array)$data - ��� ������, ��������� ����� � ������ ���� ������ �������.
-	* (array)$lang - ��� ����� � ���� ������.
-	*/
-	public function setHeadersTitle($data, $nameMeta = "titleMainDesc", $nameTitle = "titleMain")
-	{
-		$data['page_info']['title'] = $data['langNew'][$nameTitle];
-		
-		if(empty($data['name']) || $data['name'] == '')
-		{$data['name'] = $data['page_info']['title'];}
-		
-		$data['page_info']['meta_d'] = $data['langNew'][$nameMeta];
-		
-		return $data;
-	}
-	
-	/**
-	* ������� ��������� ������� ������� � ���� ��, ������� ������ � ������ �� ������� ��������
-	*
-	* @$user - ��� ������ � ����� � ��� ����� �� �����
-	* @$langBanAccount - ��� ����� ������ ���� ������� (�������)
-	*/
-	public function checkBanUser($user, $langBanAccount, $temp = 'none')
-	{
-		$CI =& get_instance();
-		
-		if($user['ban'] == 1)
-		{
-			$CI->session->unset_userdata('user');
-			delete_cookie("name");
-
-            if($temp == 'none')
-            {
-                set_cookie('error_class',$langBanAccount, 2);
-                //�������������� �� �� �� ��������
-                redirect($_SERVER['HTTP_REFERER']);
-            }
-			return false;
-		}
-		return true;
-	}
-	
-	/**
-	* ������� �������� ���� ���� ��� �������
-	*/
-	private function _nameAdmin($data, $title = 'empty')
-	{
-		$CI =& get_instance();
-		
-		$data['name'] = $CI->input->cookie('error',TRUE);
-		if(empty($data['name']) || trim($data['name']) == '')
-			$data['name'] = $data['langNew'][$title];
-			
-		$data['page_info']['title'] = $data['name'];
-		
-		return $data;
-	}
-
-    /**
-     *  ������� �������� �� ����� �� ���� � ������ str. ���� $temp = 1, �� ���� ��������� ��������� ���� ���������
-     * @param string $start
-     * @param string $stop
-     * @param string $str
-     * @param int $temp
-     * @return string
-     */
-    public function cut_str($start = '', $stop = '',$str = '', $temp = 0)
-    {
-        if($temp == 1)
-            $spos = strripos($str,$start);
-        else
-            $spos = strpos($str,$start);
-
-        $spos = $spos + strlen($start);
-        $text = substr($str, $spos);
-        $end_pos = strpos($text,$stop);
-        $text = substr($text,0,$end_pos);
-        return $text;
     }
 
     /**
-     * ������� ������� � ������ ��� � ����������� �� � ������
-     * @param string $text
-     * @return mixed
+     * Функция первоначальных проверок (на регистрацию и получение кук)
+     * The function of initial checks (for registration and reception of cookies)
+     *
+     * @param string $controller_lang
+     * @param int $name_lang
+     * @param string $folder
+     * @param bool $auth_user - изначально ставим true (вошел в ЛК), но где нужно - изменяем на false (типо не авторизирован)
+     * @param bool $ajax - если false, то разрешен редирект, если true, то возвращается сообщение ошибки
+     * @param array $what_replace - в массиве указан паттерн замены. [0] - какую ячейку заменить, [1] - на что заменить, [2] - какой паттерн искать для замены
+     * @return array
      */
-    public function changeTextToLink($text = '')
+    public  function initApp($controller_lang = 'welcome_controller', $name_lang = 0,  $folder = 'login', $auth_user = true, $ajax = false, $what_replace = ['pattern'=>''])
     {
-        $text = preg_replace("/(^|[\n ])([\w]*?)((www|ftp)\.[^ \,\"\t\n\r<]*)/is", "$1$2<a href=\"http://$3\" target='_blank'>$3</a>", $text);
-        $text = preg_replace("/(^|[\n ])([\w]*?)((ht|f)tp(s)?:\/\/[\w]+[^ \,\"\n\r\t<]*)/is", "$1$2<a href=\"$3\" target='_blank'>$3</a>", $text);
-        return $text;
-    }
-	
-	/*
-	* ������� �������� ��� ����� ��������� ��������
-	*/
-	public function init($data, $nameMeta = "titleMainDesc", $nameTitle = "titleMain", $temp = 'none', $nameLibLang = 'langadmin')
-	{
-		$CI =& get_instance();
-		
-		//��������� ������� ����� � ���� ��� ����������� ��� � ��
-		$data['segment'] = $segment = $CI->checkactiveblocks->getInfoSegment($CI->uri->segment(1));
-		//���� ��� ���� ������ ����� ���
-		$data['langAll'] = $CI->langforall->getLangForVideo($segment);
-		
-		if($temp == 'none')
-		{
-            //��� �������� ������� ����
-            $data['langNew'] = $CI->$nameLibLang->getLang($data['segment']);
-			//��������� ����� � ����
-			$data = $this->setHeadersTitle($data,$nameMeta,$nameTitle);
-			if(!empty($data['user_info'])){$this->checkBanUser($data['user_info'], $data['langAll']['banAccount']);}
-		}
-		else
-		{
-			//��� �������� ������� ����
-			$data['langNew'] = $CI->$nameLibLang->getLang();
-			$data = $this->_nameAdmin($data, $nameTitle);
-		}
-			
-		return $data;
-	}
-	
-	/* ��������� ������� ������ ������� ������� �� ��������. 
-	* ���� ��� ��������, �� ��������� ��� ���� (������ ����� ���� ��������)
-	* 
-	* @$str - ������ �� ������� ��� ���������� �����
-	*/
-	public function sms_translit($str = '') 
-	{
-			$translit = array(
-					" "=>'-',"�"=>"A","�"=>"B","�"=>"V","�"=>"G",
-					"�"=>"D","�"=>"E", "�"=>"E", "�"=>"J","�"=>"Z","�"=>"I",
-					"�"=>"Y","�"=>"K","�"=>"L","�"=>"M","�"=>"N",
-					"�"=>"O","�"=>"P","�"=>"R","�"=>"S","�"=>"T",
-					"�"=>"U","�"=>"F","�"=>"H","�"=>"TS","�"=>"CH",
-					"�"=>"SH","�"=>"SCH","�"=>"","�"=>"YI","�"=>"",
-					"�"=>"E","�"=>"YU","�"=>"YA","�"=>"a","�"=>"b",
-					"�"=>"v","�"=>"g","�"=>"d","�"=>"e", "�"=>"e","�"=>"j",
-					"�"=>"z","�"=>"i","�"=>"y","�"=>"k","�"=>"l",
-					"�"=>"m","�"=>"n","�"=>"o","�"=>"p","�"=>"r",
-					"�"=>"s","�"=>"t","�"=>"u","�"=>"f","�"=>"h",
-					"�"=>"ts","�"=>"ch","�"=>"sh","�"=>"sch","�"=>"y",
-					"�"=>"yi","�"=>"","�"=>"e","�"=>"yu","�"=>"ya","."=> "",
-           "/"=> "_",","=>"_", "-"=>"_","("=>"",")"=>"","["=>"",
-           "]"=>"", "="=>"_","+"=>"_","*"=>"","?"=>"","\""=>"",
-           "'"=>"","&"=>"", "%"=>"","#"=>"","@"=>"","!"=>"",
-           ";"=>"","�"=>"","^"=>"",":"=>"","~"=>"","\\"=>""
-			);
-			return strtr($str,$translit);
-	}
+        //тут получаем нужный нам кусок url
+        $this->getLangUrl();
+        //название получаем из языкового файла
+        $this->data['title'] = $this->data[$controller_lang][$name_lang];
 
-    /*
-	* ������� ��������� ����������� �� ����������
-	*
-	* (array)$data - ��� ������ � ����� � ��� ����� �� �����
-	* @$segment - ���� �����
-	*/
-    public function checkAvtorizationUser($data = array(), $segment = 'ru', $temp = 'js')
-    {
-        if(empty($data['user_info']))
+        //Получаем куки с текстом и ошибкой, и если они не пусты, то в итоге выводим их сразу на экране.
+        $this->data = $this->getCookie();
+
+        if(is_array($what_replace['pattern']))
+            $this->data[$what_replace['pattern'][0]] = preg_replace('/'.$what_replace['pattern'][2].'/', $this->data[$what_replace['pattern'][1]], $this->data[$what_replace['pattern'][0]]);
+
+
+        //если это false, то человек не вошел в аккаунт
+        $this->data['auth_user'] = $auth_user;
+        //если есть ошибку, то показываем вьюху
+        if($this->data['error'] != '')
         {
-            if($temp != 'js')
-                $this->my_redirect_on_vhod($data['langForDiaries']['loginIn'], $segment, 'avtoriz/register');
-            return false;
+            $this->CI_in->display_lib->display($this->data, $folder);
+            $this->data['return_notification'] = true;
+            return $this->data;
         }
-        return true;
+
+
+        //проверка зашел или нет юзер уже
+        $this->data['checkAuth'] = $this->checkAuth($ajax);
+
+        $this->setDefaultLang($this->data['segment']);
+
+        return $this->data;
     }
+
+
+    public function setDefaultLang($segment = 'ru')
+    {
+        $lang = 'russian';
+        switch($segment)
+        {
+            case 'en': $lang = 'english'; break;
+            //add next lang, who name is name folder into "application/language"
+        }
+
+        $this->CI_in->config->set_item('language', $lang);
+    }
+
+
+
+    public function getInfoSegment()
+    {
+
+        $segment = $this->clear($this->CI_in->uri->segment(1));
+        switch($segment)
+        {
+            case 'ru':
+                //Insert here languages
+                //case 'de':
+            case 'en':
+                break;
+            default:
+                $segment = 'ru';
+        }
+        return $segment;
+    }
+
+
+
+
+
+
+
 }
 ?>

@@ -14,29 +14,21 @@ class Task extends CI_Controller {
 	public function index()
 	{
 
-        $data = [];
-        $data['title'] = 'Личный кабинет в TimeBig пользователя: ';
-        //получаем нужные куки
-        $data = $this->common->getCookie($data);
+        $folderView = 'common';
+        $data = $this->common->initApp('Личный кабинет в TimeBig пользователя: <span class="label label-success">%login%</span>', 0, $folderView, true, false, ['pattern'=>['title', 'login', '%login%']]);
+        if(isset($data['return_notification']))
+            return true;
 
-        //проверка зашел или нет юзер уже (true для того, чтобы не редиректило если что)
-        $check = $this->common->checkAuth();
-/*
-        if($check['check'] == false)
-        {
-            if($check['title_error'] == '')
-                $this->common->dropCookie(true, '', 'Вам необходимо авторизоваться!');
-            else
-                $this->common->dropCookie(true, '', $check['title_error']);
+        //echo $this->uri->segment(1);
 
+        if($data['checkAuth']['check'] === false)
+            $this->common->dropCookie(true, '', ($data['checkAuth']['title_error'] != '') ? $data['checkAuth']['title_error'] : 'Вам необходимо авторизоваться!');
 
-        }
-*/
+        echo "<pre>";
+        print_r($data);
+exit;
 
-        print_r($check);
-
-
-        $this->display_lib->display($data, 'common');
+        $this->display_lib->display($data, $folderView);
 	}
 
 
