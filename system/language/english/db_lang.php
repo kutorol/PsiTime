@@ -2,7 +2,7 @@
 
 $lang['db_invalid_connection_str'] = 'Unable to determine the database settings based on the connection string you submitted.';
 $lang['db_unable_to_connect'] = 'Unable to connect to your database server using the provided settings.';
-$lang['db_unable_to_select'] = 'Unable to select the specified database: %s';
+$lang['db_unable_to_select'] = 'Unable to select the specified database: %s. If you "almost" for the first time launched a website, then delete the file /application/migrations/install.log';
 $lang['db_unable_to_create'] = 'Unable to create the specified database: %s';
 $lang['db_invalid_query'] = 'The query you submitted is not valid.';
 $lang['db_must_set_table'] = 'You must set the database table to be used with your query.';

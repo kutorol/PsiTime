@@ -10,12 +10,19 @@
 |
 */
 
- $hook['display_override'][] = array(
-     'class'    => 'Develbar',
-     'function'     => 'debug',
-     'filename'     => 'Develbar.php',
-     'filepath'     => 'third_party/DevelBar/hooks'
-  );
+$hook['display_override'][] = array(
+    'class'    => 'Develbar',
+    'function'     => 'debug',
+    'filename'     => 'Develbar.php',
+    'filepath'     => 'third_party/DevelBar/hooks'
+);
+
+$hook['pre_controller'][] = array(
+    'class'    => 'Create_db',
+    'function'     => 'add',
+    'filename'     => 'Create_db.php',
+    'filepath'     => 'hooks/'
+);
 
 /* End of file hooks.php */
 /* Location: ./application/config/hooks.php */

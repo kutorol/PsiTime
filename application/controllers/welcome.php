@@ -7,6 +7,23 @@
  */
 class Welcome extends CI_Controller {
 
+    public function install()
+    {
+        $filePath = APPPATH . 'migrations/install.log';
+        if(file_exists($filePath))
+        {
+            $this->common->setDefaultLang(YOUR_LANG);
+
+            $this->load->library('migration');
+            if (!$this->migration->current())
+            {
+                // Если произошла ошибка - выводим сообщение
+                show_error($this->migration->error_string());
+                exit;
+            }
+        }
+        $this->common->redirect_to('welcome', "TO DO NEW SUCCESS", 'text', 'success');
+    }
     /**
      * страница авторизации
      * login page

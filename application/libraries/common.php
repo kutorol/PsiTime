@@ -294,8 +294,8 @@ class Common
             $this->data['currentUrl'] = preg_replace('/'.$this->data['segment'].'\/|\/'.$this->data['segment'].'/i', '', $this->data['currentUrl']);
 
             //УДАЛИТЬ ДОМА ЭТОТ ИФ
-            if($test === true)
-                $this->data['currentUrl'] = preg_replace('/time.log\/|\/time.log|time.log/i', '', $this->data['currentUrl']);
+            /*if($test === true)
+                $this->data['currentUrl'] = preg_replace('/time.log\/|\/time.log|time.log/i', '', $this->data['currentUrl']);*/
 
             $url = explode('/', $this->data['currentUrl']);
 
@@ -326,7 +326,8 @@ class Common
     {
         //тут получаем нужный нам кусок url
         //УБРАТЬ ДОМА ЭТОТ ПАРАМЕТР
-        $this->getLangUrl(true);
+        //$this->getLangUrl(true);
+        $this->getLangUrl();
 
         //название получаем из языкового файла
         $this->data['title'] = $this->data[$controller_lang][$name_lang];
