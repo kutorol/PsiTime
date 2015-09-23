@@ -16,8 +16,8 @@
 | environments.
 |
 */
-//$config['base_url'] = 'http://localhost/time.log/';
-$config['base_url'] = 'http://time.log/';
+$config['base_url'] = 'http://localhost/time.log/';
+//$config['base_url'] = 'http://time.log/';
 
 /*
 |--------------------------------------------------------------------------

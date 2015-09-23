@@ -7,11 +7,16 @@
  */
 class Welcome extends CI_Controller {
 
+    /**
+     * Сюда перекидывает при срабатывание Hooka, который добавит базу данных и после в этой функции активируются миграции
+     * It throws in the operation Hooka, add a database and then this function is activated migration
+     */
     public function install()
     {
         $filePath = APPPATH . 'migrations/install.log';
         if(file_exists($filePath))
         {
+            //устанавливаем значение языка человека
             $this->common->setDefaultLang(YOUR_LANG);
 
             $this->load->library('migration');
@@ -30,10 +35,17 @@ class Welcome extends CI_Controller {
      */
 	public function index()
 	{
-        $folderView = 'login';
-        $data = $this->common->initApp('welcome_controller', 0, $folderView, false);
+        $config = [
+            'pathToViewDir'   =>  'login',
+            'langArray_1'   =>  'welcome_controller',
+            'langArray_2'   =>  0,
+            'authUser'   =>  false,
+            'noRedirect'   =>  false
+        ];
+        $data = $this->common->allInit($config);
         if(isset($data['return_notification']))
             return true;
+
 
         //если нажата кнопка входа в форме
         if(isset($_POST['enter_to_time']))
@@ -45,7 +57,7 @@ class Welcome extends CI_Controller {
             //если валидация не прошла проверку - показываем вьюху, а там ошибки покажут
             if($this->form_validation->run() == FALSE)
             {
-                $this->display_lib->display($data, $folderView);
+                $this->display_lib->display($data, $config['pathToViewDir']);
                 return true;
             }
 
@@ -77,7 +89,7 @@ class Welcome extends CI_Controller {
         }
 
         //показываем вид юзеру
-        $this->display_lib->display($data, $folderView);
+        $this->display_lib->display($data, $config['pathToViewDir']);
 	}
 
 
@@ -110,10 +122,17 @@ class Welcome extends CI_Controller {
      */
     public function forgot()
     {
-        $folderView = 'login/forgot';
-        $data = $this->common->initApp('welcome_controller', 8, $folderView, false);
+        $config = [
+            'pathToViewDir'   =>  'login/forgot',
+            'langArray_1'   =>  'welcome_controller',
+            'langArray_2'   =>  8,
+            'authUser'   =>  false,
+            'noRedirect'   =>  false
+        ];
+        $data = $this->common->allInit($config);
         if(isset($data['return_notification']))
             return true;
+
 
         if(isset($_POST['forgot_btn']))
         {
@@ -123,7 +142,7 @@ class Welcome extends CI_Controller {
             //если валидация не прошла проверку - показываем вьюху, а там ошибки покажут
             if($this->form_validation->run() == FALSE)
             {
-                $this->display_lib->display($data, $folderView);
+                $this->display_lib->display($data, $config['pathToViewDir']);
                 return true;
             }
 
@@ -171,7 +190,7 @@ class Welcome extends CI_Controller {
         }
 
 
-        $this->display_lib->display($data, $folderView);
+        $this->display_lib->display($data, $config['pathToViewDir']);
     }
 
 
@@ -181,10 +200,17 @@ class Welcome extends CI_Controller {
      */
     public function registration()
     {
-		$folderView = 'login/register';
-		$data = $this->common->initApp('welcome_controller', 16, $folderView, false);
+        $config = [
+            'pathToViewDir'   =>  'login/register',
+            'langArray_1'   =>  'welcome_controller',
+            'langArray_2'   =>  16,
+            'authUser'   =>  false,
+            'noRedirect'   =>  false
+        ];
+        $data = $this->common->allInit($config);
         if(isset($data['return_notification']))
             return true;
+
 
         //print_r($data);
 		if(isset($_POST['registration_btn']))
@@ -201,7 +227,7 @@ class Welcome extends CI_Controller {
             //если валидация не прошла проверку - показываем вьюху, а там ошибки покажут
             if($this->form_validation->run() === FALSE)
             {
-                $this->display_lib->display($data, $folderView);
+                $this->display_lib->display($data, $config['pathToViewDir']);
                 return true;
             }
 
@@ -245,7 +271,7 @@ class Welcome extends CI_Controller {
 
 		
 		
-		$this->display_lib->display($data, $folderView);
+		$this->display_lib->display($data, $config['pathToViewDir']);
     }
 
 
@@ -262,6 +288,35 @@ class Welcome extends CI_Controller {
             'noRedirect'   =>  true
         ];
         $data = $this->common->allInit($config);
+        if(isset($data['return_notification']))
+            return true;
+
+
+        if(isset($_POST['change_pass']))
+        {
+            //правила валидации данных из полей
+            $this->form_validation->set_rules('passOld', $data['welcome_controller'][17], 'trim|required|min_length[2]|max_length[20]|xss_clean');
+            $this->form_validation->set_rules('passNew', $data['welcome_controller'][1], 'trim|alpha_numeric|required|min_length[5]|max_length[20]|xss_clean|is_unique[users.login]');
+            $this->form_validation->set_rules('passNewRepeat', 'Email', 'trim|required|min_length[6]|valid_email|xss_clean|is_unique[users.email]');
+
+            $validateRulePass = 'trim|alpha_dash|required|min_length[5]|max_length[20]|xss_clean|';
+            $this->form_validation->set_rules('pass', $data['welcome_controller'][2], $validateRulePass.'matches[pass_too]');
+            $this->form_validation->set_rules('pass_too', $data['welcome_controller'][18], $validateRulePass.'matches[pass]');
+
+            //если валидация не прошла проверку - показываем вьюху, а там ошибки покажут
+            if($this->form_validation->run() === FALSE)
+            {
+                $this->display_lib->display($data, $config['pathToViewDir']);
+                return true;
+            }
+
+            //получаем данные из формы и чистим сразу от шлака
+            $data['name'] = $this->common->clear($this->input->post('name', true));
+            $data['login'] = $this->common->clear($this->input->post('login', true));
+            $data['email'] = $this->common->clear($this->input->post('email', true));
+            $data['pass'] = $this->common->clear($this->input->post('pass', true));
+        }
+
 
 
         $this->display_lib->display($data, $config['pathToViewDir']);

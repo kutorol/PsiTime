@@ -21,7 +21,7 @@
                 </div>
 
                 <div class="input-group col-xs-12">
-                    <button type="submit" class="btn btn-primary col-xs-12" name="enter_to_time"><?=$input_form_lang[9][$segment]?></button>
+                    <button type="submit" class="btn btn-primary col-xs-12" name="change_pass"><?=$input_form_lang[9][$segment]?></button>
                 </div>
 
                 <div class="row text-center">
