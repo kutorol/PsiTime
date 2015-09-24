@@ -384,6 +384,11 @@ class Common
     }
 
 
+    /**
+     * Устанавливаем язык, который отображает ошибки и прочие сообщения (это стандартные папки CodeIgniter)
+     * Set the language that displays errors and other messages (this is the default folders CodeIgniter)
+     * @param string $segment
+     */
     public function setDefaultLang($segment = 'ru')
     {
         $lang = 'russian';
@@ -397,7 +402,11 @@ class Common
     }
 
 
-
+    /**
+     * Получаем язык из поисковой строки браузера
+     * We get the language from the browser search box
+     * @return string
+     */
     public function getInfoSegment()
     {
 

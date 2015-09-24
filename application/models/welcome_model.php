@@ -79,6 +79,27 @@ class Welcome_model extends CI_Model {
                 $this->db->where($where, $where_2);
         }
     }
+
+    /**
+     * Проверяем нужен ли нам селект
+     * @param null $select
+     */
+    private function _checkSelect($select = null)
+    {
+        if($select !== null)
+        {
+            if(is_array($select))
+                $select = implode(', ', $select);
+            else
+                if(is_numeric($select))
+                    $select =  '*';
+        }
+        else
+            $select =  '*';
+
+        $this->db->select($select);
+    }
+
     /**
      * Обновляем юзера при множественном where
      * Update the user in the plural where
@@ -86,13 +107,29 @@ class Welcome_model extends CI_Model {
      * @param $where - тут поля в базе данных (here the fields in the database)
      * @param $where_2 - а тут значения, которые ищем (but here the values that are looking for)
      */
-    public function updateUser($new = array(), $where, $where_2)
+    public function updateData($new = array(), $where, $where_2, $table = 'users')
     {
         $this->_checkWhere($where, $where_2);
-        $this->db->update('users', $new);
+        $this->db->update($table, $new);
         return $this->db->affected_rows();
     }
-	
+
+    /**
+     * Получаем результат выборки из бд
+     * Get the result set from the database
+     *
+     * @param $table
+     * @param string $where - тут поля в базе данных (here the fields in the database)
+     * @param string $where_2 - а тут значения, которые ищем (but here the values that are looking for)
+     * @return mixed
+     */
+    public function getResult($table, $where = '', $where_2 = '', $return = 'result_array', $select = null)
+    {
+        $this->_checkSelect($select);
+        $this->_checkWhere($where, $where_2);
+        return $this->db->get($table)->$return();
+    }
+
 	/**
 	* Добавляем нового юзера
 	*/

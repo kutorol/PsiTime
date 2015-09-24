@@ -153,6 +153,10 @@ class Lang_controller
             21  =>  'На указанную почту было отправлено письмо с вашими данными и дальнейшими действиями!',
             22  =>  'Ошибка! Произошел сбой при регистрации. Попробуйте еще раз!',
             23  =>  'Страница изменения пароля',
+            24  =>   $lang['input_form_lang'][10][$segment].' у Вас не такой!',
+            25  =>  'Очень печальная ошибка... Жалко что она произошла... Перезайдите в свой аккаунт!',
+            26  =>  'Ваш пароль изменен!',
+            27  =>  'Страница изменения профиля',
         ];
 
 
@@ -194,6 +198,10 @@ class Lang_controller
             21  =>  'On the specified e-mail was sent an email with your data and further actions!',
             22  =>  'Error! There was a failure in the registration. Try again!',
             23  =>  'Change Password page',
+            24  =>   $lang['input_form_lang'][10][$segment].' does not match!',
+            25  =>  'Very unfortunate mistake ... It\'s a pity that it happened ... Please reset your account!',
+            26  =>  'Your password has been changed!',
+            27  =>  'Page profile changes',
         ];
 
         $lang['lang_'.$segment]['welcome_controller'][19][2] .= $lang['lang_'.$segment]['welcome_controller'][3];

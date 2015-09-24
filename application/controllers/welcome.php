@@ -166,7 +166,7 @@ class Welcome extends CI_Controller {
                     $new['password'] = $new_pass = random_string('alnum', rand(7, 15));
                     $new['password'] = sha1(md5($new['password'].$new['hash']));
 
-                    $check = $this->welcome_model->updateUser($new, 'id_user', $q['id_user']);
+                    $check = $this->welcome_model->updateData($new, 'id_user', $q['id_user']);
                     if($check > 0)
                     {
                         //компануем email на отправку
@@ -277,6 +277,7 @@ class Welcome extends CI_Controller {
 
     /**
      * Изменяем пароль тогда, когда человек вошел в ЛК
+     * Change the password when a man entered the LC
      */
     public function changePassword()
     {
@@ -295,13 +296,10 @@ class Welcome extends CI_Controller {
         if(isset($_POST['change_pass']))
         {
             //правила валидации данных из полей
-            $this->form_validation->set_rules('passOld', $data['welcome_controller'][17], 'trim|required|min_length[2]|max_length[20]|xss_clean');
-            $this->form_validation->set_rules('passNew', $data['welcome_controller'][1], 'trim|alpha_numeric|required|min_length[5]|max_length[20]|xss_clean|is_unique[users.login]');
-            $this->form_validation->set_rules('passNewRepeat', 'Email', 'trim|required|min_length[6]|valid_email|xss_clean|is_unique[users.email]');
-
             $validateRulePass = 'trim|alpha_dash|required|min_length[5]|max_length[20]|xss_clean|';
-            $this->form_validation->set_rules('pass', $data['welcome_controller'][2], $validateRulePass.'matches[pass_too]');
-            $this->form_validation->set_rules('pass_too', $data['welcome_controller'][18], $validateRulePass.'matches[pass]');
+            $this->form_validation->set_rules('passOld', $data['input_form_lang'][10][$data['segment']], 'trim|alpha_dash|required|min_length[5]|max_length[20]|xss_clean');
+            $this->form_validation->set_rules('passNew', $data['input_form_lang'][11][$data['segment']], $validateRulePass.'matches[passNewRepeat]');
+            $this->form_validation->set_rules('passNewRepeat', $data['input_form_lang'][12][$data['segment']], $validateRulePass.'matches[passNew]');
 
             //если валидация не прошла проверку - показываем вьюху, а там ошибки покажут
             if($this->form_validation->run() === FALSE)
@@ -311,15 +309,106 @@ class Welcome extends CI_Controller {
             }
 
             //получаем данные из формы и чистим сразу от шлака
-            $data['name'] = $this->common->clear($this->input->post('name', true));
-            $data['login'] = $this->common->clear($this->input->post('login', true));
-            $data['email'] = $this->common->clear($this->input->post('email', true));
-            $data['pass'] = $this->common->clear($this->input->post('pass', true));
-        }
+            $data['passOld'] = $this->common->clear($this->input->post('passOld', true));
+            $data['passNew'] = $this->common->clear($this->input->post('passNew', true));
 
+            $this->load->model('welcome_model');
+            $userData = $this->welcome_model->getResult('users', 'login', $data['login'], 'row_array', 'id_user, hash, password');
+            if(!empty($userData))
+            {
+                if(sha1(md5($data['passOld'].$userData['hash'])) == $userData['password'])
+                {
+                    //загружаем библиотеку помощи для строк
+                    $this->load->helper('string');
+                    $new = [];
+                    //получаем хэш для пароля
+                    $new['hash'] = random_string('alnum', rand(6, 17));
+                    //получаем пароль
+                    $new['password'] = sha1(md5($data['passNew'].$new['hash']));
+
+                    $q = $this->welcome_model->updateData($new, 'id_user', $userData['id_user']);
+                    if($q > 0)
+                        $this->common->redirect_to('welcome/changePassword', $data['welcome_controller'][26], 'text', 'success');
+                    else
+                        $data['error'] = $data['welcome_controller'][13];
+                }
+                else
+                    $data['error'] = $data['welcome_controller'][24];
+            }
+            else
+                $this->dropCookie(true, '', $data['welcome_controller'][25]);
+        }
 
 
         $this->display_lib->display($data, $config['pathToViewDir']);
     }
-	
+
+
+    /**
+     * Тут можно изменить имя, логин и email
+     * Here you can change the name, login and email
+     */
+    public function changeProfile()
+    {
+        $config = [
+            'pathToViewDir'   =>  'login/change_profile',
+            'langArray_1'   =>  'welcome_controller',
+            'langArray_2'   =>  27,
+            'authUser'   =>  true,
+            'noRedirect'   =>  true
+        ];
+        $data = $this->common->allInit($config);
+        if(isset($data['return_notification']))
+            return true;
+
+
+        if(isset($_POST['change_pass']))
+        {
+            //правила валидации данных из полей
+            $validateRulePass = 'trim|alpha_dash|required|min_length[5]|max_length[20]|xss_clean|';
+            $this->form_validation->set_rules('passOld', $data['input_form_lang'][10][$data['segment']], 'trim|alpha_dash|required|min_length[5]|max_length[20]|xss_clean');
+            $this->form_validation->set_rules('passNew', $data['input_form_lang'][11][$data['segment']], $validateRulePass.'matches[passNewRepeat]');
+            $this->form_validation->set_rules('passNewRepeat', $data['input_form_lang'][12][$data['segment']], $validateRulePass.'matches[passNew]');
+
+            //если валидация не прошла проверку - показываем вьюху, а там ошибки покажут
+            if($this->form_validation->run() === FALSE)
+            {
+                $this->display_lib->display($data, $config['pathToViewDir']);
+                return true;
+            }
+
+            //получаем данные из формы и чистим сразу от шлака
+            $data['passOld'] = $this->common->clear($this->input->post('passOld', true));
+            $data['passNew'] = $this->common->clear($this->input->post('passNew', true));
+
+            $this->load->model('welcome_model');
+            $userData = $this->welcome_model->getResult('users', 'login', $data['login'], 'row_array', 'id_user, hash, password');
+            if(!empty($userData))
+            {
+                if(sha1(md5($data['passOld'].$userData['hash'])) == $userData['password'])
+                {
+                    //загружаем библиотеку помощи для строк
+                    $this->load->helper('string');
+                    $new = [];
+                    //получаем хэш для пароля
+                    $new['hash'] = random_string('alnum', rand(6, 17));
+                    //получаем пароль
+                    $new['password'] = sha1(md5($data['passNew'].$new['hash']));
+
+                    $q = $this->welcome_model->updateData($new, 'id_user', $userData['id_user']);
+                    if($q > 0)
+                        $this->common->redirect_to('welcome/changePassword', $data['welcome_controller'][26], 'text', 'success');
+                    else
+                        $data['error'] = $data['welcome_controller'][13];
+                }
+                else
+                    $data['error'] = $data['welcome_controller'][24];
+            }
+            else
+                $this->dropCookie(true, '', $data['welcome_controller'][25]);
+        }
+
+
+        $this->display_lib->display($data, $config['pathToViewDir']);
+    }
 }
