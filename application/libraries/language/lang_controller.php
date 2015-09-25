@@ -98,7 +98,11 @@ class Lang_controller
             12  =>  [
                         'ru'    =>  'Повторите новый пароль',
                         'en'    =>  'Repeat new password'
-            ],
+                    ],
+            13  =>  [
+                        'ru'    =>  'Редактировать профиль',
+                        'en'    =>  'Edit profile'
+                    ],
         ];
 
         /**
@@ -157,6 +161,7 @@ class Lang_controller
             25  =>  'Очень печальная ошибка... Жалко что она произошла... Перезайдите в свой аккаунт!',
             26  =>  'Ваш пароль изменен!',
             27  =>  'Страница изменения профиля',
+            28  =>  'Изменение профиля',
         ];
 
 
@@ -202,6 +207,7 @@ class Lang_controller
             25  =>  'Very unfortunate mistake ... It\'s a pity that it happened ... Please reset your account!',
             26  =>  'Your password has been changed!',
             27  =>  'Page profile changes',
+            28  =>  'Changing profile',
         ];
 
         $lang['lang_'.$segment]['welcome_controller'][19][2] .= $lang['lang_'.$segment]['welcome_controller'][3];

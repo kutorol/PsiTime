@@ -27,6 +27,9 @@ class Welcome extends CI_Controller {
                 exit;
             }
         }
+        /**
+         * FIXME слова на разных языках при инициализации
+         */
         $this->common->redirect_to('welcome', "TO DO NEW SUCCESS", 'text', 'success');
     }
     /**
@@ -362,13 +365,13 @@ class Welcome extends CI_Controller {
             return true;
 
 
-        if(isset($_POST['change_pass']))
+        if(isset($_POST['change_profile']))
         {
             //правила валидации данных из полей
             $validateRulePass = 'trim|alpha_dash|required|min_length[5]|max_length[20]|xss_clean|';
-            $this->form_validation->set_rules('passOld', $data['input_form_lang'][10][$data['segment']], 'trim|alpha_dash|required|min_length[5]|max_length[20]|xss_clean');
-            $this->form_validation->set_rules('passNew', $data['input_form_lang'][11][$data['segment']], $validateRulePass.'matches[passNewRepeat]');
-            $this->form_validation->set_rules('passNewRepeat', $data['input_form_lang'][12][$data['segment']], $validateRulePass.'matches[passNew]');
+            $this->form_validation->set_rules('name', $data['input_form_lang'][1][$data['segment']], 'trim|min_length[2]|max_length[20]|xss_clean');
+            $this->form_validation->set_rules('login', $data['input_form_lang'][0][$data['segment']], 'trim|alpha_numeric|min_length[5]|max_length[20]|xss_clean|is_unique[users.login]');
+            $this->form_validation->set_rules('email', 'Email', 'trim|min_length[6]|valid_email|xss_clean|is_unique[users.email]');
 
             //если валидация не прошла проверку - показываем вьюху, а там ошибки покажут
             if($this->form_validation->run() === FALSE)
@@ -377,32 +380,38 @@ class Welcome extends CI_Controller {
                 return true;
             }
 
-            //получаем данные из формы и чистим сразу от шлака
-            $data['passOld'] = $this->common->clear($this->input->post('passOld', true));
-            $data['passNew'] = $this->common->clear($this->input->post('passNew', true));
+            $data['name'] = $this->common->clear($this->input->post('name', true));
+            $data['login'] = $this->common->clear($this->input->post('login', true));
+            $data['email'] = $this->common->clear($this->input->post('email', true));
+
+            if($data['name'] == '' && $data['login'] == '' && $data['email'] == '')
+            {
+                // TODO тут нужно вывести ошибку в data['']
+
+                $this->display_lib->display($data, $config['pathToViewDir']);
+                return true;
+            }
+
 
             $this->load->model('welcome_model');
-            $userData = $this->welcome_model->getResult('users', 'login', $data['login'], 'row_array', 'id_user, hash, password');
+            $userData = $this->welcome_model->getResult('users', 'login', $data['login'], 'row_array', 'id_user');
             if(!empty($userData))
             {
-                if(sha1(md5($data['passOld'].$userData['hash'])) == $userData['password'])
-                {
-                    //загружаем библиотеку помощи для строк
-                    $this->load->helper('string');
-                    $new = [];
-                    //получаем хэш для пароля
-                    $new['hash'] = random_string('alnum', rand(6, 17));
-                    //получаем пароль
-                    $new['password'] = sha1(md5($data['passNew'].$new['hash']));
+                $new = [];
+                if($data['name'] != '')
+                    $new['name'] = $data['name'];
 
-                    $q = $this->welcome_model->updateData($new, 'id_user', $userData['id_user']);
-                    if($q > 0)
-                        $this->common->redirect_to('welcome/changePassword', $data['welcome_controller'][26], 'text', 'success');
-                    else
-                        $data['error'] = $data['welcome_controller'][13];
-                }
+                if($data['login'] != '')
+                    $new['login'] = $data['login'];
+
+                if($data['email'] != '')
+                    $new['email'] = $data['email'];
+
+                $q = $this->welcome_model->updateData($new, 'id_user', $userData['id_user']);
+                if($q > 0)
+                    $this->common->redirect_to('welcome/changeProfile', $data['welcome_controller'][26], 'text', 'success'); //FIXME заменить другие слова при успехе
                 else
-                    $data['error'] = $data['welcome_controller'][24];
+                    $data['error'] = $data['welcome_controller'][13];//FIXME заменить другие слова при ошибке
             }
             else
                 $this->dropCookie(true, '', $data['welcome_controller'][25]);

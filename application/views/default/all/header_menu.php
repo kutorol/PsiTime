@@ -38,6 +38,7 @@
                     <?php if($auth_user === true):?>
 
                         <li><a href="<?=base_url()?><?=$segment?>/task"><?=$header_menu_lang[0][$segment]?></a></li>
+                        <li><a href="<?=base_url()?><?=$segment?>/welcome/changeProfile"><?=$welcome_controller[28]?></a></li>
                         <li><a href="<?=base_url()?><?=$segment?>/welcome/changePassword"><?=$input_form_lang[9][$segment]?></a></li>
                         <li><a href="<?=base_url()?><?=$segment?>/welcome/logout"><?=$header_menu_lang[1][$segment]?></a></li>
 
