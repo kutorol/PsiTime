@@ -364,6 +364,12 @@ class Welcome extends CI_Controller {
         if(isset($data['return_notification']))
             return true;
 
+        $this->load->model('welcome_model');
+
+        $data['userData'] = $this->welcome_model->getResult('users', 'login', $data['login'], 'row_array', 'id_user, name, login, email');
+        if(empty($data['userData']))
+            $this->dropCookie(true, '', $data['welcome_controller'][25]);
+
 
         if(isset($_POST['change_profile']))
         {
@@ -380,41 +386,39 @@ class Welcome extends CI_Controller {
                 return true;
             }
 
-            $data['name'] = $this->common->clear($this->input->post('name', true));
-            $data['login'] = $this->common->clear($this->input->post('login', true));
-            $data['email'] = $this->common->clear($this->input->post('email', true));
+            $data['profile']['name'] = $this->common->clear($this->input->post('name', true));
+            $data['profile']['login'] = $this->common->clear($this->input->post('login', true));
+            $data['profile']['email'] = $this->common->clear($this->input->post('email', true));
 
-            if($data['name'] == '' && $data['login'] == '' && $data['email'] == '')
+            if($data['profile']['name'] == '' && $data['profile']['login'] == '' && $data['profile']['email'] == '')
             {
-                // TODO тут нужно вывести ошибку в data['']
-
+                $data['error'] = $data['welcome_controller'][29];
                 $this->display_lib->display($data, $config['pathToViewDir']);
                 return true;
             }
 
 
-            $this->load->model('welcome_model');
-            $userData = $this->welcome_model->getResult('users', 'login', $data['login'], 'row_array', 'id_user');
-            if(!empty($userData))
+            $new = [];
+            foreach($data['profile'] as $k=>$v)
+                if($v != '')
+                    $new[$k] = $v;
+
+            $q = $this->welcome_model->updateData($new, 'id_user', $data['userData']['id_user']);
+            if($q > 0)
             {
-                $new = [];
-                if($data['name'] != '')
-                    $new['name'] = $data['name'];
+                if(isset($new['login']))
+                {
+                    //TODO тут баг вылазит
+                    $this->session->set_userdata(['session_user'=> 'avtoriz|'.md5('02u4hash3894').'|'.$data['login']]);
+                    setcookie ("login",$data['login'],time()+9999999999,"/");
+                    setcookie ("chech_user",1,time()+9999999999,"/");
+                }
 
-                if($data['login'] != '')
-                    $new['login'] = $data['login'];
-
-                if($data['email'] != '')
-                    $new['email'] = $data['email'];
-
-                $q = $this->welcome_model->updateData($new, 'id_user', $userData['id_user']);
-                if($q > 0)
-                    $this->common->redirect_to('welcome/changeProfile', $data['welcome_controller'][26], 'text', 'success'); //FIXME заменить другие слова при успехе
-                else
-                    $data['error'] = $data['welcome_controller'][13];//FIXME заменить другие слова при ошибке
+                $this->common->redirect_to('welcome/changeProfile', $data['welcome_controller'][30], 'text', 'success');
             }
             else
-                $this->dropCookie(true, '', $data['welcome_controller'][25]);
+                $data['error'] = $data['welcome_controller'][13];
+
         }
 
 

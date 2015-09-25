@@ -162,6 +162,8 @@ class Lang_controller
             26  =>  'Ваш пароль изменен!',
             27  =>  'Страница изменения профиля',
             28  =>  'Изменение профиля',
+            29  =>  'Заполните хотя бы одно из полей!',
+            30  =>  'Профиль успешно изменен',
         ];
 
 
@@ -208,6 +210,8 @@ class Lang_controller
             26  =>  'Your password has been changed!',
             27  =>  'Page profile changes',
             28  =>  'Changing profile',
+            29  =>  'Fill in at least one of the fields!',
+            30  =>  'Profile changed successfully',
         ];
 
         $lang['lang_'.$segment]['welcome_controller'][19][2] .= $lang['lang_'.$segment]['welcome_controller'][3];
