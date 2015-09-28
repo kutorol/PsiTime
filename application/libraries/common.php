@@ -26,6 +26,8 @@ class Common
         //получаем все слова на нужном нам языке
         $this->data = $this->CI_in->lang_controller->getLang($lang);
         $this->data['segment'] = $lang;
+        //адрес урл для ссылок с уже вписанным сегментом
+        $this->data['startUrl'] = base_url().$this->data['segment'];
     }
 
 
@@ -322,7 +324,7 @@ class Common
      * @param array $what_replace - в массиве указан паттерн замены. [0] - какую ячейку заменить, [1] - на что заменить, [2] - какой паттерн искать для замены
      * @return array
      */
-    public  function initApp($controller_lang = 'welcome_controller', $name_lang = 0,  $folder = 'login', $auth_user = true, $ajax = false, $what_replace = ['pattern'=>''])
+    public function initApp($controller_lang = 'welcome_controller', $name_lang = 0,  $folder = 'login', $auth_user = true, $ajax = false, $what_replace = ['pattern'=>''])
     {
         //тут получаем нужный нам кусок url
         //УБРАТЬ ДОМА ЭТОТ ПАРАМЕТР
@@ -368,7 +370,7 @@ class Common
     public function allInit($config = [])
     {
         $folderView = $config['pathToViewDir'];
-        $this->data = $this->initApp($config['langArray_1'], $config['langArray_2'], $folderView, $config['authUser'], $config['noRedirect']);
+        $this->data = $this->initApp($config['langArray_1'], $config['langArray_2'], $folderView, $config['authUser'], $config['noRedirect'], (isset($config['pattern'])) ? $config['pattern'] : ['pattern'=>'']);
         if(isset($this->data['return_notification']))
             return $this->data;
 

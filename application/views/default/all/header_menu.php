@@ -2,9 +2,6 @@
     <div class="container">
 
 
-
-
-
             <div class="navbar-header ">
                 <?php if($auth_user === true):?>
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#responsive-menu">
@@ -37,10 +34,11 @@
 
                     <?php if($auth_user === true):?>
 
-                        <li><a href="<?=base_url()?><?=$segment?>/task"><?=$header_menu_lang[0][$segment]?></a></li>
-                        <li><a href="<?=base_url()?><?=$segment?>/welcome/changeProfile"><?=$welcome_controller[28]?></a></li>
-                        <li><a href="<?=base_url()?><?=$segment?>/welcome/changePassword"><?=$input_form_lang[9][$segment]?></a></li>
-                        <li><a href="<?=base_url()?><?=$segment?>/welcome/logout"><?=$header_menu_lang[1][$segment]?></a></li>
+                        <li><a href="<?=$startUrl;?>/task"><?=$header_menu_lang[0][$segment]?></a></li>
+                        <li><a href="<?=$startUrl;?>/welcome/changeProfile"><?=$welcome_controller[28]?></a></li>
+                        <li><a href="<?=$startUrl;?>/welcome/changePassword"><?=$input_form_lang[9][$segment]?></a></li>
+                        <li><a href="<?=$startUrl;?>/task/addProject"><?=$task_views[0]?></a></li>
+                        <li><a href="<?=$startUrl;?>/welcome/logout"><?=$header_menu_lang[1][$segment]?></a></li>
 
                     <?php else:?>
                         <li><a href="<?=base_url()?><?=$segment?>"><?=$header_menu_lang[0][$segment]?></a></li>
@@ -53,3 +51,4 @@
 
     </div>
 </div>
+

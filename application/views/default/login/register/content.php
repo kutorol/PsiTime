@@ -1,6 +1,6 @@
 <div class="row">
     <div class="container text-center">
-        <form action="<?=base_url()?><?=$segment?>/welcome/registration" method="post">
+        <form action="<?=$startUrl;?>/welcome/registration" method="post">
             <div class="col-xs-12 col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4">
                 <div class="input-group col-xs-12">
                     <input type="text" class="form-control col-xs-12" name="name" placeholder="<?=$input_form_lang[1][$segment]?>" required>
@@ -37,8 +37,8 @@
                 </div>
 
                 <div class="row">
-                    <a href="<?=base_url()?><?=$segment?>" class="pull-left"><?=$input_form_lang[5][$segment]?></a>
-                    <a href="<?=base_url()?><?=$segment?>/welcome/forgot" class="pull-right"><?=$input_form_lang[7][$segment]?></a>
+                    <a href="<?=$startUrl;?>" class="pull-left"><?=$input_form_lang[5][$segment]?></a>
+                    <a href="<?=$startUrl;?>/welcome/forgot" class="pull-right"><?=$input_form_lang[7][$segment]?></a>
                 </div>
 
             </div>

@@ -43,7 +43,7 @@ class Welcome extends CI_Controller {
             'langArray_1'   =>  'welcome_controller',
             'langArray_2'   =>  0,
             'authUser'   =>  false,
-            'noRedirect'   =>  false
+            'noRedirect'   =>  false //true - редиректим, false - возвращаем ошибку
         ];
         $data = $this->common->allInit($config);
         if(isset($data['return_notification']))
@@ -289,7 +289,7 @@ class Welcome extends CI_Controller {
             'langArray_1'   =>  'welcome_controller',
             'langArray_2'   =>  23,
             'authUser'   =>  true,
-            'noRedirect'   =>  true
+            'noRedirect'   =>  true //true - редиректим, false - возвращаем ошибку
         ];
         $data = $this->common->allInit($config);
         if(isset($data['return_notification']))
@@ -358,7 +358,7 @@ class Welcome extends CI_Controller {
             'langArray_1'   =>  'welcome_controller',
             'langArray_2'   =>  27,
             'authUser'   =>  true,
-            'noRedirect'   =>  true
+            'noRedirect'   =>  true //true - редиректим, false - возвращаем ошибку
         ];
         $data = $this->common->allInit($config);
         if(isset($data['return_notification']))
@@ -374,7 +374,6 @@ class Welcome extends CI_Controller {
         if(isset($_POST['change_profile']))
         {
             //правила валидации данных из полей
-            $validateRulePass = 'trim|alpha_dash|required|min_length[5]|max_length[20]|xss_clean|';
             $this->form_validation->set_rules('name', $data['input_form_lang'][1][$data['segment']], 'trim|min_length[2]|max_length[20]|xss_clean');
             $this->form_validation->set_rules('login', $data['input_form_lang'][0][$data['segment']], 'trim|alpha_numeric|min_length[5]|max_length[20]|xss_clean|is_unique[users.login]');
             $this->form_validation->set_rules('email', 'Email', 'trim|min_length[6]|valid_email|xss_clean|is_unique[users.email]');
@@ -385,6 +384,7 @@ class Welcome extends CI_Controller {
                 $this->display_lib->display($data, $config['pathToViewDir']);
                 return true;
             }
+
 
             $data['profile']['name'] = $this->common->clear($this->input->post('name', true));
             $data['profile']['login'] = $this->common->clear($this->input->post('login', true));
@@ -398,6 +398,9 @@ class Welcome extends CI_Controller {
             }
 
 
+            /**
+             * Получаем все пост данные в новый массив
+             */
             $new = [];
             foreach($data['profile'] as $k=>$v)
                 if($v != '')
@@ -408,19 +411,18 @@ class Welcome extends CI_Controller {
             {
                 if(isset($new['login']))
                 {
-                    //TODO тут баг вылазит
-                    $this->session->set_userdata(['session_user'=> 'avtoriz|'.md5('02u4hash3894').'|'.$data['login']]);
-                    setcookie ("login",$data['login'],time()+9999999999,"/");
+                    $this->session->unset_userdata('session_user');
+                    $this->session->set_userdata(['session_user'=> 'avtoriz|'.md5('02u4hash3894').'|'.$new['login']]);
+                    setcookie ("login",$new['login'],time()+9999999999,"/");
                     setcookie ("chech_user",1,time()+9999999999,"/");
                 }
 
-                $this->common->redirect_to('welcome/changeProfile', $data['welcome_controller'][30], 'text', 'success');
+                $this->common->redirect_to('task', $data['welcome_controller'][30], 'text', 'success');
             }
             else
                 $data['error'] = $data['welcome_controller'][13];
 
         }
-
 
         $this->display_lib->display($data, $config['pathToViewDir']);
     }

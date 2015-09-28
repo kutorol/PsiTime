@@ -254,6 +254,7 @@ class Lang_controller
          */
         $lang['lang_ru']['task_controller'] = [
             0   =>  'Личный кабинет в TimeBig пользователя: <span class="label label-success">%login%</span>',
+            1   =>  'Страница добавления нового проекта',
         ];
 
         /********************************************
@@ -263,6 +264,7 @@ class Lang_controller
          */
         $lang['lang_en']['task_controller'] = [
             0   =>  'Personal account in TimeBig user: <span class="label label-success">%login%</span>',
+            1   =>  'The page for adding a new project',
         ];
 
         /********************************************
@@ -271,7 +273,9 @@ class Lang_controller
          * ******************************************
          */
         $lang['lang_ru']['task_views'] = [
-
+            0   =>  'Добавить проект',
+            1   =>  'Название проекта',
+            2   =>  'Имя ответственного за проект',
         ];
 
         /********************************************
@@ -280,7 +284,9 @@ class Lang_controller
          * ******************************************
          */
         $lang['lang_en']['task_views'] = [
-
+            0   =>  'Add project',
+            1   =>  'Project name',
+            2   =>  'Name responsible for the project',
         ];
 
 

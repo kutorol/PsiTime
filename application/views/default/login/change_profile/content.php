@@ -1,6 +1,6 @@
 <div class="row">
     <div class="container text-center">
-        <form action="<?=base_url()?><?=$segment?>/welcome/changeProfile" method="post">
+        <form action="<?=$startUrl;?>/welcome/changeProfile" method="post">
             <div class="col-xs-12 col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4">
 
                 <div class="input-group col-xs-12">

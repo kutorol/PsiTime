@@ -1,6 +1,6 @@
 <div class="row">
     <div class="container text-center">
-        <form action="<?=base_url()?><?=$segment?>/welcome/changePassword" method="post">
+        <form action="<?=$startUrl;?>/welcome/changePassword" method="post">
             <div class="col-xs-12 col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4">
                 <div class="input-group col-xs-12">
                     <input type="text" class="form-control col-xs-12" name="passOld" placeholder="<?=$input_form_lang[10][$segment]?>" required>
@@ -25,7 +25,7 @@
                 </div>
 
                 <div class="row text-center">
-                    <a href="<?=base_url()?><?=$segment?>/task" class="pull-left"><?=$header_menu_lang[0][$segment]?></a>
+                    <a href="<?=$startUrl;?>/task" class="pull-left"><?=$header_menu_lang[0][$segment]?></a>
                 </div>
 
             </div>
