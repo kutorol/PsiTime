@@ -23,6 +23,7 @@ class Migration_Start_db extends CI_Migration{
                   `hash` varchar(255) NOT NULL,
                   `img` varchar(255) NOT NULL DEFAULT 'img/noimg.png',
                   `status` enum('0','1') NOT NULL DEFAULT '0',
+                  AUTO_INCREMENT (`id_user`),
                   PRIMARY KEY (`id_user`),
                   UNIQUE KEY `id_user` (`id_user`),
                   KEY `role_id` (`role_id`),

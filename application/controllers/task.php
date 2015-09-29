@@ -61,36 +61,40 @@ class Task extends CI_Controller {
         $this->display_lib->display($data, $config['pathToViewDir']);
     }
 
+    /**
+     * Получаем доступные имена по логину или имени
+     * Get accessible by login name or name
+     */
     public function getName()
     {
+        //если это аякс запрос
         if($this->input->server('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest')
         {
-            echo 'fasd';
-
-
-            if(isset($_POST['nameUser']))
+            if(isset($_POST['nameUser']) && isset($_POST['maxRows']))
             {
-
                 $this->load->model('task_model');
                 $nameUser = $this->common->clear($_POST['nameUser']);
-                $maxRows  = $this->common->clear($_POST['maxRows']);
+                $maxRows  = $this->common->clear(intval($_POST['maxRows']));
                 $q = $this->task_model->getUser($nameUser, $maxRows);
                 if(!empty($q))
                 {
+                    $data['users'] = array();
+                    foreach($q as $v)
+                        $data['users'][] = array('name'     => '(#'.$v['id_user'].') Имя: '.$v['name']." Логин: ",
+                                                 'login'    =>  $v['login']);
 
+                    echo json_encode($data);
                 }
                 else
-                    echo json_encode(['response'=>[0=>['name'=>'notMatch']]]);
+                    echo json_encode(['users'=>[0=>['name'=>'notMatch_EX']]]);
             }
-
-            $aee = array(
-                'geonames'=>array(
-                    0=>array('name'=>'das'),
-                    1=>array('name'=>'dagkds'),
-                    2=>array('name'=>'dghd'))
-            );
-            echo json_encode($aee);
+            else
+                echo json_encode(['users'=>[0=>['name'=>'notPostData_EX']]]);
         }
+        else
+            echo json_encode(['users'=>[0=>['name'=>'notAjax_EX']]]);
     }
+
+
 
 }

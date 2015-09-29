@@ -12,7 +12,8 @@ class Task_model extends CI_Model {
      */
     public function getUser($str = '', $limit = 10)
     {
-        return $this->db->select('login, name')->like('login', $str)->limit($limit)->get('users')->result_array();
+        $limit = ($limit <= 0) ? 10 : $limit;
+        return $this->db->select('login, name, id_user')->like('login', $str)->or_like('name', $str)->limit($limit)->get('users')->result_array();
     }
 
 

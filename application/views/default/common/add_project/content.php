@@ -10,8 +10,9 @@
 
                 <div class="input-group col-xs-12">
                     <input type="text" class="form-control col-xs-12 ui-autocomplete-input" id="userAutocomplete" autocomplete="off" role="textbox" aria-autocomplete="list" aria-haspopup="true" name="mainUser" placeholder="<?=$task_views[2]?>" required>
+                    <input type="hidden" name="value" id="userAutocompleteHide" value="">
                     <br><br>
-                    <span class="label label-danger error"><?=strip_tags(form_error('mainUser'))?></span>
+                    <span class="label label-danger error" id="autocomplete_error"  data-role="tagsinput" ><?=strip_tags(form_error('mainUser'))?></span>
                 </div>
 
                 <div class="input-group col-xs-12">
