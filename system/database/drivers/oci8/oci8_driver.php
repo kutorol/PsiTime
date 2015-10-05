@@ -137,7 +137,7 @@ class CI_DB_oci8_driver extends CI_DB {
 	 */
 	public function db_set_charset($charset, $collation)
 	{
-		// @todo - add support if needed
+		// @to do - add support if needed
 		return TRUE;
 	}
 

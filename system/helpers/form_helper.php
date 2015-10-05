@@ -636,7 +636,7 @@ if ( ! function_exists('form_prep'))
 		}
 
 		// we've already prepped a field with this name
-		// @todo need to figure out a way to namespace this so
+		// @to do need to figure out a way to namespace this so
 		// that we know the *exact* field and not just one with
 		// the same name
 		if (isset($prepped_fields[$field_name]))

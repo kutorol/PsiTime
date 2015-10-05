@@ -55,7 +55,7 @@ class Task extends CI_Controller {
             $this->common->dropCookie(true, '', ($data['checkAuth']['title_error'] != '') ? $data['checkAuth']['title_error'] : $data['languages_desc'][0]['errorAuth'][$data['segment']]);
 
 
-
+        //TODO сделать добавление проекта
 
 
         $this->display_lib->display($data, $config['pathToViewDir']);
@@ -92,7 +92,7 @@ class Task extends CI_Controller {
                 echo json_encode(['users'=>[0=>['name'=>'notPostData_EX']]]);
         }
         else
-            echo json_encode(['users'=>[0=>['name'=>'notAjax_EX']]]);
+            echo "NU NIXUYA SEBE TI CHEGO SDELAL";
     }
 
 

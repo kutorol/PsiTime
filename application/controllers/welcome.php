@@ -27,10 +27,11 @@ class Welcome extends CI_Controller {
                 exit;
             }
         }
-        /**
-         * FIXME слова на разных языках при инициализации
-         */
-        $this->common->redirect_to('welcome', "TO DO NEW SUCCESS", 'text', 'success');
+
+        $lang = [];
+        //подключаем файл со словами
+        include APPPATH . 'language/db_hook/' . YOUR_LANG . '/install.php';
+        $this->common->redirect_to('welcome', $lang['error_5'], 'text', 'success');
     }
     /**
      * страница авторизации

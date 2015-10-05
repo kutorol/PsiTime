@@ -1129,7 +1129,7 @@ class XML_RPC_Message extends CI_Xmlrpc
 				else
 				{
 					// 'bits' is for the MetaWeblog API image bits
-					// @todo - this needs to be made more general purpose
+					// @to do - this needs to be made more general purpose
 					$array[$key] = ($key == 'bits' OR $this->xss_clean == FALSE) ? $array[$key] : $CI->security->xss_clean($array[$key]);
 				}
 			}

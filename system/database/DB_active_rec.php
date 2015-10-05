@@ -1389,7 +1389,7 @@ class CI_DB_active_record extends CI_DB_driver {
 
 		if ( ! is_array($key))
 		{
-			// @todo error
+
 		}
 
 		foreach ($key as $k => $v)
