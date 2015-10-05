@@ -55,7 +55,40 @@ class Task extends CI_Controller {
             $this->common->dropCookie(true, '', ($data['checkAuth']['title_error'] != '') ? $data['checkAuth']['title_error'] : $data['languages_desc'][0]['errorAuth'][$data['segment']]);
 
 
-        //TODO сделать добавление проекта
+
+
+        //if(isset($_POST['iAdmin'])) берем логин
+
+        if(isset($_POST['addProject_btn']))
+        {
+            $this->form_validation->set_rules('nameProject', $data['welcome_controller'][1], 'trim|required|min_length[3]|max_length[20]|xss_clean');
+            $this->form_validation->set_rules('mainUser', $data['welcome_controller'][2], 'trim|alpha_dash|min_length[2]|max_length[20]|xss_clean');
+
+            //если валидация не прошла проверку - показываем вьюху, а там ошибки покажут
+            if($this->form_validation->run() == FALSE)
+            {
+                $this->display_lib->display($data, $config['pathToViewDir']);
+                return true;
+            }
+
+            //TODO сделать добавление проекта
+            if(isset($_POST['iAdmin']))
+            {
+                if($this->input->post('iAdmin') == 'yes')
+                {
+                    //TODO тут узнать ид чувака или сразу по логину добавить проект
+                }
+                else
+                {
+                    //TODO translate
+                    $data['iAdminError'] = 'bad request';
+                }
+            }
+            else
+            {
+                //TODO тут если чел не себя главным выбрал
+            }
+        }
 
 
         $this->display_lib->display($data, $config['pathToViewDir']);

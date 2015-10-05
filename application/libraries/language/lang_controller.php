@@ -276,6 +276,7 @@ class Lang_controller
             0   =>  'Добавить проект',
             1   =>  'Название проекта',
             2   =>  'Имя ответственного за проект',
+            3   =>  'Я ответственный(ая) за проект',
         ];
 
         /********************************************
@@ -287,11 +288,24 @@ class Lang_controller
             0   =>  'Add project',
             1   =>  'Project name',
             2   =>  'Name responsible for the project',
+            3   =>  'I am responsible for the project',
         ];
 
 
+        /********************************************
+         * Перевод для jquery
+         * Translation for jquery
+         * ******************************************
+         */
+        $lang['lang_ru']['js'] = [
+            0   =>  'Вы пытаетесь отправить неправильный запрос!',
+            1   =>  "Такого пользователя нет!",
+        ];
 
-
+        $lang['lang_en']['js'] = [
+            0   =>  'You are trying to send a request to the wrong!',
+            1   =>  "This user does not have!",
+        ];
 
 
         //DON'T TOUCH!!!

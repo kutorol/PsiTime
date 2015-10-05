@@ -1,7 +1,7 @@
 $(function() {
     /**
      * Автокомплит прикрепления юзера к проекту
-     * TODO заменить язык на разный и доделать автозаполнение с тегами в инпуте
+     * Autocomplete user attachment to the project
      */
     $( "#userAutocomplete" ).autocomplete({
         source: function(request, response){
@@ -24,10 +24,10 @@ $(function() {
                         {
                             case "notAjax_EX":
                             case "notPostData_EX":
-                                error = 'Вы пытаетесь отправить неправильный запрос!';
+                                error = jsLang[0];
                                 break;
                             case "notMatch_EX":
-                                error = "Такого пользователя нет!";
+                                error = jsLang[1];
                                 break;
                         }
 
@@ -48,14 +48,20 @@ $(function() {
         },
         minLength: 3, //срабатывание при минимальном количестве символов
         delay: 200, //задержка между запросами
-        autoFocus: true,
-        select: function (e, ui) {
-            //TODO сделать добавление логина в hidden поле с ид userAutocompleteHide
-            alert(ui.item.value); //тут логин чувака
-            console.log(ui);
-        }
+        autoFocus: true
+        /*select: function (e, ui)
+        {
+            $("#userAutocompleteHide").val(ui.item.value);
+        }*/
     });
 
+    //скрывает автокоплит, если выбран чекбокс (It hides 'input autocomplete' if the checkbox is selected)
+    $("#iAdmin").click(function(){
+        if(document.getElementById('iAdmin').checked)
+            $("#userAutocomplete").prop("disabled", true);
+        else
+            $("#userAutocomplete").prop("disabled", false);
+    });
 
 
 });

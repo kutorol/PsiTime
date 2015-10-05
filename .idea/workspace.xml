@@ -2,21 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="72f7ccef-4494-4399-8117-87233966c1fc" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/hooks/Create_db.php" afterPath="$PROJECT_DIR$/application/hooks/Create_db.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/system/database/DB_active_rec.php" afterPath="$PROJECT_DIR$/system/database/DB_active_rec.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/system/libraries/Xmlrpc.php" afterPath="$PROJECT_DIR$/system/libraries/Xmlrpc.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config.php" afterPath="$PROJECT_DIR$/config.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/system/database/drivers/cubrid/cubrid_result.php" afterPath="$PROJECT_DIR$/system/database/drivers/cubrid/cubrid_result.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/system/helpers/form_helper.php" afterPath="$PROJECT_DIR$/system/helpers/form_helper.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/system/database/drivers/mssql/mssql_driver.php" afterPath="$PROJECT_DIR$/system/database/drivers/mssql/mssql_driver.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/system/database/drivers/oci8/oci8_driver.php" afterPath="$PROJECT_DIR$/system/database/drivers/oci8/oci8_driver.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/system/database/drivers/odbc/odbc_driver.php" afterPath="$PROJECT_DIR$/system/database/drivers/odbc/odbc_driver.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/system/database/drivers/pdo/pdo_driver.php" afterPath="$PROJECT_DIR$/system/database/drivers/pdo/pdo_driver.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/system/database/drivers/postgre/postgre_driver.php" afterPath="$PROJECT_DIR$/system/database/drivers/postgre/postgre_driver.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/system/database/drivers/sqlite/sqlite_driver.php" afterPath="$PROJECT_DIR$/system/database/drivers/sqlite/sqlite_driver.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/system/database/drivers/sqlsrv/sqlsrv_driver.php" afterPath="$PROJECT_DIR$/system/database/drivers/sqlsrv/sqlsrv_driver.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/default/common/add_project/content.php" afterPath="$PROJECT_DIR$/application/views/default/common/add_project/content.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/default/all/header.php" afterPath="$PROJECT_DIR$/application/views/default/all/header.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/libraries/language/lang_controller.php" afterPath="$PROJECT_DIR$/application/libraries/language/lang_controller.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/script.js" afterPath="$PROJECT_DIR$/js/script.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/controllers/task.php" afterPath="$PROJECT_DIR$/application/controllers/task.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/controllers/welcome.php" afterPath="$PROJECT_DIR$/application/controllers/welcome.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="time.log.iws" />
@@ -48,7 +38,119 @@
     <favorites_list name="time.log" />
   </component>
   <component name="FileEditorManager">
-    <leaf />
+    <leaf>
+      <file leaf-file-name="quick_view.tpl" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../cc/design/themes/responsive_clone/templates/views/products/quick_view.tpl">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-15.038462" vertical-offset="2244" max-vertical-offset="3349">
+              <caret line="155" column="80" selection-start-line="155" selection-start-column="80" selection-end-line="155" selection-end-column="80" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="call_requests.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../cc/js/addons/call_requests/call_requests.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-11.535714" vertical-offset="357" max-vertical-offset="3060">
+              <caret line="40" column="67" selection-start-line="40" selection-start-column="67" selection-end-line="40" selection-end-column="67" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="core.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../cc/js/tygh/core.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="51" max-vertical-offset="82501">
+              <caret line="39" column="63" selection-start-line="39" selection-start-column="63" selection-end-line="39" selection-end-column="63" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="checkout.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../cc/app/controllers/frontend/checkout.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-12.423077" vertical-offset="255" max-vertical-offset="16524">
+              <caret line="45" column="38" selection-start-line="45" selection-start-column="38" selection-end-line="45" selection-end-column="38" />
+              <folding>
+                <element signature="e#932#950#0#PHP" expanded="true" />
+                <element signature="e#35219#35871#0#PHP" expanded="false" />
+                <marker date="1444046727190" expanded="true" signature="2331:2402" placeholder="SELECT `star..." />
+                <marker date="1444046727190" expanded="true" signature="9409:9499" placeholder="DELETE FROM ..." />
+                <marker date="1444046727190" expanded="true" signature="17606:17677" placeholder="SELECT `star..." />
+                <marker date="1444046727190" expanded="true" signature="23192:23270" placeholder="SELECT profi..." />
+                <marker date="1444046727190" expanded="true" signature="33472:33543" placeholder="SELECT `star..." />
+                <marker date="1444046727190" expanded="true" signature="34322:34386" placeholder="SELECT data ..." />
+                <marker date="1444046727190" expanded="true" signature="38860:38925" placeholder="SELECT user_..." />
+                <marker date="1444046727190" expanded="true" signature="39401:39457" placeholder="SELECT order..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="products.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../cc/app/controllers/frontend/products.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-9.653846" vertical-offset="6345" max-vertical-offset="9435">
+              <caret line="400" column="6" selection-start-line="400" selection-start-column="6" selection-end-line="400" selection-end-column="6" />
+              <folding>
+                <marker date="1444055356986" expanded="true" signature="4480:4563" placeholder="SELECT path,..." />
+                <marker date="1444055356986" expanded="true" signature="4804:4877" placeholder="SELECT name ..." />
+                <marker date="1444055356986" expanded="true" signature="5202:5745" placeholder="..." />
+                <marker date="1444055356986" expanded="true" signature="5209:5279" placeholder="..." />
+                <marker date="1444055356986" expanded="true" signature="5286:5737" placeholder="..." />
+                <marker date="1444055356986" expanded="true" signature="5297:5726" placeholder="..." />
+                <marker date="1444055356986" expanded="true" signature="5306:5360" placeholder="..." />
+                <marker date="1444055356986" expanded="true" signature="5374:5433" placeholder="..." />
+                <marker date="1444055356986" expanded="true" signature="5447:5504" placeholder="..." />
+                <marker date="1444055356986" expanded="true" signature="5518:5589" placeholder="..." />
+                <marker date="1444055356986" expanded="true" signature="5603:5714" placeholder="..." />
+                <marker date="1444055356986" expanded="true" signature="6326:6358" placeholder="SELECT * FRO..." />
+                <marker date="1444055356986" expanded="true" signature="6493:6563" placeholder="SELECT produ..." />
+                <marker date="1444055356986" expanded="true" signature="6493:6564" placeholder="SELECT produ..." />
+                <marker date="1444055356986" expanded="true" signature="6721:6770" placeholder="..." />
+                <marker date="1444055356986" expanded="true" signature="6964:7022" placeholder="SElECT userg..." />
+                <marker date="1444055356986" expanded="true" signature="9145:9200" placeholder="SELECT id_pa..." />
+                <marker date="1444055356986" expanded="true" signature="12545:12633" placeholder="SELECT subsc..." />
+                <marker date="1444055356986" expanded="true" signature="12809:12899" placeholder="SELECT subsc..." />
+                <marker date="1444055356986" expanded="true" signature="15781:15833" placeholder="INSERT INTO ..." />
+                <marker date="1444055356986" expanded="true" signature="15834:15880" placeholder="UPDATE viewe..." />
+                <marker date="1444055356986" expanded="true" signature="16808:16897" placeholder="DELETE FROM ..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="shuft.php" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/../script_cat/application/controllers/shuft.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.4160839" vertical-offset="6409" max-vertical-offset="14552">
+              <caret line="398" column="61" selection-start-line="398" selection-start-column="61" selection-end-line="398" selection-end-column="61" />
+              <folding>
+                <marker date="1444056766905" expanded="true" signature="14046:14195" placeholder="SELECT objec..." />
+                <marker date="1444056766905" expanded="true" signature="14512:14624" placeholder="INSERT INTO ..." />
+                <marker date="1444056766905" expanded="true" signature="14512:14659" placeholder="INSERT INTO ..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="func.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../cc/app/addons/rus_ruble/func.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-27.461538" vertical-offset="204" max-vertical-offset="2210">
+              <caret line="67" column="5" selection-start-line="51" selection-start-column="4" selection-end-line="67" selection-end-column="5" />
+              <folding>
+                <marker date="1441957427550" expanded="true" signature="2439:2483" placeholder="SELECT * FRO..." />
+                <marker date="1441957427550" expanded="true" signature="2870:2964" placeholder="SELECT `coef..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FindManager">
     <FindUsagesManager>
@@ -61,16 +163,11 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/application/models/welcome_model.php" />
-        <option value="$PROJECT_DIR$/../cc/js/lib/elfinder/js/elfinder.full.js" />
-        <option value="$PROJECT_DIR$/../cc/js/lib/elfinder/js/elfinder.min.js" />
-        <option value="$PROJECT_DIR$/../cc/js/lib/inputmask/jquery.inputmask.min.js" />
         <option value="$PROJECT_DIR$/../cc/js/lib/inputmask-multi/jquery.inputmask-multi.js" />
         <option value="$PROJECT_DIR$/../cc/js/lib/jquery/jquery.min.js" />
         <option value="$PROJECT_DIR$/../cc/js/lib/tinymce/tinymce.min.js" />
         <option value="$PROJECT_DIR$/../cc/js/lib/less/less.js" />
         <option value="$PROJECT_DIR$/../cc/app/functions/fn.catalog.php" />
-        <option value="$PROJECT_DIR$/../cc/app/controllers/frontend/checkout.php" />
         <option value="$PROJECT_DIR$/application/libraries/common.php" />
         <option value="$PROJECT_DIR$/application/views/default/all/header_menu.php" />
         <option value="$PROJECT_DIR$/application/views/default/login/change_pass/content.php" />
@@ -78,18 +175,11 @@
         <option value="$PROJECT_DIR$/application/views/default/login/forgot/content.php" />
         <option value="$PROJECT_DIR$/application/views/default/login/register/content.php" />
         <option value="$PROJECT_DIR$/application/views/default/login/content.php" />
-        <option value="$PROJECT_DIR$/application/libraries/language/lang_controller.php" />
-        <option value="$PROJECT_DIR$/../cc/app/controllers/frontend/products.php" />
         <option value="$PROJECT_DIR$/../cc/app/functions/fn.common.php" />
-        <option value="$PROJECT_DIR$/application/views/default/all/header.php" />
         <option value="$PROJECT_DIR$/application/views/default/all/footer.php" />
         <option value="$PROJECT_DIR$/application/migrations/001_start_db.php" />
         <option value="$PROJECT_DIR$/application/models/task_model.php" />
-        <option value="$PROJECT_DIR$/application/views/default/common/add_project/content.php" />
-        <option value="$PROJECT_DIR$/js/script.js" />
-        <option value="$PROJECT_DIR$/../script_cat/application/controllers/shuft.php" />
         <option value="$PROJECT_DIR$/../cc/js/tygh/design_mode.js" />
-        <option value="$PROJECT_DIR$/../cc/js/tygh/core.js" />
         <option value="$PROJECT_DIR$/../cc/js/tygh/ajax.js" />
         <option value="$PROJECT_DIR$/../cc/app/controllers/frontend/categories.php" />
         <option value="$PROJECT_DIR$/../cc/design/themes/responsive_clone/templates/blocks/product_templates/default_template.tpl" />
@@ -111,7 +201,19 @@
         <option value="$PROJECT_DIR$/application/controllers/welcome.php" />
         <option value="$PROJECT_DIR$/config.php" />
         <option value="$PROJECT_DIR$/application/hooks/Create_db.php" />
+        <option value="$PROJECT_DIR$/../cc/js/addons/call_requests/call_requests.js" />
+        <option value="$PROJECT_DIR$/application/libraries/language/lang_controller.php" />
+        <option value="$PROJECT_DIR$/js/script.js" />
+        <option value="$PROJECT_DIR$/application/language/russian/form_validation_lang.php" />
+        <option value="$PROJECT_DIR$/system/language/english/form_validation_lang.php" />
+        <option value="$PROJECT_DIR$/application/views/default/common/add_project/content.php" />
+        <option value="$PROJECT_DIR$/application/views/default/all/header.php" />
         <option value="$PROJECT_DIR$/application/controllers/task.php" />
+        <option value="$PROJECT_DIR$/../cc/app/controllers/frontend/checkout.php" />
+        <option value="$PROJECT_DIR$/../cc/design/themes/responsive_clone/templates/views/products/quick_view.tpl" />
+        <option value="$PROJECT_DIR$/../cc/js/tygh/core.js" />
+        <option value="$PROJECT_DIR$/../cc/app/controllers/frontend/products.php" />
+        <option value="$PROJECT_DIR$/../script_cat/application/controllers/shuft.php" />
       </list>
     </option>
   </component>
@@ -154,6 +256,102 @@
             <PATH_ELEMENT>
               <option name="myItemId" value="time.log" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="time.log" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="time.log" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="time.log" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="time.log" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="js" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="time.log" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="time.log" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="application" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="time.log" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="time.log" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="application" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="libraries" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="time.log" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="time.log" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="application" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="libraries" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="language" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="time.log" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="time.log" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="application" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="controllers" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
@@ -251,7 +449,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="7" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
@@ -260,7 +458,7 @@
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.44340974" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.14658849" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.14658849" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
@@ -297,48 +495,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/../cc/app/controllers/frontend/checkout.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.23426573" vertical-offset="7137" max-vertical-offset="16847">
-          <caret line="421" column="12" selection-start-line="421" selection-start-column="8" selection-end-line="421" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/views/default/login/change_profile/content.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.039035592" vertical-offset="0" max-vertical-offset="871">
-          <caret line="2" column="37" selection-start-line="2" selection-start-column="37" selection-end-line="2" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/views/default/login/forgot/content.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.25373134" vertical-offset="0" max-vertical-offset="871">
-          <caret line="13" column="0" selection-start-line="13" selection-start-column="0" selection-end-line="13" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/views/default/login/register/content.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.5706085" vertical-offset="47" max-vertical-offset="918">
-          <caret line="32" column="22" selection-start-line="32" selection-start-column="22" selection-end-line="32" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/views/default/login/content.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.33180252" vertical-offset="0" max-vertical-offset="871">
-          <caret line="17" column="22" selection-start-line="17" selection-start-column="22" selection-end-line="17" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/views/default/all/title.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.21794872" vertical-offset="0" max-vertical-offset="858">
-          <caret line="11" column="4" selection-start-line="11" selection-start-column="4" selection-end-line="11" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/application/views/default/all/header_menu.php">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-23.538462" vertical-offset="0" max-vertical-offset="1020">
@@ -353,24 +509,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/application/libraries/language/lang_controller.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-15.692307" vertical-offset="4250" max-vertical-offset="5338">
-          <caret line="274" column="36" selection-start-line="274" selection-start-column="26" selection-end-line="274" selection-end-column="36" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/application/views/default/login/change_pass/content.php">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.52698046" vertical-offset="0" max-vertical-offset="871">
           <caret line="27" column="108" selection-start-line="27" selection-start-column="20" selection-end-line="27" selection-end-column="108" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../cc/app/controllers/frontend/products.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.24475524" vertical-offset="2340" max-vertical-offset="6375">
-          <caret line="287" column="25" selection-start-line="287" selection-start-column="25" selection-end-line="287" selection-end-column="25" />
         </state>
       </provider>
     </entry>
@@ -395,13 +537,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/application/views/default/all/header.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.58553386" vertical-offset="0" max-vertical-offset="871">
-          <caret line="30" column="12" selection-start-line="30" selection-start-column="4" selection-end-line="30" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/application/migrations/001_start_db.php">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.3764569" vertical-offset="102" max-vertical-offset="3247">
@@ -409,24 +544,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/application/views/default/common/add_project/content.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-7.8461537" vertical-offset="0" max-vertical-offset="612">
-          <caret line="12" column="78" selection-start-line="12" selection-start-column="58" selection-end-line="12" selection-end-column="78" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/application/models/task_model.php">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.13662457" vertical-offset="0" max-vertical-offset="1955">
           <caret line="7" column="28" selection-start-line="7" selection-start-column="28" selection-end-line="7" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../script_cat/application/controllers/shuft.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-12.423077" vertical-offset="68" max-vertical-offset="14212">
-          <caret line="23" column="85" selection-start-line="23" selection-start-column="85" selection-end-line="23" selection-end-column="85" />
         </state>
       </provider>
     </entry>
@@ -450,6 +571,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.33333334" vertical-offset="15817" max-vertical-offset="18700">
           <caret line="948" column="26" selection-start-line="948" selection-start-column="26" selection-end-line="948" selection-end-column="26" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -486,14 +608,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.115384616" vertical-offset="2159" max-vertical-offset="12036">
           <caret line="133" column="44" selection-start-line="133" selection-start-column="44" selection-end-line="133" selection-end-column="44" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../cc/js/tygh/core.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="76534" max-vertical-offset="82297">
-          <caret line="4502" column="19" selection-start-line="4502" selection-start-column="19" selection-end-line="4502" selection-end-column="19" />
           <folding />
         </state>
       </provider>
@@ -678,14 +792,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/js/script.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.597973" vertical-offset="530" max-vertical-offset="1122">
-          <caret line="52" column="14" selection-start-line="52" selection-start-column="14" selection-end-line="52" selection-end-column="14" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/application/language/db_hook/en/install.php">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.15614237" vertical-offset="0" max-vertical-offset="871">
@@ -698,14 +804,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.13662457" vertical-offset="0" max-vertical-offset="871">
           <caret line="7" column="14" selection-start-line="7" selection-start-column="7" selection-end-line="7" selection-end-column="14" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/controllers/welcome.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.23421355" vertical-offset="102" max-vertical-offset="7395">
-          <caret line="18" column="51" selection-start-line="18" selection-start-column="51" selection-end-line="18" selection-end-column="51" />
           <folding />
         </state>
       </provider>
@@ -726,11 +824,168 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/application/controllers/welcome.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-13.076923" vertical-offset="765" max-vertical-offset="7395">
+          <caret line="65" column="13" selection-start-line="60" selection-start-column="12" selection-end-line="65" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/language/russian/form_validation_lang.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.52698046" vertical-offset="0" max-vertical-offset="871">
+          <caret line="27" column="102" selection-start-line="27" selection-start-column="102" selection-end-line="27" selection-end-column="102" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/system/language/english/form_validation_lang.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.5464983" vertical-offset="0" max-vertical-offset="871">
+          <caret line="28" column="66" selection-start-line="28" selection-start-column="66" selection-end-line="28" selection-end-column="66" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/libraries/language/lang_controller.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-11.923077" vertical-offset="4569" max-vertical-offset="5576">
+          <caret line="287" column="34" selection-start-line="287" selection-start-column="34" selection-end-line="287" selection-end-column="34" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/script.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="255" max-vertical-offset="1224">
+          <caret line="49" column="46" selection-start-line="49" selection-start-column="46" selection-end-line="49" selection-end-column="46" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/views/default/common/add_project/content.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-8.5" vertical-offset="0" max-vertical-offset="714">
+          <caret line="13" column="28" selection-start-line="13" selection-start-column="28" selection-end-line="13" selection-end-column="28" />
+          <folding>
+            <marker date="1444043723953" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1444043723953" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1444043723953" expanded="true" signature="-1:-1" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/views/default/all/header.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-17.653847" vertical-offset="0" max-vertical-offset="663">
+          <caret line="27" column="6" selection-start-line="27" selection-start-column="6" selection-end-line="27" selection-end-column="6" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/application/controllers/task.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.6877153" vertical-offset="472" max-vertical-offset="1802">
-          <caret line="63" column="7" selection-start-line="63" selection-start-column="7" selection-end-line="63" selection-end-column="7" />
+        <state vertical-scroll-proportion="-26.961538" vertical-offset="863" max-vertical-offset="2363">
+          <caret line="92" column="0" selection-start-line="92" selection-start-column="0" selection-end-line="92" selection-end-column="0" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../cc/js/tygh/core.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="51" max-vertical-offset="82501">
+          <caret line="39" column="63" selection-start-line="39" selection-start-column="63" selection-end-line="39" selection-end-column="63" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../cc/js/addons/call_requests/call_requests.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-11.535714" vertical-offset="357" max-vertical-offset="3060">
+          <caret line="40" column="67" selection-start-line="40" selection-start-column="67" selection-end-line="40" selection-end-column="67" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../cc/app/controllers/frontend/checkout.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-12.423077" vertical-offset="255" max-vertical-offset="16524">
+          <caret line="45" column="38" selection-start-line="45" selection-start-column="38" selection-end-line="45" selection-end-column="38" />
+          <folding>
+            <element signature="e#932#950#0#PHP" expanded="true" />
+            <element signature="e#35219#35871#0#PHP" expanded="false" />
+            <marker date="1444046727190" expanded="true" signature="2331:2402" placeholder="SELECT `star..." />
+            <marker date="1444046727190" expanded="true" signature="9409:9499" placeholder="DELETE FROM ..." />
+            <marker date="1444046727190" expanded="true" signature="17606:17677" placeholder="SELECT `star..." />
+            <marker date="1444046727190" expanded="true" signature="23192:23270" placeholder="SELECT profi..." />
+            <marker date="1444046727190" expanded="true" signature="33472:33543" placeholder="SELECT `star..." />
+            <marker date="1444046727190" expanded="true" signature="34322:34386" placeholder="SELECT data ..." />
+            <marker date="1444046727190" expanded="true" signature="38860:38925" placeholder="SELECT user_..." />
+            <marker date="1444046727190" expanded="true" signature="39401:39457" placeholder="SELECT order..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../cc/design/themes/responsive_clone/templates/views/products/quick_view.tpl">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-15.038462" vertical-offset="2244" max-vertical-offset="3349">
+          <caret line="155" column="80" selection-start-line="155" selection-start-column="80" selection-end-line="155" selection-end-column="80" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../cc/app/addons/rus_ruble/func.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-27.461538" vertical-offset="204" max-vertical-offset="2210">
+          <caret line="67" column="5" selection-start-line="51" selection-start-column="4" selection-end-line="67" selection-end-column="5" />
+          <folding>
+            <marker date="1441957427550" expanded="true" signature="2439:2483" placeholder="SELECT * FRO..." />
+            <marker date="1441957427550" expanded="true" signature="2870:2964" placeholder="SELECT `coef..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../cc/app/controllers/frontend/products.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-9.653846" vertical-offset="6345" max-vertical-offset="9435">
+          <caret line="400" column="6" selection-start-line="400" selection-start-column="6" selection-end-line="400" selection-end-column="6" />
+          <folding>
+            <marker date="1444055356986" expanded="true" signature="4480:4563" placeholder="SELECT path,..." />
+            <marker date="1444055356986" expanded="true" signature="4804:4877" placeholder="SELECT name ..." />
+            <marker date="1444055356986" expanded="true" signature="5202:5745" placeholder="..." />
+            <marker date="1444055356986" expanded="true" signature="5209:5279" placeholder="..." />
+            <marker date="1444055356986" expanded="true" signature="5286:5737" placeholder="..." />
+            <marker date="1444055356986" expanded="true" signature="5297:5726" placeholder="..." />
+            <marker date="1444055356986" expanded="true" signature="5306:5360" placeholder="..." />
+            <marker date="1444055356986" expanded="true" signature="5374:5433" placeholder="..." />
+            <marker date="1444055356986" expanded="true" signature="5447:5504" placeholder="..." />
+            <marker date="1444055356986" expanded="true" signature="5518:5589" placeholder="..." />
+            <marker date="1444055356986" expanded="true" signature="5603:5714" placeholder="..." />
+            <marker date="1444055356986" expanded="true" signature="6326:6358" placeholder="SELECT * FRO..." />
+            <marker date="1444055356986" expanded="true" signature="6493:6563" placeholder="SELECT produ..." />
+            <marker date="1444055356986" expanded="true" signature="6493:6564" placeholder="SELECT produ..." />
+            <marker date="1444055356986" expanded="true" signature="6721:6770" placeholder="..." />
+            <marker date="1444055356986" expanded="true" signature="6964:7022" placeholder="SElECT userg..." />
+            <marker date="1444055356986" expanded="true" signature="9145:9200" placeholder="SELECT id_pa..." />
+            <marker date="1444055356986" expanded="true" signature="12545:12633" placeholder="SELECT subsc..." />
+            <marker date="1444055356986" expanded="true" signature="12809:12899" placeholder="SELECT subsc..." />
+            <marker date="1444055356986" expanded="true" signature="15781:15833" placeholder="INSERT INTO ..." />
+            <marker date="1444055356986" expanded="true" signature="15834:15880" placeholder="UPDATE viewe..." />
+            <marker date="1444055356986" expanded="true" signature="16808:16897" placeholder="DELETE FROM ..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../script_cat/application/controllers/shuft.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.4160839" vertical-offset="6409" max-vertical-offset="14552">
+          <caret line="398" column="61" selection-start-line="398" selection-start-column="61" selection-end-line="398" selection-end-column="61" />
+          <folding>
+            <marker date="1444056766905" expanded="true" signature="14046:14195" placeholder="SELECT objec..." />
+            <marker date="1444056766905" expanded="true" signature="14512:14624" placeholder="INSERT INTO ..." />
+            <marker date="1444056766905" expanded="true" signature="14512:14659" placeholder="INSERT INTO ..." />
+          </folding>
         </state>
       </provider>
     </entry>

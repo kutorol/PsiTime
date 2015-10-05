@@ -29,4 +29,6 @@
 
 <script>
     base_url = '<?=$startUrl?>';
+    //translate
+    jsLang = JSON.parse('<?=json_encode($js)?>');
 </script>
