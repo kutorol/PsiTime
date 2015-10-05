@@ -1,14 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="72f7ccef-4494-4399-8117-87233966c1fc" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/migrations/001_start_db.php" afterPath="$PROJECT_DIR$/application/migrations/001_start_db.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/default/common/add_project/content.php" afterPath="$PROJECT_DIR$/application/views/default/common/add_project/content.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/script.js" afterPath="$PROJECT_DIR$/js/script.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/controllers/task.php" afterPath="$PROJECT_DIR$/application/controllers/task.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/models/task_model.php" afterPath="$PROJECT_DIR$/application/models/task_model.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-    </list>
+    <list default="true" id="72f7ccef-4494-4399-8117-87233966c1fc" name="Default" comment="" />
     <ignored path="time.log.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path=".idea/dataSources.local.xml" />
@@ -38,7 +31,70 @@
     <favorites_list name="time.log" />
   </component>
   <component name="FileEditorManager">
-    <leaf />
+    <leaf>
+      <file leaf-file-name="product_filters.js" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/../cc/js/tygh/product_filters.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.37904125" vertical-offset="0" max-vertical-offset="2533">
+              <caret line="20" column="0" selection-start-line="20" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ajax.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../cc/js/tygh/ajax.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-80.75" vertical-offset="0" max-vertical-offset="11883">
+              <caret line="133" column="44" selection-start-line="133" selection-start-column="44" selection-end-line="133" selection-end-column="44" />
+              <folding>
+                <marker date="1443538349661" expanded="true" signature="445:486" placeholder="/*...*/" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="core.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../cc/js/tygh/core.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-12.607142" vertical-offset="76181" max-vertical-offset="82314">
+              <caret line="4502" column="28" selection-start-line="4502" selection-start-column="28" selection-end-line="4502" selection-end-column="28" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="design_mode.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../cc/js/tygh/design_mode.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-23.892857" vertical-offset="3989" max-vertical-offset="4845">
+              <caret line="274" column="32" selection-start-line="274" selection-start-column="21" selection-end-line="274" selection-end-column="32" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="responsive.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../cc/js/tygh/responsive.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-10.321428" vertical-offset="5525" max-vertical-offset="6409">
+              <caret line="342" column="36" selection-start-line="342" selection-start-column="25" selection-end-line="342" selection-end-column="36" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="theme_editor.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../cc/js/tygh/theme_editor.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-10.178572" vertical-offset="12550" max-vertical-offset="13413">
+              <caret line="755" column="32" selection-start-line="755" selection-start-column="21" selection-end-line="755" selection-end-column="32" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FindManager">
     <FindUsagesManager>
@@ -51,9 +107,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/application/config/routes.php" />
-        <option value="$PROJECT_DIR$/application/config/migrations/001_user_db.php" />
-        <option value="$PROJECT_DIR$/application/config/migration.php" />
         <option value="$PROJECT_DIR$/application/migrations/003_projects_db.php" />
         <option value="$PROJECT_DIR$/application/migrations/004_complexity_db.php" />
         <option value="$PROJECT_DIR$/application/migrations/005_complexity_db.php" />
@@ -76,12 +129,9 @@
         <option value="$PROJECT_DIR$/../cc/js/lib/inputmask-multi/jquery.inputmask-multi.js" />
         <option value="$PROJECT_DIR$/../cc/js/lib/jquery/jquery.min.js" />
         <option value="$PROJECT_DIR$/../cc/js/lib/tinymce/tinymce.min.js" />
-        <option value="$PROJECT_DIR$/../cc/js/tygh/core.js" />
         <option value="$PROJECT_DIR$/../cc/js/lib/less/less.js" />
         <option value="$PROJECT_DIR$/../cc/app/functions/fn.catalog.php" />
-        <option value="$PROJECT_DIR$/../cc/js/tygh/product_filters.js" />
         <option value="$PROJECT_DIR$/../cc/app/controllers/frontend/checkout.php" />
-        <option value="$PROJECT_DIR$/../cc/design/themes/responsive_clone/templates/blocks/list_templates/products_list.tpl" />
         <option value="$PROJECT_DIR$/application/controllers/welcome.php" />
         <option value="$PROJECT_DIR$/application/libraries/common.php" />
         <option value="$PROJECT_DIR$/application/views/default/all/header_menu.php" />
@@ -93,8 +143,6 @@
         <option value="$PROJECT_DIR$/application/libraries/language/lang_controller.php" />
         <option value="$PROJECT_DIR$/../cc/app/controllers/frontend/products.php" />
         <option value="$PROJECT_DIR$/../cc/app/functions/fn.common.php" />
-        <option value="$PROJECT_DIR$/../script_cat/application/controllers/shuft.php" />
-        <option value="$PROJECT_DIR$/../cc/app/controllers/frontend/categories.php" />
         <option value="$PROJECT_DIR$/application/views/default/all/header.php" />
         <option value="$PROJECT_DIR$/application/views/default/all/footer.php" />
         <option value="$PROJECT_DIR$/application/migrations/001_start_db.php" />
@@ -102,6 +150,14 @@
         <option value="$PROJECT_DIR$/application/controllers/task.php" />
         <option value="$PROJECT_DIR$/application/views/default/common/add_project/content.php" />
         <option value="$PROJECT_DIR$/js/script.js" />
+        <option value="$PROJECT_DIR$/../script_cat/application/controllers/shuft.php" />
+        <option value="$PROJECT_DIR$/../cc/js/tygh/design_mode.js" />
+        <option value="$PROJECT_DIR$/../cc/js/tygh/core.js" />
+        <option value="$PROJECT_DIR$/../cc/js/tygh/ajax.js" />
+        <option value="$PROJECT_DIR$/../cc/app/controllers/frontend/categories.php" />
+        <option value="$PROJECT_DIR$/../cc/design/themes/responsive_clone/templates/blocks/product_templates/default_template.tpl" />
+        <option value="$PROJECT_DIR$/../cc/design/themes/responsive_clone/templates/blocks/list_templates/products_list.tpl" />
+        <option value="$PROJECT_DIR$/../cc/js/tygh/product_filters.js" />
       </list>
     </option>
   </component>
@@ -241,7 +297,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
@@ -249,7 +305,7 @@
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.44340974" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.14498934" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.14498934" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
@@ -287,56 +343,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/index.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="3587">
-          <caret line="0" column="5" selection-start-line="0" selection-start-column="5" selection-end-line="0" selection-end-column="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../cc/design/themes/responsive_clone/styles/data/Ecobig.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.29654405" vertical-offset="4290" max-vertical-offset="9537">
-          <caret line="268" column="1" selection-start-line="268" selection-start-column="1" selection-end-line="268" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/config.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.27324915" vertical-offset="0" max-vertical-offset="871">
-          <caret line="14" column="39" selection-start-line="14" selection-start-column="39" selection-end-line="14" selection-end-column="39" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/hooks/Create_db.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.72215843" vertical-offset="0" max-vertical-offset="1003">
-          <caret line="37" column="65" selection-start-line="37" selection-start-column="65" selection-end-line="37" selection-end-column="65" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../script_cat/application/controllers/curl.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-13.115385" vertical-offset="2804" max-vertical-offset="40086">
-          <caret line="322" column="7" selection-start-line="322" selection-start-column="7" selection-end-line="431" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/models/welcome_model.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.18025258" vertical-offset="1611" max-vertical-offset="2516">
-          <caret line="104" column="42" selection-start-line="104" selection-start-column="42" selection-end-line="104" selection-end-column="42" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../cc/js/lib/ckeditor/ckeditor.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-10.178572" vertical-offset="14743" max-vertical-offset="16711">
-          <caret line="884" column="80" selection-start-line="884" selection-start-column="75" selection-end-line="884" selection-end-column="80" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../cc/js/lib/elfinder/js/elfinder.full.js">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-10.178572" vertical-offset="13196" max-vertical-offset="208981">
@@ -428,20 +434,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../cc/js/tygh/core.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.07943925" vertical-offset="0" max-vertical-offset="82314">
-          <caret line="4" column="33" selection-start-line="4" selection-start-column="27" selection-end-line="4" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../cc/js/tygh/ajax.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.01923077" vertical-offset="10999" max-vertical-offset="11883">
-          <caret line="648" column="94" selection-start-line="648" selection-start-column="94" selection-end-line="648" selection-end-column="94" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../cc/design/themes/responsive_clone/templates/views/tabs/components/product_tabs.tpl">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-0.0" vertical-offset="0" max-vertical-offset="663">
@@ -467,20 +459,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.34805652" vertical-offset="23450" max-vertical-offset="34867">
           <caret line="1391" column="16" selection-start-line="1391" selection-start-column="16" selection-end-line="1391" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../cc/js/tygh/product_filters.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="102" max-vertical-offset="2533">
-          <caret line="6" column="17" selection-start-line="6" selection-start-column="17" selection-end-line="6" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../cc/design/themes/responsive_clone/templates/blocks/list_templates/products_list.tpl">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.35664335" vertical-offset="51" max-vertical-offset="4811">
-          <caret line="21" column="0" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
         </state>
       </provider>
     </entry>
@@ -568,20 +546,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../script_cat/application/controllers/shuft.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.17832167" vertical-offset="0" max-vertical-offset="13158">
-          <caret line="9" column="35" selection-start-line="9" selection-start-column="35" selection-end-line="9" selection-end-column="35" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../cc/app/controllers/frontend/categories.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.6433566" vertical-offset="3069" max-vertical-offset="5117">
-          <caret line="224" column="138" selection-start-line="224" selection-start-column="138" selection-end-line="224" selection-end-column="138" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../cc/app/functions/fn.common.php">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.24708624" vertical-offset="102859" max-vertical-offset="103717">
@@ -657,6 +621,123 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.7536232" vertical-offset="208" max-vertical-offset="1122">
           <caret line="52" column="77" selection-start-line="52" selection-start-column="77" selection-end-line="52" selection-end-column="77" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../script_cat/application/controllers/shuft.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-12.423077" vertical-offset="68" max-vertical-offset="14212">
+          <caret line="23" column="85" selection-start-line="23" selection-start-column="85" selection-end-line="23" selection-end-column="85" />
+          <folding>
+            <marker date="1443519436215" expanded="true" signature="-1:-1" placeholder="..." />
+            <marker date="1443519436215" expanded="true" signature="-1:-1" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/lib/JavaScriptLanguage.jar!/com/intellij/lang/javascript/index/predefined/lib.d.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.3325792" vertical-offset="18831" max-vertical-offset="241349">
+          <caret line="1138" column="4" selection-start-line="1138" selection-start-column="4" selection-end-line="1138" selection-end-column="4" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/lib/JavaScriptLanguage.jar!/com/intellij/lang/javascript/index/predefined/EcmaScript.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.33333334" vertical-offset="6705" max-vertical-offset="15946">
+          <caret line="412" column="19" selection-start-line="412" selection-start-column="19" selection-end-line="412" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/lib/JavaScriptLanguage.jar!/com/intellij/lang/javascript/index/predefined/DOMCore.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.33333334" vertical-offset="15817" max-vertical-offset="18700">
+          <caret line="948" column="26" selection-start-line="948" selection-start-column="26" selection-end-line="948" selection-end-column="26" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../cc/js/tygh/design_mode.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-23.892857" vertical-offset="3989" max-vertical-offset="4845">
+          <caret line="274" column="32" selection-start-line="274" selection-start-column="21" selection-end-line="274" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../cc/js/tygh/theme_editor.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-10.178572" vertical-offset="12550" max-vertical-offset="13413">
+          <caret line="755" column="32" selection-start-line="755" selection-start-column="21" selection-end-line="755" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../cc/design/themes/responsive_clone/templates/blocks/product_templates/default_template.tpl">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-2.8240094" vertical-offset="2423" max-vertical-offset="3281">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../cc/design/themes/responsive_clone/templates/blocks/list_templates/products_list.tpl">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.2890443" vertical-offset="2744" max-vertical-offset="4539">
+          <caret line="176" column="220" selection-start-line="176" selection-start-column="220" selection-end-line="176" selection-end-column="220" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../cc/app/controllers/frontend/categories.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.36596736" vertical-offset="1216" max-vertical-offset="5117">
+          <caret line="101" column="9" selection-start-line="101" selection-start-column="9" selection-end-line="101" selection-end-column="9" />
+          <folding>
+            <marker date="1443535608194" expanded="true" signature="-1:-1" placeholder="SELECT categ..." />
+            <marker date="1443535608194" expanded="true" signature="-1:-1" placeholder="SELECT `star..." />
+            <marker date="1443535608194" expanded="true" signature="-1:-1" placeholder="SELECT path,..." />
+            <marker date="1443535608194" expanded="true" signature="-1:-1" placeholder="SELECT name ..." />
+            <marker date="1443535608194" expanded="true" signature="-1:-1" placeholder="SELECT categ..." />
+            <marker date="1443535608194" expanded="true" signature="-1:-1" placeholder="SELECT produ..." />
+            <marker date="1443535608194" expanded="true" signature="-1:-1" placeholder="SELECT COUNT..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../cc/js/tygh/responsive.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-10.321428" vertical-offset="5525" max-vertical-offset="6409">
+          <caret line="342" column="36" selection-start-line="342" selection-start-column="25" selection-end-line="342" selection-end-column="36" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../cc/js/tygh/core.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-12.607142" vertical-offset="76181" max-vertical-offset="82314">
+          <caret line="4502" column="28" selection-start-line="4502" selection-start-column="28" selection-end-line="4502" selection-end-column="28" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../cc/js/tygh/ajax.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-80.75" vertical-offset="0" max-vertical-offset="11883">
+          <caret line="133" column="44" selection-start-line="133" selection-start-column="44" selection-end-line="133" selection-end-column="44" />
+          <folding>
+            <marker date="1443538349661" expanded="true" signature="445:486" placeholder="/*...*/" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../cc/js/tygh/product_filters.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.37904125" vertical-offset="0" max-vertical-offset="2533">
+          <caret line="20" column="0" selection-start-line="20" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
           <folding />
         </state>
       </provider>
