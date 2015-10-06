@@ -1,3 +1,23 @@
+function deleteData(url, selector, id)
+{
+    $.ajax({
+        url: base_url+"/"+url,
+        type: "POST",
+        dataType: "json",
+        // параметры запроса, передаваемые на сервер (последний - подстрока для поиска):
+        data: {id: id},
+        // обработка успешного выполнения запроса
+        success: function(data){
+
+        },
+        error: function(){
+            alert('error');
+            //TODO показать ошибку транслате
+        }
+    });
+}
+
+
 $(function() {
     /**
      * Автокомплит прикрепления юзера к проекту

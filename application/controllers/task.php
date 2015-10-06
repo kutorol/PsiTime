@@ -1,9 +1,13 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 /**
+ * Class Task
  * Обязательно класс называть с большой буквы, а файл с маленькой буквы!!!
  * Be sure to call the class with a capital letter, as a file with a small letter !!!
- * Class Task
+ * @property Task_model $task_model
+ * @property Common_model $common_model - общая модель для работы с бд (general model for working with database)
+ * @property Common $common - общая библиотека с авторизацией юзера и проверками (shared library user and authorization checks)
+ * @property Display_lib $display_lib - достает нужные вьюхи (It lacks the necessary view file)
  */
 class Task extends CI_Controller {
 
@@ -28,14 +32,28 @@ class Task extends CI_Controller {
         if($data['checkAuth']['check'] === false)
             $this->common->dropCookie(true, '', ($data['checkAuth']['title_error'] != '') ? $data['checkAuth']['title_error'] : $data['languages_desc'][0]['errorAuth'][$data['segment']]);
 
-
         $this->display_lib->display($data, $config['pathToViewDir']);
 	}
 
 
     /**
+     * Получаем проекты для данного юзера
+     * @param $idIser
+     * @param string $select
+     * @param string $return
+     * @return mixed
+     */
+    private function _getProject($idIser, $select = 'id_project, title', $return = 'result_array')
+    {
+        return $this->common_model->getResult('projects', 'responsible', $idIser, $return, $select, 'id_project');
+    }
+
+
+    /**
      * Функция добавляет проект на сайт, в который потом добавляется задачи
      * The function adds the project to the site, which is then added to the task
+     *
+     * @var $fail - распределяет ошибка эта или нет (This distributes the error or not)
      */
     public function addProject()
     {
@@ -54,14 +72,19 @@ class Task extends CI_Controller {
         if($data['checkAuth']['check'] === false)
             $this->common->dropCookie(true, '', ($data['checkAuth']['title_error'] != '') ? $data['checkAuth']['title_error'] : $data['languages_desc'][0]['errorAuth'][$data['segment']]);
 
+        $this->load->model('common_model');
 
+        //узнаем ид данного юзера
+        $userData = $this->common_model->getResult('users', 'login', $data['login'], 'row_array', 'id_user');
+        if(empty($userData))
+            $this->common->dropCookie(true, '', $data['common_library'][4]);
 
-
-        //if(isset($_POST['iAdmin'])) берем логин
+        //получаем все проекты для данного юзера
+        $data['myProjects'] = $this->_getProject($userData['id_user']);
 
         if(isset($_POST['addProject_btn']))
         {
-            $this->form_validation->set_rules('nameProject', $data['welcome_controller'][1], 'trim|required|min_length[3]|max_length[20]|xss_clean');
+            $this->form_validation->set_rules('nameProject', $data['welcome_controller'][1], 'trim|required|min_length[3]|max_length[20]|xss_clean|is_unique[projects.title]');
             $this->form_validation->set_rules('mainUser', $data['welcome_controller'][2], 'trim|alpha_dash|min_length[2]|max_length[20]|xss_clean');
 
             //если валидация не прошла проверку - показываем вьюху, а там ошибки покажут
@@ -71,23 +94,53 @@ class Task extends CI_Controller {
                 return true;
             }
 
-            //TODO сделать добавление проекта
+            //распределяет ошибка эта или нет (This distributes the error or not)
+            $fail = false;
+            $new = [];
+            //название проекта
+            $new['title'] = $this->common->clear($this->input->post('nameProject', true));
+
+            //если нажат чекбокс
             if(isset($_POST['iAdmin']))
             {
                 if($this->input->post('iAdmin') == 'yes')
                 {
-                    //TODO тут узнать ид чувака или сразу по логину добавить проект
-                }
-                else
-                {
-                    //TODO translate
-                    $data['iAdminError'] = 'bad request';
+                    $new['responsible'] = $userData['id_user'];
+                    $fail = true;
                 }
             }
+            //если чекбокс не нажат и выбран чел из автокомплита
             else
             {
-                //TODO тут если чел не себя главным выбрал
+                if(isset($_POST['mainUser']))
+                {
+                    $login = $this->common->clear($this->input->post('mainUser'));
+                    $userOtherData = $this->common_model->getResult('users', 'login', $login, 'row_array', 'id_user');
+                    if(empty($userOtherData))
+                        $this->common->redirect_to('task/addProject', $data['js'][1]);
+
+                    $new['responsible'] = $userOtherData['id_user'];
+                    $fail = true;
+                }
             }
+
+            //если все хорошо прошло
+            if($fail === true)
+            {
+                $q = $this->common_model->insertData('projects', $new, true);
+                if($q > 0)
+                {
+                    $data['error'] = $data['task_views'][4];
+                    $data['status_text'] = 'success';
+                    //получаем все проекты для данного юзера
+                    $data['myProjects'] = $this->_getProject($userData['id_user']);
+                }
+                else
+                    $this->common->redirect_to('task/addProject', $data['task_views'][5]);
+            }
+            //ошибка
+            else
+                $data['error'] = $data['task_views'][6];
         }
 
 
@@ -95,6 +148,7 @@ class Task extends CI_Controller {
     }
 
     /**
+     * (AJAX)
      * Получаем доступные имена по логину или имени
      * Get accessible by login name or name
      */
@@ -128,6 +182,44 @@ class Task extends CI_Controller {
             echo "NU NIXUYA SEBE TI CHEGO SDELAL";
     }
 
+
+    /**
+     * (AJAX)
+     * Удаляем проект вместе со всеми задачами
+     * Remove the project together with all tasks
+     */
+    public function deleteProject()
+    {
+        //если это аякс запрос
+        if($this->input->server('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest')
+        {
+            $this->load->model('common_model');
+            //проверяем данные
+            if($this->common->checkData($_POST['id'], true) === true)
+            {
+                $idProject = $this->common->clear(intval($_POST['id']));
+
+                $q = $this->common_model->deleteData('projects', 'id_project', $idProject, true);
+                if($q > 0)
+                {
+                    //TODO удалять таски
+                }
+                else
+                {
+                    //TODO error
+                }
+            }
+            else
+            {
+                //TODO error
+            }
+        }
+        else
+            echo "NU NIXUYA SEBE TI CHEGO SDELAL";
+
+
+       // echo json_encode(['result'=>'blya', 'das' => ['as', 'gas']]);
+    }
 
 
 }

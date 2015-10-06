@@ -4,6 +4,10 @@
  * Обязательно класс называть с большой буквы, а файл с маленькой буквы!!!
  * Be sure to call the class with a capital letter, as a file with a small letter !!!
  * Class Welcome
+ * @property Welcome_model $welcome_model
+ * @property Common $common - общая библиотека с авторизацией юзера и проверками (shared library user and authorization checks)
+ * @property Common_model $common_model - общая модель для работы с бд (general model for working with database)
+ * @property Display_lib $display_lib - достает нужные вьюхи (It lacks the necessary view file)
  */
 class Welcome extends CI_Controller {
 
@@ -156,9 +160,9 @@ class Welcome extends CI_Controller {
             if($data['email'] != '')
             {
                 //подгружаем модель
-                $this->load->model('welcome_model');
+                $this->load->model('common_model');
                 //проверяем совпадения в базе
-                $q = $this->welcome_model->checkEmail($data['email']);
+                $q = $this->common_model->getResult('users', 'email', $data['email'], 'row_array', 'id_user, login');
                 if(!empty($q))
                 {
                     //загружаем библиотеку помощи для строк
@@ -170,7 +174,7 @@ class Welcome extends CI_Controller {
                     $new['password'] = $new_pass = random_string('alnum', rand(7, 15));
                     $new['password'] = sha1(md5($new['password'].$new['hash']));
 
-                    $check = $this->welcome_model->updateData($new, 'id_user', $q['id_user']);
+                    $check = $this->common_model->updateData($new, 'id_user',  $q['id_user'], 'users', true);
                     if($check > 0)
                     {
                         //компануем email на отправку
@@ -252,10 +256,10 @@ class Welcome extends CI_Controller {
 			//получаем пароль
 			$new['password'] = $pass = $data['pass'];
 			$new['password'] = sha1(md5($new['password'].$new['hash']));
-				
-			//подгружаем модель
-            $this->load->model('welcome_model');	
-			$check = $this->welcome_model->insertUser($new);
+
+            //подгружаем модель
+            $this->load->model('common_model');
+			$check = $this->common_model->insertData('users', $new, true);
 			if($check > 0)
 			{
 				//компануем email на отправку
@@ -272,8 +276,6 @@ class Welcome extends CI_Controller {
 				$data['error'] = $data['welcome_controller'][22];
 		   
         }
-
-		
 		
 		$this->display_lib->display($data, $config['pathToViewDir']);
     }
@@ -316,8 +318,9 @@ class Welcome extends CI_Controller {
             $data['passOld'] = $this->common->clear($this->input->post('passOld', true));
             $data['passNew'] = $this->common->clear($this->input->post('passNew', true));
 
-            $this->load->model('welcome_model');
-            $userData = $this->welcome_model->getResult('users', 'login', $data['login'], 'row_array', 'id_user, hash, password');
+            //подгружаем модель
+            $this->load->model('common_model');
+            $userData = $this->common_model->getResult('users', 'login', $data['login'], 'row_array', 'id_user, hash, password');
             if(!empty($userData))
             {
                 if(sha1(md5($data['passOld'].$userData['hash'])) == $userData['password'])
@@ -330,7 +333,7 @@ class Welcome extends CI_Controller {
                     //получаем пароль
                     $new['password'] = sha1(md5($data['passNew'].$new['hash']));
 
-                    $q = $this->welcome_model->updateData($new, 'id_user', $userData['id_user']);
+                    $q = $this->common_model->updateData($new, 'id_user', $userData['id_user'], 'users', true);
                     if($q > 0)
                         $this->common->redirect_to('welcome/changePassword', $data['welcome_controller'][26], 'text', 'success');
                     else
@@ -365,9 +368,10 @@ class Welcome extends CI_Controller {
         if(isset($data['return_notification']))
             return true;
 
+        $this->load->model('common_model');
         $this->load->model('welcome_model');
 
-        $data['userData'] = $this->welcome_model->getResult('users', 'login', $data['login'], 'row_array', 'id_user, name, login, email');
+        $data['userData'] = $this->common_model->getResult('users', 'login', $data['login'], 'row_array', 'id_user, name, login, email');
         if(empty($data['userData']))
             $this->dropCookie(true, '', $data['welcome_controller'][25]);
 
@@ -407,7 +411,7 @@ class Welcome extends CI_Controller {
                 if($v != '')
                     $new[$k] = $v;
 
-            $q = $this->welcome_model->updateData($new, 'id_user', $data['userData']['id_user']);
+            $q = $this->common_model->updateData($new, 'id_user', $data['userData']['id_user'], 'users', true);
             if($q > 0)
             {
                 if(isset($new['login']))

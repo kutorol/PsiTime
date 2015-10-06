@@ -12,7 +12,7 @@ class Lang_controller
         /**
          * Email Администратора ну или просто сутенера этого сайта
          */
-        $lang['emailAdminSite'] = 'timebig@bigmsk.ru';
+        $lang['emailAdminSite'] = 'admin@timebig.ru';
 
         /**
          * Общее для всех языков
@@ -206,7 +206,7 @@ class Lang_controller
             22  =>  'Error! There was a failure in the registration. Try again!',
             23  =>  'Change Password page',
             24  =>   $lang['input_form_lang'][10][$segment].' does not match!',
-            25  =>  'Very unfortunate mistake ... It\'s a pity that it happened ... Please reset your account!',
+            25  =>  "Very unfortunate mistake ... It's a pity that it happened ... Please reset your account!",
             26  =>  'Your password has been changed!',
             27  =>  'Page profile changes',
             28  =>  'Changing profile',
@@ -237,7 +237,7 @@ class Lang_controller
          */
         $lang['lang_en']['common_library'] = [
             0   =>  'Fucked your login!',
-            1   =>  'You\'ve come under a login -',
+            1   =>  "You've come under a login -",
             2   =>  'You are already logged in TimeBig',
             4   =>  'Very strange error ... Try again to login!',
             5   =>  'What is wrong cookies! I ask not fun!',
@@ -277,6 +277,15 @@ class Lang_controller
             1   =>  'Название проекта',
             2   =>  'Имя ответственного за проект',
             3   =>  'Я ответственный(ая) за проект',
+            4   =>  'Проект успешно добавлен',
+            5   =>  'Не удалось добавить проект. Обновите страницу и попробуйте еще раз!',
+            6   =>  'Возможно я не прав, но вы пытаетесь причинить вред сайту!',
+            7   =>  'Мои проекты',
+            8   =>  'Прикрепить персонал',
+            9   =>  'Удалить проект',
+            10  =>  'Переименовать',
+            11  =>  'Название',
+            12  =>  'Опции',
         ];
 
         /********************************************
@@ -289,6 +298,15 @@ class Lang_controller
             1   =>  'Project name',
             2   =>  'Name responsible for the project',
             3   =>  'I am responsible for the project',
+            4   =>  'The project successfully added',
+            5   =>  'Unable to add the project. Refresh the page and try again!',
+            6   =>  "Maybe I'm wrong, but you are trying to cause harm to the site!",
+            7   =>  'My projects',
+            8   =>  'Attach staff',
+            9   =>  'Remove project',
+            10  =>  'Rename',
+            11  =>  'Title',
+            12  =>  'Options',
         ];
 
 

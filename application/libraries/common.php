@@ -427,6 +427,48 @@ class Common
     }
 
 
+    /**
+     * Проверяем пришедшие данные, в основном для AJAX
+     * It examines the data mainly for AJAX
+     *
+     * @param $data - данные (data)
+     * @param bool $is_int - проверять как число (check the number)
+     * @param bool $is_string - проверять как строку (check as a string)
+     * @param bool $unsigned - проверять ли на меньше чем 0 (check whether less than 0)
+     * @param bool $zero - проверять ли на равенство 0 (check whether the equality 0)
+     * @return bool
+     */
+    public function checkData($data, $is_int = false, $is_string = false, $unsigned = true, $zero = true)
+    {
+        if(!isset($data))
+            return false;
+
+        if($is_string === true)
+        {
+            if(!is_string(trim($data)))
+                return false;
+        }
+        elseif($is_int === true)
+        {
+            if(!is_numeric($data))
+                return false;
+
+            if($zero === true)
+            {
+                if($data == 0)
+                    return false;
+            }
+
+            if($unsigned === true)
+            {
+                if($data < 0)
+                    return false;
+            }
+        }
+
+        return true;
+    }
+
 
 
 

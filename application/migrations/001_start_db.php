@@ -52,6 +52,7 @@ class Migration_Start_db extends CI_Migration{
                   `title_ru` varchar(255) NOT NULL,
                   `title_en` varchar(255) NOT NULL,
                   `programm` varchar(255) NOT NULL,
+                  AUTO_INCREMENT (`id_role`),
                   PRIMARY KEY (`id_role`),
                   UNIQUE KEY `id_role` (`id_role`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
@@ -76,6 +77,7 @@ class Migration_Start_db extends CI_Migration{
                   `id_project` int(10) unsigned NOT NULL,
                   `title` varchar(255) NOT NULL,
                   `responsible` int(11) NOT NULL COMMENT 'ид того, кто главный за этот проект',
+                  AUTO_INCREMENT (`id_project`),
                   PRIMARY KEY (`id_project`),
                   UNIQUE KEY `id_project` (`id_project`),
                   KEY `responsible` (`responsible`),
@@ -101,6 +103,7 @@ class Migration_Start_db extends CI_Migration{
               `name_complexity_ru` varchar(255) NOT NULL,
               `name_complexity_en` varchar(255) NOT NULL,
               `color` varchar(255) NOT NULL,
+              AUTO_INCREMENT (`id_complexity`),
               PRIMARY KEY (`id_complexity`),
               UNIQUE KEY `id_complexity` (`id_complexity`),
               KEY `name_complexity_ru` (`name_complexity_ru`),
@@ -144,6 +147,7 @@ class Migration_Start_db extends CI_Migration{
                   `time_for_complete_value` enum('1', '2', '3', '4') NOT NULL COMMENT 'размер времени заданного на выполнение. 0-мин,1-час,2-день,3-месяц',
                   `time_lanch` varchar(255) NOT NULL COMMENT 'время когда пойдешь на обед',
                   `time_end_day` varchar(255) NOT NULL COMMENT 'время конца рабочего дня',
+                  AUTO_INCREMENT (`id_task`),
                   PRIMARY KEY (`id_task`),
                   UNIQUE KEY `id_task` (`id_task`),
                   KEY `complexity_id` (`complexity_id`),
