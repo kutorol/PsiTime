@@ -237,7 +237,7 @@ class Lang_controller
          */
         $lang['lang_en']['common_library'] = [
             0   =>  'Fucked your login!',
-            1   =>  "You've come under a login -",
+            1   =>  "You've come under a login - ",
             2   =>  'You are already logged in TimeBig',
             4   =>  'Very strange error ... Try again to login!',
             5   =>  'What is wrong cookies! I ask not fun!',
@@ -275,7 +275,7 @@ class Lang_controller
         $lang['lang_ru']['task_views'] = [
             0   =>  'Добавить проект',
             1   =>  'Название проекта',
-            2   =>  'Имя ответственного за проект',
+            2   =>  'Имя или логин ответственного за проект',
             3   =>  'Я ответственный(ая) за проект',
             4   =>  'Проект успешно добавлен',
             5   =>  'Не удалось добавить проект. Обновите страницу и попробуйте еще раз!',
@@ -286,6 +286,8 @@ class Lang_controller
             10  =>  'Переименовать',
             11  =>  'Название',
             12  =>  'Опции',
+            13  =>  'Проект успешно удален',
+            14  =>  'Произошла ошибка. Проект не был удален',
         ];
 
         /********************************************
@@ -296,7 +298,7 @@ class Lang_controller
         $lang['lang_en']['task_views'] = [
             0   =>  'Add project',
             1   =>  'Project name',
-            2   =>  'Name responsible for the project',
+            2   =>  'Name or login responsible for the project',
             3   =>  'I am responsible for the project',
             4   =>  'The project successfully added',
             5   =>  'Unable to add the project. Refresh the page and try again!',
@@ -307,6 +309,8 @@ class Lang_controller
             10  =>  'Rename',
             11  =>  'Title',
             12  =>  'Options',
+            13  =>  'The project was successfully removed',
+            14  =>  'An error has occurred. The project has not been removed',
         ];
 
 
@@ -326,11 +330,14 @@ class Lang_controller
         ];
 
 
+
+
         //DON'T TOUCH!!!
-        $lang['lang_'.$segment]['languages_desc']   =   $lang['languages_desc'];
-        $lang['lang_'.$segment]['emailAdminSite']   =   $lang['emailAdminSite'];
-        $lang['lang_'.$segment]['input_form_lang']  =   $lang['input_form_lang'];
-        $lang['lang_'.$segment]['header_menu_lang']  =   $lang['header_menu_lang'];
+        $lang['lang_'.$segment]['languages_desc']       =   $lang['languages_desc'];
+        $lang['lang_'.$segment]['emailAdminSite']       =   $lang['emailAdminSite'];
+        $lang['lang_'.$segment]['input_form_lang']      =   $lang['input_form_lang'];
+        $lang['lang_'.$segment]['header_menu_lang']     =   $lang['header_menu_lang'];
+        $lang['lang_'.$segment]['js'][2]                =   $lang['lang_'.$segment]['task_views'][14];
 
 
 

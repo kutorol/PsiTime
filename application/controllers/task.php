@@ -22,15 +22,13 @@ class Task extends CI_Controller {
             'langArray_1'       =>  'task_controller',
             'langArray_2'       =>  0,
             'authUser'          =>  true,
-            'noRedirect'        =>  true, //true - редиректим, false - возвращаем ошибку
+            'noRedirect'        =>  false, //false - редиректим, true - возвращаем ошибку
             'pattern'           =>  ['pattern'=>['title', 'login', '%login%']]
         ];
         $data = $this->common->allInit($config);
         if(isset($data['return_notification']))
             return true;
 
-        if($data['checkAuth']['check'] === false)
-            $this->common->dropCookie(true, '', ($data['checkAuth']['title_error'] != '') ? $data['checkAuth']['title_error'] : $data['languages_desc'][0]['errorAuth'][$data['segment']]);
 
         $this->display_lib->display($data, $config['pathToViewDir']);
 	}
@@ -62,15 +60,13 @@ class Task extends CI_Controller {
             'langArray_1'       =>  'task_controller',
             'langArray_2'       =>  1,
             'authUser'          =>  true, //true - авторизирован, false - неавторизирован
-            'noRedirect'        =>  true, //true - редиректим, false - возвращаем ошибку
+            'noRedirect'        =>  false, //false - редиректим, true - возвращаем ошибку
             'pattern'           =>  ['pattern'=>['title', 'login', '%login%']]
         ];
         $data = $this->common->allInit($config);
         if(isset($data['return_notification']))
             return true;
 
-        if($data['checkAuth']['check'] === false)
-            $this->common->dropCookie(true, '', ($data['checkAuth']['title_error'] != '') ? $data['checkAuth']['title_error'] : $data['languages_desc'][0]['errorAuth'][$data['segment']]);
 
         $this->load->model('common_model');
 
@@ -157,26 +153,32 @@ class Task extends CI_Controller {
         //если это аякс запрос
         if($this->input->server('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest')
         {
-            if(isset($_POST['nameUser']) && isset($_POST['maxRows']))
+            $data = $this->common->initApp('welcome_controller', 0, 'login', true, true);
+            if($data['checkAuth']['title_error'] != '')
+                echo json_encode(['status'=>'error', 'result'=> $data['checkAuth']['title_error']]);
+            else
             {
-                $this->load->model('task_model');
-                $nameUser = $this->common->clear($_POST['nameUser']);
-                $maxRows  = $this->common->clear(intval($_POST['maxRows']));
-                $q = $this->task_model->getUser($nameUser, $maxRows);
-                if(!empty($q))
+                if(isset($_POST['nameUser']) && isset($_POST['maxRows']))
                 {
-                    $data['users'] = array();
-                    foreach($q as $v)
-                        $data['users'][] = array('name'     => '(#'.$v['id_user'].') Имя: '.$v['name']." Логин: ",
-                                                 'login'    =>  $v['login']);
+                    $this->load->model('task_model');
+                    $nameUser = $this->common->clear($_POST['nameUser']);
+                    $maxRows  = $this->common->clear(intval($_POST['maxRows']));
+                    $q = $this->task_model->getUser($nameUser, $maxRows);
+                    if(!empty($q))
+                    {
+                        $data['users'] = array();
+                        foreach($q as $v)
+                            $data['users'][] = array('name'     => '(#'.$v['id_user'].') '.$data['input_form_lang'][1][$data['segment']].': '.$v['name']." ".$data['input_form_lang'][0][$data['segment']].": ",
+                                'login'    =>  $v['login']);
 
-                    echo json_encode($data);
+                        echo json_encode($data);
+                    }
+                    else
+                        echo json_encode(['users'=>[0=>['name'=>'notMatch_EX']]]);
                 }
                 else
-                    echo json_encode(['users'=>[0=>['name'=>'notMatch_EX']]]);
+                    echo json_encode(['users'=>[0=>['name'=>'notPostData_EX']]]);
             }
-            else
-                echo json_encode(['users'=>[0=>['name'=>'notPostData_EX']]]);
         }
         else
             echo "NU NIXUYA SEBE TI CHEGO SDELAL";
@@ -193,32 +195,32 @@ class Task extends CI_Controller {
         //если это аякс запрос
         if($this->input->server('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest')
         {
-            $this->load->model('common_model');
-            //проверяем данные
-            if($this->common->checkData($_POST['id'], true) === true)
-            {
-                $idProject = $this->common->clear(intval($_POST['id']));
-
-                $q = $this->common_model->deleteData('projects', 'id_project', $idProject, true);
-                if($q > 0)
-                {
-                    //TODO удалять таски
-                }
-                else
-                {
-                    //TODO error
-                }
-            }
+            $data = $this->common->initApp('welcome_controller', 0, 'login', true, true);
+            if($data['checkAuth']['title_error'] != '')
+                echo json_encode(['status'=>'error', 'result'=> $data['checkAuth']['title_error']]);
             else
             {
-                //TODO error
+                $this->load->model('common_model');
+                //проверяем данные
+                if($this->common->checkData($_POST['id'], true) === true)
+                {
+                    $idProject = $this->common->clear(intval($_POST['id']));
+
+                    $q = $this->common_model->deleteData('projects', ['id_project', 'responsible'], [$idProject, $data['idUser']], true);
+                    if($q > 0)
+                    {
+                        $this->common_model->deleteData('task', 'project_id', $idProject);
+                        echo json_encode(['status'=>'success', 'result'=> $data['task_views'][13]]);
+                    }
+                    else
+                        echo json_encode(['status'=>'error', 'result'=> $data['task_views'][14]]);
+                }
+                else
+                    echo json_encode(['status'=>'error', 'result'=> $data['js'][0]]);
             }
         }
         else
             echo "NU NIXUYA SEBE TI CHEGO SDELAL";
-
-
-       // echo json_encode(['result'=>'blya', 'das' => ['as', 'gas']]);
     }
 
 

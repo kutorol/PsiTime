@@ -34,7 +34,6 @@ class Common
     /**
      * Получаем куки с текстом и ошибкой, и если они не пусты, то в итоге выводим их сразу на экране.
      * Get the cookie text and error, and if they are not empty, it is a way to display them all at once on the screen.
-     * @param array $data
      * @return array
      */
     public function getCookie()
@@ -105,7 +104,7 @@ class Common
         delete_cookie('chech_user');
         $this->CI_in->session->unset_userdata('session_user');
 
-        if($check)
+        if($check === true)
             $this->redirect_to($url, $title, $name_cookie, $status);
 
         return $title;
@@ -117,21 +116,21 @@ class Common
      * @param bool $ajax
      * @return bool
      */
-    public function checkAuth($ajax = false)
+    public function checkAuth($ajax = false, $auth_user = true)
     {
         //проверка зашел или нет юзер уже
         $check = $this->checkCookieSession($ajax);
 
-        if($ajax)
-            return $check;
-
-        if($check['check'] === true)
+        if($check['login'] != '' && $auth_user === false && $ajax === false)
         {
             $this->redirect_to(
                 'task',
                 ($check['login'] != '') ? $this->data['common_library'][1].$check['login'] : $this->data['common_library'][2]
             );
         }
+
+
+        return $check;
     }
 
 
@@ -141,9 +140,7 @@ class Common
      */
     public function checkCookieSession($ajax = false)
     {
-        $error = ['title_error'=>''];
-        $error['login'] = '';
-        $error['check'] = false;
+        $error = ['title_error'=>'', 'login'=>''];
 
         //переменная отвечает за редирект (при аяксе он нах не нужен)
         $redirect = ($ajax) ? false : true;
@@ -151,6 +148,7 @@ class Common
         $login = $check_user = '';
         $login = $this->clear($this->CI_in->input->cookie('login', TRUE));
         $check_user = $this->clear($this->CI_in->input->cookie('chech_user', true));
+
 
 		/**
 		* Проверяем на активацию аккаунта
@@ -166,13 +164,14 @@ class Common
         }
 
 
+
         //проверяем сессию
         $session_user = $this->clear($this->CI_in->session->userdata('session_user'));
         $session_user = explode('|', $session_user);
         if(count($session_user) == 3)
         {
             if($session_user[0] == 'avtoriz' && $session_user[1] == md5('02u4hash3894'))
-                return ['login'=>$session_user[2], 'check'=>true, 'title_error'=>'']; // в $session_user[2] находится логин
+                return ['login'=>$session_user[2], 'title_error'=>'']; // в $session_user[2] находится логин
         }
         //иначе удаляем сессию
         else
@@ -197,7 +196,7 @@ class Common
 
                     //ставим сессию
                     $this->CI_in->session->set_userdata(['session_user'=> 'avtoriz|'.md5('02u4hash3894').'|'.$login]);
-                    return ['login'=>$login, 'check'=>true,'title_error'=>''];
+                    return ['login'=>$login, 'title_error'=>''];
                 }
                 else
                     $error['title_error'] = $this->dropCookie($redirect, '', $this->data['common_library'][4]);
@@ -205,10 +204,6 @@ class Common
             else
                 $error['title_error'] = $this->dropCookie($redirect, '', $this->data['common_library'][5]);
         }
-        else
-            $error['title_error'] = $this->dropCookie();
-
-
 
         return $error;
     }
@@ -319,7 +314,7 @@ class Common
      * @param string $controller_lang
      * @param int $name_lang
      * @param string $folder
-     * @param bool $auth_user - изначально ставим true (вошел в ЛК), но где нужно - изменяем на false (типо не авторизирован)
+     * @param bool $auth_user - изначально ставим true (вошел в ЛК), но где нужно - изменяем на false (типо не авторизирован) для показа некоторых частей в виде
      * @param bool $ajax - если false, то разрешен редирект, если true, то возвращается сообщение ошибки
      * @param array $what_replace - в массиве указан паттерн замены. [0] - какую ячейку заменить, [1] - на что заменить, [2] - какой паттерн искать для замены
      * @return array
@@ -346,16 +341,24 @@ class Common
         //если есть ошибку, то показываем вьюху
         if($this->data['error'] != '')
         {
-            $this->CI_in->display_lib->display($this->data, $folder);
+            if($ajax === false)
+                $this->CI_in->display_lib->display($this->data, $folder);
+
             $this->data['return_notification'] = true;
             return $this->data;
         }
 
 
         //проверка зашел или нет юзер уже
-        $this->data['checkAuth'] = $this->checkAuth($ajax);
+        $this->data['checkAuth'] = $this->checkAuth($ajax, $auth_user);
 
         $this->setDefaultLang($this->data['segment']);
+
+        if(isset($this->data['login']))
+        {
+            $q = $this->CI_in->db->where('login', $this->data['login'])->select('id_user')->get('users')->row_array();
+            $this->data['idUser'] = (!empty($q)) ? $q['id_user'] : 0;
+        }
 
         return $this->data;
     }
@@ -376,11 +379,12 @@ class Common
 
 
         /**
-         * Если сказано что юзер авторизирован, то проверяем
+         * Если сказано что юзер авторизирован, а логин пустой
          */
         if($config['authUser'] === true)
-            if($this->data['checkAuth']['check'] === false)
-                $this->dropCookie(true, '', ($this->data['checkAuth']['title_error'] != '') ? $this->data['checkAuth']['title_error'] : $this->data['languages_desc'][0]['errorAuth'][$this->data['segment']]);
+            if($this->data['checkAuth']['login'] == '')
+                $this->data['checkAuth']['title_error'] = $this->dropCookie(($config['noRedirect']) ? false : true, '', ($this->data['checkAuth']['title_error'] != '') ? $this->data['checkAuth']['title_error'] : $this->data['languages_desc'][0]['errorAuth'][$this->data['segment']]);
+
 
         return $this->data;
     }

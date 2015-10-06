@@ -1,4 +1,13 @@
-function deleteData(url, selector, id)
+/**
+ * Удаляем любые данные
+ * Remove any data
+ *
+ * @param url - на какую страницу делаем запрос (on what page we do request)
+ * @param selector - как называется селектор той строки, которую впоследствии из вида удалим (the name of the selector line, which was later remove from view)
+ * @param id - ид того, что удаляем (id that remove)
+ * @param btn_delete_selector - селектор кнопки удаления, чтобы ее можно было скрыть (selector delete button, so that it can be hidden)
+ */
+function deleteData(url, selector, id, btn_delete_selector)
 {
     $.ajax({
         url: base_url+"/"+url,
@@ -7,16 +16,48 @@ function deleteData(url, selector, id)
         // параметры запроса, передаваемые на сервер (последний - подстрока для поиска):
         data: {id: id},
         // обработка успешного выполнения запроса
+        beforeSend: function(){
+            showLoad(btn_delete_selector, id, false);
+        },
         success: function(data){
+            if(data.status == 'error')
+            {
+                $("#mainError").removeClass("label-success").addClass("label-danger").html(data.result);
+                showLoad(btn_delete_selector, id, true);
+            }
+            else
+            {
+                $("#"+selector+id).fadeOut(300, function(){
+                    $("#mainError").removeClass("label-danger").addClass("label-success").html(data.result);
+                    $(this).remove();
+                    if($(".project").html() === undefined)
+                        $("#addProject").remove();
 
+                });
+            }
         },
         error: function(){
-            alert('error');
-            //TODO показать ошибку транслате
+            $("#mainError").removeClass("label-success").addClass("label-danger").html(jsLang[2]);
+            showLoad(btn_delete_selector, id, true);
         }
     });
 }
 
+
+function showLoad(selector, id, back)
+{
+    if(back === false)
+    {
+        $("#" + selector + id).hide();
+        $("#load_" + id).show();
+    }
+    else
+    {
+        $("#load_" + id).fadeOut(300, function(){
+            $("#" + selector + id).show();
+        });
+    }
+}
 
 $(function() {
     /**
@@ -36,6 +77,13 @@ $(function() {
                 },
                 // обработка успешного выполнения запроса
                 success: function(data){
+
+                    if(data.status == 'error')
+                    {
+                        $("#autocomplete_error").html(data.result);
+                        return false;
+                    }
+
                     // приведем полученные данные к необходимому формату и передадим в предоставленную функцию response
                     response($.map(data.users, function(item){
                         var error = '';

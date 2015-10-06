@@ -48,7 +48,7 @@ class Welcome extends CI_Controller {
             'langArray_1'   =>  'welcome_controller',
             'langArray_2'   =>  0,
             'authUser'   =>  false,
-            'noRedirect'   =>  false //true - редиректим, false - возвращаем ошибку
+            'noRedirect'   =>  false //false - редиректим, true - возвращаем ошибку
         ];
         $data = $this->common->allInit($config);
         if(isset($data['return_notification']))
@@ -135,7 +135,7 @@ class Welcome extends CI_Controller {
             'langArray_1'   =>  'welcome_controller',
             'langArray_2'   =>  8,
             'authUser'   =>  false,
-            'noRedirect'   =>  false
+            'noRedirect'   =>  false //false - редиректим, true - возвращаем ошибку
         ];
         $data = $this->common->allInit($config);
         if(isset($data['return_notification']))
@@ -213,7 +213,7 @@ class Welcome extends CI_Controller {
             'langArray_1'   =>  'welcome_controller',
             'langArray_2'   =>  16,
             'authUser'   =>  false,
-            'noRedirect'   =>  false
+            'noRedirect'   =>  false //false - редиректим, true - возвращаем ошибку
         ];
         $data = $this->common->allInit($config);
         if(isset($data['return_notification']))
@@ -292,7 +292,7 @@ class Welcome extends CI_Controller {
             'langArray_1'   =>  'welcome_controller',
             'langArray_2'   =>  23,
             'authUser'   =>  true,
-            'noRedirect'   =>  true //true - редиректим, false - возвращаем ошибку
+            'noRedirect'   =>  false //false - редиректим, true - возвращаем ошибку
         ];
         $data = $this->common->allInit($config);
         if(isset($data['return_notification']))
@@ -362,7 +362,7 @@ class Welcome extends CI_Controller {
             'langArray_1'   =>  'welcome_controller',
             'langArray_2'   =>  27,
             'authUser'   =>  true,
-            'noRedirect'   =>  true //true - редиректим, false - возвращаем ошибку
+            'noRedirect'   =>  false //false - редиректим, true - возвращаем ошибку
         ];
         $data = $this->common->allInit($config);
         if(isset($data['return_notification']))

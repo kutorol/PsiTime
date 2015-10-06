@@ -36,7 +36,7 @@
 
 
 
-<div class="row">
+<div class="row" id="addProject">
     <div class="container-fluid">
         <div class="col-xs-12 text-center">
 
@@ -53,14 +53,16 @@
                     </thead>
                     <tbody>
                     <?php $i = 1; foreach($myProjects as $key=>$val):?>
-                        <tr id="line_project_<?=$val['id_project']?>">
+                        <tr id="line_project_<?=$val['id_project']?>" class="project">
                             <td><?=$i?></td>
                             <td><a href="<?=$val['id_project']?>"><?=$val['title']?></a></td>
-                            <td>
+                            <td >
                                 <a href="" class="btn btn-default"><?=$task_views[8]?></a>
                                 <a href="" class="btn btn-info"><?=$task_views[10]?></a>
-                                <div onclick="deleteData('task/deleteProject','line_project_', <?=$val['id_project']?>);" class="btn btn-danger"><?=$task_views[9]?> <i class="fa fa-trash-o"></i></div>
+                                <div  id="delete_project_<?=$val['id_project']?>" onclick="deleteData('task/deleteProject','line_project_', <?=$val['id_project']?>, 'delete_project_');" class="btn btn-danger"><?=$task_views[9]?> <i class="fa fa-trash-o"></i></div>
+                                <div id="load_<?=$val['id_project']?>" class="btn btn-danger" style="display: none;"><i class="fa fa-spinner fa-spin"></i></div>
                             </td>
+
                         </tr>
                     <?php $i++; endforeach;?>
                     </tbody>

@@ -5,7 +5,7 @@
 
         <?php /*Если есть ошибка, то показываем ее*/
         if(isset($error)):?>
-            <span class="label label-<?=$status_text?> error"><?=preg_replace('/%s%/', '</span><br><br><span class="label label-success error">', preg_replace('<br>', '/span><br><br><span class="label label-success error"',strip_tags($error, "<br>")))?></span>
+            <span id="mainError" class="label label-<?=$status_text?> error"><?=preg_replace('/%s%/', '</span><br><br><span class="label label-success error">', preg_replace('<br>', '/span><br><br><span class="label label-success error"',strip_tags($error, "<br>")))?></span>
         <?php endif;?>
     </div>
 </div>
