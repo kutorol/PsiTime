@@ -77,12 +77,9 @@ class Welcome extends CI_Controller {
             {
                 //подгружаем модель
                 $this->load->model('welcome_model');
-                //проверяем совпадения в базе
+                //проверяем совпадения в базе по логину и паролю
                 $q = $this->welcome_model->checkUser($data['login'], $data['pass']);
-
-                if(isset($q['bad_status']))
-                    $data['error'] = $data['welcome_controller'][3];
-                elseif($q === true)
+                if($q === true)
                 {
                     $this->session->set_userdata(['session_user'=> 'avtoriz|'.md5('02u4hash3894').'|'.$data['login']]);
                     setcookie ("login",$data['login'],time()+9999999999,"/");

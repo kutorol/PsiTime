@@ -150,20 +150,6 @@ class Common
         $check_user = $this->clear($this->CI_in->input->cookie('chech_user', true));
 
 
-		/**
-		* Проверяем на активацию аккаунта
-		*/
-        if($login != '')
-        {
-            $result = $this->CI_in->db->where('login', $login)->select('status')->get('users')->row_array();
-            if($result['status'] == 0)
-            {
-                $error['title_error'] = $this->dropCookie($redirect, '', $this->data['common_library'][3]);
-                return $error;
-            }
-        }
-
-
 
         //проверяем сессию
         $session_user = $this->clear($this->CI_in->session->userdata('session_user'));
@@ -338,6 +324,19 @@ class Common
 
         //если это false, то человек не вошел в аккаунт
         $this->data['auth_user'] = $auth_user;
+
+        //проверка зашел или нет юзер уже
+        $this->data['checkAuth'] = $this->checkAuth($ajax, $auth_user);
+
+        $this->setDefaultLang($this->data['segment']);
+
+        if(isset($this->data['login']))
+        {
+            $q = $this->CI_in->db->where('login', $this->data['login'])->select('id_user, status')->get('users')->row_array();
+            $this->data['idUser'] = (!empty($q)) ? $q['id_user'] : 0;
+            $this->data['statusUser'] = (!empty($q)) ? $q['status'] : 0;
+        }
+
         //если есть ошибку, то показываем вьюху
         if($this->data['error'] != '')
         {
@@ -349,16 +348,7 @@ class Common
         }
 
 
-        //проверка зашел или нет юзер уже
-        $this->data['checkAuth'] = $this->checkAuth($ajax, $auth_user);
 
-        $this->setDefaultLang($this->data['segment']);
-
-        if(isset($this->data['login']))
-        {
-            $q = $this->CI_in->db->where('login', $this->data['login'])->select('id_user')->get('users')->row_array();
-            $this->data['idUser'] = (!empty($q)) ? $q['id_user'] : 0;
-        }
 
         return $this->data;
     }

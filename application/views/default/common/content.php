@@ -1,5 +1,12 @@
 <hr>
 
+<?php
+/**
+ * Если прикреплен к проекту
+ * If attached to the project
+ */
+if($statusUser == 1):?>
+
 <div class="row">
     <div class="container">
         <div>
@@ -81,3 +88,19 @@
 
     </div>
 </div>
+
+
+<?php
+/**
+ * Если не прикреплен к проекту
+ * If not attached to the draft
+ */
+ else:?>
+    <div class="row">
+        <div class="container">
+            <div>
+                <?=$task_views[15]?>
+            </div>
+        </div>
+    </div>
+<?php endif;?>

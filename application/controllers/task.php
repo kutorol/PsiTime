@@ -69,14 +69,8 @@ class Task extends CI_Controller {
 
 
         $this->load->model('common_model');
-
-        //узнаем ид данного юзера
-        $userData = $this->common_model->getResult('users', 'login', $data['login'], 'row_array', 'id_user');
-        if(empty($userData))
-            $this->common->dropCookie(true, '', $data['common_library'][4]);
-
         //получаем все проекты для данного юзера
-        $data['myProjects'] = $this->_getProject($userData['id_user']);
+        $data['myProjects'] = $this->_getProject($data['idUser']);
 
         if(isset($_POST['addProject_btn']))
         {
@@ -101,7 +95,12 @@ class Task extends CI_Controller {
             {
                 if($this->input->post('iAdmin') == 'yes')
                 {
-                    $new['responsible'] = $userData['id_user'];
+                    //FIXME доделать обновление юзера, а то чего то необновляет его в базе
+                    //обновляем у данного юзера статус, чтобы показывать на главной странице его проекты и таски
+                    if($data['statusUser'] == 0)
+                        $data['statusUser'] = $this->common_model->updateData(['status'=>1], 'id_user', $data['idUser'], 'users', true);
+
+                    $new['responsible'] = $data['idUser'];
                     $fail = true;
                 }
             }
@@ -111,9 +110,13 @@ class Task extends CI_Controller {
                 if(isset($_POST['mainUser']))
                 {
                     $login = $this->common->clear($this->input->post('mainUser'));
-                    $userOtherData = $this->common_model->getResult('users', 'login', $login, 'row_array', 'id_user');
+                    $userOtherData = $this->common_model->getResult('users', 'login', $login, 'row_array', 'id_user, status');
                     if(empty($userOtherData))
                         $this->common->redirect_to('task/addProject', $data['js'][1]);
+
+                    //обновляем у данного юзера статус, чтобы показывать на главной странице его проекты и таски
+                    if($userOtherData['status'] == 0)
+                        $this->common_model->updateData(['status'=>1], 'id_user', $userOtherData['id_user'], 'users');
 
                     $new['responsible'] = $userOtherData['id_user'];
                     $fail = true;
@@ -129,7 +132,7 @@ class Task extends CI_Controller {
                     $data['error'] = $data['task_views'][4];
                     $data['status_text'] = 'success';
                     //получаем все проекты для данного юзера
-                    $data['myProjects'] = $this->_getProject($userData['id_user']);
+                    $data['myProjects'] = $this->_getProject($data['idUser']);
                 }
                 else
                     $this->common->redirect_to('task/addProject', $data['task_views'][5]);

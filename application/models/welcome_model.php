@@ -17,14 +17,8 @@ class Welcome_model extends CI_Model {
         if(!empty($q))
         {
             if($q['password'] == sha1(md5($pass.$q['hash'])))
-            {
-                if($q['status'] == 0)
-                    return ['bad_status'=>''];
-                else
-                    return true;
-            }
+                return true;
         }
-
 
         return false;
     }

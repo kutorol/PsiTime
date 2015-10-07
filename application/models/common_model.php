@@ -75,6 +75,7 @@ class Common_model extends CI_Model {
      */
     public function updateData($new = array(), $where, $where_2, $table = 'users', $return = false)
     {
+        print_r($new);
         $this->_checkWhere($where, $where_2);
         $this->db->update($table, $new);
         if($return === true)
