@@ -289,6 +289,7 @@ class Lang_controller
             13  =>  'Проект успешно удален',
             14  =>  'Произошла ошибка. Проект не был удален',
             15  =>  'На данный момент вы не прикреплены к какому то проекту, поэтому создайте его или же дождитесь приглашения от вашего админа',
+            16  =>  'Нельзя удалять чужие проекты',
         ];
 
         /********************************************
@@ -313,6 +314,7 @@ class Lang_controller
             13  =>  'The project was successfully removed',
             14  =>  'An error has occurred. The project has not been removed',
             15  =>  'At the moment you are not attached to what that project, so create it, or wait for an invitation from your administrator',
+            16  =>  "You can not delete other people's projects",
         ];
 
 

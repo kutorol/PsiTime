@@ -332,9 +332,10 @@ class Common
 
         if(isset($this->data['login']))
         {
-            $q = $this->CI_in->db->where('login', $this->data['login'])->select('id_user, status')->get('users')->row_array();
+            $q = $this->CI_in->db->where('login', $this->data['login'])->select('id_user, status, count_projects')->get('users')->row_array();
             $this->data['idUser'] = (!empty($q)) ? $q['id_user'] : 0;
             $this->data['statusUser'] = (!empty($q)) ? $q['status'] : 0;
+            $this->data['count_projectsUser'] = (!empty($q)) ? $q['count_projects'] : 0;
         }
 
         //если есть ошибку, то показываем вьюху

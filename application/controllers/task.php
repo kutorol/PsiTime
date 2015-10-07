@@ -95,12 +95,14 @@ class Task extends CI_Controller {
             {
                 if($this->input->post('iAdmin') == 'yes')
                 {
-                    //FIXME доделать обновление юзера, а то чего то необновляет его в базе
                     //обновляем у данного юзера статус, чтобы показывать на главной странице его проекты и таски
                     if($data['statusUser'] == 0)
-                        $data['statusUser'] = $this->common_model->updateData(['status'=>1], 'id_user', $data['idUser'], 'users', true);
+                        $data['statusUser'] = $this->common_model->updateData(['status'=>'1', 'count_projects' => ($data['count_projectsUser'] + 1)], 'id_user', $data['idUser'], 'users', true);
+                    else
+                        $data['statusUser'] = $this->common_model->updateData(['count_projects' => ($data['count_projectsUser'] + 1)], 'id_user', $data['idUser'], 'users', true);
 
                     $new['responsible'] = $data['idUser'];
+                    $new['team_ids'] = $new['responsible'];
                     $fail = true;
                 }
             }
@@ -110,15 +112,19 @@ class Task extends CI_Controller {
                 if(isset($_POST['mainUser']))
                 {
                     $login = $this->common->clear($this->input->post('mainUser'));
-                    $userOtherData = $this->common_model->getResult('users', 'login', $login, 'row_array', 'id_user, status');
+                    $userOtherData = $this->common_model->getResult('users', 'login', $login, 'row_array', 'id_user, status, count_projects');
                     if(empty($userOtherData))
                         $this->common->redirect_to('task/addProject', $data['js'][1]);
 
+
                     //обновляем у данного юзера статус, чтобы показывать на главной странице его проекты и таски
                     if($userOtherData['status'] == 0)
-                        $this->common_model->updateData(['status'=>1], 'id_user', $userOtherData['id_user'], 'users');
+                        $this->common_model->updateData(['status'=>'1', 'count_projects' => ($userOtherData['count_projects'] + 1)], 'id_user', $userOtherData['id_user'], 'users');
+                    else
+                        $this->common_model->updateData(['count_projects' => ($userOtherData['count_projects'] + 1)], 'id_user', $userOtherData['id_user'], 'users');
 
                     $new['responsible'] = $userOtherData['id_user'];
+                    $new['team_ids'] = $new['responsible'];
                     $fail = true;
                 }
             }
@@ -208,15 +214,44 @@ class Task extends CI_Controller {
                 if($this->common->checkData($_POST['id'], true) === true)
                 {
                     $idProject = $this->common->clear(intval($_POST['id']));
-
-                    $q = $this->common_model->deleteData('projects', ['id_project', 'responsible'], [$idProject, $data['idUser']], true);
-                    if($q > 0)
+                    $infoProject = $this->common_model->getResult('projects', ['id_project', 'responsible'], [$idProject, $data['idUser']], 'row_array', 'responsible, team_ids');
+                    if(!empty($infoProject))
                     {
-                        $this->common_model->deleteData('task', 'project_id', $idProject);
-                        echo json_encode(['status'=>'success', 'result'=> $data['task_views'][13]]);
+                        $q = $this->common_model->deleteData('projects', ['id_project', 'responsible'], [$idProject, $data['idUser']], true);
+                        if($q > 0)
+                        {
+                            //обновляем количество проектов у юзера
+                            $new = [];
+                            $new['count_projects'] = $data['count_projectsUser'] - 1;
+                            if($new['count_projects']  == 0)
+                                $new['status'] = '0';
+
+                            $this->common_model->updateData($new, 'id_user', $data['idUser'], 'users');
+
+                            //также уменьшаем количество проектов у юзеров, которые находятся в этой команде (прикреплены к проекту)
+                            $q = $this->common_model->getResultIn('users', 'id_user', $infoProject['team_ids'], 'result_array', 'count_projects, id_user');
+                            foreach($q as $v)
+                            {
+                                if($v['id_user'] == $data['idUser'])
+                                    continue;
+
+                                $new = [];
+                                $new['count_projects'] = $v['count_projects'] - 1;
+                                if($new['count_projects']  == 0)
+                                    $new['status'] = '0';
+
+                                $this->common_model->updateData($new, 'id_user', $v['id_user'], 'users');
+                            }
+
+                            $this->common_model->deleteData('task', 'project_id', $idProject);
+                            echo json_encode(['status'=>'success', 'result'=> $data['task_views'][13]]);
+                        }
+                        else
+                            echo json_encode(['status'=>'error', 'result'=> $data['task_views'][14]]);
                     }
                     else
-                        echo json_encode(['status'=>'error', 'result'=> $data['task_views'][14]]);
+                        echo json_encode(['status'=>'error', 'result'=> $data['task_views'][16]]);
+
                 }
                 else
                     echo json_encode(['status'=>'error', 'result'=> $data['js'][0]]);

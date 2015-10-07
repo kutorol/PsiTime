@@ -68,6 +68,7 @@ class Common_model extends CI_Model {
     /**
      * Обновляем базу
      * Update db
+     *
      * @param array $new - данные для обновления (update data)
      * @param $where - тут поля в базе данных (here the fields in the database)
      * @param $where_2 - а тут значения, которые ищем (but here the values that are looking for)
@@ -75,7 +76,6 @@ class Common_model extends CI_Model {
      */
     public function updateData($new = array(), $where, $where_2, $table = 'users', $return = false)
     {
-        print_r($new);
         $this->_checkWhere($where, $where_2);
         $this->db->update($table, $new);
         if($return === true)
@@ -92,6 +92,27 @@ class Common_model extends CI_Model {
      * @return mixed
      */
     public function getResult($table, $where = '', $where_2 = '', $return = 'result_array', $select = null, $order_1 = '', $order_2 = 'desc')
+    {
+        $this->_checkSelect($select);
+        $this->_checkWhere($where, $where_2);
+
+        if(!empty($order))
+            $this->db->order_by($order_1, $order_2);
+
+        return $this->db->get($table)->$return();
+    }
+
+
+    /**
+     * Получаем результат выборки из бд
+     * Get the result set from the database
+     *
+     * @param $table
+     * @param string $where - тут поля в базе данных (here the fields in the database)
+     * @param string $where_2 - а тут значения, которые ищем (but here the values that are looking for)
+     * @return mixed
+     */
+    public function getResultIn($table, $where = '', $where_2 = '', $return = 'result_array', $select = null, $order_1 = '', $order_2 = 'desc')
     {
         $this->_checkSelect($select);
         $this->_checkWhere($where, $where_2);
