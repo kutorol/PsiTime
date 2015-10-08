@@ -229,14 +229,14 @@ class Task extends CI_Controller {
                             $this->common_model->updateData($new, 'id_user', $data['idUser'], 'users');
 
                             //также уменьшаем количество проектов у юзеров, которые находятся в этой команде (прикреплены к проекту)
-                            $q = $this->common_model->getResultIn('users', 'id_user', $infoProject['team_ids'], 'result_array', 'count_projects, id_user');
+                            $q = $this->common_model->getResult('users', 'id_user', explode(',', $infoProject['team_ids']), 'result_array', 'count_projects, id_user', null, 'desc', true);
                             foreach($q as $v)
                             {
                                 if($v['id_user'] == $data['idUser'])
                                     continue;
 
                                 $new = [];
-                                $new['count_projects'] = $v['count_projects'] - 1;
+                                $new['count_projects'] = intval($v['count_projects']) - 1;
                                 if($new['count_projects']  == 0)
                                     $new['status'] = '0';
 

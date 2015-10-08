@@ -64,3 +64,7 @@ thead td {
 .error{
     font-size: 13px;
 }
+
+.showHiddenName input{
+    display: none;
+}

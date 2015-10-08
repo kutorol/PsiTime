@@ -15,7 +15,7 @@ class Migration_Start_db extends CI_Migration{
          */
         $sql = "CREATE TABLE IF NOT EXISTS `users` (
                   `id_user` int(11) unsigned NOT NULL AUTO_INCREMENT,
-                  `role_id` int(10) unsigned NOT NULL,
+                  `role_id` int(10) unsigned NOT NULL DEFAULT '4',
                   `name` varchar(255) NOT NULL,
                   `login` varchar(255) NOT NULL,
                   `password` varchar(255) NOT NULL,
@@ -52,6 +52,7 @@ class Migration_Start_db extends CI_Migration{
                   `title_ru` varchar(255) NOT NULL,
                   `title_en` varchar(255) NOT NULL,
                   `programm` varchar(255) NOT NULL,
+                  `is_delete` TINYINT(1) UNSIGNED NOT NULL DEFAULT '1' COMMENT 'если 0, то нельзя не удалять не редактировать',
                   PRIMARY KEY (`id_role`),
                   UNIQUE KEY `id_role` (`id_role`)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
@@ -60,10 +61,11 @@ class Migration_Start_db extends CI_Migration{
         $q = $this->db->get('role')->result_array();
         if(empty($q))
         {
-            $sql = "INSERT INTO `role` (`id_role`, `title_ru`, `title_en`, `programm`) VALUES
-                (1, 'Администратор', 'Administrator', 'admin'),
-                (2, 'PHP разработчик', 'PHP developer', 'backend'),
-                (3, 'JS Разработчик', 'JS Developer', 'frontend');";
+            $sql = "INSERT INTO `role` (`id_role`, `title_ru`, `title_en`, `programm`, `is_delete`) VALUES
+                (1, 'Администратор', 'Administrator', 'admin', 0),
+                (2, 'PHP разработчик', 'PHP developer', 'backend', 1),
+                (3, 'JS Разработчик', 'JS Developer', 'frontend', 1),
+                (4, 'Гость', 'Guest', 'guest', 0);";
             $this->db->query($sql);
         }
 

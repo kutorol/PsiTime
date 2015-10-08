@@ -253,6 +253,7 @@ class Welcome extends CI_Controller {
 			//получаем пароль
 			$new['password'] = $pass = $data['pass'];
 			$new['password'] = sha1(md5($new['password'].$new['hash']));
+            $new['role_id'] = 4; //guest
 
             //подгружаем модель
             $this->load->model('common_model');

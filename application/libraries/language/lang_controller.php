@@ -290,6 +290,8 @@ class Lang_controller
             14  =>  'Произошла ошибка. Проект не был удален',
             15  =>  'На данный момент вы не прикреплены к какому то проекту, поэтому создайте его или же дождитесь приглашения от вашего админа',
             16  =>  'Нельзя удалять чужие проекты',
+            17  =>  'Сохранить',
+            18  =>  'Введите имена или логины ваших сотрудников/помощников',
         ];
 
         /********************************************
@@ -315,6 +317,8 @@ class Lang_controller
             14  =>  'An error has occurred. The project has not been removed',
             15  =>  'At the moment you are not attached to what that project, so create it, or wait for an invitation from your administrator',
             16  =>  "You can not delete other people's projects",
+            17  =>  "Save",
+            18  =>  'Enter the name or username of your employees/helpers',
         ];
 
 
@@ -342,6 +346,8 @@ class Lang_controller
         $lang['lang_'.$segment]['input_form_lang']      =   $lang['input_form_lang'];
         $lang['lang_'.$segment]['header_menu_lang']     =   $lang['header_menu_lang'];
         $lang['lang_'.$segment]['js'][2]                =   $lang['lang_'.$segment]['task_views'][14];
+        $lang['lang_'.$segment]['js'][3]                =   $lang['lang_'.$segment]['task_views'][10];
+        $lang['lang_'.$segment]['js'][4]                =   $lang['lang_'.$segment]['task_views'][17];
 
 
 

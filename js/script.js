@@ -44,22 +44,129 @@ function deleteData(url, selector, id, btn_delete_selector)
 }
 
 
+function ajaxRequestJSON(url, btn_delete_selector,id)
+{
+    $.ajaxSetup({
+        url: base_url+"/"+url,
+        global: false,
+        type: "POST",
+        dataType: "json",
+        beforeSend: function(){
+            showLoad(btn_delete_selector, id, false);
+        }
+    });
+}
+
+/**
+ * Показываем значек загрузки страницы
+ * @param selector
+ * @param id
+ * @param back
+ */
 function showLoad(selector, id, back)
 {
     if(back === false)
     {
-        $("#" + selector + id).hide();
-        $("#load_" + id).show();
+        $("#" + selector + id).fadeOut(150, function(){
+            $("#load_" + id).fadeIn(150);
+        });
     }
     else
     {
-        $("#load_" + id).fadeOut(300, function(){
-            $("#" + selector + id).show();
+        $("#load_" + id).fadeOut(150, function(){
+            $("#" + selector + id).fadeIn(150);
         });
     }
 }
 
+
+function errorSuccessAjax(btn_delete_selector, id, response, classHtml)
+{
+    $("#mainError").removeClass("label-"+(classHtml === undefined) ? 'success' : 'danger').addClass("label-"+(classHtml === undefined) ? 'danger' : 'success').html(response);
+    showLoad(btn_delete_selector, id, true);
+    $('html, body').animate({scrollTop: 0}, 300);
+}
+
+
 $(function() {
+
+
+    /**
+     * При нажатии на переминовать скрываем ссылку и показываем инпут
+     */
+    $(".btnReName").click(function(){
+        var id = $(this).attr("data-id");
+        var objLink = $("#nameProject_"+id);
+        var objInput = $("#reName__"+id);
+        var lastNameProject = objLink.html();
+
+        if($(this).html() == jsLang[3])
+        {
+            objLink.fadeOut(150, function(){
+                $("#reName__"+id).fadeIn(150);
+            });
+
+            $(this).fadeOut(150, function(){
+                $(this).html(jsLang[4]).fadeIn(150);
+            });
+        }
+        else
+        {
+            var titleProject = $.trim(objInput.val());
+            if(titleProject == '')
+            {
+                errorSuccessAjax("groupBtn_", id, "Нельзя оставлять поле пустым");
+                objInput.val(lastNameProject);
+                return false;
+            }
+
+            if(titleProject != lastNameProject)
+            {
+                ajaxRequestJSON("task/updateProject", 'groupBtn_', id);
+                $.ajax({
+                    data: {id: id, title: titleProject},
+                    error: function(){
+                        errorSuccessAjax('groupBtn_', id, "Произошла ошибка. Попробуйте обновить страницу");
+                        objInput.fadeOut(150, function(){
+                            objLink.fadeIn(150);
+                        });
+
+                        $(this).html(jsLang[3]);
+                    },
+                    success: function(data)
+                    {
+                        if(data.status == 'error')
+                        {
+                            objInput.val(lastNameProject);
+                            errorSuccessAjax('groupBtn_', id, data.result);
+                        }
+                        else
+                        {
+                            objLink.html(titleProject);
+                            errorSuccessAjax('groupBtn_', id, data.result, true);
+                        }
+
+                        objInput.fadeOut(150, function(){
+                            objLink.fadeIn(150);
+                        });
+
+                        $(this).html(jsLang[3]);
+                    }
+                });
+            }
+            else
+            {
+                objInput.fadeOut(150, function(){
+                    objLink.fadeIn(150);
+                });
+
+                $(this).fadeOut(150, function(){
+                    $(this).html(jsLang[3]).fadeIn(150);
+                });
+            }
+
+        }
+    });
     /**
      * Автокомплит прикрепления юзера к проекту
      * Autocomplete user attachment to the project

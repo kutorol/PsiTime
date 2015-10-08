@@ -72,11 +72,16 @@ class Common_model extends CI_Model {
      * @param array $new - данные для обновления (update data)
      * @param $where - тут поля в базе данных (here the fields in the database)
      * @param $where_2 - а тут значения, которые ищем (but here the values that are looking for)
+     * @param $table - таблица, в которой обновляем
+     * @param $is_in - если true, то делаем where_in
      * @param $return - если true, то возвращаем данные
      */
-    public function updateData($new = array(), $where, $where_2, $table = 'users', $return = false)
+    public function updateData($new = array(), $where, $where_2, $table = 'users', $return = false, $is_in = false)
     {
-        $this->_checkWhere($where, $where_2);
+        if($is_in === false)
+            $this->_checkWhere($where, $where_2);
+        else
+            $this->db->where_in($where, $where_2);
         $this->db->update($table, $new);
         if($return === true)
             return $this->db->affected_rows();
@@ -89,39 +94,30 @@ class Common_model extends CI_Model {
      * @param $table
      * @param string $where - тут поля в базе данных (here the fields in the database)
      * @param string $where_2 - а тут значения, которые ищем (but here the values that are looking for)
+     * @param $return - в каком виде возвращать (result_array для многих строк, row_array для одной строки)
+     * @param $select - какие столбцы хотим получить
+     * @param $order_1 - по какому столбцу сортировать
+     * @param $order_2 -  с каким аттрибутом сортировать
+     * @param $is_in - если true, то делаем where_in
      * @return mixed
      */
-    public function getResult($table, $where = '', $where_2 = '', $return = 'result_array', $select = null, $order_1 = '', $order_2 = 'desc')
+    public function getResult($table, $where = '', $where_2 = '', $return = 'result_array', $select = null, $order_1 = null, $order_2 = 'desc', $is_in = false)
     {
         $this->_checkSelect($select);
-        $this->_checkWhere($where, $where_2);
 
-        if(!empty($order))
+        if($is_in === false)
+            $this->_checkWhere($where, $where_2);
+        else
+            $this->db->where_in($where, $where_2);
+
+        if($order_1 !== null)
             $this->db->order_by($order_1, $order_2);
 
         return $this->db->get($table)->$return();
     }
 
 
-    /**
-     * Получаем результат выборки из бд
-     * Get the result set from the database
-     *
-     * @param $table
-     * @param string $where - тут поля в базе данных (here the fields in the database)
-     * @param string $where_2 - а тут значения, которые ищем (but here the values that are looking for)
-     * @return mixed
-     */
-    public function getResultIn($table, $where = '', $where_2 = '', $return = 'result_array', $select = null, $order_1 = '', $order_2 = 'desc')
-    {
-        $this->_checkSelect($select);
-        $this->_checkWhere($where, $where_2);
 
-        if(!empty($order))
-            $this->db->order_by($order_1, $order_2);
-
-        return $this->db->get($table)->$return();
-    }
 
     /**
      * Добавляем в базу данные и если нужно, возвращаем определенные данные
@@ -149,11 +145,16 @@ class Common_model extends CI_Model {
      * @param string $where
      * @param string $where_2
      * @param bool $return
+     * @param $is_in - если true, то делаем where_in
      * @return mixed
      */
-    public function deleteData($table, $where = '', $where_2 = '', $return = false)
+    public function deleteData($table, $where = '', $where_2 = '', $return = false, $is_in = false)
     {
-        $this->_checkWhere($where, $where_2);
+        if($is_in === false)
+            $this->_checkWhere($where, $where_2);
+        else
+            $this->db->where_in($where, $where_2);
+
         $this->db->delete($table);
 
         if($return === true)

@@ -54,15 +54,35 @@
                     <tbody>
                     <?php $i = 1; foreach($myProjects as $key=>$val):?>
                         <tr id="line_project_<?=$val['id_project']?>" class="project">
-                            <td><?=$i?></td>
-                            <td><a href="<?=$val['id_project']?>"><?=$val['title']?></a></td>
+                            <td style="max-width: 50px;"><?=$i?></td>
+                            <td class="showHiddenName" >
+                                <a id="nameProject_<?=$val['id_project']?>" href="<?=$val['id_project']?>"><?=$val['title']?></a>
+                                <input onchange="hideA('nameProject_', <?=$val['id_project']?>);" type='text' id='reName__<?=$val['id_project']?>' class='form-control' value='<?=$val['title']?>'>
+                            </td>
                             <td >
-                                <a href="" class="btn btn-default"><?=$task_views[8]?></a>
-                                <a href="" class="btn btn-info"><?=$task_views[10]?></a>
-                                <div  id="delete_project_<?=$val['id_project']?>" onclick="deleteData('task/deleteProject','line_project_', <?=$val['id_project']?>, 'delete_project_');" class="btn btn-danger"><?=$task_views[9]?> <i class="fa fa-trash-o"></i></div>
+
+
+                                <div id="groupBtn_<?=$val['id_project']?>">
+                                    <a href="" class="btn btn-default"><?=$task_views[8]?></a>
+                                    <div class="btn btn-info btnReName" id="reNameSave_<?=$val['id_project']?>" data-id="<?=$val['id_project']?>" onclick="reName('nameProject_', <?=$val['id_project']?>, 'reNameSave_', 0);"><?=$task_views[10]?></div>
+                                    <div  id="delete_project_<?=$val['id_project']?>" onclick="deleteData('task/deleteProject','line_project_', <?=$val['id_project']?>, 'groupBtn_');" class="btn btn-danger"><?=$task_views[9]?> <i class="fa fa-trash-o"></i></div>
+                                </div>
                                 <div id="load_<?=$val['id_project']?>" class="btn btn-danger" style="display: none;"><i class="fa fa-spinner fa-spin"></i></div>
                             </td>
-
+                        </tr>
+                        <tr>
+                            <td colspan="3">
+                                <table class="table table-bordered">
+                                    <thead><tr><th><?=$task_views[18]?></th></tr></thead>
+                                    <tbody>
+                                    <tr>
+                                        <td>
+                                            <input name="addUsers" type="text" class="addUserProject" data-role="tagsinput" placeholder="<?=$task_views[18]?>">
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </td>
                         </tr>
                     <?php $i++; endforeach;?>
                     </tbody>
