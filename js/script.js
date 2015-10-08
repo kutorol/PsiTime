@@ -43,7 +43,12 @@ function deleteData(url, selector, id, btn_delete_selector)
     });
 }
 
-
+/**
+ * Для всех ajax запросов это вроде как шаблон
+ * @param url
+ * @param btn_delete_selector
+ * @param id
+ */
 function ajaxRequestJSON(url, btn_delete_selector,id)
 {
     $.ajaxSetup({
@@ -79,7 +84,13 @@ function showLoad(selector, id, back)
     }
 }
 
-
+/**
+ * Вставляет сообщение под заголовок, скрывает кнопку загрузки страницы и поднимает к самому верху
+ * @param btn_delete_selector
+ * @param id
+ * @param response
+ * @param classHtml
+ */
 function errorSuccessAjax(btn_delete_selector, id, response, classHtml)
 {
     $("#mainError").removeClass("label-"+(classHtml === undefined) ? 'success' : 'danger').addClass("label-"+(classHtml === undefined) ? 'danger' : 'success').html(response);
@@ -92,7 +103,9 @@ $(function() {
 
 
     /**
-     * При нажатии на переминовать скрываем ссылку и показываем инпут
+     * При нажатии на переминовать скрываем ссылку и показываем инпут, а так же сохраняем результат
+     * TODO сделать  нормальное скрывание загрузки страницы, уменьшить эту функцию
+     *
      */
     $(".btnReName").click(function(){
         var id = $(this).attr("data-id");
@@ -103,7 +116,7 @@ $(function() {
         if($(this).html() == jsLang[3])
         {
             objLink.fadeOut(150, function(){
-                $("#reName__"+id).fadeIn(150);
+                objInput.fadeIn(150);
             });
 
             $(this).fadeOut(150, function(){
@@ -167,6 +180,8 @@ $(function() {
 
         }
     });
+
+
     /**
      * Автокомплит прикрепления юзера к проекту
      * Autocomplete user attachment to the project
