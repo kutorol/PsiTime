@@ -130,10 +130,18 @@ function errorSuccessAjax(btn_delete_selector, id, response, classHtml)
 
 $(function() {
 
+    $(".toogle-user").click(function() {
+        var id = $(this).parent().attr('data-id');
+
+        //popupWrite.classList.toggle("modal-write-us-show");
+        $("#addUserProject_"+id).toggle();
+        //username.focus();
+    });
+
+
     /**
      * При нажатии на переминовать скрываем ссылку и показываем инпут, а так же сохраняем результат
-     * TODO сделать  нормальное скрывание загрузки страницы, уменьшить эту функцию
-     *
+     * TODO слова занести в словарь и подставить сюда
      */
     $(".btnReName").click(function(){
         var id = $(this).attr("data-id"); //ну бля, ид естесно

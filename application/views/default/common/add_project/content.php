@@ -64,8 +64,8 @@
                             <td >
 
 
-                                <div id="groupBtn_<?=$val['id_project']?>">
-                                    <a href="" class="btn btn-default"><?=$task_views[8]?></a>
+                                <div id="groupBtn_<?=$val['id_project']?>" data-id="<?=$val['id_project']?>">
+                                    <div class="btn btn-default toogle-user" ><?=$task_views[8]?></div>
                                     <div class="btn btn-info btnReName" id="reNameOpen_<?=$val['id_project']?>" data-id="<?=$val['id_project']?>"><?=$task_views[10]?></div>
                                     <div  id="delete_project_<?=$val['id_project']?>" onclick="deleteData('task/deleteProject','line_project_', <?=$val['id_project']?>, 'groupBtn_');" class="btn btn-danger"><?=$task_views[9]?> <i class="fa fa-trash-o"></i></div>
                                 </div>
@@ -75,7 +75,7 @@
                         </tr>
                         <tr>
                             <td colspan="3">
-                                <table class="table table-bordered">
+                                <table class="table table-bordered hidden" id="addUserProject_<?=$val['id_project']?>">
                                     <thead><tr><th><?=$task_views[18]?></th></tr></thead>
                                     <tbody>
                                     <tr>
