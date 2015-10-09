@@ -268,8 +268,10 @@ class Task extends CI_Controller {
         //если это аякс запрос
         if($this->input->server('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest')
         {
-            $response = ['status' => 'error', 'resultTitle'=>'', 'resultText' => ''];
+
             $data = $this->common->initApp('welcome_controller', 0, 'login', true, true);
+            $response = ['status' => 'error', 'resultTitle'=>$data['languages_desc'][0]['titleError'][$data['segment']], 'resultText' => $data['common_library'][4]];
+
             if($data['checkAuth']['title_error'] != '')
                 $response['resultTitle'] = $data['checkAuth']['title_error'];
             else
