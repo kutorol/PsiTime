@@ -36,6 +36,8 @@
 
 
 
+
+
 <div class="row" id="addProject">
     <div class="container-fluid">
         <div class="col-xs-12 text-center">
@@ -54,19 +56,20 @@
                     <tbody>
                     <?php $i = 1; foreach($myProjects as $key=>$val):?>
                         <tr id="line_project_<?=$val['id_project']?>" class="project">
-                            <td style="max-width: 50px;"><?=$i?></td>
+                            <td><?=$i?></td>
                             <td class="showHiddenName" >
                                 <a id="nameProject_<?=$val['id_project']?>" href="<?=$val['id_project']?>"><?=$val['title']?></a>
-                                <input onchange="hideA('nameProject_', <?=$val['id_project']?>);" type='text' id='reName__<?=$val['id_project']?>' class='form-control' value='<?=$val['title']?>'>
+                                <input type='text' id='reName__<?=$val['id_project']?>' class='form-control' value='<?=$val['title']?>'>
                             </td>
                             <td >
 
 
                                 <div id="groupBtn_<?=$val['id_project']?>">
                                     <a href="" class="btn btn-default"><?=$task_views[8]?></a>
-                                    <div class="btn btn-info btnReName" id="reNameSave_<?=$val['id_project']?>" data-id="<?=$val['id_project']?>" onclick="reName('nameProject_', <?=$val['id_project']?>, 'reNameSave_', 0);"><?=$task_views[10]?></div>
+                                    <div class="btn btn-info btnReName" id="reNameOpen_<?=$val['id_project']?>" data-id="<?=$val['id_project']?>"><?=$task_views[10]?></div>
                                     <div  id="delete_project_<?=$val['id_project']?>" onclick="deleteData('task/deleteProject','line_project_', <?=$val['id_project']?>, 'groupBtn_');" class="btn btn-danger"><?=$task_views[9]?> <i class="fa fa-trash-o"></i></div>
                                 </div>
+                                <div class="btn btn-info btnReName" id="reNameSave_<?=$val['id_project']?>" style="display: none;" data-id="<?=$val['id_project']?>"><?=$task_views[17]?></div>
                                 <div id="load_<?=$val['id_project']?>" class="btn btn-danger" style="display: none;"><i class="fa fa-spinner fa-spin"></i></div>
                             </td>
                         </tr>

@@ -52,6 +52,7 @@ class Task extends CI_Controller {
      * The function adds the project to the site, which is then added to the task
      *
      * @var $fail - распределяет ошибка эта или нет (This distributes the error or not)
+     * TODO проверять название по прег матчу который обновлении проекта
      */
     public function addProject()
     {
@@ -261,5 +262,55 @@ class Task extends CI_Controller {
             echo "NU NIXUYA SEBE TI CHEGO SDELAL";
     }
 
+
+    public function updateProject()
+    {
+        //если это аякс запрос
+        if($this->input->server('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest')
+        {
+            $response = ['status' => 'error', 'resultTitle'=>'', 'resultText' => ''];
+            $data = $this->common->initApp('welcome_controller', 0, 'login', true, true);
+            if($data['checkAuth']['title_error'] != '')
+                $response['resultTitle'] = $data['checkAuth']['title_error'];
+            else
+            {
+                if(@$this->common->checkData($_POST['id'], true) === true && @$this->common->checkData($_POST['title'], false, true) === true)
+                {
+                    $this->load->model('common_model');
+                    $idProject = $this->common->clear(intval($_POST['id']));
+                    $titleProject  = $this->common->clear($_POST['title']);
+                    if(strlen($titleProject) > 2 && strlen($titleProject) < 256 && preg_match("/^[а-яА-ЯёЁa-zA-Z0-9\-_ ]+$/i", $titleProject))
+                    {
+                        $ckeckUniq = $this->common_model->getResult('projects', 'title', $titleProject, 'result_array', 'responsible');
+                        if(!empty($ckeckUniq))
+                            $response = ['status' => 'error', 'resultTitle' => $data['languages_desc'][0]['titleError'][$data['segment']], 'resultText' => $data['task_views'][23]];
+                        else
+                        {
+                            $infoProject = $this->common_model->getResult('projects', ['id_project', 'responsible'], [$idProject, $data['idUser']], 'row_array', 'responsible');
+                            if(!empty($infoProject))
+                            {
+                                $q = $this->common_model->updateData(['title'=>$titleProject], ['id_project', 'responsible'], [$idProject, $data['idUser']], 'projects', true);
+                                if($q > 0)
+                                    $response = ['status'=>'success', 'resultTitle' => $data['task_views'][21], 'resultText' => $data['task_views'][22]];
+                                else
+                                    $response = ['status' => 'error', 'resultTitle' => $data['languages_desc'][0]['titleError'][$data['segment']], 'resultText' => $data['welcome_controller'][13]];
+                            }
+                            else
+                                $response = ['status' => 'error', 'resultTitle' => $data['task_views'][19], 'resultText' => $data['task_views'][16]];
+                        }
+                    }
+                    else
+                        $response = ['status' => 'error', 'resultTitle' => $data['task_views'][19], 'resultText' => $data['task_views'][20]];
+                }
+                else
+                    $response = ['status' => 'error', 'resultTitle'=> $data['js'][0], 'resultText'=>$data['task_views'][6]];
+            }
+
+            echo json_encode($response);
+        }
+        else
+            echo "NU NIXUYA SEBE TI CHEGO SDELAL";
+
+    }
 
 }

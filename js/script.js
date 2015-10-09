@@ -48,8 +48,9 @@ function deleteData(url, selector, id, btn_delete_selector)
  * @param url
  * @param btn_delete_selector
  * @param id
+ * @param additionalDelBlock - дополнительный блок, подлежащий скрытию
  */
-function ajaxRequestJSON(url, btn_delete_selector,id)
+function ajaxRequestJSON(url, btn_delete_selector, id, additionalDelBlock)
 {
     $.ajaxSetup({
         url: base_url+"/"+url,
@@ -57,7 +58,14 @@ function ajaxRequestJSON(url, btn_delete_selector,id)
         type: "POST",
         dataType: "json",
         beforeSend: function(){
+            if(additionalDelBlock !== undefined)
+                additionalDelBlock.fadeOut();
+
             showLoad(btn_delete_selector, id, false);
+        },
+        error: function(){
+            showLoad(btn_delete_selector, id, true); //скрываем кнопку загрузки и открываем прежние скрытые блоки
+            addTitle({title: "Произошла ошибка!", message: "Попробуйте обновить страницу, если не поможет - сообщите об ошибке на <a href=''>этой страницу</a>"});
         }
     });
 }
@@ -66,7 +74,7 @@ function ajaxRequestJSON(url, btn_delete_selector,id)
  * Показываем значек загрузки страницы
  * @param selector
  * @param id
- * @param back
+ * @param back - если false, то показываем кнопку загрузки страницы, true - скрываем
  */
 function showLoad(selector, id, back)
 {
@@ -85,22 +93,42 @@ function showLoad(selector, id, back)
 }
 
 /**
+ * Вставляет сообщение под заголовок и поднимает вверх
+ *
+ * @param response - текст
+ * @param classHtml - класс стилей для отображения в json {del: '', add: ''}
+ */
+function addTitle(response, classHtml)
+{
+    var mainError = $("#mainError"); //ид блока под главным названием, чтобы показывать ошибку
+    mainError.html(""); //обнуляем прошлый текст ошибки
+    if(classHtml === undefined)
+        bootbox.alert({
+                title: response.title,
+                message: response.message
+            });
+    else
+    {
+        mainError.removeClass("label-"+classHtml.del).addClass("label-"+classHtml.add).html(response);
+        $('html, body').animate({scrollTop: 0}, 300);
+    }
+}
+
+/**
  * Вставляет сообщение под заголовок, скрывает кнопку загрузки страницы и поднимает к самому верху
  * @param btn_delete_selector
  * @param id
- * @param response
- * @param classHtml
+ * @param response - содержит овтет в json
+ * @param classHtml - json {del: '', add: ''}
  */
 function errorSuccessAjax(btn_delete_selector, id, response, classHtml)
 {
-    $("#mainError").removeClass("label-"+(classHtml === undefined) ? 'success' : 'danger').addClass("label-"+(classHtml === undefined) ? 'danger' : 'success').html(response);
+    addTitle(response, classHtml);
     showLoad(btn_delete_selector, id, true);
-    $('html, body').animate({scrollTop: 0}, 300);
 }
 
 
 $(function() {
-
 
     /**
      * При нажатии на переминовать скрываем ссылку и показываем инпут, а так же сохраняем результат
@@ -108,76 +136,79 @@ $(function() {
      *
      */
     $(".btnReName").click(function(){
-        var id = $(this).attr("data-id");
-        var objLink = $("#nameProject_"+id);
-        var objInput = $("#reName__"+id);
-        var lastNameProject = objLink.html();
+        var id = $(this).attr("data-id"); //ну бля, ид естесно
+        var objLink = $("#nameProject_"+id); //ссылка, которую скрываем и показываем инпут
+        var objInput = $("#reName__"+id); //инпут, который меняем
+        var lastNameProject = objLink.html(); //название проекта старое
+        var btnSave = $("#reNameSave_"+id); //кнопка сохранения
 
+        //если жмякнули по кнопке переименовать
         if($(this).html() == jsLang[3])
         {
+            //скрываем ссылку и показываем инпут
             objLink.fadeOut(150, function(){
-                objInput.fadeIn(150);
+                objInput.fadeIn(150,function(){
+                    objInput.focus().val(objInput.val()); //делаем фокус на инпут и ставим курсор в конец
+                });
             });
 
-            $(this).fadeOut(150, function(){
-                $(this).html(jsLang[4]).fadeIn(150);
+            //скрываем кнопки, показываем кнопку сохранить
+            $(this).parent().fadeOut(150, function(){
+                btnSave.fadeIn(150);
             });
+
         }
+        //если жмем по кнопке сохранить
         else
         {
-            var titleProject = $.trim(objInput.val());
-            if(titleProject == '')
+            var titleProject = $.trim(objInput.val()); //получаем "измененное название"
+            if(titleProject == '' || titleProject.length < 3 || titleProject.length > 255 || /^[a-zA-Zа-яА-ЯёЁ0-9-_ ]+$/.test(titleProject) === false)
             {
-                errorSuccessAjax("groupBtn_", id, "Нельзя оставлять поле пустым");
-                objInput.val(lastNameProject);
+                addTitle({title: jsLang[5], message: jsLang[6]}); //показываем ошибку
+                objInput.val(lastNameProject); //заносим в инпут старое название
                 return false;
             }
 
+            //если изменили название
             if(titleProject != lastNameProject)
             {
-                ajaxRequestJSON("task/updateProject", 'groupBtn_', id);
+                //шаблон ajax запроса
+                ajaxRequestJSON("task/updateProject", 'groupBtn_', id, btnSave);
                 $.ajax({
                     data: {id: id, title: titleProject},
-                    error: function(){
-                        errorSuccessAjax('groupBtn_', id, "Произошла ошибка. Попробуйте обновить страницу");
-                        objInput.fadeOut(150, function(){
-                            objLink.fadeIn(150);
-                        });
-
-                        $(this).html(jsLang[3]);
-                    },
                     success: function(data)
                     {
                         if(data.status == 'error')
                         {
                             objInput.val(lastNameProject);
-                            errorSuccessAjax('groupBtn_', id, data.result);
+                            errorSuccessAjax('groupBtn_', id, {title: data.resultTitle, message: data.resultText}); //показываем модалку
                         }
                         else
                         {
                             objLink.html(titleProject);
-                            errorSuccessAjax('groupBtn_', id, data.result, true);
+                            errorSuccessAjax('groupBtn_', id, data.resultTitle, {del: "danger", add: "success"}); //сообщение вставляем под главный title
                         }
 
+                        //скрываем ссылку и показываем инпут
                         objInput.fadeOut(150, function(){
                             objLink.fadeIn(150);
                         });
 
-                        $(this).html(jsLang[3]);
+                        btnSave.fadeOut(150); //скрываем кнопку сохранить
                     }
                 });
-            }
-            else
-            {
-                objInput.fadeOut(150, function(){
-                    objLink.fadeIn(150);
-                });
-
-                $(this).fadeOut(150, function(){
-                    $(this).html(jsLang[3]).fadeIn(150);
-                });
+                return false;
             }
 
+            //если название не изменили показываем конфирм
+            bootbox.confirm("Название не изменилось. Оставить его в покое?",function(result) {
+                if(result)
+                {
+                    btnSave.fadeOut(150, function(){
+                        errorSuccessAjax("groupBtn_", id, "Не стал переминовывать", {del: "danger", add: "success"}); //сообщение вставляем под главный title
+                    });
+                }
+            });
         }
     });
 

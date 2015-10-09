@@ -252,9 +252,9 @@ class CI_DB_driver {
 	{
 		if ($sql == '')
 		{
+            log_message('error', 'Invalid query: '.$sql);
 			if ($this->db_debug)
 			{
-				log_message('error', 'Invalid query: '.$sql);
 				return $this->display_error('db_invalid_query');
 			}
 			return FALSE;
@@ -307,12 +307,16 @@ class CI_DB_driver {
 			// This will trigger a rollback if transactions are being used
 			$this->_trans_status = FALSE;
 
+            $error_msg = $this->_error_message();
+            // Log and display errors
+            log_message('error', 'Query error: '.$error_msg." ".$sql);
+
 			if ($this->db_debug)
 			{
 				// grab the error number and message now, as we might run some
 				// additional queries before displaying the error
 				$error_no = $this->_error_number();
-				$error_msg = $this->_error_message();
+
 
 				// We call this function in order to roll-back queries
 				// if transactions are enabled.  If we don't call this here
@@ -320,8 +324,7 @@ class CI_DB_driver {
 				// transactions to remain in limbo.
 				$this->trans_complete();
 
-				// Log and display errors
-				log_message('error', 'Query error: '.$error_msg);
+
 				return $this->display_error(
 										array(
 												'Error Number: '.$error_no,

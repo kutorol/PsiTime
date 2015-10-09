@@ -32,8 +32,12 @@ class Lang_controller
                                                 //'de'  =>  ['first_link'   =>  'Erste', 'last_link' =>  'Letzte'],
                                             ],
                         'errorAuth'     =>  [
-                                                'ru'=>'Вам необходимо авторизоваться!',
-                                                'en'=>'Please log in!'
+                                                'ru'    =>  'Вам необходимо авторизоваться!',
+                                                'en'    =>  'Please log in!'
+                                            ],
+                        'titleError'    =>  [
+                                                'ru'    =>  'Ошибка!',
+                                                'en'    =>  'Error!'
                                             ],
                     ],
             'ru'   =>   'Русский',
@@ -289,9 +293,14 @@ class Lang_controller
             13  =>  'Проект успешно удален',
             14  =>  'Произошла ошибка. Проект не был удален',
             15  =>  'На данный момент вы не прикреплены к какому то проекту, поэтому создайте его или же дождитесь приглашения от вашего админа',
-            16  =>  'Нельзя удалять чужие проекты',
+            16  =>  'Нельзя трогать чужие проекты',
             17  =>  'Сохранить',
             18  =>  'Введите имена или логины ваших сотрудников/помощников',
+            19  =>  "Ошибка ввода данных!",
+            20  =>  "Причины: <br> - Нельзя оставлять поле пустым. Заполните как минимум 3 символа<br> - Название длиньше чем 255 символов<br> - Допустимые символы: кириллица, латиница, цифры, пробел, - и _",
+            21  =>  "Проект переименован",
+            22  =>  "Операция прошла успешно",
+            23  =>  "Такое название уже существует. Придумайте другое!",
         ];
 
         /********************************************
@@ -316,9 +325,14 @@ class Lang_controller
             13  =>  'The project was successfully removed',
             14  =>  'An error has occurred. The project has not been removed',
             15  =>  'At the moment you are not attached to what that project, so create it, or wait for an invitation from your administrator',
-            16  =>  "You can not delete other people's projects",
+            16  =>  "Do not touch other people's projects",
             17  =>  "Save",
             18  =>  'Enter the name or username of your employees/helpers',
+            19  =>  "Error input!",
+            20  =>  "Reasons: <br> - Do not leave it blank. Fill in at least 3 characters<br> - Name is longer than 255 characters<br> - Allowed characters: Cyrillic, Latin, figures, space, - and _",
+            21  =>  "The project was renamed",
+            22  =>  "Operation was successfully completed",
+            23  =>  "This name already exists. Think different!",
         ];
 
 
@@ -348,6 +362,8 @@ class Lang_controller
         $lang['lang_'.$segment]['js'][2]                =   $lang['lang_'.$segment]['task_views'][14];
         $lang['lang_'.$segment]['js'][3]                =   $lang['lang_'.$segment]['task_views'][10];
         $lang['lang_'.$segment]['js'][4]                =   $lang['lang_'.$segment]['task_views'][17];
+        $lang['lang_'.$segment]['js'][5]                =   $lang['lang_'.$segment]['task_views'][19];
+        $lang['lang_'.$segment]['js'][6]                =   $lang['lang_'.$segment]['task_views'][20];
 
 
 
