@@ -276,9 +276,9 @@ class Common
         {
             $this->data['currentUrl'] = preg_replace('/'.$this->data['segment'].'\/|\/'.$this->data['segment'].'/i', '', $this->data['currentUrl']);
 
-            //УДАЛИТЬ ДОМА ЭТОТ ИФ
-            if($test === true)
-                $this->data['currentUrl'] = preg_replace('/time.log\/|\/time.log|time.log/i', '', $this->data['currentUrl']);
+            //FIXME УДАЛИТЬ ДОМА ЭТОТ ИФ
+            /*if($test === true)
+                $this->data['currentUrl'] = preg_replace('/time.log\/|\/time.log|time.log/i', '', $this->data['currentUrl']);*/
 
             $url = explode('/', $this->data['currentUrl']);
 
@@ -308,9 +308,9 @@ class Common
     public function initApp($controller_lang = 'welcome_controller', $name_lang = 0,  $folder = 'login', $auth_user = true, $ajax = false, $what_replace = ['pattern'=>''])
     {
         //тут получаем нужный нам кусок url
-        //УБРАТЬ ДОМА ЭТОТ ПАРАМЕТР
-        $this->getLangUrl(true);
-        //$this->getLangUrl();
+        //FIXME УБРАТЬ ДОМА ЭТОТ ПАРАМЕТР
+        //$this->getLangUrl(true);
+        $this->getLangUrl();
 
         //название получаем из языкового файла
         $this->data['title'] = $this->data[$controller_lang][$name_lang];
@@ -332,10 +332,13 @@ class Common
 
         if(isset($this->data['login']))
         {
-            $q = $this->CI_in->db->where('login', $this->data['login'])->select('id_user, status, count_projects')->get('users')->row_array();
-            $this->data['idUser'] = (!empty($q)) ? $q['id_user'] : 0;
-            $this->data['statusUser'] = (!empty($q)) ? $q['status'] : 0;
-            $this->data['count_projectsUser'] = (!empty($q)) ? $q['count_projects'] : 0;
+            if(trim($this->data['login']) != "")
+            {
+                $q = $this->CI_in->db->where('login', $this->data['login'])->select('id_user, status, count_projects')->get('users')->row_array();
+                $this->data['idUser'] = (!empty($q)) ? $q['id_user'] : 0;
+                $this->data['statusUser'] = (!empty($q)) ? $q['status'] : 0;
+                $this->data['count_projectsUser'] = (!empty($q)) ? $q['count_projects'] : 0;
+            }
         }
 
         //если есть ошибку, то показываем вьюху
@@ -435,9 +438,6 @@ class Common
      */
     public function checkData($data, $is_int = false, $is_string = false, $unsigned = true, $zero = true)
     {
-        if(!isset($data))
-            return false;
-
         if($is_string === true)
         {
             if(!is_string(trim($data)))
@@ -464,6 +464,58 @@ class Common
         return true;
     }
 
+    /**
+     * Функция проверки ajax запроса и проверки всех его параметров, если что то не так, то возвращаем error
+     * Function check ajax request and checking all of its parameters, if there is something wrong, then we return error
+     * @return array
+     */
+    public  function isAjax()
+    {
+        //если это аякс запрос
+        if($this->CI_in->input->server('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest')
+        {
+            $data = $this->initApp('welcome_controller', 0, 'login', true, true);
+            if($data['checkAuth']['title_error'] != '')
+                return ['status'=>'error', 'resultTitle'=>$data['checkAuth']['title_error'], "resultText"=>$data['checkAuth']['title_error']];
+
+            //количество всех аргументов функции
+            $numargs = func_num_args();
+            if($numargs <= 0)
+                return ['status'=>'error', 'resultTitle'=>$data['task_views'][24], 'resultText'=>$data['task_views'][24]];
+
+            //получаем все аргументы переданные в функцию
+            $arg_list = func_get_args();
+            for ($i = 0; $i < $numargs; $i++)
+            {
+                $postError = false;
+                if(!is_array($arg_list[$i]))
+                    $postError = true;
+                else
+                {
+
+                    if(!isset($_POST[$arg_list[$i][0]]))
+                        $postError = true;
+                    else
+                    {
+                        if($arg_list[$i][1] == 'int')
+                            if(@$this->checkData($_POST[$arg_list[$i][0]], true) !== true)
+                                $postError = true;
+                        else
+                            if(@$this->checkData($_POST[$arg_list[$i][0]], false, true) !== true)
+                                $postError = true;
+                    }
+                }
+
+                if($postError === true)
+                    return ['status' => 'error', 'resultTitle'=> $data['js'][0], 'resultText'=>$data['task_views'][6]];
+
+                return ['status'=>"success", 'data'=>$data];
+            }
+
+        }
+        else
+            return ['status'=>'error', 'resultTitle'=>"NU NIXUYA SEBE TI CHEGO SDELAL", "resultText"=>"NU NIXUYA SEBE TI CHEGO SDELAL"];
+    }
 
 
 

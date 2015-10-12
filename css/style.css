@@ -68,3 +68,63 @@ thead td {
 .showHiddenName input{
     display: none;
 }
+
+/**
+* Прелоадер на весь экран
+*/
+#prel{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    background-color: #080808;
+    z-index: 1000;
+    opacity: .7;
+}
+
+#preloader_3{
+    z-index: 1001;
+    position:absolute;
+    top: 50%;
+    left: 50%;
+}
+#preloader_3:before{
+    width:20px;
+    height:20px;
+    border-radius:20px;
+    background: #000085;
+    content:'';
+    position:absolute;
+    background: #5b3972;
+    animation: preloader_3_before 1.5s infinite ease-in-out;
+}
+
+#preloader_3:after{
+    width:20px;
+    height:20px;
+    border-radius:20px;
+    background:#000085;
+    content:'';
+    position:absolute;
+    background: #228544;
+    left:22px;
+    animation: preloader_3_after 1.5s infinite ease-in-out;
+}
+
+@keyframes preloader_3_before {
+    0% {transform: translateX(0px) rotate(0deg)}
+    50% {transform: translateX(50px) scale(1.2) rotate(260deg); background:#228544;border-radius:0px;}
+    100% {transform: translateX(0px) rotate(0deg)}
+}
+@keyframes preloader_3_after {
+    0% {transform: translateX(0px)}
+    50% {transform: translateX(-50px) scale(1.2) rotate(-260deg);background:#5b3972;border-radius:0px;}
+    100% {transform: translateX(0px)}
+}
+/**
+* Конец Прелоадер на весь экран
+*/
+
+.tagit-new{
+    width: 700px;
+}

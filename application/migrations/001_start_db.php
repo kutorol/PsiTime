@@ -37,8 +37,8 @@ class Migration_Start_db extends CI_Migration{
         $q = $this->db->get('users')->result_array();
         if(empty($q))
         {
-            $sql = "INSERT INTO `users` (`id_user`, `role_id`, `name`, `login`, `password`, `email`, `hash`, `status`) VALUES
-                    (1, 1, '".ADMIN_NAME."', '".ADMIN_LOGIN."', '".sha1(md5(ADMIN_PASS.'Y2LVejV1zNXBne'))."', '".ADMIN_EMAIL."', 'Y2LVejV1zNXBne', '1');";
+            $sql = "INSERT INTO `users` (`id_user`, `role_id`, `name`, `login`, `password`, `email`, `hash`, `status`, `count_projects`) VALUES
+                    (1, 1, '".ADMIN_NAME."', '".ADMIN_LOGIN."', '".sha1(md5(ADMIN_PASS.'Y2LVejV1zNXBne'))."', '".ADMIN_EMAIL."', 'Y2LVejV1zNXBne', '1', 1);";
             $this->db->query($sql);
         }
 
@@ -89,8 +89,8 @@ class Migration_Start_db extends CI_Migration{
         $q = $this->db->get('projects')->result_array();
         if(empty($q))
         {
-            $sql = "INSERT INTO `projects` (`id_project`, `title`, `responsible`) VALUES
-                                    (1, 'Первая задача', 1);";
+            $sql = "INSERT INTO `projects` (`id_project`, `title`, `responsible`, `team_ids`) VALUES
+                                    (1, 'Первая задача', 1, 1);";
             $this->db->query($sql);
         }
 

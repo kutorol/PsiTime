@@ -3,7 +3,7 @@
         <form action="<?=$startUrl;?>/welcome/forgot" method="post">
             <div class="col-xs-12 col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4">
                 <div class="input-group col-xs-12">
-                    <input type="email" class="form-control col-xs-12" name="email" placeholder="Email" required>
+                    <input type="email" class="form-control col-xs-12" value="<?=set_value("email")?>" name="email" placeholder="Email" required>
                     <br><br>
                     <span class="label label-danger error"><?=strip_tags(form_error('email'))?></span>
                 </div>

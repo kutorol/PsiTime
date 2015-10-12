@@ -11,6 +11,20 @@
  */
 class Welcome extends CI_Controller {
 
+
+    public function logError()
+    {
+        if($this->input->server('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest')
+        {
+            if(@$this->common->checkData($_POST['message'], false, true) === true)
+            {
+                log_message('error', $_POST['message']);
+            }
+        }
+        else
+            echo "NU NIXUYA SEBE TI CHEGO SDELAL";
+    }
+
     /**
      * Сюда перекидывает при срабатывание Hooka, который добавит базу данных и после в этой функции активируются миграции
      * It throws in the operation Hooka, add a database and then this function is activated migration

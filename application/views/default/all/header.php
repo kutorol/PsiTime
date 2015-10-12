@@ -13,8 +13,13 @@
     <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
 
-    <!--TAGS INPUT BOOTSTRAP-->
-    <link rel="stylesheet" href="//cdn.jsdelivr.net/bootstrap.tagsinput/0.4.2/bootstrap-tagsinput.css" />
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+
+    <!--MULTI TAGS INPUT JQUERY-->
+    <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/flick/jquery-ui.css">
+    <link href="<?=base_url()?>css/jquery.tagit.css" rel="stylesheet" type="text/css">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -23,16 +28,19 @@
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+
 
 </head>
 
 <body>
 
+<div id="prel" style="display: none">
+    <div id="preloader_3"></div>
+</div>
 <script>
-    base_url = '<?=$startUrl?>';
-    //translate
-    jsLang = JSON.parse('<?=json_encode($js)?>');
+    var base_url = '<?=$startUrl?>';
+    //json translate
+    var jsLang = JSON.parse('<?=json_encode($js)?>');
+    //html response
+    var jsLangAdditional = "<?=$languages_desc[0]['titleErrorMessage'][$segment]?>";
 </script>

@@ -4,13 +4,12 @@
         <!--видоизмененные alert, confirm, promt и стандартный bootstrap modal, короче тут модалки-->
         <script src="<?=base_url()?>js/bootbox.min.js"></script>
 
-        <!--TAGS INPUT BOOTSTRAP-->
-        <script src="//cdn.jsdelivr.net/bootstrap.tagsinput/0.4.2/bootstrap-tagsinput.min.js"></script>
-        <script src="<?=base_url()?>js/typehead.bundle.js"></script>
+        <!--MULTI TAGS INPUT JQUERY-->
+        <script src="<?=base_url()?>js/tag-it.min.js" type="text/javascript" charset="utf-8"></script>
         <!--END TAGS INPUT-->
 
+
+
         <script src="<?=base_url()?>js/script.js"></script>
-
-
     </body>
 </html>

@@ -77,8 +77,9 @@ class Create_db {
                         //FIXME не редиректит, если до этого не был отправлен заголовок или наоборот он не должен быть отправлен. Короче тут бред пиздец какой
                         //самый простой и тупой способ отправить заголовки, чтобы потом редирект сработал, иначе миграции не применятся и установка не завершится.
                         //Кто поумнее - исправьте на более правильный вариант
-                        echo 1;
-                        header('Location: /time.log/'.YOUR_LANG.'/welcome/install');
+                        //echo 1;
+                        //header('Location: /time.log/'.YOUR_LANG.'/welcome/install');
+                        header('Location: /'.YOUR_LANG.'/welcome/install');
                         exit;
                     }
 

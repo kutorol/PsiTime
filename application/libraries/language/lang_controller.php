@@ -39,6 +39,10 @@ class Lang_controller
                                                 'ru'    =>  'Ошибка!',
                                                 'en'    =>  'Error!'
                                             ],
+                        'titleErrorMessage'    =>  [
+                                                'ru'    =>  "Попробуйте обновить страницу, если не поможет - сообщите об ошибке на <a href=''>этой страницу</a>",
+                                                'en'    =>  "Try to refresh the page if you do not help - report an error <a href=''>on this page</a>"
+                                            ],
                     ],
             'ru'   =>   'Русский',
             'en'   =>   'English',
@@ -295,12 +299,18 @@ class Lang_controller
             15  =>  'На данный момент вы не прикреплены к какому то проекту, поэтому создайте его или же дождитесь приглашения от вашего админа',
             16  =>  'Нельзя трогать чужие проекты',
             17  =>  'Сохранить',
-            18  =>  'Введите имена или логины ваших сотрудников/помощников',
+            18  =>  'Введите имена или логины ваших сотрудников/помощников через пробел',
             19  =>  "Ошибка ввода данных!",
             20  =>  "Причины: <br> - Нельзя оставлять поле пустым. Заполните как минимум 3 символа<br> - Название длиньше чем 255 символов<br> - Допустимые символы: кириллица, латиница, цифры, пробел, - и _",
             21  =>  "Проект переименован",
             22  =>  "Операция прошла успешно",
             23  =>  "Такое название уже существует. Придумайте другое!",
+            24  =>  "В функцию не переданно ни одного аргумента!",
+            25  =>  "Прикрепить к проекту",
+            26  =>  "Все эти люди уже прикреплены к этому проекту",
+            27  =>  "Данные успешно обновлены.",
+            28  =>  "Вы никого не удалили из проекта",
+            29  =>  "Были удалены люди под логинами: ",
         ];
 
         /********************************************
@@ -327,12 +337,18 @@ class Lang_controller
             15  =>  'At the moment you are not attached to what that project, so create it, or wait for an invitation from your administrator',
             16  =>  "Do not touch other people's projects",
             17  =>  "Save",
-            18  =>  'Enter the name or username of your employees/helpers',
+            18  =>  'Enter the name or username of your employees/helpers through the space',
             19  =>  "Error input!",
             20  =>  "Reasons: <br> - Do not leave it blank. Fill in at least 3 characters<br> - Name is longer than 255 characters<br> - Allowed characters: Cyrillic, Latin, figures, space, - and _",
             21  =>  "The project was renamed",
             22  =>  "Operation was successfully completed",
             23  =>  "This name already exists. Think different!",
+            24  =>  "The function has not submitted any argument!",
+            25  =>  "Attach the project",
+            26  =>  "All these people are already attached to this project",
+            27  =>  "The data have been updated successfully.",
+            28  =>  "You have not removed anyone from the project",
+            29  =>  "People have been removed under the login: ",
         ];
 
 
@@ -341,14 +357,43 @@ class Lang_controller
          * Translation for jquery
          * ******************************************
          */
+        //в js передавать текст без '. Пример НЕ: can't ЛУЧШЕ: cannot
         $lang['lang_ru']['js'] = [
             0   =>  'Вы пытаетесь отправить неправильный запрос!',
             1   =>  "Такого пользователя нет!",
+            8   =>  "Ошибка 400: Сервер обработал запрос, но содержание запроса является недействительным.",
+            9   =>  "Ошибка 401: Не авторизованный доступ фунеции JavaScript",
+            10  =>  "Ошибка 403: Невозможно получить доступ к ресурсу.",
+            11  =>  "Ошибка 404: Запрос отправлен на несуществующую страницу",
+            12  =>  "Ошибка 500: Внутренняя ошибка сервера.",
+            13  =>  "Ошибка 503: Сервис недоступен.",
+            14  =>  "Ошибка. Неудалось разборать JSON запрос.",
+            15  =>  "Превышен лимит ожидания.",
+            16  =>  "Запрос был прерван сервером",
+            17  =>  "Название не изменилось. Оставить его в покое?",
+            18  =>  "Вы не стали переименовывать проект",
+            20  =>  "Вы действительно хотите удалить проект?",
+            21  =>  "Обновить данные (если удалили человека из поля, нажмите сюда)",
         ];
 
+
+        //в js передавать текст без '. Пример НЕ: can't ЛУЧШЕ: cannot
         $lang['lang_en']['js'] = [
             0   =>  'You are trying to send a request to the wrong!',
             1   =>  "This user does not have!",
+            8   =>  "Error 400: Server understood the request, but request content was invalid.",
+            9   =>  "Error 401: Unauthorized access.",
+            10  =>  "Error 403: Forbidden resource cannot be accessed.",
+            11  =>  "Error 404: Request sent to a nonexistent page",
+            12  =>  "Error 500: Internal server error.",
+            13  =>  "Error 503: Service unavailable.",
+            14  =>  "Error. Parsing JSON Request failed.",
+            15  =>  "Request Time out.",
+            16  =>  "Request was aborted by the server",
+            17  =>  "The name has not changed. Leave him alone?",
+            18  =>  "You did not rename the project",
+            20  =>  "Are you sure you want to delete the project?",
+            21  =>  "Update details (If you remove the person from the field, click here)",
         ];
 
 
@@ -364,6 +409,8 @@ class Lang_controller
         $lang['lang_'.$segment]['js'][4]                =   $lang['lang_'.$segment]['task_views'][17];
         $lang['lang_'.$segment]['js'][5]                =   $lang['lang_'.$segment]['task_views'][19];
         $lang['lang_'.$segment]['js'][6]                =   $lang['lang_'.$segment]['task_views'][20];
+        $lang['lang_'.$segment]['js'][7]                =   $lang['lang_'.$segment]['languages_desc'][0]['titleError'][$segment];
+        $lang['lang_'.$segment]['js'][19]               =   $lang['lang_'.$segment]['task_views'][18];
 
 
 

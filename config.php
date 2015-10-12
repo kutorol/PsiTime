@@ -5,7 +5,7 @@ define('IS_FILL_KEY', 'a53d6030b');
  * Настройка базы данных
  * Setting up the database
  */
-define('NAME_DB', 'time_log');
+define('NAME_DB', 'time_log_home');
 define('USER_DB', 'root');
 define('PASSWORD_DB', '');
 define('HOST_DB', 'localhost');

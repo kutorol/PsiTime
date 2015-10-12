@@ -5,53 +5,50 @@
  * @param url - на какую страницу делаем запрос (on what page we do request)
  * @param selector - как называется селектор той строки, которую впоследствии из вида удалим (the name of the selector line, which was later remove from view)
  * @param id - ид того, что удаляем (id that remove)
- * @param btn_delete_selector - селектор кнопки удаления, чтобы ее можно было скрыть (selector delete button, so that it can be hidden)
  */
-function deleteData(url, selector, id, btn_delete_selector)
+function deleteData(url, selector, id)
 {
-    $.ajax({
-        url: base_url+"/"+url,
-        type: "POST",
-        dataType: "json",
-        // параметры запроса, передаваемые на сервер (последний - подстрока для поиска):
-        data: {id: id},
-        // обработка успешного выполнения запроса
-        beforeSend: function(){
-            showLoad(btn_delete_selector, id, false);
-        },
-        success: function(data){
-            if(data.status == 'error')
-            {
-                $("#mainError").removeClass("label-success").addClass("label-danger").html(data.result);
-                showLoad(btn_delete_selector, id, true);
-            }
-            else
-            {
-                $("#"+selector+id).fadeOut(300, function(){
-                    $("#mainError").removeClass("label-danger").addClass("label-success").html(data.result);
-                    $(this).remove();
-                    if($(".project").html() === undefined)
-                        $("#addProject").remove();
+    bootbox.confirm(jsLang[20], function(result) {
+        if(result)
+        {
+            ajaxRequestJSON(url);
+            $.ajax({
+                // параметры запроса, передаваемые на сервер (последний - подстрока для поиска):
+                data: {id: id},
+                // обработка успешного выполнения запроса
+                success: function(data){
+                    if(data.status == 'error')
+                        errorSuccessAjax({title: data.resultTitle, message: data.resultText}); //показываем модалку
+                    else
+                    {
+                        var rowProject = $("#"+selector+id);
+                        rowProject.fadeOut(300, function(){
+                            rowProject.next().remove();
+                            rowProject.remove();
 
-                });
-            }
-        },
-        error: function(){
-            $("#mainError").removeClass("label-success").addClass("label-danger").html(jsLang[2]);
-            showLoad(btn_delete_selector, id, true);
+                            if($(".project").html() === undefined)
+                                $("#addProject").remove();
+
+                            errorSuccessAjax(data.resultTitle, {del: "danger", add: "success"}); //сообщение вставляем под главный title
+                        });
+                    }
+                }
+            });
         }
     });
+
 }
 
 /**
  * Для всех ajax запросов это вроде как шаблон
+ * For all ajax requests this kind of pattern
+ *
  * @param url
- * @param btn_delete_selector
- * @param id
  * @param additionalDelBlock - дополнительный блок, подлежащий скрытию
  */
-function ajaxRequestJSON(url, btn_delete_selector, id, additionalDelBlock)
+function ajaxRequestJSON(url, additionalDelBlock, hidePreloader)
 {
+    var message;
     $.ajaxSetup({
         url: base_url+"/"+url,
         global: false,
@@ -61,35 +58,56 @@ function ajaxRequestJSON(url, btn_delete_selector, id, additionalDelBlock)
             if(additionalDelBlock !== undefined)
                 additionalDelBlock.fadeOut();
 
-            showLoad(btn_delete_selector, id, false);
+            if(hidePreloader === undefined)
+                showLoad();
         },
-        error: function(){
-            showLoad(btn_delete_selector, id, true); //скрываем кнопку загрузки и открываем прежние скрытые блоки
-            addTitle({title: "Произошла ошибка!", message: "Попробуйте обновить страницу, если не поможет - сообщите об ошибке на <a href=''>этой страницу</a>"});
+        error: function(e, x, settings, exception){
+            hideLoad();//скрываем прелоадер
+            var statusErrorMap = {
+                '400' : jsLang[8],
+                '401' : jsLang[9],
+                '403' : jsLang[10],
+                '404' : jsLang[11],
+                '500' : jsLang[12],
+                '503' : jsLang[13]
+            };
+
+            if (e.status)
+            {
+                message = statusErrorMap[e.status];
+                if(!message)
+                    message = jsLangAdditional;
+            }
+            else if(exception == 'parsererror')
+                message = jsLang[14];
+            else if(exception == 'timeout')
+                message = jsLang[15];
+            else if(exception == 'abort')
+                message = jsLang[16];
+            else
+                message = jsLangAdditional;
+
+            //показываем ошибку
+            addTitle({title: jsLang[7], message: message});
         }
     });
+
 }
 
 /**
- * Показываем значек загрузки страницы
- * @param selector
- * @param id
- * @param back - если false, то показываем кнопку загрузки страницы, true - скрываем
+ * Показываем прелоадер
  */
-function showLoad(selector, id, back)
+function showLoad()
 {
-    if(back === false)
-    {
-        $("#" + selector + id).fadeOut(150, function(){
-            $("#load_" + id).fadeIn(150);
-        });
-    }
-    else
-    {
-        $("#load_" + id).fadeOut(150, function(){
-            $("#" + selector + id).fadeIn(150);
-        });
-    }
+    $("#prel").fadeIn(500);
+}
+
+/**
+ * скрываем прелоадер
+ */
+function hideLoad()
+{
+    $("#prel").fadeOut(500);
 }
 
 /**
@@ -101,6 +119,11 @@ function showLoad(selector, id, back)
 function addTitle(response, classHtml)
 {
     var mainError = $("#mainError"); //ид блока под главным названием, чтобы показывать ошибку
+    //если были дополнительные ошибки, то их удаляем, а то мешаются своей громозкостью
+    $.each($(".additionalError"), function( index, value ) {
+        $(value).remove();
+    });
+
     mainError.html(""); //обнуляем прошлый текст ошибки
     if(classHtml === undefined)
         bootbox.alert({
@@ -116,32 +139,142 @@ function addTitle(response, classHtml)
 
 /**
  * Вставляет сообщение под заголовок, скрывает кнопку загрузки страницы и поднимает к самому верху
- * @param btn_delete_selector
- * @param id
  * @param response - содержит овтет в json
  * @param classHtml - json {del: '', add: ''}
+ * @param showForm - если не undefined, то показываем скрытые элементы
  */
-function errorSuccessAjax(btn_delete_selector, id, response, classHtml)
+function errorSuccessAjax(response, classHtml, showForm)
 {
+    if(showForm !== undefined)
+        $("#"+showForm).fadeIn(150);
+
     addTitle(response, classHtml);
-    showLoad(btn_delete_selector, id, true);
+    hideLoad();
 }
 
+/**
+ * Достаем имена пользователей для автокомплита
+ * We get the usernames for auto complete
+ *
+ * @param request
+ * @param response
+ * @param id - там где будет отображаться ошибка (where will show an error)
+ */
+function addUserTag(request, response, id)
+{
+    ajaxRequestJSON('task/getUsersProject', undefined, 'hide');
+    $.ajax({
+        data: {query: request.term },
+        success: function (data)
+        {
+            var error = '';
+            if(data.status == 'error')
+                error = data.resultTitle;
+
+            if(error != '')
+                id.html(error);
+            else
+            {
+                id.html("");
+                response($.map(data.users, function (item){
+                        return {
+                            label: item.name + item.login,
+                            value: item.login
+                        }
+                    })
+                );
+            }
+        },
+        error: function (request, status, error)
+        {
+            //показываем ошибку
+            addTitle({title: jsLang[7], message: error});
+        }});
+}
+
+/**
+ * Прикрепляем юзеров к проекту
+ * Users attach to the project
+ * @param id - id проекта
+ */
+function attachUsers(id)
+{
+    ajaxRequestJSON("task/attachUserProject");
+    $.ajax({
+        data: {names: $("#tagsInputAutocomplete_"+id).val(), id: id},
+        success: function(data)
+        {
+            errorSuccessAjax({title: data.resultTitle, message: data.resultText}); //показываем модалку
+        }
+    });
+}
+
+/**
+ * Прикрепляем юзеров к проекту
+ * Users attach to the project
+ * @param id - id проекта
+ */
+function delUserProject(id)
+{
+    ajaxRequestJSON("task/delUserProject");
+    $.ajax({
+        data: {names: $("#tagsInputAutocomplete_"+id).val(), id: id},
+        success: function(data)
+        {
+            errorSuccessAjax({title: data.resultTitle, message: data.resultText}); //показываем модалку
+        }
+    });
+}
 
 $(function() {
 
-    $(".toogle-user").click(function() {
-        var id = $(this).parent().attr('data-id');
 
-        //popupWrite.classList.toggle("modal-write-us-show");
-        $("#addUserProject_"+id).toggle();
-        //username.focus();
+    /**
+     * При нажатии кнопки добавить юзера к проекту
+     * When you click to add a user to the project
+     */
+    $(".toogle-user").click(function() {
+
+        var id = $(this).parent().attr('data-id');
+        var idAttach;
+        //скрываем все поля добавления юзера к проекту, кроме выбранного
+        $.each($(".addUserProject"), function( index, value ) {
+            idAttach = $(value).attr("data-id");
+            if(idAttach != id)
+                $("#addUserProject_"+idAttach).hide(500).addClass("hidden_my");
+        });
+
+        //открываем поле добавления юзера или скрываем
+        var selector = $("#addUserProject_"+id);
+        if(selector.hasClass("hidden_my"))
+            selector.show(500).removeClass("hidden_my");
+        else
+            selector.hide(500).addClass("hidden_my");
+
+        //автокоплит юзеров
+        $('#tagsInputAutocomplete_'+id).tagit({
+            placeholderText: jsLang[19],
+            autocomplete: ({
+                source: function (request, response)
+                {
+                    addUserTag(request, response, $("#tagsInputAutocompleteError_"+id));
+                },
+                minLength: 3,
+                autoFocus: true,
+                delay: 200,
+                select: function (e, ui)
+                {
+                    //console.log(ui.item);
+                    //$("#userAutocompleteHide").val(ui.item.value);
+                }
+            })});
+
     });
 
 
     /**
-     * При нажатии на переминовать скрываем ссылку и показываем инпут, а так же сохраняем результат
-     * TODO слова занести в словарь и подставить сюда
+     * При нажатии на переименовать скрываем ссылку и показываем инпут, а так же сохраняем результат
+     * When you click on a link and rename hide show INPUT, as well as store the result
      */
     $(".btnReName").click(function(){
         var id = $(this).attr("data-id"); //ну бля, ид естесно
@@ -164,13 +297,12 @@ $(function() {
             $(this).parent().fadeOut(150, function(){
                 btnSave.fadeIn(150);
             });
-
         }
         //если жмем по кнопке сохранить
         else
         {
             var titleProject = $.trim(objInput.val()); //получаем "измененное название"
-            if(titleProject == '' || titleProject.length < 3 || titleProject.length > 255 || /^[a-zA-Zа-яА-ЯёЁ0-9-_ ]+$/.test(titleProject) === false)
+            if(titleProject == '' || /^[a-zA-Zа-яА-ЯёЁ0-9-_ ]{3,256}$/.test(titleProject) === false)
             {
                 addTitle({title: jsLang[5], message: jsLang[6]}); //показываем ошибку
                 objInput.val(lastNameProject); //заносим в инпут старое название
@@ -181,20 +313,21 @@ $(function() {
             if(titleProject != lastNameProject)
             {
                 //шаблон ajax запроса
-                ajaxRequestJSON("task/updateProject", 'groupBtn_', id, btnSave);
+                ajaxRequestJSON("task/updateProject", btnSave);
                 $.ajax({
                     data: {id: id, title: titleProject},
                     success: function(data)
                     {
+                        console.log(data);
                         if(data.status == 'error')
                         {
                             objInput.val(lastNameProject);
-                            errorSuccessAjax('groupBtn_', id, {title: data.resultTitle, message: data.resultText}); //показываем модалку
+                            errorSuccessAjax({title: data.resultTitle, message: data.resultText}, undefined, 'groupBtn_'+id); //показываем модалку
                         }
                         else
                         {
                             objLink.html(titleProject);
-                            errorSuccessAjax('groupBtn_', id, data.resultTitle, {del: "danger", add: "success"}); //сообщение вставляем под главный title
+                            errorSuccessAjax(data.resultTitle, {del: "danger", add: "success"}, 'groupBtn_'+id); //сообщение вставляем под главный title
                         }
 
                         //скрываем ссылку и показываем инпут
@@ -209,11 +342,15 @@ $(function() {
             }
 
             //если название не изменили показываем конфирм
-            bootbox.confirm("Название не изменилось. Оставить его в покое?",function(result) {
+            bootbox.confirm(jsLang[17], function(result) {
                 if(result)
                 {
                     btnSave.fadeOut(150, function(){
-                        errorSuccessAjax("groupBtn_", id, "Не стал переминовывать", {del: "danger", add: "success"}); //сообщение вставляем под главный title
+                        errorSuccessAjax(jsLang[18], {del: "danger", add: "success"}, 'groupBtn_'+id); //сообщение вставляем под главный title
+                    });
+
+                    objInput.fadeOut(150, function(){
+                        objLink.fadeIn(150);
                     });
                 }
             });
@@ -222,58 +359,13 @@ $(function() {
 
 
     /**
-     * Автокомплит прикрепления юзера к проекту
-     * Autocomplete user attachment to the project
+     * Автокомплит, который делает юзера главным по проекту
+     * Autocomplete, which makes the user the main project
      */
     $( "#userAutocomplete" ).autocomplete({
-        source: function(request, response){
-            $.ajax({
-                url: base_url+"/task/getName",
-                type: "POST",
-                dataType: "json",
-                // параметры запроса, передаваемые на сервер (последний - подстрока для поиска):
-                data:{
-                    maxRows: 12,
-                    nameUser: request.term
-                },
-                // обработка успешного выполнения запроса
-                success: function(data){
-
-                    if(data.status == 'error')
-                    {
-                        $("#autocomplete_error").html(data.result);
-                        return false;
-                    }
-
-                    // приведем полученные данные к необходимому формату и передадим в предоставленную функцию response
-                    response($.map(data.users, function(item){
-                        var error = '';
-
-                        switch(item.name)
-                        {
-                            case "notAjax_EX":
-                            case "notPostData_EX":
-                                error = jsLang[0];
-                                break;
-                            case "notMatch_EX":
-                                error = jsLang[1];
-                                break;
-                        }
-
-                        if(error != '')
-                            $("#autocomplete_error").html(error);
-                        else
-                        {
-                            $("#autocomplete_error").html('');
-                            return{
-                                label: item.name+item.login,
-                                value: item.login
-                            }
-                        }
-
-                    }));
-                }
-            });
+        source: function(request, response)
+        {
+            addUserTag(request, response, $("#autocomplete_error"));
         },
         minLength: 3, //срабатывание при минимальном количестве символов
         delay: 200, //задержка между запросами
