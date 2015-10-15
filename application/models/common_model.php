@@ -132,6 +132,9 @@ class Common_model extends CI_Model {
     {
         $this->db->insert($table, $new);
 
+        if($return === true && $last_id === true)
+            return $this->db->insert_id()."|".$this->_returnOperation();
+
         if($last_id === true)
             return $this->db->insert_id();
 

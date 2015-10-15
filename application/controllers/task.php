@@ -41,7 +41,7 @@ class Task extends CI_Controller {
      * @param string $return
      * @return mixed
      */
-    private function _getProject($idIser, $select = 'id_project, title', $return = 'result_array')
+    private function _getProject($idIser, $select = 'id_project, title, team_ids', $return = 'result_array')
     {
         return $this->common_model->getResult('projects', 'responsible', $idIser, $return, $select, 'id_project');
     }
@@ -72,11 +72,48 @@ class Task extends CI_Controller {
         //получаем все проекты для данного юзера
         $data['myProjects'] = $this->_getProject($data['idUser']);
 
+        //получаем всех прикрепленных юзеров к проекту и вставляем в ячейку, чтобы потом их отобразить во вьюхе
+        foreach($data['myProjects'] as $val)
+        {
+            $allUsers = explode(',', $val['team_ids']);
+            //если в проекте только сам проект менеджер
+            if(count($allUsers) == 1)
+            {
+                $data['userForProject'][$val['id_project']] = "";
+                continue;
+            }
+
+            //если ид юзера совпадает с ид в комаде, то удаляем его, чтобы не отображалось это во вьюхе
+            foreach($allUsers as $key=>$v)
+                if($v == $data['idUser'])
+                    unset($allUsers[$key]);
+
+
+            $data['userForProject'][$val['id_project']] = $this->common_model->getResult('users', 'id_user', $allUsers, 'result_array', 'login', null, 'desc', true);
+            if(empty($data['userForProject'][$val['id_project']]))
+                $data['userForProject'][$val['id_project']] = "";
+            else
+            {
+                $temp = '';
+                foreach( $data['userForProject'][$val['id_project']] as $k=>$login)
+                {
+                    if(isset( $data['userForProject'][$val['id_project']][$k+1]))
+                        $temp .= $login['login'].',';
+                    else
+                        $temp .= $login['login'];
+                }
+
+                $data['userForProject'][$val['id_project']] = $temp;
+                unset($temp);
+            }
+        }
+
+
         if(isset($_POST['addProject_btn']))
         {
             //если чувак нажал чекбокс, то при ошибке мы его снова нажмем и сделаем инпут закрытым
             $data['iAdminCheck'] = (isset($_POST['iAdmin'])) ? true : false;
-            $this->form_validation->set_rules('nameProject', $data['welcome_controller'][1], 'trim|required|min_length[3]|max_length[255]|xss_clean|is_unique[projects.title]');
+            $this->form_validation->set_rules('nameProject', $data['task_views'][30], 'trim|required|min_length[3]|max_length[255]|xss_clean|is_unique[projects.title]');
             $this->form_validation->set_rules('mainUser', $data['welcome_controller'][2], 'trim|alpha_dash|min_length[2]|max_length[20]|xss_clean');
 
             //если валидация не прошла проверку - показываем вьюху, а там ошибки покажут
@@ -142,9 +179,12 @@ class Task extends CI_Controller {
             //если все хорошо прошло
             if($fail === true)
             {
-                $q = $this->common_model->insertData('projects', $new, true);
-                if($q > 0)
+                $q = explode("|", $this->common_model->insertData('projects', $new, true, true));
+                //в $q[1] содержится количество выполненых операций
+                if($q[1] > 0)
                 {
+                    //в проекте нет добавленных юзеров еще, для отображения тегов  нужно это. в $q[0] содержиться последний вставленный ид в бд
+                    $data['userForProject'][$q[0]] = "";
                     $data['error'] = $data['task_views'][4];
                     $data['status_text'] = 'success';
                     //получаем все проекты для данного юзера
@@ -157,7 +197,6 @@ class Task extends CI_Controller {
             else
                 $data['error'] = $data['task_views'][6];
         }
-
 
         $this->display_lib->display($data, $config['pathToViewDir']);
     }
@@ -220,7 +259,6 @@ class Task extends CI_Controller {
         echo json_encode($response);
     }
 
-
     /**
      * (AJAX)
      * Обновляем имя проекта и делаем разного рода проверки
@@ -264,8 +302,6 @@ class Task extends CI_Controller {
         echo json_encode($response);
     }
 
-
-
     /**
      * (AJAX)
      * Получаем доступные имена по логину или имени
@@ -298,6 +334,7 @@ class Task extends CI_Controller {
     }
 
     /**
+     * (AJAX)
      * Прикрепляем разных юзеров к проекту
      * Attach the different users to the project
      */
@@ -371,6 +408,7 @@ class Task extends CI_Controller {
 
 
     /**
+     * (AJAX)
      * Удаляем юзеров из проекта
      * Remove users from the project
      */

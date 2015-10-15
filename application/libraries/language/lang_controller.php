@@ -311,6 +311,7 @@ class Lang_controller
             27  =>  "Данные успешно обновлены.",
             28  =>  "Вы никого не удалили из проекта",
             29  =>  "Были удалены люди под логинами: ",
+            30  =>  "Название проекта",
         ];
 
         /********************************************
@@ -349,6 +350,7 @@ class Lang_controller
             27  =>  "The data have been updated successfully.",
             28  =>  "You have not removed anyone from the project",
             29  =>  "People have been removed under the login: ",
+            30  =>  "Project name",
         ];
 
 
@@ -373,7 +375,6 @@ class Lang_controller
             17  =>  "Название не изменилось. Оставить его в покое?",
             18  =>  "Вы не стали переименовывать проект",
             20  =>  "Вы действительно хотите удалить проект?",
-            21  =>  "Обновить данные (если удалили человека из поля, нажмите сюда)",
         ];
 
 
@@ -393,7 +394,6 @@ class Lang_controller
             17  =>  "The name has not changed. Leave him alone?",
             18  =>  "You did not rename the project",
             20  =>  "Are you sure you want to delete the project?",
-            21  =>  "Update details (If you remove the person from the field, click here)",
         ];
 
 

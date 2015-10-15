@@ -2,27 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="72f7ccef-4494-4399-8117-87233966c1fc" name="Default" comment="">
-      <change type="DELETED" beforePath="C:\newWeb\home\time.log\www\js\typehead.bundle.js" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/migrations/001_start_db.php" afterPath="$PROJECT_DIR$/application/migrations/001_start_db.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/hooks/Create_db.php" afterPath="$PROJECT_DIR$/application/hooks/Create_db.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/libraries/common.php" afterPath="$PROJECT_DIR$/application/libraries/common.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config.php" afterPath="$PROJECT_DIR$/config.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/config/config.php" afterPath="$PROJECT_DIR$/application/config/config.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/models/common_model.php" afterPath="$PROJECT_DIR$/application/models/common_model.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/default/common/add_project/content.php" afterPath="$PROJECT_DIR$/application/views/default/common/add_project/content.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/default/login/content.php" afterPath="$PROJECT_DIR$/application/views/default/login/content.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/default/login/change_pass/content.php" afterPath="$PROJECT_DIR$/application/views/default/login/change_pass/content.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/default/login/change_profile/content.php" afterPath="$PROJECT_DIR$/application/views/default/login/change_profile/content.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/default/login/forgot/content.php" afterPath="$PROJECT_DIR$/application/views/default/login/forgot/content.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/default/login/register/content.php" afterPath="$PROJECT_DIR$/application/views/default/login/register/content.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/default/all/footer.php" afterPath="$PROJECT_DIR$/application/views/default/all/footer.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/language/russian/form_validation_lang.php" afterPath="$PROJECT_DIR$/application/language/russian/form_validation_lang.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/default/all/header.php" afterPath="$PROJECT_DIR$/application/views/default/all/header.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/libraries/language/lang_controller.php" afterPath="$PROJECT_DIR$/application/libraries/language/lang_controller.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/script.js" afterPath="$PROJECT_DIR$/js/script.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/css/style.css" afterPath="$PROJECT_DIR$/css/style.css" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/controllers/task.php" afterPath="$PROJECT_DIR$/application/controllers/task.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/default/all/title.php" afterPath="$PROJECT_DIR$/application/views/default/all/title.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/controllers/welcome.php" afterPath="$PROJECT_DIR$/application/controllers/welcome.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="time.log.iws" />
@@ -58,8 +42,8 @@
       <file leaf-file-name="content.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/application/views/default/common/add_project/content.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-19.346153" vertical-offset="1299" max-vertical-offset="2176">
-              <caret line="106" column="40" selection-start-line="106" selection-start-column="40" selection-end-line="106" selection-end-column="40" />
+            <state vertical-scroll-proportion="-12.076923" vertical-offset="1301" max-vertical-offset="2176">
+              <caret line="95" column="43" selection-start-line="95" selection-start-column="43" selection-end-line="95" selection-end-column="43" />
               <folding>
                 <element signature="e#6#83#0#PHP" expanded="true" />
                 <element signature="n#style#0;n#tr#1;n#tbody#0;n#table#0;n#div#0;n#div#0;n#div#1;n#!!top" expanded="true" />
@@ -71,79 +55,55 @@
       <file leaf-file-name="script.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/script.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="904" max-vertical-offset="2941">
-              <caret line="215" column="3" selection-start-line="215" selection-start-column="3" selection-end-line="215" selection-end-column="3" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="839" max-vertical-offset="7123">
+              <caret line="119" column="1" selection-start-line="119" selection-start-column="1" selection-end-line="119" selection-end-column="1" />
               <folding>
                 <element signature="n#!!doc;n#deleteData#0" expanded="false" />
                 <element signature="n#!!doc;n#ajaxRequestJSON#0" expanded="false" />
-                <element signature="n#!!block;n#ajaxRequestJSON#0" expanded="false" />
                 <element signature="n#!!doc;n#showLoad#0" expanded="false" />
-                <element signature="n#!!block;n#showLoad#0" expanded="false" />
                 <element signature="n#!!doc;n#hideLoad#0" expanded="false" />
                 <element signature="n#!!block;n#hideLoad#0" expanded="false" />
                 <element signature="n#!!doc;n#addTitle#0" expanded="false" />
-                <element signature="n#!!block;n#addTitle#0" expanded="false" />
                 <element signature="n#!!doc;n#errorSuccessAjax#0" expanded="false" />
                 <element signature="n#!!block;n#errorSuccessAjax#0" expanded="false" />
-                <element signature="n#!!doc;n#addUserTag#0" expanded="false" />
                 <element signature="n#!!block;n#addUserTag#0" expanded="false" />
-                <element signature="e#8276#11578#0" expanded="false" />
-                <element signature="e#12305#12498#0" expanded="false" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="log-2015-10-12.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/application/logs/log-2015-10-12.php">
+      <file leaf-file-name="log-2015-10-16.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/application/logs/log-2015-10-16.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-0.0" vertical-offset="612" max-vertical-offset="782">
-              <caret line="36" column="0" selection-start-line="36" selection-start-column="0" selection-end-line="36" selection-end-column="0" />
+            <state vertical-scroll-proportion="-0.0" vertical-offset="272" max-vertical-offset="425">
+              <caret line="16" column="0" selection-start-line="16" selection-start-column="0" selection-end-line="16" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="task.php" pinned="false" current-in-tab="false">
+      <file leaf-file-name="task.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/application/controllers/task.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-15.192307" vertical-offset="4229" max-vertical-offset="6375">
-              <caret line="379" column="39" selection-start-line="379" selection-start-column="39" selection-end-line="379" selection-end-column="39" />
+            <state vertical-scroll-proportion="0.5510907" vertical-offset="1509" max-vertical-offset="5848">
+              <caret line="117" column="0" selection-start-line="117" selection-start-column="0" selection-end-line="117" selection-end-column="0" />
               <folding>
-                <element signature="n#addProject#0;n#Task#0;n#!!top" expanded="false" />
+                <element signature="n#deleteProject#0;n#Task#0;n#!!top" expanded="false" />
+                <element signature="n#updateProject#0;n#Task#0;n#!!top" expanded="false" />
+                <element signature="n#getUsersProject#0;n#Task#0;n#!!top" expanded="false" />
+                <element signature="n#attachUserProject#0;n#Task#0;n#!!top" expanded="false" />
+                <marker date="1444947998442" expanded="true" signature="8845:8896" placeholder="..." />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="common.php" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/application/libraries/common.php">
+      <file leaf-file-name="common_model.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/application/models/common_model.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="1.3233216" vertical-offset="4045" max-vertical-offset="5202">
-              <caret line="506" column="17" selection-start-line="506" selection-start-column="17" selection-end-line="506" selection-end-column="17" />
-              <folding>
-                <element signature="n#__construct#0;n#Common#0;n#!!top" expanded="false" />
-                <element signature="e#885#1139#0#PHP" expanded="false" />
-                <element signature="e#3395#3628#0#PHP" expanded="false" />
-                <element signature="n#dropCookie#0;n#Common#0;n#!!top" expanded="false" />
-                <element signature="n#checkAuth#0;n#Common#0;n#!!top" expanded="false" />
-                <element signature="e#4738#4843#0#PHP" expanded="false" />
-                <element signature="n#checkCookieSession#0;n#Common#0;n#!!top" expanded="false" />
-                <element signature="e#7186#7372#0#PHP" expanded="false" />
-                <element signature="n#changeTextToLink#0;n#Common#0;n#!!top" expanded="false" />
-                <element signature="e#7751#7897#0#PHP" expanded="false" />
-                <element signature="e#8198#8554#0#PHP" expanded="false" />
-                <element signature="n#sms_translit#0;n#Common#0;n#!!top" expanded="false" />
-                <element signature="e#9744#9844#0#PHP" expanded="false" />
-                <element signature="n#clear#0;n#Common#0;n#!!top" expanded="false" />
-                <element signature="e#10000#10292#0#PHP" expanded="false" />
-                <element signature="e#11168#11882#0#PHP" expanded="false" />
-                <element signature="n#allInit#0;n#Common#0;n#!!top" expanded="false" />
-                <element signature="e#14943#15198#0#PHP" expanded="false" />
-                <element signature="e#15531#15669#0#PHP" expanded="false" />
-                <element signature="n#getInfoSegment#0;n#Common#0;n#!!top" expanded="false" />
-                <element signature="e#16052#16540#0#PHP" expanded="false" />
-              </folding>
+            <state vertical-scroll-proportion="-18.038462" vertical-offset="1860" max-vertical-offset="3094">
+              <caret line="137" column="29" selection-start-line="137" selection-start-column="29" selection-end-line="137" selection-end-column="29" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -151,8 +111,8 @@
       <file leaf-file-name="lang_controller.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/application/libraries/language/lang_controller.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-10.277778" vertical-offset="5361" max-vertical-offset="7242">
-              <caret line="348" column="63" selection-start-line="348" selection-start-column="63" selection-end-line="348" selection-end-column="63" />
+            <state vertical-scroll-proportion="-2.074074" vertical-offset="5345" max-vertical-offset="7242">
+              <caret line="321" column="36" selection-start-line="321" selection-start-column="26" selection-end-line="321" selection-end-column="36" />
               <folding />
             </state>
           </provider>
@@ -171,8 +131,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/system/database/drivers/sqlite/sqlite_driver.php" />
-        <option value="$PROJECT_DIR$/system/database/drivers/sqlsrv/sqlsrv_driver.php" />
         <option value="$PROJECT_DIR$/system/helpers/form_helper.php" />
         <option value="$PROJECT_DIR$/system/libraries/Xmlrpc.php" />
         <option value="$PROJECT_DIR$/application/language/db_hook/ru/install.php" />
@@ -192,7 +150,6 @@
         <option value="$PROJECT_DIR$/js/bootstrap.js" />
         <option value="$PROJECT_DIR$/application/config/hooks.php" />
         <option value="$PROJECT_DIR$/application/migrations/install.log" />
-        <option value="$PROJECT_DIR$/application/models/common_model.php" />
         <option value="$PROJECT_DIR$/js/typehead.bundle.js" />
         <option value="$PROJECT_DIR$/../cc/app/controllers/frontend/categories.php" />
         <option value="$PROJECT_DIR$/system/database/DB_driver.php" />
@@ -216,12 +173,15 @@
         <option value="$PROJECT_DIR$/application/views/default/all/footer.php" />
         <option value="$PROJECT_DIR$/application/views/default/all/header.php" />
         <option value="$PROJECT_DIR$/css/style.css" />
-        <option value="$PROJECT_DIR$/js/script.js" />
-        <option value="$PROJECT_DIR$/application/views/default/common/add_project/content.php" />
-        <option value="$PROJECT_DIR$/application/logs/log-2015-10-12.php" />
-        <option value="$PROJECT_DIR$/application/controllers/task.php" />
-        <option value="$PROJECT_DIR$/application/libraries/language/lang_controller.php" />
         <option value="$PROJECT_DIR$/application/libraries/common.php" />
+        <option value="$PROJECT_DIR$/application/logs/log-2015-10-12.php" />
+        <option value="$PROJECT_DIR$/application/models/common_model.php" />
+        <option value="$PROJECT_DIR$/application/logs/log-2015-10-15.php" />
+        <option value="$PROJECT_DIR$/application/views/default/common/add_project/content.php" />
+        <option value="$PROJECT_DIR$/js/script.js" />
+        <option value="$PROJECT_DIR$/application/logs/log-2015-10-16.php" />
+        <option value="$PROJECT_DIR$/application/libraries/language/lang_controller.php" />
+        <option value="$PROJECT_DIR$/application/controllers/task.php" />
       </list>
     </option>
   </component>
@@ -512,17 +472,20 @@
     <configuration default="true" type="PhpLocalRunConfigurationType" factoryName="PHP Console">
       <method />
     </configuration>
-    <configuration default="true" type="JavascriptDebugType" factoryName="JavaScript Debug">
-      <method />
-    </configuration>
     <configuration default="true" type="com.intellij.database.run.ConsoleRunConfigurationType" factoryName="Query Language Console">
       <option name="VM_PARAMETERS" value="" />
       <option name="USER_CFG_CLASS" />
       <option name="CONTEXT_PROVIDER" />
       <method />
     </configuration>
+    <configuration default="true" type="JavascriptDebugType" factoryName="JavaScript Debug">
+      <method />
+    </configuration>
     <configuration default="true" type="PhpBehatConfigurationType" factoryName="Behat">
       <BehatRunner />
+      <method />
+    </configuration>
+    <configuration default="true" type="PhpUnitRemoteRunConfigurationType" factoryName="PHPUnit on Server">
       <method />
     </configuration>
     <configuration default="true" type="js.build_tools.gulp" factoryName="Gulp.js">
@@ -531,9 +494,6 @@
       <tasks />
       <pass-parent-env-vars>false</pass-parent-env-vars>
       <envs />
-      <method />
-    </configuration>
-    <configuration default="true" type="PhpUnitRemoteRunConfigurationType" factoryName="PHPUnit on Server">
       <method />
     </configuration>
     <list size="0" />
@@ -572,28 +532,28 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="7" />
-    <editor active="false" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32967034" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.44340974" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.10394456" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.10501066" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Event Log" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32972974" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32972974" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32972974" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -612,9 +572,9 @@
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.15618336" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
     </layout-to-restore>
   </component>
   <component name="Vcs.Log.UiProperties">
@@ -662,19 +622,13 @@
           <folding>
             <element signature="n#!!doc;n#deleteData#0" expanded="false" />
             <element signature="n#!!doc;n#ajaxRequestJSON#0" expanded="false" />
-            <element signature="n#!!block;n#ajaxRequestJSON#0" expanded="false" />
             <element signature="n#!!doc;n#showLoad#0" expanded="false" />
-            <element signature="n#!!block;n#showLoad#0" expanded="false" />
             <element signature="n#!!doc;n#hideLoad#0" expanded="false" />
             <element signature="n#!!block;n#hideLoad#0" expanded="false" />
             <element signature="n#!!doc;n#addTitle#0" expanded="false" />
-            <element signature="n#!!block;n#addTitle#0" expanded="false" />
             <element signature="n#!!doc;n#errorSuccessAjax#0" expanded="false" />
             <element signature="n#!!block;n#errorSuccessAjax#0" expanded="false" />
-            <element signature="n#!!doc;n#addUserTag#0" expanded="false" />
             <element signature="n#!!block;n#addUserTag#0" expanded="false" />
-            <element signature="e#8276#11578#0" expanded="false" />
-            <element signature="e#12305#12498#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -683,7 +637,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="34" max-vertical-offset="731">
           <caret line="2" column="6" selection-start-line="2" selection-start-column="6" selection-end-line="2" selection-end-column="6" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -692,7 +645,11 @@
         <state vertical-scroll-proportion="0.0" vertical-offset="1135" max-vertical-offset="3400">
           <caret line="258" column="104" selection-start-line="258" selection-start-column="104" selection-end-line="258" selection-end-column="104" />
           <folding>
-            <element signature="n#addProject#0;n#Task#0;n#!!top" expanded="false" />
+            <element signature="n#deleteProject#0;n#Task#0;n#!!top" expanded="false" />
+            <element signature="n#updateProject#0;n#Task#0;n#!!top" expanded="false" />
+            <element signature="n#getUsersProject#0;n#Task#0;n#!!top" expanded="false" />
+            <element signature="n#attachUserProject#0;n#Task#0;n#!!top" expanded="false" />
+            <marker date="1444947998442" expanded="true" signature="8845:8896" placeholder="..." />
           </folding>
         </state>
       </provider>
@@ -730,19 +687,13 @@
           <folding>
             <element signature="n#!!doc;n#deleteData#0" expanded="false" />
             <element signature="n#!!doc;n#ajaxRequestJSON#0" expanded="false" />
-            <element signature="n#!!block;n#ajaxRequestJSON#0" expanded="false" />
             <element signature="n#!!doc;n#showLoad#0" expanded="false" />
-            <element signature="n#!!block;n#showLoad#0" expanded="false" />
             <element signature="n#!!doc;n#hideLoad#0" expanded="false" />
             <element signature="n#!!block;n#hideLoad#0" expanded="false" />
             <element signature="n#!!doc;n#addTitle#0" expanded="false" />
-            <element signature="n#!!block;n#addTitle#0" expanded="false" />
             <element signature="n#!!doc;n#errorSuccessAjax#0" expanded="false" />
             <element signature="n#!!block;n#errorSuccessAjax#0" expanded="false" />
-            <element signature="n#!!doc;n#addUserTag#0" expanded="false" />
             <element signature="n#!!block;n#addUserTag#0" expanded="false" />
-            <element signature="e#8276#11578#0" expanded="false" />
-            <element signature="e#12305#12498#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -849,7 +800,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.15154994" vertical-offset="259" max-vertical-offset="1258">
           <caret line="23" column="72" selection-start-line="23" selection-start-column="72" selection-end-line="23" selection-end-column="72" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -886,7 +836,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.38231918" vertical-offset="976" max-vertical-offset="1870">
           <caret line="77" column="25" selection-start-line="77" selection-start-column="25" selection-end-line="77" selection-end-column="25" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -979,7 +928,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.12244898" vertical-offset="0" max-vertical-offset="833">
           <caret line="6" column="35" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="35" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -987,15 +935,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-15.692307" vertical-offset="0" max-vertical-offset="867">
           <caret line="24" column="31" selection-start-line="24" selection-start-column="31" selection-end-line="24" selection-end-column="31" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/models/common_model.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.34282324" vertical-offset="1462" max-vertical-offset="3043">
-          <caret line="103" column="20" selection-start-line="103" selection-start-column="20" selection-end-line="103" selection-end-column="20" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1007,71 +946,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/js/script.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="904" max-vertical-offset="2941">
-          <caret line="215" column="3" selection-start-line="215" selection-start-column="3" selection-end-line="215" selection-end-column="3" />
-          <folding>
-            <element signature="n#!!doc;n#deleteData#0" expanded="false" />
-            <element signature="n#!!doc;n#ajaxRequestJSON#0" expanded="false" />
-            <element signature="n#!!block;n#ajaxRequestJSON#0" expanded="false" />
-            <element signature="n#!!doc;n#showLoad#0" expanded="false" />
-            <element signature="n#!!block;n#showLoad#0" expanded="false" />
-            <element signature="n#!!doc;n#hideLoad#0" expanded="false" />
-            <element signature="n#!!block;n#hideLoad#0" expanded="false" />
-            <element signature="n#!!doc;n#addTitle#0" expanded="false" />
-            <element signature="n#!!block;n#addTitle#0" expanded="false" />
-            <element signature="n#!!doc;n#errorSuccessAjax#0" expanded="false" />
-            <element signature="n#!!block;n#errorSuccessAjax#0" expanded="false" />
-            <element signature="n#!!doc;n#addUserTag#0" expanded="false" />
-            <element signature="n#!!block;n#addUserTag#0" expanded="false" />
-            <element signature="e#8276#11578#0" expanded="false" />
-            <element signature="e#12305#12498#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/logs/log-2015-10-12.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.0" vertical-offset="612" max-vertical-offset="782">
-          <caret line="36" column="0" selection-start-line="36" selection-start-column="0" selection-end-line="36" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/views/default/common/add_project/content.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-19.346153" vertical-offset="1299" max-vertical-offset="2176">
-          <caret line="106" column="40" selection-start-line="106" selection-start-column="40" selection-end-line="106" selection-end-column="40" />
-          <folding>
-            <element signature="e#6#83#0#PHP" expanded="true" />
-            <element signature="n#style#0;n#tr#1;n#tbody#0;n#table#0;n#div#0;n#div#0;n#div#1;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/libraries/language/lang_controller.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-10.277778" vertical-offset="5361" max-vertical-offset="7242">
-          <caret line="348" column="63" selection-start-line="348" selection-start-column="63" selection-end-line="348" selection-end-column="63" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/controllers/task.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-15.192307" vertical-offset="4229" max-vertical-offset="6375">
-          <caret line="379" column="39" selection-start-line="379" selection-start-column="39" selection-end-line="379" selection-end-column="39" />
-          <folding>
-            <element signature="n#addProject#0;n#Task#0;n#!!top" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/application/libraries/common.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="1.3233216" vertical-offset="4045" max-vertical-offset="5202">
-          <caret line="506" column="17" selection-start-line="506" selection-start-column="17" selection-end-line="506" selection-end-column="17" />
+        <state vertical-scroll-proportion="0.081947744" vertical-offset="4045" max-vertical-offset="5202">
+          <caret line="466" column="7" selection-start-line="466" selection-start-column="7" selection-end-line="466" selection-end-column="7" />
           <folding>
             <element signature="n#__construct#0;n#Common#0;n#!!top" expanded="false" />
             <element signature="e#885#1139#0#PHP" expanded="false" />
@@ -1094,6 +972,81 @@
             <element signature="e#15531#15669#0#PHP" expanded="false" />
             <element signature="n#getInfoSegment#0;n#Common#0;n#!!top" expanded="false" />
             <element signature="e#16052#16540#0#PHP" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/logs/log-2015-10-15.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="871">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/models/common_model.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-18.038462" vertical-offset="1860" max-vertical-offset="3094">
+          <caret line="137" column="29" selection-start-line="137" selection-start-column="29" selection-end-line="137" selection-end-column="29" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/logs/log-2015-10-16.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-0.0" vertical-offset="272" max-vertical-offset="425">
+          <caret line="16" column="0" selection-start-line="16" selection-start-column="0" selection-end-line="16" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/views/default/common/add_project/content.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-12.076923" vertical-offset="1301" max-vertical-offset="2176">
+          <caret line="95" column="43" selection-start-line="95" selection-start-column="43" selection-end-line="95" selection-end-column="43" />
+          <folding>
+            <element signature="e#6#83#0#PHP" expanded="true" />
+            <element signature="n#style#0;n#tr#1;n#tbody#0;n#table#0;n#div#0;n#div#0;n#div#1;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/libraries/language/lang_controller.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-2.074074" vertical-offset="5345" max-vertical-offset="7242">
+          <caret line="321" column="36" selection-start-line="321" selection-start-column="26" selection-end-line="321" selection-end-column="36" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/script.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="839" max-vertical-offset="7123">
+          <caret line="119" column="1" selection-start-line="119" selection-start-column="1" selection-end-line="119" selection-end-column="1" />
+          <folding>
+            <element signature="n#!!doc;n#deleteData#0" expanded="false" />
+            <element signature="n#!!doc;n#ajaxRequestJSON#0" expanded="false" />
+            <element signature="n#!!doc;n#showLoad#0" expanded="false" />
+            <element signature="n#!!doc;n#hideLoad#0" expanded="false" />
+            <element signature="n#!!block;n#hideLoad#0" expanded="false" />
+            <element signature="n#!!doc;n#addTitle#0" expanded="false" />
+            <element signature="n#!!doc;n#errorSuccessAjax#0" expanded="false" />
+            <element signature="n#!!block;n#errorSuccessAjax#0" expanded="false" />
+            <element signature="n#!!block;n#addUserTag#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/controllers/task.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.5510907" vertical-offset="1509" max-vertical-offset="5848">
+          <caret line="117" column="0" selection-start-line="117" selection-start-column="0" selection-end-line="117" selection-end-column="0" />
+          <folding>
+            <element signature="n#deleteProject#0;n#Task#0;n#!!top" expanded="false" />
+            <element signature="n#updateProject#0;n#Task#0;n#!!top" expanded="false" />
+            <element signature="n#getUsersProject#0;n#Task#0;n#!!top" expanded="false" />
+            <element signature="n#attachUserProject#0;n#Task#0;n#!!top" expanded="false" />
+            <marker date="1444947998442" expanded="true" signature="8845:8896" placeholder="..." />
           </folding>
         </state>
       </provider>

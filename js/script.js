@@ -158,9 +158,9 @@ function errorSuccessAjax(response, classHtml, showForm)
  *
  * @param request
  * @param response
- * @param id - там где будет отображаться ошибка (where will show an error)
+ * @param idError - там где будет отображаться ошибка (where will show an error)
  */
-function addUserTag(request, response, id)
+function addUserTag(request, response, idError)
 {
     ajaxRequestJSON('task/getUsersProject', undefined, 'hide');
     $.ajax({
@@ -169,13 +169,18 @@ function addUserTag(request, response, id)
         {
             var error = '';
             if(data.status == 'error')
+            {
+                idError.removeClass('label-success').addClass("label-danger");
                 error = data.resultTitle;
+            }
+            else
+                idError.removeClass('label-danger').addClass("label-success");
 
             if(error != '')
-                id.html(error);
+                idError.html(error);
             else
             {
-                id.html("");
+                idError.html("");
                 response($.map(data.users, function (item){
                         return {
                             label: item.name + item.login,
@@ -193,40 +198,87 @@ function addUserTag(request, response, id)
 }
 
 /**
- * Прикрепляем юзеров к проекту
- * Users attach to the project
- * @param id - id проекта
+ * Показывает ошибку или сообщение при удалении или добавлении тега (юзера к проекту)
+ * It displays an error message or when you add or remove the tag (user to the project)
+ * @param modal - показывать модальное окно или же в html встроить сообщение
+ * @param data - данные с сообщением от скрипта
+ * @param id - ид проекта
+ * @returns {boolean}
  */
-function attachUsers(id)
+function showMessageInputTag(modal, data, id)
 {
-    ajaxRequestJSON("task/attachUserProject");
-    $.ajax({
-        data: {names: $("#tagsInputAutocomplete_"+id).val(), id: id},
-        success: function(data)
+    var fail = false;
+    if(modal === undefined)
+        errorSuccessAjax({title: data.resultTitle, message: data.resultText}); //показываем модалку
+    else
+    {
+        var label = $("#tagsInputAutocompleteError_"+id);
+        if(data.status != 'error')
+            label.removeClass('label-danger').addClass("label-success");
+        else
         {
-            errorSuccessAjax({title: data.resultTitle, message: data.resultText}); //показываем модалку
+            label.removeClass('label-success').addClass("label-danger");
+            fail = true;
         }
-    });
+
+        label.html(data.resultTitle+" "+data.resultText);
+    }
+
+    return fail;
 }
 
 /**
- * Прикрепляем юзеров к проекту
- * Users attach to the project
+ * Удаляем юзеров из проекта
+ * Remove users from the project
  * @param id - id проекта
+ * @param name - delete user name
+ * @param modal - show or no modal view message
  */
-function delUserProject(id)
+function delUserProject(id, name, modal)
 {
-    ajaxRequestJSON("task/delUserProject");
+    ajaxRequestJSON("task/delUserProject", undefined, (modal !== undefined) ? 'dontShow' : modal);
+    var fail = false;
     $.ajax({
-        data: {names: $("#tagsInputAutocomplete_"+id).val(), id: id},
+        data: {names: name, id: id},
         success: function(data)
         {
-            errorSuccessAjax({title: data.resultTitle, message: data.resultText}); //показываем модалку
+            fail = showMessageInputTag(modal, data, id);
         }
     });
+
+    return fail;
+}
+
+
+/**
+ * Прикрепляем юзеров к проекту, над input добавляет текст ошибки или успеха или показывает модальное окно
+ * Users attach to the project, adds the text of the input error or success, or show the modal window
+ * @param id - id проекта
+ * @param name - attach user name
+ * @param modal - show or no modal view message
+ */
+function attachUsers(id, name, modal)
+{
+    ajaxRequestJSON("task/attachUserProject", undefined, (modal !== undefined) ? 'dontShow' : modal);
+    $.ajax({
+        data: {names: name, id: id},
+        success: function(data)
+        {
+            showMessageInputTag(modal, data, id);
+        }
+    });
+
 }
 
 $(function() {
+
+
+    /**
+     * Если false, то разрешается event beforeTagRemoved, иначе его не выполнять. Если этого не сделать, то сообщение при завершении скрипта всегда будет с ошибкой
+     * If false, then allowed event before Tag Removed, otherwise it will not perform. If you do not, then the message at the end of the script will always be an error
+     * @type {boolean}
+     */
+    var dontDeleteUserTag = false;
 
 
     /**
@@ -251,8 +303,35 @@ $(function() {
         else
             selector.hide(500).addClass("hidden_my");
 
+        var inputTags = $('#tagsInputAutocomplete_'+id);
         //автокоплит юзеров
-        $('#tagsInputAutocomplete_'+id).tagit({
+        inputTags.tagit({
+            /**
+             * до удаления тега отсылаем его в контроллер и если ок, тогда удаляем тег из input
+             * to remove the tag sends it to the controller, and if OK, then remove the tag from the input
+             * @param event
+             * @param ui
+             * @returns {boolean}
+             */
+            beforeTagRemoved : function(event, ui) {
+                //смотри выше про эту переменную (See above about the variable)
+                if(dontDeleteUserTag === false)
+                {
+                    //удаляем наш тег из общего стека и передаем его в фунецию
+                    var allTags = inputTags.val().split(',');
+                    $.each(allTags, function( index, value ) {
+                        if(value == ui.tagLabel)
+                            allTags.splice(index, 1);
+                    });
+                    //объединяем в строку
+                    allTags = allTags.join(',');
+
+                    var fail = delUserProject(id, allTags, 'noModal'); //without modal window
+                    //var fail = delUserProject(id, ""); // with modal window
+                    if(fail === true) //if error
+                        return false;
+                }
+            },
             placeholderText: jsLang[19],
             autocomplete: ({
                 source: function (request, response)
@@ -264,13 +343,30 @@ $(function() {
                 delay: 200,
                 select: function (e, ui)
                 {
-                    //console.log(ui.item);
-                    //$("#userAutocompleteHide").val(ui.item.value);
+                    dontDeleteUserTag = false;
+                    attachUsers(id, ui.item.value, 'noModal'); //without modal message
+                    //attachUsers(id, ui.item.value); // with modal message
                 }
             })});
-
     });
 
+
+    /**
+     * Одной кнопкой удаляем все теги
+     * One button to remove all tags
+     */
+    $(".delUserProject").click(function(){
+        var id = $(this).attr('data-id');
+        var fail = delUserProject(id, "", 'noModal'); //without modal window
+        //var fail = delUserProject(id, ""); // with modal window
+        //если все прошло успешно, то удаляем все теги, иначе оставляем их
+        if(fail === false)
+        {
+            //смотри выше про эту переменную (See above about the variable)
+            dontDeleteUserTag = true;
+            $("#tagsInputAutocomplete_"+id).tagit("removeAll");
+        }
+    });
 
     /**
      * При нажатии на переименовать скрываем ссылку и показываем инпут, а так же сохраняем результат
@@ -318,7 +414,6 @@ $(function() {
                     data: {id: id, title: titleProject},
                     success: function(data)
                     {
-                        console.log(data);
                         if(data.status == 'error')
                         {
                             objInput.val(lastNameProject);
