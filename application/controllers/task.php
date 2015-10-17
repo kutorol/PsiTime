@@ -11,6 +11,8 @@
  */
 class Task extends CI_Controller {
 
+
+
     /**
      * Главная страница личного кабинета
      * Home private office
@@ -26,9 +28,45 @@ class Task extends CI_Controller {
             'pattern'           =>  ['pattern'=>['title', 'login', '%login%']]
         ];
         $data = $this->common->allInit($config);
-        if(isset($data['return_notification']))
-            return true;
+        $data['attachUploadSripts'] = true;
+        if($data['statusUser'] == 1)
+        {
+            $this->load->model('common_model');
+            $data['myProjects'] = $this->_getProject($data['idUser']);
+        }
+        else
+            $data['myProjects'] = [];
 
+        //проверяем, не оставил ли юзер файлы в папке, при создании задачи
+        //это может быть тогда, когда он не добавил задачу, а просто все загрузил!
+        $tempAttachFileDir = 'img/temp/'.$data['login'].'/';
+        if(file_exists('./'.$tempAttachFileDir))
+        {
+            $files = [];
+            $descriptor = opendir('./'.$tempAttachFileDir);
+            while($v = readdir($descriptor))
+            {
+                if($v == '.' || $v == '..')
+                    continue;
+
+                $files[] = $v;
+            }
+
+            if(!empty($files))
+            {
+                $data['filesAttach'] = [];
+                foreach($files as $k=>$v)
+                {
+                    $data['filesAttach'][$k]['src'] = base_url().$tempAttachFileDir.$v;
+                    $data['filesAttach'][$k]['title'] = $v;
+                    $ext = explode('.', $v);
+                    $ext = $ext[count($ext)-1];
+                    $ext = $this->_findExt($ext);
+                    $data['filesAttach'][$k]['ext'] = ($ext != 'zip_pack') ? $ext : 'zip';
+                }
+            }
+
+        }
 
         $this->display_lib->display($data, $config['pathToViewDir']);
 	}
@@ -64,9 +102,6 @@ class Task extends CI_Controller {
             'pattern'           =>  ['pattern'=>['title', 'login', '%login%']]
         ];
         $data = $this->common->allInit($config);
-        if(isset($data['return_notification']))
-            return true;
-
 
         $this->load->model('common_model');
         //получаем все проекты для данного юзера
@@ -108,6 +143,8 @@ class Task extends CI_Controller {
             }
         }
 
+        if(isset($data['return_notification']))
+            $this->display_lib->display($data, $config['pathToViewDir']);
 
         if(isset($_POST['addProject_btn']))
         {
@@ -214,7 +251,7 @@ class Task extends CI_Controller {
         if($response['status'] != 'error')
         {
             $data = $response['data'];
-
+            unset($response['data']);
             $this->load->model('common_model');
             $idProject = $this->common->clear(intval($_POST['id']));
             $infoProject = $this->common_model->getResult('projects', ['id_project', 'responsible'], [$idProject, $data['idUser']], 'row_array', 'responsible, team_ids');
@@ -271,7 +308,7 @@ class Task extends CI_Controller {
         if($response['status'] != 'error')
         {
             $data = $response['data'];
-
+            unset($response['data']);
             $this->load->model('common_model');
             $idProject = $this->common->clear(intval($_POST['id']));
             $titleProject  = $this->common->clear($_POST['title']);
@@ -314,7 +351,7 @@ class Task extends CI_Controller {
         if($response['status'] != 'error')
         {
             $data = $response['data'];
-
+            unset($response['data']);
             $this->load->model('task_model');
             $nameUser = $this->common->clear($_POST['query']);
             $maxRows = 10;
@@ -345,7 +382,7 @@ class Task extends CI_Controller {
         if($response['status'] != 'error')
         {
             $data = $response['data'];
-
+            unset($response['data']);
             $this->load->model('common_model');
 
             $idProject = $this->common->clear(intval($this->input->post('id', true)));
@@ -419,7 +456,7 @@ class Task extends CI_Controller {
         if($response['status'] != 'error')
         {
             $data = $response['data'];
-
+            unset($response['data']);
             $this->load->model('common_model');
 
             $idProject = $this->common->clear(intval($this->input->post('id', true)));
@@ -511,4 +548,205 @@ class Task extends CI_Controller {
         else
             return ['status' => 'error', 'resultTitle' => $data['languages_desc'][0]['titleError'][$data['segment']], 'resultText' =>  $data['welcome_controller'][13]];
     }
+
+
+    /**
+     * Узнаем, является ли расширение файла одним из этих, если нет, то возвращаем 'zip_pack', чтобы потом заархивировать документ
+     * To know whether the file extension by one of these, if not, return 'zip_pack', then to the document archive
+     * @param $type - тип определяемого файла
+     * @param bool $getExt - если true, то возвращаем массив всех доступных расширений
+     * @return array|int|string
+     */
+    private function _findExt($type, $getExt = false)
+    {
+        $ext = [
+            'word'      =>  ['doc', 'docx', 'docm', 'dotx', "dotm"],
+            'exel'      =>  ['xlsx', 'xls', 'xlsm', 'xltx', "xltm", "xlsb", "xlam", "xlt", "xla", "csv", 'xml'],
+            'pPoint'    =>  ['pptx', 'pptm', 'ppsx', 'ppsm', "potx", "potm", "ppam", "ppt", "pps", "pot", "ppa"],
+            'zip'       =>  ['7z', 'arj', 'bin', 'cab', 'cbr', 'deb', 'gz', 'gzip', 'one', 'pak', 'rar', 'sit', 'sitx', 'tar', 'tar-gz', 'tgz', 'xar', 'zip', 'zipx'],
+            'img'       =>  ['gif','jpg','png','jpeg','bmp'],
+            'pdf'       =>  ['pdf'],
+            'text'      =>  ['txt'],
+            'video'     =>  ['avi', 'mov', 'mp4', 'mpeg', 'mpg', 'wm', 'wmv'],
+            'audio'     =>  ['m4a', 'm4b', 'm4r', 'mid', 'midi', 'mp3', 'ogg', 'ra', 'wav', 'wma']
+        ];
+
+        if($getExt === true)
+            return $ext;
+
+        $extention = 'zip_pack';
+        foreach($ext as $k=>$v)
+        {
+            $key = array_search($type, $v);
+            if($key !== false) //если расширение нашлось, возвращаем его ключ
+                return $k;
+        }
+
+        return $extention;
+    }
+
+    /**
+     * Архивируем загружаемый файл
+     * Archiving the downloaded file
+     * @param $path - путь к папке с файлом (path to the file) - Ex: './img/'
+     * @param $name - название файла (file name) - Ex: 'noimg--fds'
+     * @param $pathWithName - путь к самому файлу (the path to the file itself) - Ex: './img/noimg--fds.png'
+     * @param $endExt - расширение загружаемого файла (extension of the uploaded file) - Ex: 'png'
+     * @return array
+     */
+    private function _attachToZip($path, $name, $pathWithName, $endExt)
+    {
+        $response = ['status'=>'success'];
+        //создание zip архива
+        $zip = new ZipArchive();
+        //имя файла архива с путем
+        $fileName = $path.$name.".zip";
+        //получаем имя без хеша
+        $name = explode("--", $name);
+
+        //если удалось создать архив, записываем в него файл
+        if ($zip->open($fileName, ZIPARCHIVE::CREATE) === true)
+            $zip->addFile($pathWithName, $name[0].'.'.$endExt); //2nd param - новое имя файла в архиве
+        else
+            $response = ['status'=>'error', 'title'=>"Error while creating archive file"];
+
+        //закрываем архив
+        $zip->close();
+
+        return $response;
+    }
+
+
+    /**
+     * (AJAX)
+     * Удаляем прикрепленный к проекту файл
+     * Remove attached to the project file
+     */
+    public function delAttach()
+    {
+        //проверяем на ajax и его параметры
+        $response = $this->common->isAjax(["src",'str']);
+        if($response['status'] != 'error')
+        {
+            $data = $response['data'];
+            unset($response['data']);
+
+            $src = $this->common->clear($this->input->post('src'));
+
+            $src = explode('/', $src);
+            $src = $src[count($src)-1];
+            $path = './img/temp/'.$data['login'].'/'.$src;
+
+            $response = ['status' => 'success'];
+            if(file_exists($path))
+            {
+                unlink($path);
+
+                //если папка пуста, то удаляем ее
+                $tempAttachFileDir = './img/temp/'.$data['login'].'/';
+                if(file_exists($tempAttachFileDir))
+                {
+                    $files = [];
+                    $descriptor = opendir($tempAttachFileDir);
+                    while($v = readdir($descriptor))
+                    {
+                        if($v == '.' || $v == '..')
+                            continue;
+
+                        $files[] = $v;
+                    }
+
+                    if(empty($files))
+                        rmdir($tempAttachFileDir);
+                }
+            }
+            else
+                $response = ['status' => 'error', 'resultTitle'=> $data['languages_desc'][0]['titleError'][$data['segment']], 'resultText'=> 'Не удалось удалить файл!'];
+        }
+
+        echo json_encode($response);
+    }
+
+    /**
+     * (AJAX)
+     * Когда еще создаем задачу, и решили добавить к задаче какой нибудь документ, то сработает эта функция
+     * When will create a task, and decided to add to the problem of some sort of document, this feature will work
+     * TODO text
+     */
+    public function addTaskAttachFile()
+    {
+        //если файл к нам пришел
+        if(isset($_FILES['userfile']))
+            $_POST['userfile'] = "yes";
+
+        //проверяем на ajax и его параметры
+        $response = $this->common->isAjax(["userfile",'str']);
+        if($response['status'] != 'error')
+        {
+            $data = $response['data'];
+            unset($response['data']);
+
+            if($_FILES['userfile']['size'] <= 10485760) //10Mb
+            {
+                //получаем имя файла и обрабатываем
+                $fileName = explode(".", $_FILES['userfile']['name']);
+                $endExt = $fileName[count($fileName)-1];
+                unset($fileName[count($fileName)-1]);
+                $fileName = $this->common->sms_translit(implode('-', $fileName));
+                $hash = md5(time().rand(1,500000000));
+                $fileName = $fileName.'--'.$hash;
+
+                //создаем папку временную, если ее не было
+                $tempPath = 'img/temp/'.$data['login'].'/';
+                if(!file_exists('./'.$tempPath))
+                    @mkdir($tempPath, 0777);
+
+                //если расширение неизвестное, то запаковываем в zip архив
+                $ext = $this->_findExt($endExt);
+
+
+                $config = [];
+                $config['upload_path'] = './'.$tempPath;
+                $config['file_name'] = $fileName.'.'.$endExt;
+                $config['allowed_types'] = '*'; //все типы файлов
+                $config['remove_spaces']  = TRUE;
+                $this->load->library('upload', $config);
+
+                if($this->upload->do_upload())
+                {
+
+                    $pathWithName = base_url().$tempPath.$fileName;
+                    $response = ['status' => 'success', 'resultTitle' => "ok", 'resultText' => "ok",  'id'=> 'delete_'.$hash, 'fileSrc'=> $pathWithName, 'titleFile'=>$fileName];
+
+                    if($ext == 'zip_pack')
+                    {
+                        //$this->_attachToZip('./img/', 'noimg--fds', './img/noimg--fds.png', 'png');
+                        $answer = $this->_attachToZip('./'.$tempPath, $fileName, './'.$tempPath.$config['file_name'], $endExt);
+
+                        if(file_exists('./'.$tempPath.$fileName.'.'.$endExt))
+                            unlink('./'.$tempPath.$fileName.'.'.$endExt);
+
+                        $ext = 'zip';
+                        $response['fileSrc'] .= '.zip';
+
+                        if($answer['status'] == 'error')
+                            $response = ['status' => 'error', 'resultTitle' => $data['languages_desc'][0]['titleError'][$data['segment']], 'resultText' => $answer['title']];
+                    }
+                    else
+                        $response['fileSrc'] .= '.'.$endExt;
+
+                    $response['extension'] = $ext;
+                }
+                else
+                    $response = ['status' => 'error', 'resultTitle' => $data['languages_desc'][0]['titleError'][$data['segment']], 'resultText' =>  $this->upload->display_errors()];
+            }
+            else
+                $response = ['status' => 'error', 'resultTitle' => $data['languages_desc'][0]['titleError'][$data['segment']], 'resultText' =>  "Файл весит больше 10 Мб"];
+
+        }
+
+
+        echo json_encode($response);
+    }
+
 }

@@ -100,7 +100,7 @@ if(isset($iAdminCheck)):?>
                                             <span class="label label-danger error" id="tagsInputAutocompleteError_<?=$val['id_project']?>"></span>
                                             <br><br>
                                             <input name="addUsers" value="<?=$userForProject[$val['id_project']]?>" autocomplete="off" data-id="<?=$val['id_project']?>" id="tagsInputAutocomplete_<?=$val['id_project']?>" type="text" class="addUserProject" data-role="tagsinput" placeholder="<?=$task_views[18]?>">
-                                            <input type="submit" value="DEL ALL" class="delUserProject" data-id="<?=$val['id_project']?>">
+                                            <input type="submit" value="<?=$task_views[31]?>" class="delUserProject" data-id="<?=$val['id_project']?>">
                                         </td>
                                     </tr>
                                     </tbody>

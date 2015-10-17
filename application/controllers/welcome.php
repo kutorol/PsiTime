@@ -12,19 +12,6 @@
 class Welcome extends CI_Controller {
 
 
-    public function logError()
-    {
-        if($this->input->server('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest')
-        {
-            if(@$this->common->checkData($_POST['message'], false, true) === true)
-            {
-                log_message('error', $_POST['message']);
-            }
-        }
-        else
-            echo "NU NIXUYA SEBE TI CHEGO SDELAL";
-    }
-
     /**
      * Сюда перекидывает при срабатывание Hooka, который добавит базу данных и после в этой функции активируются миграции
      * It throws in the operation Hooka, add a database and then this function is activated migration
@@ -51,6 +38,7 @@ class Welcome extends CI_Controller {
         include APPPATH . 'language/db_hook/' . YOUR_LANG . '/install.php';
         $this->common->redirect_to('welcome', $lang['error_5'], 'text', 'success');
     }
+
     /**
      * страница авторизации
      * login page
@@ -66,7 +54,10 @@ class Welcome extends CI_Controller {
         ];
         $data = $this->common->allInit($config);
         if(isset($data['return_notification']))
+        {
+            $this->display_lib->display($data, $config['pathToViewDir']);
             return true;
+        }
 
 
         //если нажата кнопка входа в форме
@@ -150,7 +141,10 @@ class Welcome extends CI_Controller {
         ];
         $data = $this->common->allInit($config);
         if(isset($data['return_notification']))
+        {
+            $this->display_lib->display($data, $config['pathToViewDir']);
             return true;
+        }
 
 
         if(isset($_POST['forgot_btn']))
@@ -228,7 +222,10 @@ class Welcome extends CI_Controller {
         ];
         $data = $this->common->allInit($config);
         if(isset($data['return_notification']))
+        {
+            $this->display_lib->display($data, $config['pathToViewDir']);
             return true;
+        }
 
 
         //print_r($data);
@@ -308,7 +305,10 @@ class Welcome extends CI_Controller {
         ];
         $data = $this->common->allInit($config);
         if(isset($data['return_notification']))
+        {
+            $this->display_lib->display($data, $config['pathToViewDir']);
             return true;
+        }
 
 
         if(isset($_POST['change_pass']))
@@ -378,7 +378,10 @@ class Welcome extends CI_Controller {
         ];
         $data = $this->common->allInit($config);
         if(isset($data['return_notification']))
+        {
+            $this->display_lib->display($data, $config['pathToViewDir']);
             return true;
+        }
 
         $this->load->model('common_model');
         $this->load->model('welcome_model');

@@ -17,6 +17,11 @@
                 <ul class="nav navbar-nav">
 
                     <li>
+                        <a class="navbar-brand" href="#">
+                            TimeBig <span style="padding-bottom: 10px;">&beta;eta</span>
+                        </a>
+                    </li>
+                    <li>
                         <div class="btn-group alignCenter">
                             <button class="btn btn-info dropdown-toggle" data-toggle="dropdown" data-original-title="<?=$languages_desc[0][$segment]?>" title="<?=$languages_desc[0][$segment]?>">
                                 &nbsp; <?=$languages_desc[0][$segment]?> &nbsp; <i class="icon-caret-down "></i>

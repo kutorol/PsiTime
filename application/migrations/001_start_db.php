@@ -24,6 +24,8 @@ class Migration_Start_db extends CI_Migration{
                   `img` varchar(255) NOT NULL DEFAULT 'img/noimg.png',
                   `count_projects` INT(5) UNSIGNED NOT NULL DEFAULT '0',
                   `status` enum('0','1') NOT NULL DEFAULT '0',
+                  `time_start_day` varchar(255) NOT NULL COMMENT 'время начала рабочего дня',
+                  `time_end_day` varchar(255) NOT NULL COMMENT 'время конца рабочего дня',
                   PRIMARY KEY (`id_user`),
                   UNIQUE KEY `id_user` (`id_user`),
                   KEY `role_id` (`role_id`),
@@ -137,6 +139,7 @@ class Migration_Start_db extends CI_Migration{
                   `time_end` varchar(255) NOT NULL,
                   `text` text NOT NULL,
                   `links_to_img` text NOT NULL,
+                  `links_to_docs` text NOT NULL,
                   `pause` text NOT NULL,
                   `time_much` varchar(255) NOT NULL COMMENT 'сколько прошло времени  свыше нормы',
                   `link_to_srv` varchar(255) NOT NULL,
@@ -144,9 +147,7 @@ class Migration_Start_db extends CI_Migration{
                   `month_start` int(10) unsigned NOT NULL,
                   `year_start` int(10) unsigned NOT NULL,
                   `time_for_complete` int(10) unsigned NOT NULL COMMENT 'время заданное на выполнение',
-                  `time_for_complete_value` enum('1', '2', '3', '4') NOT NULL COMMENT 'размер времени заданного на выполнение. 0-мин,1-час,2-день,3-месяц',
-                  `time_lanch` varchar(255) NOT NULL COMMENT 'время когда пойдешь на обед',
-                  `time_end_day` varchar(255) NOT NULL COMMENT 'время конца рабочего дня',
+                  `time_for_complete_value` enum('1', '2', '3', '4', '5') NOT NULL COMMENT 'размер времени заданного на выполнение. 1-мин,2-час,3-день,4-неделя,5-месяц',
                   PRIMARY KEY (`id_task`),
                   UNIQUE KEY `id_task` (`id_task`),
                   KEY `complexity_id` (`complexity_id`),
@@ -167,8 +168,8 @@ class Migration_Start_db extends CI_Migration{
         $q = $this->db->get('task')->result_array();
         if(empty($q))
         {
-            $sql = "INSERT INTO `task` (`id_task`, `complexity_id`, `user_id`, `project_id`, `title`, `status`, `time_start`, `text`, `day_start`, `month_start`, `year_start`, `time_for_complete`, `time_for_complete_value`, `time_lanch`, `time_end_day`) VALUES
-                    ('1', '2', '1', '1', 'Первая задача', '0', '".time()."', 'Комментарий к задаче', '".date('d')."', '".date('m')."', '".date('Y')."', '12', '2', '13', '".(time()+7200)."');";
+            $sql = "INSERT INTO `task` (`id_task`, `complexity_id`, `user_id`, `project_id`, `title`, `status`, `time_start`, `text`, `day_start`, `month_start`, `year_start`, `time_for_complete`, `time_for_complete_value`) VALUES
+                    ('1', '2', '1', '1', 'Первая задача', '0', '".time()."', 'Комментарий к задаче', '".date('d')."', '".date('m')."', '".date('Y')."', '12', '2');";
             $this->db->query($sql);
         }
 

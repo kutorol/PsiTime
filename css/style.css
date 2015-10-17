@@ -128,3 +128,75 @@ thead td {
 .tagit-new{
     width: 700px;
 }
+
+.dropzone {
+    border: 3px dashed #B0A7A7;
+    margin-top: 10px;
+    font-size: 40px;
+    color: #B0A7A7;
+    line-height: 100px;
+    padding-left: 5%;
+    vertical-align: middle;
+}
+
+.input_opacity {
+    display: none !important;
+}
+
+.modal-dialog {
+    width: 800px;
+    margin: 30px auto;
+}
+
+#fileAttach .col-lg-2{
+    width: 130px;
+    height: 130px;
+}
+
+.longText{
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.iconAttach{
+    font-size: 50px !important;
+    color: rgb(153, 155, 146);
+}
+
+.iconWord{
+    font-size: 50px !important;
+    color: #337AB7;
+}
+
+.iconPdf{
+    font-size: 50px !important;
+    color: rgb(216, 38, 38);
+}
+
+.iconExel{
+    font-size: 50px !important;
+    color: rgb(33, 164, 30);
+}
+
+.iconPPoint{
+    font-size: 50px !important;
+    color: rgb(230, 129, 30);
+}
+
+.deleteAttachFile{
+    position: absolute;
+    top: 0px;
+    right: 15px;
+    padding: 2px 7px;
+    border-radius: 0px 5px;
+}
+
+.thumbnail{
+    cursor: pointer;
+}
+
+#fileAttach .thumbnail img{
+    width: 90px;
+    height: 90px;
+}

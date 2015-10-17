@@ -45,6 +45,7 @@ function deleteData(url, selector, id)
  *
  * @param url
  * @param additionalDelBlock - дополнительный блок, подлежащий скрытию
+ * @param hidePreloader - если не равно undefined, то показываем прелоадер на весь экран
  */
 function ajaxRequestJSON(url, additionalDelBlock, hidePreloader)
 {
@@ -119,6 +120,7 @@ function hideLoad()
 function addTitle(response, classHtml)
 {
     var mainError = $("#mainError"); //ид блока под главным названием, чтобы показывать ошибку
+
     //если были дополнительные ошибки, то их удаляем, а то мешаются своей громозкостью
     $.each($(".additionalError"), function( index, value ) {
         $(value).remove();
@@ -203,16 +205,17 @@ function addUserTag(request, response, idError)
  * @param modal - показывать модальное окно или же в html встроить сообщение
  * @param data - данные с сообщением от скрипта
  * @param id - ид проекта
+ * @param selector - ид DOM элемента, куда вставляется ошибка
  * @returns {boolean}
  */
-function showMessageInputTag(modal, data, id)
+function showMessageInputTag(modal, data, id, selector)
 {
     var fail = false;
     if(modal === undefined)
         errorSuccessAjax({title: data.resultTitle, message: data.resultText}); //показываем модалку
     else
     {
-        var label = $("#tagsInputAutocompleteError_"+id);
+        var label = $("#"+selector+id);
         if(data.status != 'error')
             label.removeClass('label-danger').addClass("label-success");
         else
@@ -242,7 +245,7 @@ function delUserProject(id, name, modal)
         data: {names: name, id: id},
         success: function(data)
         {
-            fail = showMessageInputTag(modal, data, id);
+            fail = showMessageInputTag(modal, data, id, 'tagsInputAutocompleteError_');
         }
     });
 
@@ -264,13 +267,92 @@ function attachUsers(id, name, modal)
         data: {names: name, id: id},
         success: function(data)
         {
-            showMessageInputTag(modal, data, id);
+            showMessageInputTag(modal, data, id, 'tagsInputAutocompleteError_');
         }
     });
 
 }
 
+function showDownloadImageDoc(src, ext, title)
+{
+    /**
+     * При нажатии на иконку картинки, в модальном окне показывается увеличенная картинка
+     * Clicking on the icon image in a modal window shows an enlarged picture
+     * TODO это прототип, так как надо сделать чтобы для всех картинок в проекте и сделать кнопку удаления картинки
+     */
+
+        if(ext == 'img')
+        {
+            var img = '<img src="' + src + '" class="img-responsive"/>';
+            $("#myModal .modal-title").html(title);
+            $("#myModal .modal-body").attr("align", "center").html(img);
+            $('#myModal').modal();
+        }
+
+
+}
+/**
+ * При нажатии на иконку картинки, в модальном окне показывается увеличенная картинка
+ * Clicking on the icon image in a modal window shows an enlarged picture
+ * TODO это прототип, так как надо сделать чтобы для всех картинок в проекте и сделать кнопку удаления картинки
+ *//*
+$('#fileAttach img.imgAttachFile').on('click',function(){
+    var src = $(this).attr('src');
+    var img = '<img src="' + src + '" class="img-responsive"/>';
+    $("#myModal .modal-body").attr("align", "center");
+    $('#myModal .modal-body').html(img);
+    $('#myModal').modal();
+    return false;
+});*/
 $(function() {
+
+    /**
+     * Показывает или скрывает форму добавления нового задания для проекта
+     * Shows or hides the form to add a new task for the project
+     * TODO перевод текста
+     */
+    $("#addTaskBtnForm").on('click', function(){
+        var allTasks = $("#allTasks"), addTaskForm = $("#addTaskForm");
+
+        if($(this).hasClass("btn-warning"))
+        {
+            $(this).html("Отмена добавления <i class='fa fa-times'></i>").removeClass("btn-warning").addClass("btn-danger");
+            allTasks.fadeOut(150, function(){
+                addTaskForm.fadeIn(150);
+            });
+        }
+        else
+        {
+            $(this).html("Добавить задачу <i class='fa fa-plus'></i>").removeClass("btn-danger").addClass("btn-warning");
+            addTaskForm.fadeOut(150, function(){
+                allTasks.fadeIn(150);
+            });
+        }
+    });
+
+
+
+
+    /**
+     * Когда выбираем нужную нам сложность, то цвет у самого select становиться цветом выбранного option
+     * When we select the desired complexity, the color had become a very select color selected option
+     */
+    $("#taskLevel option").click(function(){
+        var color = $(this).attr("class");
+        $('#taskLevel').attr("class", "form-control "+color);
+    });
+
+    /**
+     * Удаляем и добавляем класс active для меню, при выборе проекта
+     * Remove and add the active class for the menu, selecting Project
+     */
+    $("#menu-projects a").click(function(){
+        $.each($("#menu-projects a"), function( index, value ) {
+            $(value).removeClass("active");
+        });
+        $(this).addClass("active");
+        return false;
+    });
 
 
     /**

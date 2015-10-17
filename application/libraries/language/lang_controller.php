@@ -289,7 +289,7 @@ class Lang_controller
             5   =>  'Не удалось добавить проект. Обновите страницу и попробуйте еще раз!',
             6   =>  'Возможно я не прав, но вы пытаетесь причинить вред сайту!',
             7   =>  'Мои проекты',
-            8   =>  'Прикрепить персонал',
+            8   =>  'Прикрепить/удалить персонал',
             9   =>  'Удалить проект',
             10  =>  'Переименовать',
             11  =>  'Название',
@@ -312,6 +312,7 @@ class Lang_controller
             28  =>  "Вы никого не удалили из проекта",
             29  =>  "Были удалены люди под логинами: ",
             30  =>  "Название проекта",
+            31  =>  "Удалить всех",
         ];
 
         /********************************************
@@ -328,7 +329,7 @@ class Lang_controller
             5   =>  'Unable to add the project. Refresh the page and try again!',
             6   =>  "Maybe I'm wrong, but you are trying to cause harm to the site!",
             7   =>  'My projects',
-            8   =>  'Attach staff',
+            8   =>  'Attach/delete staff',
             9   =>  'Remove project',
             10  =>  'Rename',
             11  =>  'Title',
@@ -351,6 +352,7 @@ class Lang_controller
             28  =>  "You have not removed anyone from the project",
             29  =>  "People have been removed under the login: ",
             30  =>  "Project name",
+            31  =>  "Remove all",
         ];
 
 
