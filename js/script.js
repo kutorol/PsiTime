@@ -112,6 +112,22 @@ function hideLoad()
 }
 
 /**
+ * Функция показывает модальное окно
+ * The function displays a modal window
+ * @param title
+ * @param content
+ * @param footer
+ */
+function showModal(title, content, footer)
+{
+    $("#myModal .modal-title").html(title);
+    $("#myModal .modal-body").attr("align", "center").html('<p>'+content+'</p>');
+    if(footer !== undefined)
+        $("#myModal .modal-footer").html('<p>'+content+'</p>');
+    $('#myModal').modal();
+}
+
+/**
  * Вставляет сообщение под заголовок и поднимает вверх
  *
  * @param response - текст
@@ -273,65 +289,46 @@ function attachUsers(id, name, modal)
 
 }
 
-function showDownloadImageDoc(src, ext, title)
-{
-    /**
-     * При нажатии на иконку картинки, в модальном окне показывается увеличенная картинка
-     * Clicking on the icon image in a modal window shows an enlarged picture
-     * TODO это прототип, так как надо сделать чтобы для всех картинок в проекте и сделать кнопку удаления картинки
-     */
 
-        if(ext == 'img')
-        {
-            var img = '<img src="' + src + '" class="img-responsive"/>';
-            $("#myModal .modal-title").html(title);
-            $("#myModal .modal-body").attr("align", "center").html(img);
-            $('#myModal').modal();
-        }
-
-
-}
-/**
- * При нажатии на иконку картинки, в модальном окне показывается увеличенная картинка
- * Clicking on the icon image in a modal window shows an enlarged picture
- * TODO это прототип, так как надо сделать чтобы для всех картинок в проекте и сделать кнопку удаления картинки
- *//*
-$('#fileAttach img.imgAttachFile').on('click',function(){
-    var src = $(this).attr('src');
-    var img = '<img src="' + src + '" class="img-responsive"/>';
-    $("#myModal .modal-body").attr("align", "center");
-    $('#myModal .modal-body').html(img);
-    $('#myModal').modal();
-    return false;
-});*/
 $(function() {
+
+
+    /**
+     * При нажатии на кнопку закрыть в модальном окне - убираем все содержимое
+     * When you click on the Close button in a modal window - remove all the contents
+     */
+    $("#myModal").on('click', function(){
+        setTimeout(function(){
+            if(!$("#myModal").hasClass('in'))
+            {
+                $("#myModal .modal-title").html('');
+                $("#myModal .modal-body").attr("align","").html('');
+            }
+        }, 500);
+    });
 
     /**
      * Показывает или скрывает форму добавления нового задания для проекта
      * Shows or hides the form to add a new task for the project
-     * TODO перевод текста
      */
     $("#addTaskBtnForm").on('click', function(){
         var allTasks = $("#allTasks"), addTaskForm = $("#addTaskForm");
 
         if($(this).hasClass("btn-warning"))
         {
-            $(this).html("Отмена добавления <i class='fa fa-times'></i>").removeClass("btn-warning").addClass("btn-danger");
+            $(this).html(jsLang[26]+" <i class='fa fa-times'></i>").removeClass("btn-warning").addClass("btn-danger");
             allTasks.fadeOut(150, function(){
                 addTaskForm.fadeIn(150);
             });
         }
         else
         {
-            $(this).html("Добавить задачу <i class='fa fa-plus'></i>").removeClass("btn-danger").addClass("btn-warning");
+            $(this).html(jsLang[25]+" <i class='fa fa-plus'></i>").removeClass("btn-danger").addClass("btn-warning");
             addTaskForm.fadeOut(150, function(){
                 allTasks.fadeIn(150);
             });
         }
     });
-
-
-
 
     /**
      * Когда выбираем нужную нам сложность, то цвет у самого select становиться цветом выбранного option
@@ -553,7 +550,10 @@ $(function() {
         }*/
     });
 
-    //скрывает автокоплит, если выбран чекбокс (It hides 'input autocomplete' if the checkbox is selected)
+    /**
+     * скрывает автокоплит, если выбран чекбокс
+     * It hides 'input autocomplete' if the checkbox is selected
+     */
     $("#iAdmin").click(function(){
         if(document.getElementById('iAdmin').checked)
             $("#userAutocomplete").prop("disabled", true);

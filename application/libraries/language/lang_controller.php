@@ -313,6 +313,34 @@ class Lang_controller
             29  =>  "Были удалены люди под логинами: ",
             30  =>  "Название проекта",
             31  =>  "Удалить всех",
+            32  =>  "Добавить задачу",
+            33  =>  "Задача",
+            34  =>  "Сложность",
+            35  =>  "Легко",
+            36  =>  "Средне",
+            37  =>  "Трудно",
+            38  =>  "Название",
+            39  =>  "Описание",
+            40  =>  "Время рабочего дня (один раз)",
+            41  =>  "Можно изменить в профиле",
+            42  =>  "Начало дня",
+            43  =>  "Конец дня",
+            44  =>  "Временные рамки задачи",
+            45  =>  "Примерное время выполнения",
+            46  =>  "Время измерения",
+            47  =>  "минуты",
+            48  =>  "часы",
+            49  =>  "дни",
+            50  =>  "недели",
+            51  =>  "месяцы",
+            52  =>  "Прикрепите картинку/документ:",
+            53  =>  "Максимальный размер файла 60 Мб",
+            54  =>  "Перетащите сюда",
+            55  =>  "Выбрать файл...",
+            56  =>  "Прикрепленные файлы:",
+            57  =>  "В прошлый раз вы не добавили задачу. Это то что вы прикрепляли!",
+            58  =>  "Закрыть",
+
         ];
 
         /********************************************
@@ -353,6 +381,33 @@ class Lang_controller
             29  =>  "People have been removed under the login: ",
             30  =>  "Project name",
             31  =>  "Remove all",
+            32  =>  "Add task",
+            33  =>  "Task",
+            34  =>  "Complexity",
+            35  =>  "Easily",
+            36  =>  "Middle",
+            37  =>  "Difficult",
+            38  =>  "Title",
+            39  =>  "Description",
+            40  =>  "The time of the day (once)",
+            41  =>  "Can be changed in profile",
+            42  =>  "The beginning of the day",
+            43  =>  "End of the day",
+            44  =>  "Timeframe task",
+            45  =>  "Estimated time to complete",
+            46  =>  "Measurement time",
+            47  =>  "minutes",
+            48  =>  "clock",
+            49  =>  "days",
+            50  =>  "weeks",
+            51  =>  "months",
+            52  =>  "Attach image/document:",
+            53  =>  "Maximum file size 60 MB",
+            54  =>  "Drag here",
+            55  =>  "Choose File...",
+            56  =>  "Attached files:",
+            57  =>  "Last time you did not add the task. This is something that you have attached!",
+            58  =>  "Close",
         ];
 
 
@@ -377,6 +432,11 @@ class Lang_controller
             17  =>  "Название не изменилось. Оставить его в покое?",
             18  =>  "Вы не стали переименовывать проект",
             20  =>  "Вы действительно хотите удалить проект?",
+            21  =>  "Удалить",
+            22  =>  "Ваш браузер не поддерживает тег audio!",
+            23  =>  "Скачать файл",
+            24  =>  "Загрузка плеера...",
+            26  =>  "Отмена добавления",
         ];
 
 
@@ -396,6 +456,11 @@ class Lang_controller
             17  =>  "The name has not changed. Leave him alone?",
             18  =>  "You did not rename the project",
             20  =>  "Are you sure you want to delete the project?",
+            21  =>  "Remove",
+            22  =>  "Your browser does not support tag audio!",
+            23  =>  "Download file",
+            24  =>  "Loading the player...",
+            26  =>  "Stop adding",
         ];
 
 
@@ -413,6 +478,7 @@ class Lang_controller
         $lang['lang_'.$segment]['js'][6]                =   $lang['lang_'.$segment]['task_views'][20];
         $lang['lang_'.$segment]['js'][7]                =   $lang['lang_'.$segment]['languages_desc'][0]['titleError'][$segment];
         $lang['lang_'.$segment]['js'][19]               =   $lang['lang_'.$segment]['task_views'][18];
+        $lang['lang_'.$segment]['js'][25]               =   $lang['lang_'.$segment]['task_views'][32];
 
 
 

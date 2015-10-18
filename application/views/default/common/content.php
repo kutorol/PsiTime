@@ -7,12 +7,15 @@
  */
 if($statusUser == 1):?>
 
-    <!--ADD TASK-->
+    <!--BUTTON ADD TASK-->
     <div class="row" align="center">
-        <div class="btn btn-warning" id="addTaskBtnForm">Добавить задачу <i class="fa fa-plus"></i></div>
+        <div class="btn btn-warning" id="addTaskBtnForm"><?=$task_views[32]?> <i class="fa fa-plus"></i></div>
     </div>
+    <!--END BUTTON ADD TASK-->
 
     <div class="clearfix"></div>
+
+    <!--Тут форма добавления задачи-->
     <div class="row" id="addTaskForm" style="display: none;">
         <hr>
         <div class="container">
@@ -20,18 +23,19 @@ if($statusUser == 1):?>
 
                 <div class="row">
 
+                    <!--Задаем параметры добавляемой задачи-->
                     <div class="col-lg-4">
                         <form action="" method="post">
 
                             <fieldset>
-                                <legend>Задача</legend>
+                                <legend><?=$task_views[33]?></legend>
                                 <div class="col-lg-12" style="margin-bottom: 15px;">
-                                    <div class="label label-info" style="border-radius: 5px 5px 0px 0px;">Сложность</div>
+                                    <div class="label label-info" style="border-radius: 5px 5px 0px 0px;"><?=$task_views[34]?></div>
                                     <div>
                                         <select id="taskLevel" class="btn-success form-control"  style="margin-top: 4px;">
-                                            <option class="btn-success">Легко</option>
-                                            <option class=" btn-warning">Средне</option>
-                                            <option class=" btn-danger">Трудно</option>
+                                            <option class="btn-success"><?=$task_views[35]?></option>
+                                            <option class=" btn-warning"><?=$task_views[36]?></option>
+                                            <option class=" btn-danger"><?=$task_views[37]?></option>
                                         </select>
                                     </div>
                                 </div>
@@ -39,18 +43,18 @@ if($statusUser == 1):?>
                                 <div class="clearfix"></div>
 
                                 <div class="col-lg-12">
-                                    <div class="label label-info" style="border-radius: 5px 5px 0px 0px;">Название</div>
+                                    <div class="label label-info" style="border-radius: 5px 5px 0px 0px;"><?=$task_views[38]?></div>
                                     <div class="input-group col-xs-12">
-                                        <input type="text" class="form-control col-xs-12" placeholder="Название">
+                                        <input type="text" class="form-control col-xs-12" placeholder="<?=$task_views[38]?>">
                                     </div>
                                 </div>
 
                                 <div class="clearfix"></div>
 
                                 <div class="col-lg-12">
-                                    <div class="label label-info" style="border-radius: 5px 5px 0px 0px;">Описание</div>
+                                    <div class="label label-info" style="border-radius: 5px 5px 0px 0px;"><?=$task_views[39]?></div>
                                     <div class="input-group col-xs-12">
-                                       <textarea name="textTask" rows="3"  class="form-control" placeholder="Описание"></textarea>
+                                       <textarea name="textTask" rows="3"  class="form-control" placeholder="<?=$task_views[39]?>"></textarea>
                                     </div>
                                 </div>
                             </fieldset>
@@ -58,20 +62,20 @@ if($statusUser == 1):?>
 
                             <?php if(!is_numeric($time_start_day) || !is_numeric($time_end_day)):?>
                                 <fieldset>
-                                    <legend>Время рабочего дня (одни раз)</legend>
-                                    <div style="margin-top: -20px; margin-bottom: 20px; color: #ccc;">Можно изменить в профиле</div>
+                                    <legend><?=$task_views[40]?></legend>
+                                    <div style="margin-top: -20px; margin-bottom: 20px; color: #ccc;"><?=$task_views[41]?></div>
 
-                                    <div class="col-lg-6">
-                                        <div class="label label-info" style="border-radius: 5px 5px 0px 0px;">Начало дня</div>
+                                    <div class="col-lg-12">
+                                        <div class="label label-info" style="border-radius: 5px 5px 0px 0px;"><?=$task_views[42]?></div>
                                         <div class="input-group col-xs-12">
-                                            <input type="number" class="form-control col-xs-12" placeholder="Начало дня" value="9">
+                                            <input type="number" class="form-control col-xs-12" placeholder="<?=$task_views[42]?>" value="9">
                                         </div>
                                     </div>
 
-                                    <div class="col-lg-6">
-                                        <div class="label label-info" style="border-radius: 5px 5px 0px 0px;">Конец дня</div>
+                                    <div class="col-lg-12">
+                                        <div class="label label-info" style="border-radius: 5px 5px 0px 0px;"><?=$task_views[43]?></div>
                                         <div class="input-group col-xs-12">
-                                            <input type="number" class="form-control col-xs-12" placeholder="Конец дня" value="18">
+                                            <input type="number" class="form-control col-xs-12" placeholder="<?=$task_views[43]?>" value="18">
                                         </div>
                                     </div>
                                 </fieldset>
@@ -79,24 +83,24 @@ if($statusUser == 1):?>
 
 
                             <fieldset>
-                                <legend>Временные рамки задачи</legend>
+                                <legend><?=$task_views[44]?></legend>
 
                                 <div class="col-lg-12">
-                                    <div class="label label-info" style="border-radius: 5px 5px 0px 0px;">Примерное время выполнения</div>
+                                    <div class="label label-info" style="border-radius: 5px 5px 0px 0px;"><?=$task_views[45]?></div>
                                     <div class="input-group col-xs-12">
-                                        <input type="number" class="form-control col-xs-12" placeholder="Конец дня" value="18">
+                                        <input type="number" class="form-control col-xs-12" placeholder="<?=$task_views[45]?>" value="18">
                                     </div>
                                 </div>
 
                                 <div class="col-lg-12" style="margin-bottom: 15px;">
-                                    <div class="label label-info" style="border-radius: 5px 5px 0px 0px;">Время измерения</div>
+                                    <div class="label label-info" style="border-radius: 5px 5px 0px 0px;"><?=$task_views[46]?></div>
                                     <div>
                                         <select class="form-control"  style="margin-top: 4px;">
-                                            <option>минуты</option>
-                                            <option>часы</option>
-                                            <option>дни</option>
-                                            <option>недели</option>
-                                            <option>месяцы</option>
+                                            <option value="0"><?=$task_views[47]?></option>
+                                            <option value="1"><?=$task_views[48]?></option>
+                                            <option value="2"><?=$task_views[49]?></option>
+                                            <option value="3"><?=$task_views[50]?></option>
+                                            <option value="4"><?=$task_views[51]?></option>
                                         </select>
                                     </div>
                                 </div>
@@ -105,78 +109,61 @@ if($statusUser == 1):?>
 
                             <div class="col-lg-12">
                                 <div class="input-group col-lg-12">
-                                    <button type="submit" class="btn btn-primary col-lg-12 pull-right">Добавить</button>
+                                    <button type="submit" class="btn btn-primary col-lg-12 pull-right"><?=$task_views[32]?></button>
                                 </div>
                             </div>
                         </form>
                     </div>
+                    <!--КОНЕЦ Задаем параметры добавляемой задачи-->
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+                    <!--Прикрепляем файлы к создаваемой задаче-->
                     <div class="col-lg-8">
-
                         <fieldset>
-                            <legend>Прикрепите картинку/документ:</legend>
+                            <legend><?=$task_views[52]?></legend>
 
+                            <!--This function help add attach file itno server (AJAX with progress bar)-->
                             <script src="<?=base_url();?>js/upload/script.js"></script>
-
+                            <!--Не менять этот URL, туда будут отсылаться файлы-->
                             <form id="fileupload" action="<?=$startUrl;?>/task/addTaskAttachFile" method="POST" enctype="multipart/form-data" />
 
+                                <p><span style="color: red;">*</span> <?=$task_views[53]?></p>
 
-                                <p><span style="color: red;">*</span> Максимальный размер файла 10 Мб</p>
-
+                                <!--Поле для переноса файла для загрузки (drag n drop)-->
                                 <div class="row-fluid" id="upl_button_div">
                                     <div class="span12">
                                         <div id="dropZone" class="dropzone" align="center">
-                                            Перетащите сюда <i class="fa fa-download"></i>
+                                            <?=$task_views[54]?> <i class="fa fa-download"></i>
                                             <input name="userfile" class="input_opacity" type="file">
                                         </div>
                                     </div>
                                 </div>
+                                <!--КОНЕЦ Поле для переноса файла для загрузки (drag n drop)-->
 
-<br>
+                                <br>
+                                <!--Прогресс бар загрузки-->
                                 <div class="progress">
                                     <div id="bar" class="progress-bar progress-bar-success progress-bar-striped active bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
                                 </div>
+                                <!--КОНЕЦ Прогресс бар загрузки-->
 
+                                <!--Кнопка загрузки файла-->
                                 <div class="form-actions fileupload-buttonbar no-margin">
                                     <div class="btn btn-small btn-default" id="fake_upload_button">
                                         <i class="icon-plus"></i>
-                                        <span>Выбрать FOTO...</span>
+                                        <span><?=$task_views[55]?></span>
                                     </div>
                                 </div>
+                                <!--КОНЕЦ Кнопка загрузки файла-->
 
-                                    <br><br>
+                                <br><br>
                             </form>
                         </fieldset>
 
-
                         <fieldset>
-                            <legend>Прикрепленные файлы:</legend>
+                            <legend><?=$task_views[56]?></legend>
 
                             <?php if(isset($filesAttach)):?>
-                                <p>В прошлый раз вы не добавили задачу. Это то что вы прикрепляли!</p>
+                                <p><?=$task_views[57]?></p>
                             <?php endif;?>
 
                             <div class="row" id="fileAttach">
@@ -184,7 +171,7 @@ if($statusUser == 1):?>
                                 <?php if(isset($filesAttach)):?>
                                     <?php foreach($filesAttach as $k=>$v):?>
                                         <div class="col-lg-2" id="delete_<?=$k?>">
-                                            <div title="Удалить" onclick="delAttach('<?=$v["src"]?>', 'delete_<?=$k?>');" class="btn btn-danger deleteAttachFile">
+                                            <div title="<?=$js[21]?>" onclick="delAttach('<?=$v["src"]?>', 'delete_<?=$k?>');" class="btn btn-danger deleteAttachFile">
                                                 <i class="fa fa-times"></i>
                                             </div>
                                             <div class="thumbnail" align="center">
@@ -211,16 +198,15 @@ if($statusUser == 1):?>
                                 <?php endif;?>
 
                             </div>
-                        <fieldset>
-
+                        </fieldset>
                     </div>
+                    <!--КОНЕЦ Прикрепляем файлы к создаваемой задаче-->
                 </div>
             </div>
         </div>
     </div>
     <hr>
-    <!--END ADD TASK-->
-
+    <!--КОНЕЦ Тут форма добавления задачи-->
 
     <div class="container-fluid" id="allTasks">
         <div class="row">
@@ -228,8 +214,7 @@ if($statusUser == 1):?>
             <!--ALL PROJECT, FILTER-->
             <div class="col-lg-3" >
 
-
-                <!--PROJECTS-->
+                <!--ALL PROJECTS-->
                 <?php if(!empty($myProjects)):?>
                     <div class="list-group" id="menu-projects">
                     <?php $i = 0; foreach($myProjects as $key=>$project):?>
@@ -237,7 +222,7 @@ if($statusUser == 1):?>
                     <?php $i++; endforeach;?>
                     </div>
                 <?php endif;?>
-
+                <!--END ALL PROJECTS-->
 
 
             </div>
@@ -317,21 +302,30 @@ if($statusUser == 1):?>
 
     <p>&nbsp;</p>
     <p>&nbsp;</p>
-
-
+    <p>&nbsp;</p>
+    <p>&nbsp;</p>
 
 
 
 <?php
 /**
- * Если не прикреплен к проекту
- * If not attached to the draft
+ * Если не прикреплен к проекту, показываем сообщение без всяких форм
+ * If not attached to the draft, show a message without any form
  */
  else:?>
     <div class="row">
         <div class="container">
-            <div>
-                <?=$task_views[15]?>
+            <div align="center">
+                <h4><i class="fa fa-exclamation-triangle" style="color: red;"></i> <?=$task_views[15]?></h4>
+                <hr>
+                <p>
+                    <?php if($segment == 'ru'):?>
+                        <img src="<?=base_url()?>img/notProject.jpg">
+                    <?php else:?>
+                        <img src="<?=base_url()?>img/notProject_.jpg">
+                    <?php endif;?>
+                </p>
+
             </div>
         </div>
     </div>

@@ -44,6 +44,7 @@
 </div>
 <script>
     var base_url = '<?=$startUrl?>';
+    var base_url_start = '<?=base_url();?>';
     //json translate
     var jsLang = JSON.parse('<?=json_encode($js)?>');
     //html response

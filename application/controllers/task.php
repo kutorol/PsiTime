@@ -616,6 +616,30 @@ class Task extends CI_Controller {
         return $response;
     }
 
+    public function download($src)
+    {
+        $config = [
+            'pathToViewDir'     =>  'common',
+            'langArray_1'       =>  'task_controller',
+            'langArray_2'       =>  0,
+            'authUser'          =>  true,
+            'noRedirect'        =>  false, //false - редиректим, true - возвращаем ошибку
+        ];
+        $data = $this->common->allInit($config);
+
+        $src = $this->common->clear($src);
+        $filePath = './img/temp/'.$data['login'].'/'.$src;
+        if(file_exists($filePath))
+        {
+            header('Content-Disposition: attachment; filename=' . $src);
+            readfile($filePath);
+            return true;
+        }
+        else
+            echo 'Такого файла нет!';
+
+    }
+
 
     /**
      * (AJAX)
@@ -686,14 +710,14 @@ class Task extends CI_Controller {
             $data = $response['data'];
             unset($response['data']);
 
-            if($_FILES['userfile']['size'] <= 10485760) //10Mb
+            if($_FILES['userfile']['size'] <= 62914560)//10485760) //10Mb
             {
                 //получаем имя файла и обрабатываем
                 $fileName = explode(".", $_FILES['userfile']['name']);
                 $endExt = $fileName[count($fileName)-1];
                 unset($fileName[count($fileName)-1]);
                 $fileName = $this->common->sms_translit(implode('-', $fileName));
-                $hash = md5(time().rand(1,500000000));
+                $hash = substr(md5(time().rand(1,500000000)), 0, 8);
                 $fileName = $fileName.'--'.$hash;
 
                 //создаем папку временную, если ее не было
