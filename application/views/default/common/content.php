@@ -25,94 +25,115 @@ if($statusUser == 1):?>
 
                     <!--Задаем параметры добавляемой задачи-->
                     <div class="col-lg-4">
-                        <form action="" method="post">
+                        <form method="post" action="" id="formAddTask">
+                        <fieldset>
+                            <legend><?=$task_views[33]?></legend>
 
-                            <fieldset>
-                                <legend><?=$task_views[33]?></legend>
-                                <div class="col-lg-12" style="margin-bottom: 15px;">
-                                    <div class="label label-info" style="border-radius: 5px 5px 0px 0px;"><?=$task_views[34]?></div>
-                                    <div>
-                                        <select id="taskLevel" class="btn-success form-control"  style="margin-top: 4px;">
-                                            <option class="btn-success"><?=$task_views[35]?></option>
-                                            <option class=" btn-warning"><?=$task_views[36]?></option>
-                                            <option class=" btn-danger"><?=$task_views[37]?></option>
+
+                            <div class="col-lg-12" style="margin-bottom: 15px;">
+                                <div class="label label-info" style="border-radius: 5px 5px 0px 0px;"><?=$task_views[59];?></div>
+                                <div>
+                                    <!--ALL PROJECTS-->
+                                    <?php if(!empty($myProjects)):?>
+                                        <select id="projectSelect" class="form-control"  style="margin-top: 4px;">
+                                            <?php foreach($myProjects as $key=>$project):?>
+                                                <option value="<?=$project['id_project']?>"><?=$project['title']?></option>
+                                            <?php endforeach;?>
                                         </select>
-                                    </div>
+                                    <?php endif;?>
+                                    <!--END ALL PROJECTS-->
                                 </div>
+                            </div>
 
-                                <div class="clearfix"></div>
-
-                                <div class="col-lg-12">
-                                    <div class="label label-info" style="border-radius: 5px 5px 0px 0px;"><?=$task_views[38]?></div>
-                                    <div class="input-group col-xs-12">
-                                        <input type="text" class="form-control col-xs-12" placeholder="<?=$task_views[38]?>">
-                                    </div>
+                            <div class="col-lg-12" style="margin-bottom: 15px;">
+                                <div class="label label-info" style="border-radius: 5px 5px 0px 0px;"><?=$task_views[34]?></div>
+                                <div>
+                                    <select id="taskLevel" class="btn-success form-control"  style="margin-top: 4px;">
+                                        <?php foreach($complexity as $v):?>
+                                            <option class="btn-<?=$v['color']?>" value="<?=$v['id_complexity']?>"><?=$v['name_complexity_'.$segment]?></option>
+                                        <?php endforeach;?>
+                                    </select>
                                 </div>
+                            </div>
 
-                                <div class="clearfix"></div>
+                            <div class="clearfix"></div>
 
-                                <div class="col-lg-12">
-                                    <div class="label label-info" style="border-radius: 5px 5px 0px 0px;"><?=$task_views[39]?></div>
-                                    <div class="input-group col-xs-12">
-                                       <textarea name="textTask" rows="3"  class="form-control" placeholder="<?=$task_views[39]?>"></textarea>
-                                    </div>
+                            <div class="col-lg-12">
+                                <div class="label label-info" style="border-radius: 5px 5px 0px 0px;"><?=$task_views[38]?></div>
+                                <div class="input-group col-xs-12">
+                                    <input type="text" id="titleTask" class="form-control col-xs-12" placeholder="<?=$task_views[38]?>" required>
                                 </div>
-                            </fieldset>
+                            </div>
+
+                            <div class="clearfix"></div>
+
+                            <div class="col-lg-12">
+                                <div class="label label-info" style="border-radius: 5px 5px 0px 0px;"><?=$task_views[39]?></div>
+                                <div class="input-group col-xs-12">
+                                   <textarea name="textTask" rows="3"  class="form-control" placeholder="<?=$task_views[39]?>"></textarea>
+                                </div>
+                            </div>
+                        </fieldset>
 
 
                             <?php if(!is_numeric($time_start_day) || !is_numeric($time_end_day)):?>
-                                <fieldset>
-                                    <legend><?=$task_views[40]?></legend>
-                                    <div style="margin-top: -20px; margin-bottom: 20px; color: #ccc;"><?=$task_views[41]?></div>
-
-                                    <div class="col-lg-12">
-                                        <div class="label label-info" style="border-radius: 5px 5px 0px 0px;"><?=$task_views[42]?></div>
-                                        <div class="input-group col-xs-12">
-                                            <input type="number" class="form-control col-xs-12" placeholder="<?=$task_views[42]?>" value="9">
-                                        </div>
-                                    </div>
-
-                                    <div class="col-lg-12">
-                                        <div class="label label-info" style="border-radius: 5px 5px 0px 0px;"><?=$task_views[43]?></div>
-                                        <div class="input-group col-xs-12">
-                                            <input type="number" class="form-control col-xs-12" placeholder="<?=$task_views[43]?>" value="18">
-                                        </div>
-                                    </div>
-                                </fieldset>
+                                <fieldset id="onceTime" >
+                            <?php else:?>
+                                <fieldset id="onceTime" class="hidden">
                             <?php endif;?>
-
-
-                            <fieldset>
-                                <legend><?=$task_views[44]?></legend>
+                                <legend><?=$task_views[40]?></legend>
+                                <div style="margin-top: -20px; margin-bottom: 20px; color: #ccc;"><?=$task_views[41]?></div>
 
                                 <div class="col-lg-12">
-                                    <div class="label label-info" style="border-radius: 5px 5px 0px 0px;"><?=$task_views[45]?></div>
+                                    <div class="label label-info" style="border-radius: 5px 5px 0px 0px;"><?=$task_views[42]?></div>
                                     <div class="input-group col-xs-12">
-                                        <input type="number" class="form-control col-xs-12" placeholder="<?=$task_views[45]?>" value="18">
+                                        <input type="number" required id="startDay" class="form-control col-xs-12" placeholder="<?=$task_views[42]?>" value="9">
                                     </div>
                                 </div>
 
-                                <div class="col-lg-12" style="margin-bottom: 15px;">
-                                    <div class="label label-info" style="border-radius: 5px 5px 0px 0px;"><?=$task_views[46]?></div>
-                                    <div>
-                                        <select class="form-control"  style="margin-top: 4px;">
-                                            <option value="0"><?=$task_views[47]?></option>
-                                            <option value="1"><?=$task_views[48]?></option>
-                                            <option value="2"><?=$task_views[49]?></option>
-                                            <option value="3"><?=$task_views[50]?></option>
-                                            <option value="4"><?=$task_views[51]?></option>
-                                        </select>
+                                <div class="col-lg-12">
+                                    <div class="label label-info" style="border-radius: 5px 5px 0px 0px;"><?=$task_views[43]?></div>
+                                    <div class="input-group col-xs-12">
+                                        <input type="number" required id="endDay" class="form-control col-xs-12" placeholder="<?=$task_views[43]?>" value="18">
                                     </div>
                                 </div>
-
                             </fieldset>
 
+
+
+                        <fieldset>
+                            <legend><?=$task_views[44]?></legend>
+
                             <div class="col-lg-12">
-                                <div class="input-group col-lg-12">
-                                    <button type="submit" class="btn btn-primary col-lg-12 pull-right"><?=$task_views[32]?></button>
+                                <div class="label label-info" style="border-radius: 5px 5px 0px 0px;"><?=$task_views[45]?></div>
+                                <div class="input-group col-xs-12">
+                                    <input type="number" id="estimatedTimeForTask" required class="form-control col-xs-12" placeholder="<?=$task_views[45]?>" >
                                 </div>
                             </div>
-                        </form>
+
+                            <div class="col-lg-12" style="margin-bottom: 15px;">
+                                <div class="label label-info" style="border-radius: 5px 5px 0px 0px;"><?=$task_views[46]?></div>
+                                <div>
+                                    <select class="form-control"  id="measurementTime" style="margin-top: 4px;">
+                                        <option value="0"><?=$task_views[47]?></option>
+                                        <option value="1"><?=$task_views[48]?></option>
+                                        <option value="2"><?=$task_views[49]?></option>
+                                        <option value="3"><?=$task_views[50]?></option>
+                                        <option value="4"><?=$task_views[51]?></option>
+                                    </select>
+                                </div>
+                            </div>
+
+                        </fieldset>
+
+                        <div class="col-lg-12">
+                            <div class="input-group col-lg-12">
+                                <?php if(!empty($myProjects)):?>
+                                    <button type="submit" id="addTaskBtn" class="btn btn-primary col-lg-12 pull-right"><?=$task_views[32]?></button>
+                                <?php endif;?>
+                            </div>
+                        </div>
+                    </form>
                     </div>
                     <!--КОНЕЦ Задаем параметры добавляемой задачи-->
 

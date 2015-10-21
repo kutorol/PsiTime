@@ -11,8 +11,6 @@
  */
 class Task extends CI_Controller {
 
-
-
     /**
      * Главная страница личного кабинета
      * Home private office
@@ -37,40 +35,15 @@ class Task extends CI_Controller {
         else
             $data['myProjects'] = [];
 
+        $data['complexity'] = $this->common_model->getResult('complexity');
         //проверяем, не оставил ли юзер файлы в папке, при создании задачи
         //это может быть тогда, когда он не добавил задачу, а просто все загрузил!
-        $tempAttachFileDir = 'img/temp/'.$data['login'].'/';
-        if(file_exists('./'.$tempAttachFileDir))
-        {
-            $files = [];
-            $descriptor = opendir('./'.$tempAttachFileDir);
-            while($v = readdir($descriptor))
-            {
-                if($v == '.' || $v == '..')
-                    continue;
-
-                $files[] = $v;
-            }
-
-            if(!empty($files))
-            {
-                $data['filesAttach'] = [];
-                foreach($files as $k=>$v)
-                {
-                    $data['filesAttach'][$k]['src'] = base_url().$tempAttachFileDir.$v;
-                    $data['filesAttach'][$k]['title'] = $v;
-                    $ext = explode('.', $v);
-                    $ext = $ext[count($ext)-1];
-                    $ext = $this->_findExt($ext);
-                    $data['filesAttach'][$k]['ext'] = ($ext != 'zip_pack') ? $ext : 'zip';
-                }
-            }
-
-        }
+        $data['filesAttach'] = $this->_getAllAttach(null, $data['login'], $data['task_controller'][9]);
+        if(isset($data['filesAttach']['status']) || @empty($data['filesAttach']))
+            unset($data['filesAttach']);
 
         $this->display_lib->display($data, $config['pathToViewDir']);
 	}
-
 
     /**
      * Получаем проекты для данного юзера
@@ -83,7 +56,6 @@ class Task extends CI_Controller {
     {
         return $this->common_model->getResult('projects', 'responsible', $idIser, $return, $select, 'id_project');
     }
-
 
     /**
      * Функция добавляет проект на сайт, в который потом добавляется задачи
@@ -237,7 +209,6 @@ class Task extends CI_Controller {
 
         $this->display_lib->display($data, $config['pathToViewDir']);
     }
-
 
     /**
      * (AJAX)
@@ -439,10 +410,8 @@ class Task extends CI_Controller {
             }
         }
 
-
         echo json_encode($response);
     }
-
 
     /**
      * (AJAX)
@@ -504,10 +473,8 @@ class Task extends CI_Controller {
             }
         }
 
-
         echo json_encode($response);
     }
-
 
     /**
      * Удаляем юзеров из проекта, дополнительная функция
@@ -549,7 +516,6 @@ class Task extends CI_Controller {
             return ['status' => 'error', 'resultTitle' => $data['languages_desc'][0]['titleError'][$data['segment']], 'resultText' =>  $data['welcome_controller'][13]];
     }
 
-
     /**
      * Узнаем, является ли расширение файла одним из этих, если нет, то возвращаем 'zip_pack', чтобы потом заархивировать документ
      * To know whether the file extension by one of these, if not, return 'zip_pack', then to the document archive
@@ -577,7 +543,7 @@ class Task extends CI_Controller {
         $extention = 'zip_pack';
         foreach($ext as $k=>$v)
         {
-            $key = array_search($type, $v);
+            $key = array_search(mb_strtolower($type), $v);
             if($key !== false) //если расширение нашлось, возвращаем его ключ
                 return $k;
         }
@@ -592,9 +558,10 @@ class Task extends CI_Controller {
      * @param $name - название файла (file name) - Ex: 'noimg--fds'
      * @param $pathWithName - путь к самому файлу (the path to the file itself) - Ex: './img/noimg--fds.png'
      * @param $endExt - расширение загружаемого файла (extension of the uploaded file) - Ex: 'png'
+     * @param $data - все параметры
      * @return array
      */
-    private function _attachToZip($path, $name, $pathWithName, $endExt)
+    private function _attachToZip($path, $name, $pathWithName, $endExt, &$data)
     {
         $response = ['status'=>'success'];
         //создание zip архива
@@ -608,7 +575,7 @@ class Task extends CI_Controller {
         if ($zip->open($fileName, ZIPARCHIVE::CREATE) === true)
             $zip->addFile($pathWithName, $name[0].'.'.$endExt); //2nd param - новое имя файла в архиве
         else
-            $response = ['status'=>'error', 'title'=>"Error while creating archive file"];
+            $response = ['status'=>'error', 'title'=> $data['task_controller'][5]];
 
         //закрываем архив
         $zip->close();
@@ -616,6 +583,12 @@ class Task extends CI_Controller {
         return $response;
     }
 
+    /**
+     * Скачиваем audio, video и другие документы
+     * Download audio, video and other documents
+     * @param $src - название документа с его расширением (document title with its expansion)
+     * @return bool
+     */
     public function download($src)
     {
         $config = [
@@ -631,15 +604,15 @@ class Task extends CI_Controller {
         $filePath = './img/temp/'.$data['login'].'/'.$src;
         if(file_exists($filePath))
         {
+            //заголовок, что сейчас будем скачивать данный файл
             header('Content-Disposition: attachment; filename=' . $src);
+            //чтение файла, чтобы отдать его на скачивание
             readfile($filePath);
             return true;
         }
         else
-            echo 'Такого файла нет!';
-
+            echo $data['task_controller'][4];
     }
-
 
     /**
      * (AJAX)
@@ -680,12 +653,13 @@ class Task extends CI_Controller {
                         $files[] = $v;
                     }
 
+                    //удаляем папку
                     if(empty($files))
                         rmdir($tempAttachFileDir);
                 }
             }
             else
-                $response = ['status' => 'error', 'resultTitle'=> $data['languages_desc'][0]['titleError'][$data['segment']], 'resultText'=> 'Не удалось удалить файл!'];
+                $response = ['status' => 'error', 'resultTitle'=> $data['languages_desc'][0]['titleError'][$data['segment']], 'resultText'=> $data['task_controller'][3]];
         }
 
         echo json_encode($response);
@@ -695,11 +669,10 @@ class Task extends CI_Controller {
      * (AJAX)
      * Когда еще создаем задачу, и решили добавить к задаче какой нибудь документ, то сработает эта функция
      * When will create a task, and decided to add to the problem of some sort of document, this feature will work
-     * TODO text
      */
     public function addTaskAttachFile()
     {
-        //если файл к нам пришел
+        //если файл к нам пришел, то для прохождения проверки $this->common->isAjax, нужно сделать в массиве post ячейку
         if(isset($_FILES['userfile']))
             $_POST['userfile'] = "yes";
 
@@ -710,7 +683,7 @@ class Task extends CI_Controller {
             $data = $response['data'];
             unset($response['data']);
 
-            if($_FILES['userfile']['size'] <= 62914560)//10485760) //10Mb
+            if($_FILES['userfile']['size'] <= 62914560)//60Mb // 10485760) //10Mb
             {
                 //получаем имя файла и обрабатываем
                 $fileName = explode(".", $_FILES['userfile']['name']);
@@ -722,8 +695,7 @@ class Task extends CI_Controller {
 
                 //создаем папку временную, если ее не было
                 $tempPath = 'img/temp/'.$data['login'].'/';
-                if(!file_exists('./'.$tempPath))
-                    @mkdir($tempPath, 0777);
+                $this->_createFolder($tempPath);
 
                 //если расширение неизвестное, то запаковываем в zip архив
                 $ext = $this->_findExt($endExt);
@@ -738,15 +710,17 @@ class Task extends CI_Controller {
 
                 if($this->upload->do_upload())
                 {
-
+                    //если файл загрузился, то либо архивируем его, или ничего не делаем
                     $pathWithName = base_url().$tempPath.$fileName;
-                    $response = ['status' => 'success', 'resultTitle' => "ok", 'resultText' => "ok",  'id'=> 'delete_'.$hash, 'fileSrc'=> $pathWithName, 'titleFile'=>$fileName];
+                    $response = ['status' => 'success', 'resultTitle' => $data['task_views'][22], 'resultText' => $data['task_views'][22],  'id'=> 'delete_'.$hash, 'fileSrc'=> $pathWithName, 'titleFile'=>$fileName];
 
                     if($ext == 'zip_pack')
                     {
+                        //архивируем
                         //$this->_attachToZip('./img/', 'noimg--fds', './img/noimg--fds.png', 'png');
-                        $answer = $this->_attachToZip('./'.$tempPath, $fileName, './'.$tempPath.$config['file_name'], $endExt);
+                        $answer = $this->_attachToZip('./'.$tempPath, $fileName, './'.$tempPath.$config['file_name'], $endExt, $data);
 
+                        //когда архивация пройдет хорошо, тогда удаляем прежний файл, чтобы место не занимал
                         if(file_exists('./'.$tempPath.$fileName.'.'.$endExt))
                             unlink('./'.$tempPath.$fileName.'.'.$endExt);
 
@@ -765,10 +739,210 @@ class Task extends CI_Controller {
                     $response = ['status' => 'error', 'resultTitle' => $data['languages_desc'][0]['titleError'][$data['segment']], 'resultText' =>  $this->upload->display_errors()];
             }
             else
-                $response = ['status' => 'error', 'resultTitle' => $data['languages_desc'][0]['titleError'][$data['segment']], 'resultText' =>  "Файл весит больше 10 Мб"];
+                $response = ['status' => 'error', 'resultTitle' => $data['languages_desc'][0]['titleError'][$data['segment']], 'resultText' =>  $data['task_controller'][2]];
 
         }
 
+        echo json_encode($response);
+    }
+
+
+    /**
+     * Получаем все файлы с их расширениями содержащиеся во временной папке или уже в полноценной
+     * We get all the files with their extensions contained in the temporary folder or already in full
+     * @param null $id - если не null, то получаем данные из папки уже созданной задачи (if not null, you get the data from a folder already created task)
+     * @param null $login - если не null, то получаем данные из временной папки (if not null, you get the data from the temporary folder)
+     * @param $textLang - тут ошибка на определенном языке (then the error in a particular language)
+     * @return array
+     */
+    private function _getAllAttach($id = null, $login = null, $textLang)
+    {
+        if($login !== null)
+            $tempAttachFileDir = 'img/temp/'.$login.'/';
+        elseif($id !== null)
+            $tempAttachFileDir = 'file/tasks/'.$id.'/';
+        else
+            return ['status'=> 'error', 'title'=> $textLang];
+
+        $files = [];
+        $array = [];
+        if(file_exists('./'.$tempAttachFileDir))
+        {
+            $descriptor = opendir('./'.$tempAttachFileDir);
+            while($v = readdir($descriptor))
+            {
+                if($v == '.' || $v == '..')
+                    continue;
+
+                $files[] = $v;
+            }
+        }
+
+        if(!empty($files))
+        {
+            foreach($files as $k=>$v)
+            {
+                $array[$k]['src'] = base_url().$tempAttachFileDir.$v;
+                $array[$k]['src_'] = './'.$tempAttachFileDir.$v;
+                $array[$k]['title'] = $v;
+                $ext = explode('.', $v);
+                $ext = $ext[count($ext)-1];
+                $ext = $this->_findExt($ext);
+                $array[$k]['ext'] = ($ext != 'zip_pack') ? $ext : 'zip';
+            }
+        }
+
+        return $array;
+    }
+
+    /**
+     * Создаем папку, если она не существовала
+     * Create the folder if it does not exist
+     * @param $path
+     */
+    private function _createFolder($path)
+    {
+        if(!file_exists('./'.$path))
+            @mkdir('./'.$path, 0777);
+    }
+
+    /**
+     * Удаляем папку
+     * delete the folder
+     * @param $path
+     * @return bool
+     */
+    private function _delFolder($path)
+    {
+        if(file_exists($path))
+        {
+            $files = array_diff(scandir($path), array('.','..'));
+            foreach ($files as $file)
+            {
+                (is_dir("$path/$file")) ? $this->_delFolder("$path/$file") : unlink("$path/$file");
+            }
+
+            return rmdir($path);
+        }
+
+        return false;
+    }
+
+    /**
+     * (AJAX)
+     * Добавляем задачу в бд
+     * Add tasks to the database
+     */
+    public function addTask()
+    {
+        //проверяем на ajax и его параметры
+        $response = $this->common->isAjax(["titleTask", 'str'], ["descTask", 'str'], ["taskLevel", 'int', 'notZero'], ["startDay", 'int', 'notZero'], ["endDay", 'int', 'notZero'], ["estimatedTimeForTask", 'int'], ["measurementTime", 'int', 'notZero'], ["idProject", 'int']);
+        if($response['status'] != 'error')
+        {
+            $this->load->model('common_model');
+            $data = $response['data'];
+            unset($response['data']);
+
+            $q = $this->common_model->getResult('users', 'id_user', $data['idUser'], 'row_array', 'time_start_day, time_end_day');
+
+            $titleTask = $this->common->clear($this->input->post('titleTask', true));
+            if(preg_match("/^[а-яА-ЯёЁa-zA-Z0-9\-_ ]{3,256}$/iu", $titleTask))
+            {
+                $updateUser = null;
+                //если не установленные рамки рабочего времени, то ставим их
+                if(!is_numeric($q['time_start_day']) || !is_numeric($q['time_end_day']))
+                {
+                    $new = [
+                        'time_start_day'    =>  $this->common->clear($this->input->post('startDay', true)),
+                        'time_end_day'      =>  $this->common->clear($this->input->post('endDay', true))
+                    ];
+
+                    if(is_numeric($new['time_start_day']) && is_numeric($new['time_end_day']))
+                    {
+                        //я живу в двадцатичетырех часовом формате, поэтому вычисления делаю в нем же
+                        //I live in a twenty-four hour format, so the calculations do it well
+                        if($new['time_start_day'] < 0 || $new['time_start_day'] > 24 || $new['time_end_day'] < 0 || $new['time_end_day'] > 24)
+                            $updateUser = 0;
+                        else
+                            $updateUser = $this->common_model->updateData($new, 'id_user', $data['idUser'], 'users', true);
+                    }
+                    else
+                        $updateUser = 0;
+                }
+
+                //проверяем, есть ли такой проект у человека
+                $idProject = intval($this->common->clear($this->input->post('idProject', true)));
+                $checkProject = $this->common_model->getResult('projects', ['id_project', 'responsible'], [$idProject, $data['idUser']], 'row_array');
+                if(empty($checkProject))
+                {
+                    $response = ['status' => 'error', 'resultTitle' => $data['languages_desc'][0]['titleError'][$data['segment']], 'resultText' =>  $data['task_controller'][10]];
+                    echo json_encode($response);
+                    return true;
+                }
+
+                $new = [];
+                $new['title']           =   $titleTask;
+                $new['status']          =   '0'; // 0 - пока еще только добавленна
+                $new['text']            =   $this->common->clear($this->input->post('descTask', true));
+                $new['time_add']        =   time();
+                $new['day_start']       =   date('d');
+                $new['month_start']     =   date('m');
+                $new['year_start']      =   date('Y');
+                $new['complexity_id']   =   intval($this->common->clear($this->input->post('taskLevel', true)));
+                $new['user_id']         =   $data['idUser'];
+                $new['project_id']                  =   $idProject;
+                $new['time_for_complete']           =   intval($this->common->clear($this->input->post('estimatedTimeForTask', true)));
+                $new['time_for_complete_value']     =   intval($this->common->clear($this->input->post('measurementTime', true)));
+
+
+                $myResponse = explode('|', $this->common_model->insertData('task', $new, true, true));
+                if($myResponse[1] > 0)
+                {
+                    $response = ['status'=> 'success', 'resultTitle'=> $data['task_views'][22], 'resultText'=> $data['task_views'][60]];
+                    $answer = $this->_getAllAttach(null, $data['login'], $data['task_controller'][9]);
+                    if(!isset($answer['status']))
+                    {
+                        if(!empty($answer))
+                        {
+                            $newFolderForTask = 'file/tasks/'.$myResponse[0].'/';
+                            $this->_createFolder($newFolderForTask);
+
+                            $failCopy = ['text'=>'', 'fail'=>0];
+                            foreach($answer as $v)
+                            {
+                                if(copy($v['src_'], './'.$newFolderForTask.$v['title']) === false)
+                                {
+                                    if($failCopy['fail'] == 0)
+                                        $failCopy['text'] = $data['task_controller'][6];
+
+                                    $errorAttach[] = $v['title'];
+                                    $failCopy['fail']++;
+                                }
+                            }
+
+                            if($failCopy['fail'] > 0)
+                                $response['error']['copyText'] =  $failCopy['text'].implode(', ', $errorAttach);
+
+                            $this->_delFolder('./img/temp/'.$data['login']);
+                        }
+                    }
+                    else
+                        $response['error']['attach'] = $answer['title'];
+                }
+                else
+                    $response = ['status' => 'error', 'resultTitle' => $data['languages_desc'][0]['titleError'][$data['segment']], 'resultText' =>  $data['task_controller'][7]];
+
+                if($updateUser !== null)
+                {
+                    if($updateUser <= 0)
+                        $response['error']['updateWorkDay'] = $data['task_controller'][8];
+                    else
+                        $response['hideTimeBlock'] = true;
+                }
+            }
+            else
+                $response = ['status' => 'error', 'resultTitle' => $data['languages_desc'][0]['titleError'][$data['segment']], 'resultText' =>  $data['task_views'][19]." ".$data['task_views'][20]];
+        }
 
         echo json_encode($response);
     }

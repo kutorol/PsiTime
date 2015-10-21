@@ -12,6 +12,9 @@ class Common_model extends CI_Model {
      */
     private function _checkWhere($where, $where_2)
     {
+        if($where == '')
+            return false;
+
         if(is_array($where))
         {
             if(is_array($where_2))

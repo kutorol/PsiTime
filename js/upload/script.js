@@ -93,7 +93,6 @@ function uploadAttachFile()
             if(response.status == 'error')
                 return false;
 
-            //FIXME text
             var textAppend = '<div class="col-lg-2" id="'+response.id+'"><div title="'+jsLang[21]+'" onclick="delAttach(\''+response.fileSrc+'\', \''+response.id+'\');" class="btn btn-danger deleteAttachFile"><i class="fa fa-times"></i></div><div class="thumbnail" align="center">';
             textAppend += '<div class="options" data-ext="'+response.extension+'" onClick="showDownloadImageDoc(\''+response.fileSrc+'\', \''+response.extension+'\', \''+response.titleFile+'\');" title="'+response.titleFile+'">';
 
@@ -140,40 +139,198 @@ function uploadAttachFile()
  */
 function showDownloadImageDoc(src, ext, title)
 {
-    //если картинка, то показываем ее в модалке
-    if(ext == 'img')
-    {
-        var img = '<img src="' + src + '" class="img-responsive"/>';
-        showModal(title, img);
-    }
-    //если видео, аудио - показываем в модальном окне и делаем кнопку скачать
-    else
-    {
-        var srcFile = src.split('/');
-        srcFile = srcFile[srcFile.length-1];
-        var windowParam = 'width=500,height=600,resizable=yes,scrollbars=yes,status=yes';
-        var secondContetn = '<br><br><div onclick="window.open(\''+base_url+'/task/download/'+srcFile+'\', \''+jsLang[23]+' '+title+'\', \''+windowParam+'\');" class="btn btn-warning">'+jsLang[23]+' <i class="fa fa-download"></i></div>';
+    var srcFile = src.split('/');
+    srcFile = srcFile[srcFile.length-1];
+    var windowParam = 'width=500,height=600,resizable=yes,scrollbars=yes,status=yes';
+    var secondContetn = '<br><br><div onclick="window.open(\''+base_url+'/task/download/'+srcFile+'\', \''+jsLang[23]+' '+title+'\', \''+windowParam+'\');" class="btn btn-warning">'+jsLang[23]+' <i class="fa fa-download"></i></div>';
 
-        if(ext == 'audio')
-        {
-            var audio = '<audio controls><source src="'+src+'" preload="metadata">'+jsLang[22]+'</audio>';
-            showModal(title, audio+secondContetn);
-        }
-        else if(ext == 'video')
-        {
-            var srcVideo = '<script src="'+base_url_start+'js/jwplatform.js"></script><div id="myElement">'+jsLang[24]+'</div><script type="text/javascript">var playerInstance = jwplayer("myElement");'
-                +'playerInstance.setup({file: "'+src+'", width: 640, height: 360, title: "'+title+'"});</script>';
-            showModal(title, srcVideo+secondContetn);
-        }
-        //если прочие файлы, то сразу даем их скачать
-        else
-            window.open(src, title, windowParam);
+    var content;
+    switch (ext)
+    {
+        case 'img':
+            content = '<img src="' + src + '" class="img-responsive"/>'; break;
+        case 'audio':
+            content = '<audio controls><source src="'+src+'" preload="metadata">'+jsLang[22]+'</audio>'; break;
+        case 'video':
+            content = '<video src="'+src+'" width="640" height="360" controls />'; break;
+        default:
+            window.open(base_url+'/task/download/'+srcFile, jsLang[23]+' '+title, windowParam);
+            return false;
     }
 
+    showModal(title, content+secondContetn);
+}
 
+/**
+ * Проверяем число ли это и находиться ли оно в заданном диапазоне
+ * Check whether this number and whether it is in a predetermined range
+ * @param title - название поля (field name)
+ * @param num - проверяемое значение (the value to test)
+ * @param fail - true|false была ли ошибка ранее (whether the error earlier)
+ * @param zero - проверять ли на то, что меньше или равно 0 (check whether that is less than or equal to 0)
+ * @param before - до какого значения должно быть число (to which value should be a number)
+ * @param after - ниже какого числа, проверяемое значение не может быть (below a number, verifiable value can not be)
+ * @returns {{message: string, fail: *}}
+ */
+function validateNum(title, num, fail, zero, before, after)
+{
+    var errorMessage = '';
+    if(isNaN(num)) //если не число
+    {
+        errorMessage = jsLang[28]+" <i>'"+title+"'</i>";
+        fail = true;
+    }
+    else // если число
+    {
+        if(zero !== undefined)
+        {
+            if(num <= 0)
+            {
+                errorMessage += jsLang[29]+" <i>'"+title+"'</i> "+jsLang[30];
+                fail = true;
+            }
+        }
+
+        if(before !== undefined && after !== undefined)
+        {
+            if(num < after || num > before)
+            {
+                errorMessage += jsLang[29]+" <i>'"+title+"'</i> "+jsLang[31]+" " + after + " "+jsLang[32]+" " + before;
+                fail = true;
+            }
+        }
+        else if(before !== undefined)
+        {
+            if(num > before)
+            {
+                errorMessage += jsLang[29]+" <i>'"+title+"'</i> " + jsLang[33] + " " + before;
+                fail = true;
+            }
+        }
+        else if(after !== undefined)
+        {
+            if(num < after)
+            {
+                errorMessage += jsLang[29]+" <i>'"+title+"'</i> " + jsLang[31] + " " + after;
+                fail = true;
+            }
+        }
+    }
+
+    return {message: errorMessage, fail: fail};
 }
 
 $(document).ready(function(){
+
+     /**
+     * Кнопка добавить задачу
+     * Button to add the task
+     */
+    $("#addTaskBtn").on('click', function(){
+        var fail = false, errorMessage = "<ul>", tempErrorMessage;
+
+        /**
+         * Валидация данных
+         */
+        //название
+        var titleTask = $.trim($("#titleTask").val());
+        if(titleTask == '' || /^[a-zA-Zа-яА-ЯёЁ0-9-_ ]{3,256}$/.test(titleTask) === false)
+        {
+            errorMessage += "<li>" + jsLang[28] + " '<i>"+jsLang[27]+"</i>':<br>" + jsLang[6] + "</li>";
+            fail = true;
+        }
+
+        //описание
+        var descTask =  $.trim($("#addTaskForm textarea").val());
+
+        var idProject = parseInt($("#projectSelect").val());
+        tempErrorMessage = validateNum(jsLang[34], idProject, fail, 'yes');
+        errorMessage += (tempErrorMessage.message != '') ? "<li>"+tempErrorMessage.message+"</li>" : '';
+        fail = tempErrorMessage.fail;
+
+        //сложность
+        var taskLevel = parseInt($("#taskLevel").val());
+        tempErrorMessage = validateNum(jsLang[35], taskLevel, fail, 'yes');
+        errorMessage += (tempErrorMessage.message != '') ? "<li>"+tempErrorMessage.message+"</li>" : '';
+        fail = tempErrorMessage.fail;
+
+        var startDay = 'no', endDay = 'no';
+        if(!$("#onceTime").hasClass("hidden"))
+        {
+            startDay = parseInt($("#startDay").val());
+            endDay =  parseInt($("#endDay").val());
+
+            tempErrorMessage = validateNum(jsLang[36], startDay, fail, undefined, 24, 0);
+            errorMessage += (tempErrorMessage.message != '') ? "<li>"+tempErrorMessage.message+" "+jsLang[38]+"</li>" : '';
+            fail = tempErrorMessage.fail;
+
+            tempErrorMessage = validateNum(jsLang[37], endDay, fail, undefined, 24, 0);
+            errorMessage += (tempErrorMessage.message != '') ? "<li>"+tempErrorMessage.message+" "+jsLang[38]+"</li>" : '';
+            fail = tempErrorMessage.fail;
+        }
+
+        //примерное время выполнения
+        var estimatedTimeForTask = parseInt($("#estimatedTimeForTask").val());
+        tempErrorMessage = validateNum(jsLang[39], estimatedTimeForTask, fail, 'yes');
+        errorMessage += (tempErrorMessage.message != '') ? "<li>"+tempErrorMessage.message+"</li>" : '';
+        fail = tempErrorMessage.fail;
+
+        //в чем измерять время
+        var measurementTime = parseInt($("#measurementTime").val());
+        tempErrorMessage = validateNum(jsLang[40], measurementTime, fail);
+        errorMessage += (tempErrorMessage.message != '') ? "<li>"+tempErrorMessage.message+"</li>" : '';
+        fail = tempErrorMessage.fail;
+        switch(measurementTime){case 0: case 1: case 2: case 3: case 4: break;default: measurementTime = 1;}
+
+        //если были ошибки
+        if(fail === true)
+        {
+            errorMessage += "</ul>";
+            addTitle({title: jsLang[5], message: errorMessage}); //показываем ошибку
+            return false;
+        }
+
+        //шаблон ajax запроса
+        ajaxRequestJSON("task/addTask");
+        $.ajax({
+            data: {titleTask: titleTask, descTask: descTask, idProject: idProject, taskLevel: taskLevel, startDay: startDay, endDay: endDay, estimatedTimeForTask: estimatedTimeForTask, measurementTime: measurementTime},
+            success: function(data)
+            {
+                if(data.status == 'error')
+                {
+                    errorSuccessAjax({title: data.resultTitle, message: data.resultText}); //показываем модалку
+                    return false;
+                }
+
+                if(data.error !== undefined)
+                {
+                    data.resultText += "<p><b>"+jsLang[41]+"</b> <ul>";
+                    $.each( data.error, function( key, value ) {
+                        data.resultText += "<li>" + value + "</li>";
+                    });
+                    data.resultText += "</ul></p>";
+                }
+
+                //очищаем введеные поля
+                $("#titleTask").val('');
+                $("#addTaskForm textarea").val('');
+                $("#estimatedTimeForTask").val('');
+
+                //удаляем прикрепленные файлы из видимости
+                var fileAttach = $("#fileAttach");
+                fileAttach.fadeOut(300,function(){fileAttach.html('').show();});
+
+                //скрываем блок с заданием времени рабочего дня
+                if(data.hideTimeBlock !== undefined)
+                    $("#onceTime").addClass("hidden");
+
+                errorSuccessAjax({title: data.resultTitle, message: data.resultText}); //показываем модалку
+            }
+        });
+
+
+        return false;
+    });
 
     /**
      * Когда перетаскиваем файл в специальное поле

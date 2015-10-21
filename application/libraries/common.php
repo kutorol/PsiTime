@@ -494,8 +494,16 @@ class Common
                     else
                     {
                         if($arg_list[$i][1] == 'int')
-                            if(@$this->checkData($_POST[$arg_list[$i][0]], true) !== true)
-                                $postError = true;
+                        {
+                            if(isset($arg_list[$i][2]))
+                            {
+                                if(@$this->checkData($_POST[$arg_list[$i][0]], true, false, true, false) !== true)
+                                    $postError = true;
+                            }
+                            else
+                                if(@$this->checkData($_POST[$arg_list[$i][0]], true) !== true)
+                                    $postError = true;
+                        }
                         else
                             if(@$this->checkData($_POST[$arg_list[$i][0]], false, true) !== true)
                                 $postError = true;

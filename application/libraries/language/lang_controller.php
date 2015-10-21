@@ -261,8 +261,18 @@ class Lang_controller
          * ******************************************
          */
         $lang['lang_ru']['task_controller'] = [
-            0   =>  'Личный кабинет в TimeBig пользователя: <span class="label label-success">%login%</span>',
-            1   =>  'Страница добавления нового проекта',
+            0       =>  'Личный кабинет в TimeBig пользователя: <span class="label label-success">%login%</span>',
+            1       =>  'Страница добавления нового проекта',
+            2       =>  'Файл весит больше 60 Мб',
+            3       =>  'Не удалось удалить файл!',
+            4       =>  'Такого файла не существует!',
+            5       =>  'Ошибка при создании архива из файла',
+            6       =>  "Неудалось скопировать файлы: ",
+            7       =>  "Не удалось проделать данную операцию",
+            8       =>  'Не удалось обновить временные рамки, поэтому еще раз наберите их, создавая следующую задачу.',
+            9       =>  'Вы пытаетесь совершить невозможное действие! Не верно переданны параметры в функцию.',
+            10      =>  'Вы пытаетесь использовать чужой проект!',
+
         ];
 
         /********************************************
@@ -271,8 +281,17 @@ class Lang_controller
          * ******************************************
          */
         $lang['lang_en']['task_controller'] = [
-            0   =>  'Personal account in TimeBig user: <span class="label label-success">%login%</span>',
-            1   =>  'The page for adding a new project',
+            0       =>  'Personal account in TimeBig user: <span class="label label-success">%login%</span>',
+            1       =>  'The page for adding a new project',
+            2       =>  'The file size more than 60 MB',
+            3       =>  'Failed to delete the file!',
+            4       =>  'This file does not exist!',
+            5       =>  'Error while creating archive file',
+            6       =>  "Unable to copy files: ",
+            7       =>  "Unable to perform the operation",
+            8       =>  'Failed to update the time frame, so once again enter them by creating the following problem.',
+            9       =>  'You are trying to do the impossible action! Not right to pass parameters to the function.',
+            10      =>  'You are trying to use someone elses project!',
         ];
 
         /********************************************
@@ -316,10 +335,7 @@ class Lang_controller
             32  =>  "Добавить задачу",
             33  =>  "Задача",
             34  =>  "Сложность",
-            35  =>  "Легко",
-            36  =>  "Средне",
-            37  =>  "Трудно",
-            38  =>  "Название",
+            38  =>  "Название задачи",
             39  =>  "Описание",
             40  =>  "Время рабочего дня (один раз)",
             41  =>  "Можно изменить в профиле",
@@ -340,6 +356,8 @@ class Lang_controller
             56  =>  "Прикрепленные файлы:",
             57  =>  "В прошлый раз вы не добавили задачу. Это то что вы прикрепляли!",
             58  =>  "Закрыть",
+            59  =>  "Выберите проект",
+            60  =>  "Задача была добавлена!",
 
         ];
 
@@ -384,10 +402,7 @@ class Lang_controller
             32  =>  "Add task",
             33  =>  "Task",
             34  =>  "Complexity",
-            35  =>  "Easily",
-            36  =>  "Middle",
-            37  =>  "Difficult",
-            38  =>  "Title",
+            38  =>  "Task title",
             39  =>  "Description",
             40  =>  "The time of the day (once)",
             41  =>  "Can be changed in profile",
@@ -397,7 +412,7 @@ class Lang_controller
             45  =>  "Estimated time to complete",
             46  =>  "Measurement time",
             47  =>  "minutes",
-            48  =>  "clock",
+            48  =>  "hours",
             49  =>  "days",
             50  =>  "weeks",
             51  =>  "months",
@@ -408,6 +423,8 @@ class Lang_controller
             56  =>  "Attached files:",
             57  =>  "Last time you did not add the task. This is something that you have attached!",
             58  =>  "Close",
+            59  =>  "Choose a project",
+            60  =>  "The task has been added!",
         ];
 
 
@@ -437,6 +454,15 @@ class Lang_controller
             23  =>  "Скачать файл",
             24  =>  "Загрузка плеера...",
             26  =>  "Отмена добавления",
+            28  =>  "Некорректно заполнено поле",
+            29  =>  "Поле",
+            30  =>  "не может быть меньше или равно 0",
+            31  =>  "не может быть меньше",
+            32  =>  "и больше",
+            33  =>  "не может быть больше",
+            38  =>  "(поле имеет двадцатичетырехчасовой формат)",
+            41  =>  "Ошибки:",
+
         ];
 
 
@@ -461,6 +487,15 @@ class Lang_controller
             23  =>  "Download file",
             24  =>  "Loading the player...",
             26  =>  "Stop adding",
+            28  =>  "Incorrectly filled field",
+            29  =>  "Field",
+            30  =>  "can not be less than or equal to 0",
+            31  =>  "can not be less than",
+            32  =>  "and more",
+            33  =>  "can not be more than",
+            38  =>  "(the field has a twenty-four format)",
+            41  =>  "Errors:",
+
         ];
 
 
@@ -479,6 +514,13 @@ class Lang_controller
         $lang['lang_'.$segment]['js'][7]                =   $lang['lang_'.$segment]['languages_desc'][0]['titleError'][$segment];
         $lang['lang_'.$segment]['js'][19]               =   $lang['lang_'.$segment]['task_views'][18];
         $lang['lang_'.$segment]['js'][25]               =   $lang['lang_'.$segment]['task_views'][32];
+        $lang['lang_'.$segment]['js'][27]               =   $lang['lang_'.$segment]['task_views'][38];
+        $lang['lang_'.$segment]['js'][34]               =   $lang['lang_'.$segment]['task_views'][59];
+        $lang['lang_'.$segment]['js'][35]               =   $lang['lang_'.$segment]['task_views'][34];
+        $lang['lang_'.$segment]['js'][36]               =   $lang['lang_'.$segment]['task_views'][42];
+        $lang['lang_'.$segment]['js'][37]               =   $lang['lang_'.$segment]['task_views'][43];
+        $lang['lang_'.$segment]['js'][39]               =   $lang['lang_'.$segment]['task_views'][45];
+        $lang['lang_'.$segment]['js'][40]               =   $lang['lang_'.$segment]['task_views'][46];
 
 
 

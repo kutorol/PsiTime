@@ -135,19 +135,17 @@ class Migration_Start_db extends CI_Migration{
                   `project_id` int(10) unsigned NOT NULL,
                   `title` varchar(255) NOT NULL,
                   `status` enum('0','1','2','3','4') NOT NULL COMMENT '0-добавили,1-делаем,2-готово,3-готово,но с просрочкой,4 - на паузе',
+                  `time_add` VARCHAR(50) NOT NULL COMMENT 'время добавления задачи',
                   `time_start` varchar(255) NOT NULL,
                   `time_end` varchar(255) NOT NULL,
                   `text` text NOT NULL,
-                  `links_to_img` text NOT NULL,
-                  `links_to_docs` text NOT NULL,
                   `pause` text NOT NULL,
-                  `time_much` varchar(255) NOT NULL COMMENT 'сколько прошло времени  свыше нормы',
                   `link_to_srv` varchar(255) NOT NULL,
                   `day_start` int(10) unsigned NOT NULL,
                   `month_start` int(10) unsigned NOT NULL,
                   `year_start` int(10) unsigned NOT NULL,
                   `time_for_complete` int(10) unsigned NOT NULL COMMENT 'время заданное на выполнение',
-                  `time_for_complete_value` enum('1', '2', '3', '4', '5') NOT NULL COMMENT 'размер времени заданного на выполнение. 1-мин,2-час,3-день,4-неделя,5-месяц',
+                  `time_for_complete_value` TINYINT(1) NOT NULL COMMENT 'размер времени заданного на выполнение. 0-мин,1-час,2-день,3-неделя,4-месяц',
                   PRIMARY KEY (`id_task`),
                   UNIQUE KEY `id_task` (`id_task`),
                   KEY `complexity_id` (`complexity_id`),
@@ -168,8 +166,8 @@ class Migration_Start_db extends CI_Migration{
         $q = $this->db->get('task')->result_array();
         if(empty($q))
         {
-            $sql = "INSERT INTO `task` (`id_task`, `complexity_id`, `user_id`, `project_id`, `title`, `status`, `time_start`, `text`, `day_start`, `month_start`, `year_start`, `time_for_complete`, `time_for_complete_value`) VALUES
-                    ('1', '2', '1', '1', 'Первая задача', '0', '".time()."', 'Комментарий к задаче', '".date('d')."', '".date('m')."', '".date('Y')."', '12', '2');";
+            $sql = "INSERT INTO `task` (`id_task`, `complexity_id`, `user_id`, `project_id`, `title`, `status`, `time_add`, `text`, `day_start`, `month_start`, `year_start`, `time_for_complete`, `time_for_complete_value`) VALUES
+                    ('1', '2', '1', '1', 'Первая задача', '0', '".time()."', 'Комментарий к задаче', '".date('d')."', '".date('m')."', '".date('Y')."', '12', '1');";
             $this->db->query($sql);
         }
 
