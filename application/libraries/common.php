@@ -484,31 +484,37 @@ class Common
             for ($i = 0; $i < $numargs; $i++)
             {
                 $postError = false;
+
                 if(!is_array($arg_list[$i]))
                     $postError = true;
                 else
                 {
-
-                    if(!isset($_POST[$arg_list[$i][0]]))
-                        $postError = true;
-                    else
+                    if($arg_list[$i][0] != 'noPost')
                     {
-                        if($arg_list[$i][1] == 'int')
+                        if(!isset($_POST[$arg_list[$i][0]]))
+                            $postError = true;
+                        else
                         {
-                            if(isset($arg_list[$i][2]))
+                            if($arg_list[$i][1] == 'int')
                             {
-                                if(@$this->checkData($_POST[$arg_list[$i][0]], true, false, true, false) !== true)
-                                    $postError = true;
+                                if(isset($arg_list[$i][2]))
+                                {
+                                    if(@$this->checkData($_POST[$arg_list[$i][0]], true, false, true, false) !== true)
+                                        $postError = true;
+                                }
+                                else
+                                    if(@$this->checkData($_POST[$arg_list[$i][0]], true) !== true)
+                                        $postError = true;
                             }
                             else
-                                if(@$this->checkData($_POST[$arg_list[$i][0]], true) !== true)
+                                if(@$this->checkData($_POST[$arg_list[$i][0]], false, true) !== true)
                                     $postError = true;
                         }
-                        else
-                            if(@$this->checkData($_POST[$arg_list[$i][0]], false, true) !== true)
-                                $postError = true;
                     }
                 }
+
+
+
 
                 if($postError === true)
                     return ['status' => 'error', 'resultTitle'=> $data['js'][0], 'resultText'=>$data['task_views'][6]];

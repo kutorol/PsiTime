@@ -10,6 +10,8 @@
     <!-- Bootstrap -->
     <link href="<?=base_url()?>css/bootstrap.css" rel="stylesheet">
     <link href="<?=base_url()?>css/style.css" rel="stylesheet">
+    <!--Преобразуем стандартный select-->
+    <link href="<?=base_url()?>css/bootstrap-select.min.css" rel="stylesheet">
 
     <?php if(isset($attachUploadSripts)):?>
         <link href="<?=base_url()?>js/upload/jquery.fileupload.css" rel="stylesheet" />

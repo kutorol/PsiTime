@@ -272,6 +272,7 @@ class Lang_controller
             8       =>  'Не удалось обновить временные рамки, поэтому еще раз наберите их, создавая следующую задачу.',
             9       =>  'Вы пытаетесь совершить невозможное действие! Не верно переданны параметры в функцию.',
             10      =>  'Вы пытаетесь использовать чужой проект!',
+            11      =>  'Выбранный исполнитель не существует или не прикреплен к этому проекту!',
 
         ];
 
@@ -292,6 +293,9 @@ class Lang_controller
             8       =>  'Failed to update the time frame, so once again enter them by creating the following problem.',
             9       =>  'You are trying to do the impossible action! Not right to pass parameters to the function.',
             10      =>  'You are trying to use someone elses project!',
+            11      =>  'The selected artist does not exist or is not attached to the project!',
+
+
         ];
 
         /********************************************
@@ -358,6 +362,13 @@ class Lang_controller
             58  =>  "Закрыть",
             59  =>  "Выберите проект",
             60  =>  "Задача была добавлена!",
+            61  =>  "Исполнитель",
+            62  =>  "Приоритет",
+            63  =>  "Все проекты",
+            'status_task_0'      =>  'Поставлена',
+            'status_task_1'      =>  'Выполняется',
+            'status_task_2'      =>  'Выполнена',
+            'status_task_3'      =>  'На паузе',
 
         ];
 
@@ -425,6 +436,13 @@ class Lang_controller
             58  =>  "Close",
             59  =>  "Choose a project",
             60  =>  "The task has been added!",
+            61  =>  "Performer",
+            62  =>  "Priority",
+            63  =>  "All projects",
+            'status_task_0'      =>  'Supplied',
+            'status_task_1'      =>  'Running',
+            'status_task_2'      =>  'Implemented',
+            'status_task_3'      =>  'Pause',
         ];
 
 
@@ -521,6 +539,8 @@ class Lang_controller
         $lang['lang_'.$segment]['js'][37]               =   $lang['lang_'.$segment]['task_views'][43];
         $lang['lang_'.$segment]['js'][39]               =   $lang['lang_'.$segment]['task_views'][45];
         $lang['lang_'.$segment]['js'][40]               =   $lang['lang_'.$segment]['task_views'][46];
+        $lang['lang_'.$segment]['js'][42]               =   $lang['lang_'.$segment]['task_views'][61];
+        $lang['lang_'.$segment]['js'][43]               =   $lang['lang_'.$segment]['task_views'][62];
 
 
 

@@ -107,9 +107,7 @@ class Migration_Start_db extends CI_Migration{
               `name_complexity_en` varchar(255) NOT NULL,
               `color` varchar(255) NOT NULL,
               PRIMARY KEY (`id_complexity`),
-              UNIQUE KEY `id_complexity` (`id_complexity`),
-              KEY `name_complexity_ru` (`name_complexity_ru`),
-              KEY `name_complexity_en` (`name_complexity_en`)
+              UNIQUE KEY `id_complexity` (`id_complexity`)
             ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Тут все названия сложностей задач и их цвета';";
         $this->db->query($sql);
 
@@ -125,22 +123,51 @@ class Migration_Start_db extends CI_Migration{
 
 
         /**
+         * Таблица приоритета задачи с ее иконкой ;)
+         * Table task priority to its icon ;)
+         */
+        $sql = "CREATE TABLE IF NOT EXISTS `priority` (
+              `id_priority` int(11) unsigned NOT NULL AUTO_INCREMENT,
+              `title_ru` varchar(255) NOT NULL,
+              `title_en` varchar(255) NOT NULL,
+              `icon` varchar(255) NOT NULL,
+              `color` varchar(255) NOT NULL,
+              PRIMARY KEY (`id_priority`),
+              UNIQUE KEY `id_priority` (`id_priority`)
+            ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Тут приоритет задачи';";
+        $this->db->query($sql);
+
+        $q = $this->db->get('priority')->result_array();
+        if(empty($q))
+        {
+            $sql = "INSERT INTO `priority` (`id_priority`, `title_ru`, `title_en`, `icon`) VALUES
+                    (1, 'Обычный', 'Normal', 'fa fa-mars', ''),
+                    (2, 'Важный', 'Significant', 'fa fa-venus', 'default'),
+                    (3, 'Серьезный', 'Serious', 'fa fa-venus-mars', 'primary'),
+                    (4, 'Критический', 'Crucial', 'fa fa-mars-double', 'warning'),
+                    (5, 'Срочно выполнить', 'Urgent perform', 'fa fa-transgender-alt', 'danger');";
+            $this->db->query($sql);
+        }
+
+
+        /**
          * Тут все задачи для разных проектов
          * Here all the tasks for different projects
          */
         $sql = "CREATE TABLE IF NOT EXISTS `task` (
                   `id_task` int(10) unsigned NOT NULL AUTO_INCREMENT,
                   `complexity_id` int(10) unsigned NOT NULL,
-                  `user_id` int(10) unsigned NOT NULL,
+                  `priority_id` INT unsigned NOT NULL,
+                  `user_id` int(10) unsigned NOT NULL  COMMENT 'id юзера, кто создал задачу',
                   `project_id` int(10) unsigned NOT NULL,
                   `title` varchar(255) NOT NULL,
-                  `status` enum('0','1','2','3','4') NOT NULL COMMENT '0-добавили,1-делаем,2-готово,3-готово,но с просрочкой,4 - на паузе',
+                  `status` enum('0','1','2','3') NOT NULL COMMENT '0-добавили,1-делаем,2-готово,3-на паузе',
+                  `performer_id` INT NOT NULL COMMENT 'id исполнителя',
                   `time_add` VARCHAR(50) NOT NULL COMMENT 'время добавления задачи',
                   `time_start` varchar(255) NOT NULL,
                   `time_end` varchar(255) NOT NULL,
                   `text` text NOT NULL,
                   `pause` text NOT NULL,
-                  `link_to_srv` varchar(255) NOT NULL,
                   `day_start` int(10) unsigned NOT NULL,
                   `month_start` int(10) unsigned NOT NULL,
                   `year_start` int(10) unsigned NOT NULL,

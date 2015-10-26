@@ -290,7 +290,51 @@ function attachUsers(id, name, modal)
 }
 
 
+/**
+ * Получаем все задачи для всех проектов
+ * We get all the tasks for all projects
+ */
+function getAllTask(idProject)
+{
+    var idProject = (idProject === undefined) ? 0 : parseInt(idProject);
+    //шаблон ajax запроса
+    ajaxRequestJSON("task/getAllTask");
+    $.ajaxSetup({
+        dataType: "html"
+    });
+    $.ajax({
+        data: {idProject: idProject},
+        success: function(data)
+        {
+            var jsonResponse = $.parseJSON(data);
+            if(jsonResponse.status == 'error')
+            {
+                errorSuccessAjax({title: jsonResponse.resultTitle, message: jsonResponse.resultText}); //показываем модалку
+                return false;
+            }
+
+            //вставляем количество заданий у всех проектов в левую навигацию
+            if(jsonResponse.countProject_all !== undefined)
+            {
+                $("#countProject_all").html(jsonResponse.countProject_all);
+                if(jsonResponse.countProject_all > 0)
+                {
+                    var allProjectId = jsonResponse['idProjects'].split('|');
+                    $.each(allProjectId, function( index, value ) {
+                        if(jsonResponse['countProject_'+value] !== undefined)
+                            $("#countProject_"+value).html(jsonResponse['countProject_'+value]);
+                    });
+                }
+            }
+
+            $("#allTaskHere").html(jsonResponse.content);
+            hideLoad();
+        }
+    });
+}
+
 $(function() {
+
 
 
     /**
@@ -324,8 +368,10 @@ $(function() {
         else
         {
             $(this).html(jsLang[25]+" <i class='fa fa-plus'></i>").removeClass("btn-danger").addClass("btn-warning");
+
             addTaskForm.fadeOut(150, function(){
                 allTasks.fadeIn(150);
+                getAllTask();
             });
         }
     });

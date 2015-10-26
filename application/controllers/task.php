@@ -27,15 +27,13 @@ class Task extends CI_Controller {
         ];
         $data = $this->common->allInit($config);
         $data['attachUploadSripts'] = true;
-        if($data['statusUser'] == 1)
-        {
-            $this->load->model('common_model');
-            $data['myProjects'] = $this->_getProject($data['idUser']);
-        }
-        else
-            $data['myProjects'] = [];
+        $this->load->model('common_model');
+        $this->_additionalGetTask($data);
 
-        $data['complexity'] = $this->common_model->getResult('complexity');
+        //приоритет задания
+        $data['priority'] =  $this->common_model->getResult('priority', '', '', 'result_array', 'id_priority, icon, title_'.$data['segment'], 'id_priority', 'asc');
+        //сложность задания
+        $data['complexity'] = $this->common_model->getResult('complexity', '', '', 'result_array', 'id_complexity, color, name_complexity_'.$data['segment'], 'id_complexity', 'asc');
         //проверяем, не оставил ли юзер файлы в папке, при создании задачи
         //это может быть тогда, когда он не добавил задачу, а просто все загрузил!
         $data['filesAttach'] = $this->_getAllAttach(null, $data['login'], $data['task_controller'][9]);
@@ -46,15 +44,149 @@ class Task extends CI_Controller {
 	}
 
     /**
-     * Получаем проекты для данного юзера
+     * Получаем некоторые данные, нужные для добавления задачи и в переменной $data['renderViewTask'] содержится вид всех задач
+     * We get some data necessary to add tasks and in the variable $data['renderViewTask'] view shows all tasks
+     * @param $data - ссылка  на сам массив, поэтому нет смысла его возвращать (a reference to the array, so it makes no sense to return)
+     * @param int $idProject
+     */
+    private function _additionalGetTask(&$data, $idProject = 0)
+    {
+        if($data['statusUser'] == 1)
+        {
+            $data['myProjects'] = $this->_getProject($data['idUser']);
+            if(!empty($data['myProjects']))
+            {
+                //получаем всех юзеров, которые прикрепленны к самому первому проекту, чтобы при добавлении задачи их показать
+                $data['myProjects'][0]['userInProject'] = $this->common_model->getResult('users', 'id_user', explode(',', $data['myProjects'][0]['team_ids']), 'result_array', 'id_user, name, login', null, '', true);
+
+                $allIdProjects = [];
+                foreach($data['myProjects'] as $project)
+                    $allIdProjects[] = $project['id_project'];
+
+                $this->load->model('task_model');
+
+                //считаем общее количество задач и количество задач для каждого проекта
+                $data['countProject_all'] = 0;
+                $data['allIdProjects'] = $allIdProjects;
+                foreach($allIdProjects as $id)
+                {
+                    $data['countTask']['countProject_'.$id] = $this->task_model->getAllTasks([$id], $data['segment']);
+                    $data['countProject_all'] += $data['countTask']['countProject_'.$id];
+                }
+
+                //если через ajax пытаемся достать задания по какому либо проекту, то вот это...
+                if($idProject > 0)
+                {
+                    $checkProject = $this->_checkProject($idProject, $data);
+                    if($checkProject['status'] == 'error')
+                    {
+                        $data['status_project'] = $data['task_views'][16];
+                        return true;
+                    }
+
+                    //[15, 0]: 15 - по сколько записей выводить на страницу. 0 - с первой страницы начинать
+                    $data['allTasks'] = $this->task_model->getAllTasks([$idProject], $data['segment'], [15, 0]);
+                }
+                //получаем все задания для всех проектов
+                else
+                    $data['allTasks'] = $this->task_model->getAllTasks($allIdProjects, $data['segment'], [15, 0]);
+
+
+                if(!empty( $data['allTasks'] ))
+                {
+                    foreach($data['allTasks'] as $k=>$task)
+                    {
+                        switch($task['time_for_complete_value'])
+                        {
+                            case '0':     $data['allTasks'][$k]['time_for_complete_value'] = mb_substr($data['task_views'][47], 0, 1, 'utf8'); break;
+                            case '1':     $data['allTasks'][$k]['time_for_complete_value'] = mb_substr($data['task_views'][48], 0, 1, 'utf8'); break;
+                            case '2':     $data['allTasks'][$k]['time_for_complete_value'] = mb_substr($data['task_views'][49], 0, 1, 'utf8'); break;
+                            case '3':     $data['allTasks'][$k]['time_for_complete_value'] = mb_substr($data['task_views'][50], 0, 1, 'utf8'); break;
+                            case '4':     $data['allTasks'][$k]['time_for_complete_value'] = mb_substr($data['task_views'][51], 0, ($data['segment'] == 'ru') ? 3 : 4, 'utf8'); break;
+                        }
+
+                    }
+
+                    //$data['renderNavigationTask'] = $this->load->view('default/common/task/navigation.php', $data, true);
+                }
+
+                $data['renderViewTask'] = $this->load->view('default/common/task/content.php', $data, true);
+                unset($data['allTasks']);
+            }
+            else
+                $data['countProject_all'] = 0;
+        }
+        else
+            $data['myProjects'] = [];
+    }
+
+    /**
+     * (AJAX)
+     * Получаем все задачи для всех проектов
+     * We get all the tasks for all projects
+     */
+    public function getAllTask()
+    {
+        $response = $this->common->isAjax(["idProject", 'int', 'notZero']);
+        if($response['status'] != 'error')
+        {
+            $idProject = intval($this->common->clear($this->input->post('idProject', true)));
+            $data = $response['data'];
+            unset($response['data']);
+            $this->load->model('common_model');
+
+            //получаем вид всех задач
+            $this->_additionalGetTask($data, $idProject);
+            if(isset($data['renderViewTask']))
+            {
+                $response = ['status'=>'success', 'content'=> $data['renderViewTask'], 'countProject_all' => $data['countProject_all']];
+
+                //если существует больше 0 задач во всех проектах, то ведем их подсчет
+                if($data['countProject_all'] > 0)
+                {
+                    foreach($data['allIdProjects'] as $k=>$id)
+                    {
+                        if(isset($data['countTask']['countProject_'.$id]))
+                            $response['countProject_'.$id] = $data['countTask']['countProject_'.$id];
+                    }
+
+                    $response['idProjects'] = implode('|', $data['allIdProjects']);
+                }
+            }
+            else
+                $response = ['status'=>'error'];
+
+            //если ранее была ошибка
+            if(isset($data['status_project']))
+            {
+                $response['resultTitle'] = $data['languages_desc'][0]['titleError'][$data['segment']];
+                $response['resultText'] = $data['status_project'];
+            }
+        }
+
+        echo json_encode($response);
+    }
+
+    /**
+     * Получаем все проекты для данного юзера
+     * We get all the projects for a given user
      * @param $idIser
      * @param string $select
      * @param string $return
+     * @param $getMy - если false, то возвращаем и мои проекты и те, к которым я прикреплен, если true, то возвращаем только мои проекты (if false, the return and my projects and those to which I have attached, if true, return only my projects)
      * @return mixed
      */
-    private function _getProject($idIser, $select = 'id_project, title, team_ids', $return = 'result_array')
+    private function _getProject($idIser, $select = 'id_project, title, team_ids', $return = 'result_array', $getMy = false)
     {
-        return $this->common_model->getResult('projects', 'responsible', $idIser, $return, $select, 'id_project');
+        if($getMy === false)
+        {
+            //ищем нужный нам id регулярным выражением, или же просто проверяем на то, является ли юзер создателем этого проекта
+            //We are looking for the right id regular expression, or just to check whether a user creator of this project
+            return $this->db->query("SELECT ".$select." FROM projects  WHERE responsible = ".$idIser." OR team_ids REGEXP '^{$idIser},|,{$idIser},|,{$idIser}$|^{$idIser}$'")->$return();
+        }
+        else
+            return $this->common_model->getResult('projects', 'responsible', $idIser, $return, $select, 'id_project');
+
     }
 
     /**
@@ -77,7 +209,7 @@ class Task extends CI_Controller {
 
         $this->load->model('common_model');
         //получаем все проекты для данного юзера
-        $data['myProjects'] = $this->_getProject($data['idUser']);
+        $data['myProjects'] = $this->_getProject($data['idUser'], 'id_project, title, team_ids', 'result_array', true);
 
         //получаем всех прикрепленных юзеров к проекту и вставляем в ячейку, чтобы потом их отобразить во вьюхе
         foreach($data['myProjects'] as $val)
@@ -197,7 +329,7 @@ class Task extends CI_Controller {
                     $data['error'] = $data['task_views'][4];
                     $data['status_text'] = 'success';
                     //получаем все проекты для данного юзера
-                    $data['myProjects'] = $this->_getProject($data['idUser']);
+                    $data['myProjects'] = $this->_getProject($data['idUser'], 'id_project, title, team_ids', 'result_array', true);
                 }
                 else
                     $this->common->redirect_to('task/addProject', $data['task_views'][5]);
@@ -748,6 +880,80 @@ class Task extends CI_Controller {
 
 
     /**
+     * Проверяем, есть ли у человека такой проект, или же он прикреплен к нему!
+     * We check whether a person has such a project, or whether it is attached to it!
+     * @param $idProject
+     * @param $data
+     * @return array
+     */
+    private function _checkProject($idProject, &$data)
+    {
+        $checkProject = $this->common_model->getResult('projects', 'id_project', $idProject, 'row_array');
+        $fail = false;
+        if(empty($checkProject))
+            $fail = true;
+        else
+        {
+            if($checkProject['responsible'] != $data['idUser'])
+                if(array_search($data['idUser'], explode(',', $checkProject['team_ids'])) === false)
+                    $fail = true;
+        }
+
+        if($fail === true)
+        {
+            $response = ['status' => 'error', 'resultTitle' => $data['languages_desc'][0]['titleError'][$data['segment']], 'resultText' =>  $data['task_controller'][10], 'remove'=>true];
+            return $response;
+        }
+
+        return ['status'=>'success', 'team_ids' => $checkProject['team_ids']];
+    }
+
+
+    /**
+     * Получаем все логины, которые привязаны к конкретному проекту
+     * We get all the logins that are tied to a specific project
+     */
+    public function getAllUsersProject()
+    {
+        //проверяем на ajax и его параметры
+        $response = $this->common->isAjax(["idProject",'int']);
+        if($response['status'] != 'error')
+        {
+            $data = $response['data'];
+            unset($response['data']);
+
+            $this->load->model('common_model');
+
+            //проверяем, есть ли такой проект у человека
+            $idProject = intval($this->common->clear($this->input->post('idProject', true)));
+            $errorOrNot = $this->_checkProject($idProject, $data);
+            if($errorOrNot['status'] == 'error')
+            {
+                echo json_encode($errorOrNot);
+                return true;
+            }
+
+            //получаем всех юзеров, которые прикрепленны к самому первому проекту
+            $allUsers = $this->common_model->getResult('users', 'id_user', explode(',', $errorOrNot['team_ids']), 'result_array', 'id_user, name, login', null, '', true);
+            if(!empty($allUsers))
+            {
+                foreach($allUsers as $k=>$v)
+                {
+                    $response['users'][$k]['name'] = $v['name'];
+                    $response['users'][$k]['id_user'] = $v['id_user'];
+                    $response['users'][$k]['login'] = $v['login'];
+                }
+                $response['status'] = 'success';
+            }
+            else
+                $response = ['status' => 'error', 'resultTitle' => $data['languages_desc'][0]['titleError'][$data['segment']], 'resultText' =>  "У проекта вообще НИКТО не прикреплен!"];
+        }
+
+        echo json_encode($response);
+    }
+
+
+    /**
      * Получаем все файлы с их расширениями содержащиеся во временной папке или уже в полноценной
      * We get all the files with their extensions contained in the temporary folder or already in full
      * @param null $id - если не null, то получаем данные из папки уже созданной задачи (if not null, you get the data from a folder already created task)
@@ -836,7 +1042,7 @@ class Task extends CI_Controller {
     public function addTask()
     {
         //проверяем на ajax и его параметры
-        $response = $this->common->isAjax(["titleTask", 'str'], ["descTask", 'str'], ["taskLevel", 'int', 'notZero'], ["startDay", 'int', 'notZero'], ["endDay", 'int', 'notZero'], ["estimatedTimeForTask", 'int'], ["measurementTime", 'int', 'notZero'], ["idProject", 'int']);
+        $response = $this->common->isAjax(["titleTask", 'str'], ["priorityLevel", 'int'], ["descTask", 'str'], ["taskLevel", 'int', 'notZero'], ["perfomerUser", 'int'], ["startDay", 'int', 'notZero'], ["endDay", 'int', 'notZero'], ["estimatedTimeForTask", 'int'], ["measurementTime", 'int', 'notZero'], ["idProject", 'int']);
         if($response['status'] != 'error')
         {
             $this->load->model('common_model');
@@ -848,40 +1054,72 @@ class Task extends CI_Controller {
             $titleTask = $this->common->clear($this->input->post('titleTask', true));
             if(preg_match("/^[а-яА-ЯёЁa-zA-Z0-9\-_ ]{3,256}$/iu", $titleTask))
             {
-                $updateUser = null;
-                //если не установленные рамки рабочего времени, то ставим их
-                if(!is_numeric($q['time_start_day']) || !is_numeric($q['time_end_day']))
-                {
-                    $new = [
-                        'time_start_day'    =>  $this->common->clear($this->input->post('startDay', true)),
-                        'time_end_day'      =>  $this->common->clear($this->input->post('endDay', true))
-                    ];
-
-                    if(is_numeric($new['time_start_day']) && is_numeric($new['time_end_day']))
-                    {
-                        //я живу в двадцатичетырех часовом формате, поэтому вычисления делаю в нем же
-                        //I live in a twenty-four hour format, so the calculations do it well
-                        if($new['time_start_day'] < 0 || $new['time_start_day'] > 24 || $new['time_end_day'] < 0 || $new['time_end_day'] > 24)
-                            $updateUser = 0;
-                        else
-                            $updateUser = $this->common_model->updateData($new, 'id_user', $data['idUser'], 'users', true);
-                    }
-                    else
-                        $updateUser = 0;
-                }
-
                 //проверяем, есть ли такой проект у человека
                 $idProject = intval($this->common->clear($this->input->post('idProject', true)));
-                $checkProject = $this->common_model->getResult('projects', ['id_project', 'responsible'], [$idProject, $data['idUser']], 'row_array');
-                if(empty($checkProject))
+                $errorOrNot = $this->_checkProject($idProject, $data);
+                if($errorOrNot['status'] == 'error')
                 {
-                    $response = ['status' => 'error', 'resultTitle' => $data['languages_desc'][0]['titleError'][$data['segment']], 'resultText' =>  $data['task_controller'][10]];
+                    echo json_encode($errorOrNot);
+                    return true;
+                }
+
+                //приоритет
+                $priorityLevel = intval($this->common->clear($this->input->post('priorityLevel', true)));
+                if(empty($this->common_model->getResult('priority', 'id_priority', $priorityLevel, 'row_array')))
+                    $priorityLevel = 1;
+
+                //проверяем, есть ли такой юзер
+                $idPerformer = intval($this->common->clear($this->input->post('perfomerUser', true)));
+                $checkPerformer = $this->common_model->getResult('users', 'id_user', $idPerformer, 'row_array');
+                if(empty($checkPerformer))
+                {
+                    $response = ['status' => 'error', 'resultTitle' => $data['languages_desc'][0]['titleError'][$data['segment']], 'resultText' =>  $data['task_controller'][11]];
                     echo json_encode($response);
                     return true;
                 }
 
+
+                $updateUser = null;
+                $new = [
+                    'time_start_day'    =>  intval($this->common->clear($this->input->post('startDay', true))),
+                    'time_end_day'      =>  intval($this->common->clear($this->input->post('endDay', true)))
+                ];
+                //я живу в двадцатичетырех часовом формате, поэтому вычисления делаю в нем же
+                //I live in a twenty-four hour format, so the calculations do it well
+                if($new['time_start_day'] < 0 || $new['time_start_day'] > 24 || $new['time_end_day'] < 0 || $new['time_end_day'] > 24)
+                {
+                    if(!is_numeric($q['time_start_day']) || !is_numeric($q['time_end_day']))
+                        $updateUser = 0;
+                }
+                else
+                {
+                    if($data['idUser'] != $checkPerformer['id_user'])
+                    {
+                        //если у выполняющего задание, еще не заданы временные границы, то задаем их такие же, как и у "его коллеги"
+                        if(!is_numeric($checkPerformer['time_start_day']) || !is_numeric($checkPerformer['time_end_day']) || $checkPerformer['time_start_day'] == 0 || $checkPerformer['time_end_day'] == 0)
+                        {
+                            if(!is_numeric($q['time_start_day']) || !is_numeric($q['time_end_day']))
+                                $this->common_model->updateData($new, 'id_user', $checkPerformer['id_user'], 'users', true);
+                            else
+                            {
+                                $new = [
+                                    'time_start_day'    => $q['time_start_day'],
+                                    'time_end_day'      =>  $q['time_end_day']
+                                ];
+                                $this->common_model->updateData($new, 'id_user', $checkPerformer['id_user'], 'users', true);
+                            }
+
+                        }
+                    }
+
+                    //если не установленные рамки рабочего времени, то ставим их
+                    if(!is_numeric($q['time_start_day']) || !is_numeric($q['time_end_day']))
+                        $updateUser = $this->common_model->updateData($new, 'id_user', $data['idUser'], 'users', true);
+                }
+
                 $new = [];
                 $new['title']           =   $titleTask;
+                $new['priority_id']     =   $priorityLevel;
                 $new['status']          =   '0'; // 0 - пока еще только добавленна
                 $new['text']            =   $this->common->clear($this->input->post('descTask', true));
                 $new['time_add']        =   time();
@@ -889,6 +1127,7 @@ class Task extends CI_Controller {
                 $new['month_start']     =   date('m');
                 $new['year_start']      =   date('Y');
                 $new['complexity_id']   =   intval($this->common->clear($this->input->post('taskLevel', true)));
+                $new['performer_id']    =   intval($this->common->clear($this->input->post('perfomerUser', true)));
                 $new['user_id']         =   $data['idUser'];
                 $new['project_id']                  =   $idProject;
                 $new['time_for_complete']           =   intval($this->common->clear($this->input->post('estimatedTimeForTask', true)));
@@ -899,6 +1138,9 @@ class Task extends CI_Controller {
                 if($myResponse[1] > 0)
                 {
                     $response = ['status'=> 'success', 'resultTitle'=> $data['task_views'][22], 'resultText'=> $data['task_views'][60]];
+
+                    //если прикрепляли файлы к заданию, то переносим их в новую деррикторию
+                    //If you attach files to the task, then transfer them to a new derriktoriyu
                     $answer = $this->_getAllAttach(null, $data['login'], $data['task_controller'][9]);
                     if(!isset($answer['status']))
                     {

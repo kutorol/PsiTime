@@ -17,8 +17,9 @@
                 <ul class="nav navbar-nav">
 
                     <li>
-                        <a class="navbar-brand" href="#">
-                            TimeBig <span style="padding-bottom: 10px;">&beta;eta</span>
+
+                        <a class="navbar-brand" href="<?=$startUrl?><?=($login != "") ? "/task" : "";?>">
+                            TimeBig <span style="color: rgb(91, 192, 222);">&beta;eta</span>
                         </a>
                     </li>
                     <li>

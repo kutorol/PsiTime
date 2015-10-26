@@ -220,7 +220,73 @@ function validateNum(title, num, fail, zero, before, after)
     return {message: errorMessage, fail: fail};
 }
 
+/**
+ * При выборе другого проекта, подгружается выбор юзера исполнителя, если вдруг исключили из проекта, то удаляется данная строка и подгружаются заного юзеры
+ * When you select a different project loaded selection of user artist if suddenly eliminated from the project, then this string is removed and loaded, users zanogo
+ * @returns {boolean}
+ */
+function changeSelect()
+{
+    var idProject = parseInt($("#projectSelect").val()), errorMessage = "<ul>", tempErrorMessage;
+    if(idProject == '')
+        alert("f");
+    tempErrorMessage = validateNum(jsLang[34], idProject, false, 'yes');
+    errorMessage += (tempErrorMessage.message != '') ? "<li>"+tempErrorMessage.message+"</li>" : '';
+    if(tempErrorMessage.fail === true)
+    {
+        errorMessage += "</ul>";
+        addTitle({title: jsLang[5], message: errorMessage}); //показываем ошибку
+        //если вдруг исключили из всех проектов - редиректим на главную страницу
+        setTimeout(function(){
+            document.location.href = base_url;
+        }, 5000);
+        return false;
+    }
+
+    //шаблон ajax запроса
+    ajaxRequestJSON("task/getAllUsersProject");
+    $.ajax({
+        data: {idProject: idProject},
+        success: function(data)
+        {
+            if(data.status == 'error')
+            {
+                //если мы обращаемся к чужому проекту (например нас неожиданно изключили из проекта), то удаляем строку этого проекта и заного подгружаем юзеров
+                if(data.remove !== undefined)
+                {
+                    $("#projectSelect option[value='"+idProject+"']").remove();
+                    changeSelect();
+                }
+
+
+                errorSuccessAjax({title: data.resultTitle, message: data.resultText}); //показываем модалку
+                return false;
+            }
+
+            var perfomerUser = $("#perfomerUser");
+            perfomerUser.empty();
+
+            $.each( data.users, function( key, value ) {
+                perfomerUser.append('<option value="'+value.id_user+'">'+value.name+' ('+value.login+')</option>');
+            });
+
+            hideLoad();
+
+
+        }
+    });
+}
+
+
 $(document).ready(function(){
+
+    /**
+     * При смене проекта в select, получаем других юзеров, которые прикреплены к этому проекту
+     * If you change the project to select, obtain other users that are attached to this project
+     */
+    $("#projectSelect").on('change', function(){
+        changeSelect();
+    });
 
      /**
      * Кнопка добавить задачу
@@ -245,6 +311,16 @@ $(document).ready(function(){
 
         var idProject = parseInt($("#projectSelect").val());
         tempErrorMessage = validateNum(jsLang[34], idProject, fail, 'yes');
+        errorMessage += (tempErrorMessage.message != '') ? "<li>"+tempErrorMessage.message+"</li>" : '';
+        fail = tempErrorMessage.fail;
+
+        var priorityLevel = parseInt($("#priorityLevel").val());
+        tempErrorMessage = validateNum(jsLang[43], priorityLevel, fail, 'yes');
+        errorMessage += (tempErrorMessage.message != '') ? "<li>"+tempErrorMessage.message+"</li>" : '';
+        fail = tempErrorMessage.fail;
+
+        var perfomerUser = parseInt($("#perfomerUser").val());
+        tempErrorMessage = validateNum(jsLang[42], perfomerUser, fail, 'yes');
         errorMessage += (tempErrorMessage.message != '') ? "<li>"+tempErrorMessage.message+"</li>" : '';
         fail = tempErrorMessage.fail;
 
@@ -293,7 +369,7 @@ $(document).ready(function(){
         //шаблон ajax запроса
         ajaxRequestJSON("task/addTask");
         $.ajax({
-            data: {titleTask: titleTask, descTask: descTask, idProject: idProject, taskLevel: taskLevel, startDay: startDay, endDay: endDay, estimatedTimeForTask: estimatedTimeForTask, measurementTime: measurementTime},
+            data: {titleTask: titleTask, priorityLevel: priorityLevel, descTask: descTask, perfomerUser: perfomerUser, idProject: idProject, taskLevel: taskLevel, startDay: startDay, endDay: endDay, estimatedTimeForTask: estimatedTimeForTask, measurementTime: measurementTime},
             success: function(data)
             {
                 if(data.status == 'error')

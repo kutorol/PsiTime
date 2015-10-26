@@ -46,11 +46,37 @@ if($statusUser == 1):?>
                             </div>
 
                             <div class="col-lg-12" style="margin-bottom: 15px;">
+                                <div class="label label-info" style="border-radius: 5px 5px 0px 0px;"><?=$task_views[61];?></div>
+                                <div>
+                                    <!--ALL PROJECTS-->
+                                    <?php if(!empty($myProjects)):?>
+                                        <select id="perfomerUser" class="form-control"  style="margin-top: 4px;">
+                                            <?php foreach($myProjects[0]['userInProject'] as $key=>$user):?>
+                                                <option value="<?=$user['id_user']?>"><?=$user['name']?> (<?=$user['login']?>)</option>
+                                            <?php endforeach;?>
+                                        </select>
+                                    <?php endif;?>
+                                    <!--END ALL PROJECTS-->
+                                </div>
+                            </div>
+
+                            <div class="col-lg-12" style="margin-bottom: 15px;">
                                 <div class="label label-info" style="border-radius: 5px 5px 0px 0px;"><?=$task_views[34]?></div>
                                 <div>
                                     <select id="taskLevel" class="btn-success form-control"  style="margin-top: 4px;">
                                         <?php foreach($complexity as $v):?>
                                             <option class="btn-<?=$v['color']?>" value="<?=$v['id_complexity']?>"><?=$v['name_complexity_'.$segment]?></option>
+                                        <?php endforeach;?>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-12" style="margin-bottom: 15px;">
+                                <div class="label label-info" style="border-radius: 5px 5px 0px 0px;"><?=$task_views[62]?></div>
+                                <div style="margin-top: -18px;">
+                                    <select id="priorityLevel" class="selectpicker" >
+                                        <?php foreach($priority as $v):?>
+                                            <option value="<?=$v['id_priority']?>" data-icon="<?=$v['icon']?>" > <?=$v['title_'.$segment]?></option>
                                         <?php endforeach;?>
                                     </select>
                                 </div>
@@ -238,9 +264,10 @@ if($statusUser == 1):?>
                 <!--ALL PROJECTS-->
                 <?php if(!empty($myProjects)):?>
                     <div class="list-group" id="menu-projects">
-                    <?php $i = 0; foreach($myProjects as $key=>$project):?>
-                        <a href="#" class="<?=($i == 0) ? 'active' : '';?> list-group-item navigate-project" data-id="<?=$project['id_project']?>"><?=$project['title']?></a>
-                    <?php $i++; endforeach;?>
+                        <a href="#" class="active list-group-item navigate-project" onclick="getAllTask();"><?=$task_views[63]?>  <span class="badge" id="countProject_all"><?=$countProject_all?></span></a>
+                    <?php foreach($myProjects as $key=>$project):?>
+                        <a href="#" class="list-group-item navigate-project" onclick="getAllTask(<?=$project['id_project']?>);"><?=$project['title']?>  <span class="badge" id="countProject_<?=$project['id_project']?>"><?=$countTask['countProject_'.$project['id_project']]?></span></a>
+                    <?php endforeach;?>
                     </div>
                 <?php endif;?>
                 <!--END ALL PROJECTS-->
@@ -252,69 +279,15 @@ if($statusUser == 1):?>
             <!--ALL TASK-->
             <div class="col-lg-9" >
 
-                <div class="row table-task">
+                <div class="row table-task" id="allTaskHere">
                     <?php if(!empty($myProjects)):?>
 
-                        <div style="margin-right: 15px;">
-                            <div class="div">
-                                <span class="label label-default">Выполнено</span>
-                                <span class="label label-default">3 задачи</span>
-                                <span class="label label-default">резерв времени</span>
-                            </div>
-
-                            <div class="table-task">
-                                <table>
-                                    <thead>
-                                    <tr>
-                                        <td>Задача</td>
-                                        <td>Сложность</td>
-                                        <td>Приступили</td>
-                                        <td>Завершили</td>
-                                        <td>Выполнили</td>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr>
-                                        <td>правка</td>
-                                        <td>легко</td>
-                                        <td>10:25 15.09.2015</td>
-                                        <td>17:25 16.10.2015</td>
-                                        <td>5 минут</td>
-                                    </tr>
-                                    <tr>
-                                        <td>правка 2</td>
-                                        <td>трудно</td>
-                                        <td>10:25 15.09.2015</td>
-                                        <td>17:25 16.10.2015</td>
-                                        <td>6 часов</td>
-                                    </tr>
-                                    <tr>
-                                        <td>правка 3</td>
-                                        <td>средне</td>
-                                        <td>10:25 15.09.2015</td>
-                                        <td>17:25 16.10.2015</td>
-                                        <td>12 часов 9 минут</td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-
-                        </div>
-
-                    <?php else:?>
-                        <div class="alert alert-danger col-lg-9">
-                            Вы не создали ни одной задачи! <a href="#" class="alert-link">Добавить задачу!</a>
-                        </div>
+                        <!--Тут находиться все задачи, если они есть-->
+                        <?php if(isset($renderViewTask)){ echo $renderViewTask; }?>
+                        <!--КОНЕЦ Тут находиться все задачи, если они есть-->
 
                     <?php endif;?>
                 </div>
-
-
-
-
-
-
-
 
             </div>
             <!--END ALL TASK-->
