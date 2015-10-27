@@ -13,12 +13,12 @@
                     <thead>
                     <tr >
 
-                        <th align="center">Сложность</th>
-                        <th align="center">Примерное время выполнения</th>
-                        <th align="center">Статус</th>
-                        <th align="center">Исполнитель</th>
-                        <th align="center">Поставил</th>
-                        <th align="center">Приоритет</th>
+                        <th align="center"><?=$task_views[34]?></th>
+                        <th align="center"><?=$task_views[45]?></th>
+                        <th align="center"><?=$task_views[64]?></th>
+                        <th align="center"><?=$task_views[61]?></th>
+                        <th align="center"><?=$task_views[65]?></th>
+                        <th align="center"><?=$task_views[62]?></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -26,8 +26,8 @@
                         <?php foreach($allTasks as $k=>$task):?>
                             <tr class="row_task_<?=$task['id_task'];?>">
                                 <td colspan="6" style="border-bottom: none;">
-                                    <a href="<?=$startUrl;?>/task/view/<?=$task['id_task'];?>"><?=$task['id_task'];?> - <?=$task['title'];?></a><br>
-                                    Проект: <?=$task['title_project'];?>
+                                    <a style="<?php if($task['status'] == 4){echo "text-decoration:line-through; color: #818289; font-weight: bold;";}?>" href="<?=$startUrl;?>/task/view/<?=$task['id_task'];?>"><?=$task['id_task'];?> - <?=$task['title'];?></a><br>
+                                    <?=$task_views[66]?> <?=$task['title_project'];?>
                                     <hr style="margin-bottom: -44px; border: none;">
                                 </td>
                             </tr>
@@ -55,6 +55,6 @@
 
 <?php else:?>
     <div class="alert alert-danger col-lg-9">
-        Вы не создали ни одной задачи! <a href="#" class="alert-link">Добавить задачу!</a>
+        <?=$task_views[67]?>
     </div>
 <?php endif;?>

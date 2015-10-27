@@ -137,6 +137,7 @@ class Task extends CI_Controller {
 
             //получаем вид всех задач
             $this->_additionalGetTask($data, $idProject);
+            //если существует вид задач
             if(isset($data['renderViewTask']))
             {
                 $response = ['status'=>'success', 'content'=> $data['renderViewTask'], 'countProject_all' => $data['countProject_all']];
@@ -154,14 +155,11 @@ class Task extends CI_Controller {
                 }
             }
             else
-                $response = ['status'=>'error'];
+                $response = ['status'=>'error', 'resultTitle'=>$data['languages_desc'][0]['titleError'][$data['segment']], 'resultText'=>''];
 
             //если ранее была ошибка
             if(isset($data['status_project']))
-            {
-                $response['resultTitle'] = $data['languages_desc'][0]['titleError'][$data['segment']];
                 $response['resultText'] = $data['status_project'];
-            }
         }
 
         echo json_encode($response);
@@ -1034,6 +1032,74 @@ class Task extends CI_Controller {
         return false;
     }
 
+
+    /**
+     * Функция обновления рабочего времени для юзеров
+     * Update feature of working time for users
+     * @param $checkPerformer
+     * @param $q
+     * @param $data
+     * @return int|null
+     */
+    private function _updateUsersTime($checkPerformer, $q, $data)
+    {
+        $updateUser = null;
+        $new = ['hoursInDayToWork'    =>  $this->common->clear($this->input->post('hoursInDayToWork', true))];
+        //если не число
+        if(!is_numeric($new['hoursInDayToWork']))
+        {
+            //если у меня изначально не установленно значение, то это ошибка
+            if(!is_numeric($q['hoursInDayToWork']))
+                $updateUser = 0;
+            else
+            {
+                //если я ставлю задачу не себе, а другому юзеру
+                if($data['idUser'] != $checkPerformer['id_user'])
+                {
+                    //если у выполняющего задание, еще не заданы временные границы, то задаем их такие же, как и у его "коллеги"
+                    if(!is_numeric($checkPerformer['hoursInDayToWork']) || $checkPerformer['hoursInDayToWork'] <= 0 || $checkPerformer['hoursInDayToWork'] > 20)
+                    {
+                        $new = ['hoursInDayToWork'    => $q['hoursInDayToWork']];
+                        $this->common_model->updateData($new, 'id_user', $checkPerformer['id_user'], 'users', true);
+                    }
+                }
+            }
+        }
+        //если число
+        else
+        {
+            $new['hoursInDayToWork'] = intval($new['hoursInDayToWork']);
+            //если не входит в указанные рамки, то это ошибка
+            if($new['hoursInDayToWork'] <= 0 || $new['hoursInDayToWork'] > 20)
+            {
+                if(!is_numeric($q['hoursInDayToWork']))
+                    $updateUser = 0;
+            }
+            else
+            {
+                //если не установленные рамки рабочего времени, то ставим их
+                if(!is_numeric($q['hoursInDayToWork']))
+                    $updateUser = $this->common_model->updateData($new, 'id_user', $data['idUser'], 'users', true);
+                else
+                {
+                    if($q['hoursInDayToWork'] != $new['hoursInDayToWork'])
+                        $updateUser = $this->common_model->updateData($new, 'id_user', $data['idUser'], 'users', true);
+                }
+
+                //если я ставлю задачу не себе, а другому юзеру
+                if($data['idUser'] != $checkPerformer['id_user'])
+                {
+                    //если у выполняющего задание, еще не заданы временные границы, то задаем их такие же, как и у его "коллеги", который только что задал их
+                    if(!is_numeric($checkPerformer['hoursInDayToWork']) || $checkPerformer['hoursInDayToWork'] <= 0 || $checkPerformer['hoursInDayToWork'] > 20)
+                        $this->common_model->updateData($new, 'id_user', $checkPerformer['id_user'], 'users', true);
+                }
+            }
+        }
+
+       return $updateUser;
+    }
+
+
     /**
      * (AJAX)
      * Добавляем задачу в бд
@@ -1042,14 +1108,14 @@ class Task extends CI_Controller {
     public function addTask()
     {
         //проверяем на ajax и его параметры
-        $response = $this->common->isAjax(["titleTask", 'str'], ["priorityLevel", 'int'], ["descTask", 'str'], ["taskLevel", 'int', 'notZero'], ["perfomerUser", 'int'], ["startDay", 'int', 'notZero'], ["endDay", 'int', 'notZero'], ["estimatedTimeForTask", 'int'], ["measurementTime", 'int', 'notZero'], ["idProject", 'int']);
+        $response = $this->common->isAjax(["titleTask", 'str'], ["priorityLevel", 'int'], ["descTask", 'str'], ["taskLevel", 'int', 'notZero'], ["perfomerUser", 'int'], ["hoursInDayToWork", 'str'], ["estimatedTimeForTask", 'int'], ["measurementTime", 'int', 'notZero'], ["idProject", 'int']);
         if($response['status'] != 'error')
         {
             $this->load->model('common_model');
             $data = $response['data'];
             unset($response['data']);
 
-            $q = $this->common_model->getResult('users', 'id_user', $data['idUser'], 'row_array', 'time_start_day, time_end_day');
+            $q = $this->common_model->getResult('users', 'id_user', $data['idUser'], 'row_array', 'hoursInDayToWork');
 
             $titleTask = $this->common->clear($this->input->post('titleTask', true));
             if(preg_match("/^[а-яА-ЯёЁa-zA-Z0-9\-_ ]{3,256}$/iu", $titleTask))
@@ -1079,43 +1145,7 @@ class Task extends CI_Controller {
                 }
 
 
-                $updateUser = null;
-                $new = [
-                    'time_start_day'    =>  intval($this->common->clear($this->input->post('startDay', true))),
-                    'time_end_day'      =>  intval($this->common->clear($this->input->post('endDay', true)))
-                ];
-                //я живу в двадцатичетырех часовом формате, поэтому вычисления делаю в нем же
-                //I live in a twenty-four hour format, so the calculations do it well
-                if($new['time_start_day'] < 0 || $new['time_start_day'] > 24 || $new['time_end_day'] < 0 || $new['time_end_day'] > 24)
-                {
-                    if(!is_numeric($q['time_start_day']) || !is_numeric($q['time_end_day']))
-                        $updateUser = 0;
-                }
-                else
-                {
-                    if($data['idUser'] != $checkPerformer['id_user'])
-                    {
-                        //если у выполняющего задание, еще не заданы временные границы, то задаем их такие же, как и у "его коллеги"
-                        if(!is_numeric($checkPerformer['time_start_day']) || !is_numeric($checkPerformer['time_end_day']) || $checkPerformer['time_start_day'] == 0 || $checkPerformer['time_end_day'] == 0)
-                        {
-                            if(!is_numeric($q['time_start_day']) || !is_numeric($q['time_end_day']))
-                                $this->common_model->updateData($new, 'id_user', $checkPerformer['id_user'], 'users', true);
-                            else
-                            {
-                                $new = [
-                                    'time_start_day'    => $q['time_start_day'],
-                                    'time_end_day'      =>  $q['time_end_day']
-                                ];
-                                $this->common_model->updateData($new, 'id_user', $checkPerformer['id_user'], 'users', true);
-                            }
-
-                        }
-                    }
-
-                    //если не установленные рамки рабочего времени, то ставим их
-                    if(!is_numeric($q['time_start_day']) || !is_numeric($q['time_end_day']))
-                        $updateUser = $this->common_model->updateData($new, 'id_user', $data['idUser'], 'users', true);
-                }
+                $updateUser = $this->_updateUsersTime($checkPerformer, $q, $data);
 
                 $new = [];
                 $new['title']           =   $titleTask;
@@ -1181,6 +1211,8 @@ class Task extends CI_Controller {
                     else
                         $response['hideTimeBlock'] = true;
                 }
+                else
+                    $response['hideTimeBlock'] = true;
             }
             else
                 $response = ['status' => 'error', 'resultTitle' => $data['languages_desc'][0]['titleError'][$data['segment']], 'resultText' =>  $data['task_views'][19]." ".$data['task_views'][20]];

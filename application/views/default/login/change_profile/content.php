@@ -21,15 +21,85 @@
                     <span class="label label-danger error"><?=strip_tags(form_error('email'))?></span>
                 </div>
 
+                <div class="input-group col-xs-12">
+                    <label for="hours"><span style="color:red;">*</span> <?=$welcome_controller[32]?></label>
+                    <input type="number" class="form-control col-xs-12" name="hours" value="<?=(is_numeric($userData['hoursInDayToWork'])) ? $userData['hoursInDayToWork'] : set_value("hours");?>" placeholder="<?=$userData['hoursInDayToWork']?>" required>
+                    <br><br>
+                    <span class="label label-danger error"><?=strip_tags(form_error('hours'))?></span>
+                </div>
+
 
                 <div class="input-group col-xs-12">
                     <button type="submit" class="btn btn-primary col-xs-12" name="change_profile"><?=$input_form_lang[13][$segment]?></button>
                 </div>
-
-
 
             </div>
 
         </form>
     </div>
 </div>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-4">
+            <fieldset>
+                <legend>Ваш аватар</legend>
+                <div align="center">
+                    <img src="<?=base_url()?><?=$userData['img']?>">
+                </div>
+            </fieldset>
+        </div>
+
+        <div class="col-lg-8">
+            <fieldset>
+                <legend>Сменить аватарку</legend>
+
+                <!--This function help add attach file itno server (AJAX with progress bar)-->
+                <script src="<?=base_url();?>js/upload/script.js"></script>
+                <!--Не менять этот URL, туда будут отсылаться файлы-->
+                <form id="fileupload_avatar" action="<?=$startUrl;?>/welcome/changeAvatar" method="POST" enctype="multipart/form-data" />
+
+                <p><span style="color: red;">*</span> <?=$task_views[68]?></p>
+
+                <!--Поле для переноса файла для загрузки (drag n drop)-->
+                <div class="row-fluid" id="upl_button_div">
+                    <div class="span12">
+                        <div id="dropZone_avatar" class="dropzone" align="center">
+                            <?=$task_views[54]?> <i class="fa fa-download"></i>
+                            <input name="userfile" class="input_opacity" type="file">
+                        </div>
+                    </div>
+                </div>
+                <!--КОНЕЦ Поле для переноса файла для загрузки (drag n drop)-->
+
+                <br>
+                <!--Прогресс бар загрузки-->
+                <div class="progress">
+                    <div id="bar" class="progress-bar progress-bar-success progress-bar-striped active bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
+                </div>
+                <!--КОНЕЦ Прогресс бар загрузки-->
+
+                <!--Кнопка загрузки файла-->
+                <div class="form-actions fileupload-buttonbar no-margin">
+                    <div class="btn btn-small btn-default" id="fake_upload_button_avatar">
+                        <i class="icon-plus"></i>
+                        <span><?=$task_views[55]?></span>
+                    </div>
+                </div>
+                <!--КОНЕЦ Кнопка загрузки файла-->
+
+                <br><br>
+                </form>
+            </fieldset>
+        </div>
+    </div>
+</div>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>

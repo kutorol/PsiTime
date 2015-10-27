@@ -33,7 +33,7 @@ function delAttach(src, id)
  * Если переносим или добавляем файл через кнопку, то эта функция добавит файл к добавляемой задачи, и отобразит его в нужном нам формате (zip, img, video, audio etc.)
  * If you move or add files via the button, this function will add a file to add tasks, and display it in the required format (zip, img, video, audio etc.)
  */
-function uploadAttachFile()
+function uploadAttachFile(id_area)
 {
     //не удалять! если удалить какой нибудь прикрепленный файл, то настройки для ajax сохраняться и прелоадер будет вечно показываться!
     //do not delete! if you remove some sort of attachment, the setup, for ajax preloader will persist forever show!
@@ -41,11 +41,18 @@ function uploadAttachFile()
         beforeSend: function(){}
     });
 
+    var upload;
+    if(id_area === undefined)
+        upload  = $('#fileupload');
+    else
+        upload  = $('#fileupload_avatar');
+
+
     //главный id, куда будут вставляться прикрепленные файлы
     var attachFile = $('#fileAttach');
     //прогресс бар
     var progressBar = $('#bar');
-    $('#fileupload').fileupload({
+    upload.fileupload({
         type: "POST",
         dataType: "json",
         error: function(e, x, settings, exception)
@@ -93,42 +100,52 @@ function uploadAttachFile()
             if(response.status == 'error')
                 return false;
 
-            var textAppend = '<div class="col-lg-2" id="'+response.id+'"><div title="'+jsLang[21]+'" onclick="delAttach(\''+response.fileSrc+'\', \''+response.id+'\');" class="btn btn-danger deleteAttachFile"><i class="fa fa-times"></i></div><div class="thumbnail" align="center">';
-            textAppend += '<div class="options" data-ext="'+response.extension+'" onClick="showDownloadImageDoc(\''+response.fileSrc+'\', \''+response.extension+'\', \''+response.titleFile+'\');" title="'+response.titleFile+'">';
-
-            switch(response.extension)
+            //добавляем файлы к заданию
+            if(id_area === undefined)
             {
-                case 'pdf':
-                    textAppend += '<i class="fa fa-file-pdf-o iconPdf"></i></div>';
-                    break;
-                case "word":
-                    textAppend += '<i class="fa fa-file-word-o iconWord"></i></div>';
-                    break;
-                case "exel":
-                    textAppend += '<i class="fa fa-file-excel-o iconExel"></i></div>';
-                    break;
-                case "pPoint":
-                    textAppend += '<i class="fa fa-file-powerpoint-o iconPPoint"></i></div>';
-                    break;
-                case "text":
-                    textAppend += '<i class="fa fa-file-text-o iconAttach"></i></div>';
-                    break;
-                case "video":
-                    textAppend += '<i class="fa fa-file-video-o iconAttach"></i></div>';
-                    break;
-                case "audio":
-                    textAppend += '<i class="fa fa-file-audio-o iconAttach"></i></div>';
-                    break;
-                case "img":
-                    textAppend += '<img src="'+response.fileSrc+'" alt="'+response.titleFile+'"></div>';
-                    break;
-                default:
-                    textAppend += '<i class="fa fa-file-archive-o iconAttach"></i></div>';
+                var textAppend = '<div class="col-lg-2" id="'+response.id+'"><div title="'+jsLang[21]+'" onclick="delAttach(\''+response.fileSrc+'\', \''+response.id+'\');" class="btn btn-danger deleteAttachFile"><i class="fa fa-times"></i></div><div class="thumbnail" align="center">';
+                textAppend += '<div class="options" data-ext="'+response.extension+'" onClick="showDownloadImageDoc(\''+response.fileSrc+'\', \''+response.extension+'\', \''+response.titleFile+'\');" title="'+response.titleFile+'">';
+
+                switch(response.extension)
+                {
+                    case 'pdf':
+                        textAppend += '<i class="fa fa-file-pdf-o iconPdf"></i></div>';
+                        break;
+                    case "word":
+                        textAppend += '<i class="fa fa-file-word-o iconWord"></i></div>';
+                        break;
+                    case "exel":
+                        textAppend += '<i class="fa fa-file-excel-o iconExel"></i></div>';
+                        break;
+                    case "pPoint":
+                        textAppend += '<i class="fa fa-file-powerpoint-o iconPPoint"></i></div>';
+                        break;
+                    case "text":
+                        textAppend += '<i class="fa fa-file-text-o iconAttach"></i></div>';
+                        break;
+                    case "video":
+                        textAppend += '<i class="fa fa-file-video-o iconAttach"></i></div>';
+                        break;
+                    case "audio":
+                        textAppend += '<i class="fa fa-file-audio-o iconAttach"></i></div>';
+                        break;
+                    case "img":
+                        textAppend += '<img src="'+response.fileSrc+'" alt="'+response.titleFile+'"></div>';
+                        break;
+                    default:
+                        textAppend += '<i class="fa fa-file-archive-o iconAttach"></i></div>';
+                }
+
+                textAppend += '<div class="longText" title="'+response.titleFile+'" >'+response.titleFile+'</div></div></div>';
+
+                attachFile.append(textAppend);
             }
-
-            textAppend += '<div class="longText" title="'+response.titleFile+'" >'+response.titleFile+'</div></div></div>';
-
-            attachFile.append(textAppend);
+            //смена аватарки в профиле
+            else
+            {
+                //TODO смену аватарки и в контроллере welcome
+                console.log(data.result);
+            }
         }
     });
 }
@@ -330,17 +347,12 @@ $(document).ready(function(){
         errorMessage += (tempErrorMessage.message != '') ? "<li>"+tempErrorMessage.message+"</li>" : '';
         fail = tempErrorMessage.fail;
 
-        var startDay = 'no', endDay = 'no';
+        var hoursInDayToWork = 'no';
         if(!$("#onceTime").hasClass("hidden"))
         {
-            startDay = parseInt($("#startDay").val());
-            endDay =  parseInt($("#endDay").val());
+            hoursInDayToWork = parseInt($("#hoursInDayToWork").val());
 
-            tempErrorMessage = validateNum(jsLang[36], startDay, fail, undefined, 24, 0);
-            errorMessage += (tempErrorMessage.message != '') ? "<li>"+tempErrorMessage.message+" "+jsLang[38]+"</li>" : '';
-            fail = tempErrorMessage.fail;
-
-            tempErrorMessage = validateNum(jsLang[37], endDay, fail, undefined, 24, 0);
+            tempErrorMessage = validateNum(jsLang[36], hoursInDayToWork, fail, undefined, 24, 0);
             errorMessage += (tempErrorMessage.message != '') ? "<li>"+tempErrorMessage.message+" "+jsLang[38]+"</li>" : '';
             fail = tempErrorMessage.fail;
         }
@@ -369,7 +381,7 @@ $(document).ready(function(){
         //шаблон ajax запроса
         ajaxRequestJSON("task/addTask");
         $.ajax({
-            data: {titleTask: titleTask, priorityLevel: priorityLevel, descTask: descTask, perfomerUser: perfomerUser, idProject: idProject, taskLevel: taskLevel, startDay: startDay, endDay: endDay, estimatedTimeForTask: estimatedTimeForTask, measurementTime: measurementTime},
+            data: {titleTask: titleTask, priorityLevel: priorityLevel, descTask: descTask, perfomerUser: perfomerUser, idProject: idProject, taskLevel: taskLevel, hoursInDayToWork: hoursInDayToWork, estimatedTimeForTask: estimatedTimeForTask, measurementTime: measurementTime},
             success: function(data)
             {
                 if(data.status == 'error')
@@ -378,8 +390,15 @@ $(document).ready(function(){
                     return false;
                 }
 
+                //скрываем блок с заданием времени рабочего дня
+                if(data.hideTimeBlock !== undefined)
+                    $("#onceTime").addClass("hidden");
+
                 if(data.error !== undefined)
                 {
+                    if(data.error.updateWorkDay !== undefined)
+                        $("#onceTime").removeClass("hidden");
+
                     data.resultText += "<p><b>"+jsLang[41]+"</b> <ul>";
                     $.each( data.error, function( key, value ) {
                         data.resultText += "<li>" + value + "</li>";
@@ -396,9 +415,9 @@ $(document).ready(function(){
                 var fileAttach = $("#fileAttach");
                 fileAttach.fadeOut(300,function(){fileAttach.html('').show();});
 
-                //скрываем блок с заданием времени рабочего дня
-                if(data.hideTimeBlock !== undefined)
-                    $("#onceTime").addClass("hidden");
+
+
+
 
                 errorSuccessAjax({title: data.resultTitle, message: data.resultText}); //показываем модалку
             }
@@ -428,4 +447,25 @@ $(document).ready(function(){
     //эта функция сработает тогда, когда нажмем на фейковую кнопку "Выбрать файл"
     //This function works when fake click on the "Choose File"
     uploadAttachFile();
+
+    /**
+     * Когда перетаскиваем файл в специальное поле
+     * When drag and drop files into a special field
+     */
+    $("#dropZone_avatar").bind('drop dragover', function (e) { // указал дроп зону
+        e.preventDefault();
+        uploadAttachFile('avatar');
+    });
+
+    /**
+     * При нажатии на фейковую кнопку "Выбрать файл", открываем настоящую кнопку
+     * By clicking on phishing web button "Choose File" button to open this
+     */
+    $("#fake_upload_button_avatar").click(function(){ // по нажатию, нажимаем окно добавления файла
+        $('#fileupload_avatar input').click();
+    });
+
+    //эта функция сработает тогда, когда нажмем на фейковую кнопку "Выбрать файл"
+    //This function works when fake click on the "Choose File"
+    uploadAttachFile('avatar');
 });

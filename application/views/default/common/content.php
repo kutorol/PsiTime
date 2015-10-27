@@ -102,7 +102,7 @@ if($statusUser == 1):?>
                         </fieldset>
 
 
-                            <?php if(!is_numeric($time_start_day) || !is_numeric($time_end_day)):?>
+                            <?php if(!is_numeric($hoursInDayToWork)):?>
                                 <fieldset id="onceTime" >
                             <?php else:?>
                                 <fieldset id="onceTime" class="hidden">
@@ -111,18 +111,12 @@ if($statusUser == 1):?>
                                 <div style="margin-top: -20px; margin-bottom: 20px; color: #ccc;"><?=$task_views[41]?></div>
 
                                 <div class="col-lg-12">
-                                    <div class="label label-info" style="border-radius: 5px 5px 0px 0px;"><?=$task_views[42]?></div>
+                                    <div class="label label-info" style="border-radius: 5px 5px 0px 0px;"><?=$task_views[40]?></div>
                                     <div class="input-group col-xs-12">
-                                        <input type="number" required id="startDay" class="form-control col-xs-12" placeholder="<?=$task_views[42]?>" value="9">
+                                        <input type="number" required id="hoursInDayToWork" class="form-control col-xs-12" placeholder="<?=$task_views[40]?>" value="8">
                                     </div>
                                 </div>
 
-                                <div class="col-lg-12">
-                                    <div class="label label-info" style="border-radius: 5px 5px 0px 0px;"><?=$task_views[43]?></div>
-                                    <div class="input-group col-xs-12">
-                                        <input type="number" required id="endDay" class="form-control col-xs-12" placeholder="<?=$task_views[43]?>" value="18">
-                                    </div>
-                                </div>
                             </fieldset>
 
 

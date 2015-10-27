@@ -386,16 +386,18 @@ class Welcome extends CI_Controller {
         $this->load->model('common_model');
         $this->load->model('welcome_model');
 
-        $data['userData'] = $this->common_model->getResult('users', 'login', $data['login'], 'row_array', 'id_user, name, login, email');
+
+
+        $data['userData'] = $this->common_model->getResult('users', 'login', $data['login'], 'row_array', 'id_user, name, login, email, hoursInDayToWork, img');
         if(empty($data['userData']))
             $this->dropCookie(true, '', $data['welcome_controller'][25]);
-
 
         if(isset($_POST['change_profile']))
         {
             //правила валидации данных из полей
             $this->form_validation->set_rules('name', $data['input_form_lang'][1][$data['segment']], 'trim|min_length[2]|max_length[20]|xss_clean');
             $this->form_validation->set_rules('login', $data['input_form_lang'][0][$data['segment']], 'trim|alpha_numeric|min_length[5]|max_length[20]|xss_clean|is_unique[users.login]');
+            $this->form_validation->set_rules('hours', "", 'trim|required|numeric|integer|is_natural_no_zero|min_length[1]|max_length[2]|xss_clean');
             $this->form_validation->set_rules('email', 'Email', 'trim|min_length[6]|valid_email|xss_clean|is_unique[users.email]');
 
             //если валидация не прошла проверку - показываем вьюху, а там ошибки покажут
@@ -409,13 +411,32 @@ class Welcome extends CI_Controller {
             $data['profile']['name'] = $this->common->clear($this->input->post('name', true));
             $data['profile']['login'] = $this->common->clear($this->input->post('login', true));
             $data['profile']['email'] = $this->common->clear($this->input->post('email', true));
+            //количество рабочих часов в день
+            $data['profile']['hoursInDayToWork'] = intval($this->common->clear($this->input->post('hours', true)));
 
-            if($data['profile']['name'] == '' && $data['profile']['login'] == '' && $data['profile']['email'] == '')
+            //проверяем на бональные ошибки
+            $fail = false;
+            if(($data['userData']['hoursInDayToWork'] == $data['profile']['hoursInDayToWork']) && $data['profile']['name'] == '' && $data['profile']['login'] == '' && $data['profile']['email'] == '')
             {
+                $fail = true;
                 $data['error'] = $data['welcome_controller'][29];
+            }
+            else
+            {
+                //человек  не может работать больше чем 20 часов
+                if($data['profile']['hoursInDayToWork'] > 20 || $data['profile']['hoursInDayToWork'] <= 0)
+                {
+                    $data['error'] = $data['welcome_controller'][31];
+                    $fail = true;
+                }
+            }
+
+            if($fail === true)
+            {
                 $this->display_lib->display($data, $config['pathToViewDir']);
                 return true;
             }
+
 
 
             /**

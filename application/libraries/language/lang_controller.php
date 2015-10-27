@@ -172,6 +172,8 @@ class Lang_controller
             28  =>  'Изменение профиля',
             29  =>  'Заполните хотя бы одно из полей!',
             30  =>  'Профиль успешно изменен',
+            31  =>  'Количество рабочих часов не может быть меньше 1 и больше 20',
+            32  =>  "Сколько вы работаете в день часов без учета обеденного перерыва:",
         ];
 
 
@@ -220,6 +222,9 @@ class Lang_controller
             28  =>  'Changing profile',
             29  =>  'Fill in at least one of the fields!',
             30  =>  'Profile changed successfully',
+            31  =>  'Number of working hours can not be less than 1 and more than 20',
+            32  =>  "How much are you working hours per day without a lunch break:",
+
         ];
 
         $lang['lang_'.$segment]['welcome_controller'][19][2] .= $lang['lang_'.$segment]['welcome_controller'][3];
@@ -269,7 +274,7 @@ class Lang_controller
             5       =>  'Ошибка при создании архива из файла',
             6       =>  "Неудалось скопировать файлы: ",
             7       =>  "Не удалось проделать данную операцию",
-            8       =>  'Не удалось обновить временные рамки, поэтому еще раз наберите их, создавая следующую задачу.',
+            8       =>  'Не удалось обновить "Время рабочего дня (в часах и без обеденного перерыва)", поэтому еще раз наберите их, создавая следующую задачу или измените их в профиле.',
             9       =>  'Вы пытаетесь совершить невозможное действие! Не верно переданны параметры в функцию.',
             10      =>  'Вы пытаетесь использовать чужой проект!',
             11      =>  'Выбранный исполнитель не существует или не прикреплен к этому проекту!',
@@ -290,7 +295,7 @@ class Lang_controller
             5       =>  'Error while creating archive file',
             6       =>  "Unable to copy files: ",
             7       =>  "Unable to perform the operation",
-            8       =>  'Failed to update the time frame, so once again enter them by creating the following problem.',
+            8       =>  'Failed to update the "Time of the day (in hours and no lunch break)", so once again enter them by creating the following problem or change their profile.',
             9       =>  'You are trying to do the impossible action! Not right to pass parameters to the function.',
             10      =>  'You are trying to use someone elses project!',
             11      =>  'The selected artist does not exist or is not attached to the project!',
@@ -343,8 +348,6 @@ class Lang_controller
             39  =>  "Описание",
             40  =>  "Время рабочего дня (один раз)",
             41  =>  "Можно изменить в профиле",
-            42  =>  "Начало дня",
-            43  =>  "Конец дня",
             44  =>  "Временные рамки задачи",
             45  =>  "Примерное время выполнения",
             46  =>  "Время измерения",
@@ -365,6 +368,11 @@ class Lang_controller
             61  =>  "Исполнитель",
             62  =>  "Приоритет",
             63  =>  "Все проекты",
+            64  =>  "Статус",
+            65  =>  "Поставил",
+            66  =>  "Проект: ",
+            67  =>  "Вы не создали ни одной задачи!",
+            68  =>  "Максимальный размер аватаки 10 Мб",
             'status_task_0'      =>  'Поставлена',
             'status_task_1'      =>  'Выполняется',
             'status_task_2'      =>  'Выполнена',
@@ -417,8 +425,6 @@ class Lang_controller
             39  =>  "Description",
             40  =>  "The time of the day (once)",
             41  =>  "Can be changed in profile",
-            42  =>  "The beginning of the day",
-            43  =>  "End of the day",
             44  =>  "Timeframe task",
             45  =>  "Estimated time to complete",
             46  =>  "Measurement time",
@@ -439,6 +445,11 @@ class Lang_controller
             61  =>  "Performer",
             62  =>  "Priority",
             63  =>  "All projects",
+            64  =>  "Status",
+            65  =>  "Delivered",
+            66  =>  "The project: ",
+            67  =>  "You have not created any task!",
+            68  =>  "Maximum file size 10 MB",
             'status_task_0'      =>  'Supplied',
             'status_task_1'      =>  'Running',
             'status_task_2'      =>  'Implemented',
@@ -478,7 +489,7 @@ class Lang_controller
             31  =>  "не может быть меньше",
             32  =>  "и больше",
             33  =>  "не может быть больше",
-            38  =>  "(поле имеет двадцатичетырехчасовой формат)",
+            38  =>  "(поле может принимать значение от 1 до 20 часов - без учета обеда)",
             41  =>  "Ошибки:",
 
         ];
@@ -511,7 +522,7 @@ class Lang_controller
             31  =>  "can not be less than",
             32  =>  "and more",
             33  =>  "can not be more than",
-            38  =>  "(the field has a twenty-four format)",
+            38  =>  "(field can have a value from 1 to 20 hours - without dinner)",
             41  =>  "Errors:",
 
         ];
@@ -535,8 +546,7 @@ class Lang_controller
         $lang['lang_'.$segment]['js'][27]               =   $lang['lang_'.$segment]['task_views'][38];
         $lang['lang_'.$segment]['js'][34]               =   $lang['lang_'.$segment]['task_views'][59];
         $lang['lang_'.$segment]['js'][35]               =   $lang['lang_'.$segment]['task_views'][34];
-        $lang['lang_'.$segment]['js'][36]               =   $lang['lang_'.$segment]['task_views'][42];
-        $lang['lang_'.$segment]['js'][37]               =   $lang['lang_'.$segment]['task_views'][43];
+        $lang['lang_'.$segment]['js'][36]               =   $lang['lang_'.$segment]['task_views'][40];
         $lang['lang_'.$segment]['js'][39]               =   $lang['lang_'.$segment]['task_views'][45];
         $lang['lang_'.$segment]['js'][40]               =   $lang['lang_'.$segment]['task_views'][46];
         $lang['lang_'.$segment]['js'][42]               =   $lang['lang_'.$segment]['task_views'][61];

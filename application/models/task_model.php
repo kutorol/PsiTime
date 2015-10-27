@@ -6,7 +6,6 @@ class Task_model extends CI_Model {
     /**
      * (для автокомплита)
      * Проверяем, есть ли такой юзер
-     *
      * (for autocomplete)
      * Checks whether a user
      *
@@ -24,6 +23,7 @@ class Task_model extends CI_Model {
      * We get all the tasks for all projects
      * @param array $allIdProjects
      * @param string $segment
+     * @param array $config - тут передаются данные для постраничной навигации
      * @return mixed
      */
     public function getAllTasks($allIdProjects = [], $segment = 'ru', $config = [])

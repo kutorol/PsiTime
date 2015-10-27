@@ -334,12 +334,11 @@ class Common
         {
             if(trim($this->data['login']) != "")
             {
-                $q = $this->CI_in->db->where('login', $this->data['login'])->select('id_user, status, count_projects, time_start_day, time_end_day')->get('users')->row_array();
+                $q = $this->CI_in->db->where('login', $this->data['login'])->select('id_user, status, count_projects, hoursInDayToWork')->get('users')->row_array();
                 $this->data['idUser'] = (!empty($q)) ? $q['id_user'] : 0;
                 $this->data['statusUser'] = (!empty($q)) ? $q['status'] : 0;
                 $this->data['count_projectsUser'] = (!empty($q)) ? $q['count_projects'] : 0;
-                $this->data['time_start_day'] = $q['time_start_day'];
-                $this->data['time_end_day'] = $q['time_end_day'];
+                $this->data['hoursInDayToWork'] = $q['hoursInDayToWork'];
             }
         }
 
