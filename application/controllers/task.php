@@ -802,18 +802,20 @@ class Task extends CI_Controller {
      */
     public function addTaskAttachFile()
     {
-        //если файл к нам пришел, то для прохождения проверки $this->common->isAjax, нужно сделать в массиве post ячейку
-        if(isset($_FILES['userfile']))
-            $_POST['userfile'] = "yes";
-
         //проверяем на ajax и его параметры
-        $response = $this->common->isAjax(["userfile",'str']);
+        $response = $this->common->isAjax(["userfile",'int'], ['avatarOrNot', 'int', 'notZero']);
         if($response['status'] != 'error')
         {
+            /**
+             * Если равно 0, то это добавляем картинку к задаче. Если 1 - изменяем аватар у юзера
+             */
+            $avatarOrNot = intval($this->input->post('avatarOrNot', true));
+
             $data = $response['data'];
             unset($response['data']);
 
-            if($_FILES['userfile']['size'] <= 62914560)//60Mb // 10485760) //10Mb
+            $fileSize = ($avatarOrNot == 0) ? 62914560 : 10485760;
+            if($_FILES['userfile']['size'] <= $fileSize)//60Mb // 10485760) //10Mb
             {
                 //получаем имя файла и обрабатываем
                 $fileName = explode(".", $_FILES['userfile']['name']);
@@ -823,53 +825,90 @@ class Task extends CI_Controller {
                 $hash = substr(md5(time().rand(1,500000000)), 0, 8);
                 $fileName = $fileName.'--'.$hash;
 
-                //создаем папку временную, если ее не было
-                $tempPath = 'img/temp/'.$data['login'].'/';
-                $this->_createFolder($tempPath);
+                $tempPath = 'img/';
+                if($avatarOrNot == 0)
+                {
+                    //создаем папку временную, если ее не было
+                    $tempPath .= 'temp/'.$data['login'].'/';
+                    $this->_createFolder($tempPath);
 
-                //если расширение неизвестное, то запаковываем в zip архив
-                $ext = $this->_findExt($endExt);
+                    //если расширение неизвестное, то запаковываем в zip архив
+                    $ext = $this->_findExt($endExt);
+                }
+
 
 
                 $config = [];
                 $config['upload_path'] = './'.$tempPath;
                 $config['file_name'] = $fileName.'.'.$endExt;
-                $config['allowed_types'] = '*'; //все типы файлов
+                $config['allowed_types'] = ($avatarOrNot == 0) ? '*' : "gif|jpg|png|jpeg|bmp"; //все типы файлов
                 $config['remove_spaces']  = TRUE;
                 $this->load->library('upload', $config);
 
                 if($this->upload->do_upload())
                 {
-                    //если файл загрузился, то либо архивируем его, или ничего не делаем
-                    $pathWithName = base_url().$tempPath.$fileName;
-                    $response = ['status' => 'success', 'resultTitle' => $data['task_views'][22], 'resultText' => $data['task_views'][22],  'id'=> 'delete_'.$hash, 'fileSrc'=> $pathWithName, 'titleFile'=>$fileName];
-
-                    if($ext == 'zip_pack')
+                    //если обновляем аватар
+                    if($avatarOrNot >= 1)
                     {
-                        //архивируем
-                        //$this->_attachToZip('./img/', 'noimg--fds', './img/noimg--fds.png', 'png');
-                        $answer = $this->_attachToZip('./'.$tempPath, $fileName, './'.$tempPath.$config['file_name'], $endExt, $data);
+                        $this->load->model('common_model');
+                        $q = $this->common_model->getResult('users', 'id_user', $data['idUser'], 'row_array', 'img');
+                        $updateAvatar = $this->common_model->updateData(['img'=>$config['file_name']], 'id_user', $data['idUser'], 'users', true);
+                        if($updateAvatar > 0)
+                        {
+                            if($q['img'] != "noimg.png")
+                            {
+                                if(file_exists('./img/'.$q['img']))
+                                    unlink('./img/'.$q['img']);
+                            }
 
-                        //когда архивация пройдет хорошо, тогда удаляем прежний файл, чтобы место не занимал
-                        if(file_exists('./'.$tempPath.$fileName.'.'.$endExt))
-                            unlink('./'.$tempPath.$fileName.'.'.$endExt);
+                            $response = ['status'=>'success', 'src'=> base_url().'img/'.$config['file_name']];
+                        }
+                        else
+                        {
+                            if(file_exists('./img/'.$config['file_name']))
+                                unlink('./img/'.$config['file_name']);
 
-                        $ext = 'zip';
-                        $response['fileSrc'] .= '.zip';
-
-                        if($answer['status'] == 'error')
-                            $response = ['status' => 'error', 'resultTitle' => $data['languages_desc'][0]['titleError'][$data['segment']], 'resultText' => $answer['title']];
+                            $response = ['status'=>'error', 'resultTitle'=> $data['languages_desc'][0]['titleError'][$data['segment']], 'resultText'=> $data['task_controller'][7]];
+                        }
                     }
+                    //если прикрепляем файл к задаче
                     else
-                        $response['fileSrc'] .= '.'.$endExt;
+                    {
+                        //если файл загрузился, то либо архивируем его, или ничего не делаем
+                        $pathWithName = base_url().$tempPath.$fileName;
+                        $response = ['status' => 'success', 'resultTitle' => $data['task_views'][22], 'resultText' => $data['task_views'][22],  'id'=> 'delete_'.$hash, 'fileSrc'=> $pathWithName, 'titleFile'=>$fileName];
 
-                    $response['extension'] = $ext;
+                        if($ext == 'zip_pack')
+                        {
+                            //архивируем
+                            //$this->_attachToZip('./img/', 'noimg--fds', './img/noimg--fds.png', 'png');
+                            $answer = $this->_attachToZip('./'.$tempPath, $fileName, './'.$tempPath.$config['file_name'], $endExt, $data);
+
+                            //когда архивация пройдет хорошо, тогда удаляем прежний файл, чтобы место не занимал
+                            if(file_exists('./'.$tempPath.$fileName.'.'.$endExt))
+                                unlink('./'.$tempPath.$fileName.'.'.$endExt);
+
+                            $ext = 'zip';
+                            $response['fileSrc'] .= '.zip';
+
+                            if($answer['status'] == 'error')
+                                $response = ['status' => 'error', 'resultTitle' => $data['languages_desc'][0]['titleError'][$data['segment']], 'resultText' => $answer['title']];
+                        }
+                        else
+                            $response['fileSrc'] .= '.'.$endExt;
+
+                        $response['extension'] = $ext;
+                    }
                 }
                 else
                     $response = ['status' => 'error', 'resultTitle' => $data['languages_desc'][0]['titleError'][$data['segment']], 'resultText' =>  $this->upload->display_errors()];
             }
             else
+            {
                 $response = ['status' => 'error', 'resultTitle' => $data['languages_desc'][0]['titleError'][$data['segment']], 'resultText' =>  $data['task_controller'][2]];
+                if($avatarOrNot >= 1)
+                    $response['resultText'] = $data['welcome_controller'][33];
+            }
 
         }
 

@@ -44,32 +44,33 @@
 <p>&nbsp;</p>
 
 
+
 <div class="container">
     <div class="row">
         <div class="col-lg-4">
             <fieldset>
-                <legend>Ваш аватар</legend>
+                <legend><?=$welcome_controller[34]?></legend>
                 <div align="center">
-                    <img src="<?=base_url()?><?=$userData['img']?>">
+                    <img src="<?=base_url()?>img/<?=$userData['img']?>" id="avatarImg" class="col-lg-12" alt="avatar">
                 </div>
             </fieldset>
         </div>
 
         <div class="col-lg-8">
             <fieldset>
-                <legend>Сменить аватарку</legend>
+                <legend><?=$welcome_controller[35]?></legend>
 
                 <!--This function help add attach file itno server (AJAX with progress bar)-->
                 <script src="<?=base_url();?>js/upload/script.js"></script>
                 <!--Не менять этот URL, туда будут отсылаться файлы-->
-                <form id="fileupload_avatar" action="<?=$startUrl;?>/welcome/changeAvatar" method="POST" enctype="multipart/form-data" />
+                <form id="fileupload" action="<?=$startUrl;?>/task/addTaskAttachFile" method="POST" enctype="multipart/form-data" />
 
-                <p><span style="color: red;">*</span> <?=$task_views[68]?></p>
+                <p><span style="color: red;">*</span> <?=$welcome_controller[33]?></p>
 
                 <!--Поле для переноса файла для загрузки (drag n drop)-->
                 <div class="row-fluid" id="upl_button_div">
                     <div class="span12">
-                        <div id="dropZone_avatar" class="dropzone" align="center">
+                        <div id="dropZone" class="dropzone" align="center">
                             <?=$task_views[54]?> <i class="fa fa-download"></i>
                             <input name="userfile" class="input_opacity" type="file">
                         </div>
@@ -86,7 +87,7 @@
 
                 <!--Кнопка загрузки файла-->
                 <div class="form-actions fileupload-buttonbar no-margin">
-                    <div class="btn btn-small btn-default" id="fake_upload_button_avatar">
+                    <div class="btn btn-small btn-default" id="fake_upload_button">
                         <i class="icon-plus"></i>
                         <span><?=$task_views[55]?></span>
                     </div>
@@ -100,6 +101,7 @@
     </div>
 </div>
 
+<p style="display: none;" id="AvatarOrNo">avatar</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>

@@ -37,9 +37,9 @@
                                 <td><?=$task['time_for_complete'];?> <?=$task['time_for_complete_value'];?></td>
                                 <td><?=$task_views['status_task_'.$task['status']]?></td>
 
-                                <td align="center" <?=($task['user_id'] == $task['performer_id']) ? "colspan='2'" : "";?> ><img src="<?=base_url()?><?=$task['img_performer'];?>"  style="height: 50px; width: 50px; display: block;"> <?=$task['name_performer'];?></td>
+                                <td align="center" <?=($task['user_id'] == $task['performer_id']) ? "colspan='2'" : "";?> ><img src="<?=base_url()?>img/<?=$task['img_performer'];?>"  style="height: 50px; width: 50px; display: block;"> <?=$task['name_performer'];?></td>
                                 <?php if($task['user_id'] != $task['performer_id']):?>
-                                    <td align="center"><img src="<?=base_url()?><?=$task['user_img'];?>"  style="height: 50px; width: 50px; display: block;"> <?=$task['name'];?></td>
+                                    <td align="center"><img src="<?=base_url()?>img/<?=$task['user_img'];?>"  style="height: 50px; width: 50px; display: block;"> <?=$task['name'];?></td>
                                 <?php endif;?>
                                 <td align="center"><span style="display: block;" class="<?php if($task['color_priority'] != ''):?>label label-<?=$task['color_priority']?><?php endif;?>"><i class="<?=$task['icon_priority']?> "></i> <?=$task['title_priority']?></span></td>
                             </tr>

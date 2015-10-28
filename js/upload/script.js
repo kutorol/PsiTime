@@ -12,7 +12,6 @@ function delAttach(src, id)
         data: {src: src},
         success: function(data)
         {
-            console.log(data);
             if(data.status == 'error')
             {
                 errorSuccessAjax({title: data.resultTitle, message: data.resultText}); //показываем модалку
@@ -33,7 +32,7 @@ function delAttach(src, id)
  * Если переносим или добавляем файл через кнопку, то эта функция добавит файл к добавляемой задачи, и отобразит его в нужном нам формате (zip, img, video, audio etc.)
  * If you move or add files via the button, this function will add a file to add tasks, and display it in the required format (zip, img, video, audio etc.)
  */
-function uploadAttachFile(id_area)
+function uploadAttachFile()
 {
     //не удалять! если удалить какой нибудь прикрепленный файл, то настройки для ajax сохраняться и прелоадер будет вечно показываться!
     //do not delete! if you remove some sort of attachment, the setup, for ajax preloader will persist forever show!
@@ -41,20 +40,22 @@ function uploadAttachFile(id_area)
         beforeSend: function(){}
     });
 
-    var upload;
-    if(id_area === undefined)
-        upload  = $('#fileupload');
-    else
-        upload  = $('#fileupload_avatar');
-
+    //проверяем что будем загружать - или файлы для задач или картинку для аватарки
+    var id_area, variable = 0;
+    if($("#AvatarOrNo").html() !== undefined)
+    {
+        id_area = 'avatar';
+        variable = 1;
+    }
 
     //главный id, куда будут вставляться прикрепленные файлы
     var attachFile = $('#fileAttach');
     //прогресс бар
     var progressBar = $('#bar');
-    upload.fileupload({
+    $('#fileupload').fileupload({
         type: "POST",
         dataType: "json",
+        formData: {avatarOrNot: variable, userfile: 1},
         error: function(e, x, settings, exception)
         {
             $('#bar').css('width','0%');
@@ -92,17 +93,23 @@ function uploadAttachFile(id_area)
         },
         done: function (e, data)
         {
+
+            console.log(data.result);
             hideLoad();
             progressBar.css('width','0%');
             response = data.result;
 
-            addTitle({title: response.resultTitle, message: response.resultText});
             if(response.status == 'error')
+            {
+                addTitle({title: response.resultTitle, message: response.resultText});
                 return false;
+            }
 
             //добавляем файлы к заданию
             if(id_area === undefined)
             {
+                //если нужно чтобы показывалось оповещение об удачном добавление файлов к задаче, то раскоментируйте ниже
+                //addTitle({title: response.resultTitle, message: response.resultText});
                 var textAppend = '<div class="col-lg-2" id="'+response.id+'"><div title="'+jsLang[21]+'" onclick="delAttach(\''+response.fileSrc+'\', \''+response.id+'\');" class="btn btn-danger deleteAttachFile"><i class="fa fa-times"></i></div><div class="thumbnail" align="center">';
                 textAppend += '<div class="options" data-ext="'+response.extension+'" onClick="showDownloadImageDoc(\''+response.fileSrc+'\', \''+response.extension+'\', \''+response.titleFile+'\');" title="'+response.titleFile+'">';
 
@@ -143,8 +150,9 @@ function uploadAttachFile(id_area)
             //смена аватарки в профиле
             else
             {
-                //TODO смену аватарки и в контроллере welcome
-                console.log(data.result);
+                $("#avatarImg").fadeOut(350, function(){
+                    $("#avatarImg").attr("src", response.src).fadeIn(350);
+                });
             }
         }
     });
@@ -448,24 +456,4 @@ $(document).ready(function(){
     //This function works when fake click on the "Choose File"
     uploadAttachFile();
 
-    /**
-     * Когда перетаскиваем файл в специальное поле
-     * When drag and drop files into a special field
-     */
-    $("#dropZone_avatar").bind('drop dragover', function (e) { // указал дроп зону
-        e.preventDefault();
-        uploadAttachFile('avatar');
-    });
-
-    /**
-     * При нажатии на фейковую кнопку "Выбрать файл", открываем настоящую кнопку
-     * By clicking on phishing web button "Choose File" button to open this
-     */
-    $("#fake_upload_button_avatar").click(function(){ // по нажатию, нажимаем окно добавления файла
-        $('#fileupload_avatar input').click();
-    });
-
-    //эта функция сработает тогда, когда нажмем на фейковую кнопку "Выбрать файл"
-    //This function works when fake click on the "Choose File"
-    uploadAttachFile('avatar');
 });

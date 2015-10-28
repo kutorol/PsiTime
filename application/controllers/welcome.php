@@ -386,7 +386,8 @@ class Welcome extends CI_Controller {
         $this->load->model('common_model');
         $this->load->model('welcome_model');
 
-
+        //разрешаем подгрузку скриптов для ajax загрузки аватарки на сайт
+        $data['attachUploadSripts'] = 'yes';
 
         $data['userData'] = $this->common_model->getResult('users', 'login', $data['login'], 'row_array', 'id_user, name, login, email, hoursInDayToWork, img');
         if(empty($data['userData']))

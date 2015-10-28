@@ -170,10 +170,13 @@ class Lang_controller
             26  =>  'Ваш пароль изменен!',
             27  =>  'Страница изменения профиля',
             28  =>  'Изменение профиля',
-            29  =>  'Заполните хотя бы одно из полей!',
+            29  =>  'Заполните хотя бы одно из полей! Эта ошибка могла появиться из-за того, что последнее поле у вас неизменилось, а все остальные пустые!',
             30  =>  'Профиль успешно изменен',
             31  =>  'Количество рабочих часов не может быть меньше 1 и больше 20',
             32  =>  "Сколько вы работаете в день часов без учета обеденного перерыва:",
+            33  =>  "Максимальный размер аватаки 10 Мб",
+            34  =>  "Ваш аватар",
+            35  =>  "Сменить аватарку",
         ];
 
 
@@ -220,10 +223,13 @@ class Lang_controller
             26  =>  'Your password has been changed!',
             27  =>  'Page profile changes',
             28  =>  'Changing profile',
-            29  =>  'Fill in at least one of the fields!',
+            29  =>  'Fill in at least one of the fields! This error can occur due to the fact that the last field you unchanged, and the rest are empty!',
             30  =>  'Profile changed successfully',
             31  =>  'Number of working hours can not be less than 1 and more than 20',
             32  =>  "How much are you working hours per day without a lunch break:",
+            33  =>  "Maximum file size 10 MB",
+            34  =>  "Your avatar",
+            35  =>  "Change avatar",
 
         ];
 
@@ -358,7 +364,7 @@ class Lang_controller
             51  =>  "месяцы",
             52  =>  "Прикрепите картинку/документ:",
             53  =>  "Максимальный размер файла 60 Мб",
-            54  =>  "Перетащите сюда",
+            54  =>  "Перетащите файл/файлы в любое место на экране",
             55  =>  "Выбрать файл...",
             56  =>  "Прикрепленные файлы:",
             57  =>  "В прошлый раз вы не добавили задачу. Это то что вы прикрепляли!",
@@ -372,7 +378,7 @@ class Lang_controller
             65  =>  "Поставил",
             66  =>  "Проект: ",
             67  =>  "Вы не создали ни одной задачи!",
-            68  =>  "Максимальный размер аватаки 10 Мб",
+
             'status_task_0'      =>  'Поставлена',
             'status_task_1'      =>  'Выполняется',
             'status_task_2'      =>  'Выполнена',
@@ -435,7 +441,7 @@ class Lang_controller
             51  =>  "months",
             52  =>  "Attach image/document:",
             53  =>  "Maximum file size 60 MB",
-            54  =>  "Drag here",
+            54  =>  "Drag the file / files to any location on the screen",
             55  =>  "Choose File...",
             56  =>  "Attached files:",
             57  =>  "Last time you did not add the task. This is something that you have attached!",
@@ -449,7 +455,7 @@ class Lang_controller
             65  =>  "Delivered",
             66  =>  "The project: ",
             67  =>  "You have not created any task!",
-            68  =>  "Maximum file size 10 MB",
+
             'status_task_0'      =>  'Supplied',
             'status_task_1'      =>  'Running',
             'status_task_2'      =>  'Implemented',
