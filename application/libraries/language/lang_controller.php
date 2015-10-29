@@ -10,11 +10,6 @@ class Lang_controller
 	public function getLang($segment = 'ru')
 	{
         /**
-         * Email Администратора ну или просто сутенера этого сайта
-         */
-        $lang['emailAdminSite'] = 'admin@timebig.ru';
-
-        /**
          * Общее для всех языков
          * The total for all languages
          */
@@ -538,7 +533,6 @@ class Lang_controller
 
         //DON'T TOUCH!!!
         $lang['lang_'.$segment]['languages_desc']       =   $lang['languages_desc'];
-        $lang['lang_'.$segment]['emailAdminSite']       =   $lang['emailAdminSite'];
         $lang['lang_'.$segment]['input_form_lang']      =   $lang['input_form_lang'];
         $lang['lang_'.$segment]['header_menu_lang']     =   $lang['header_menu_lang'];
         $lang['lang_'.$segment]['js'][2]                =   $lang['lang_'.$segment]['task_views'][14];

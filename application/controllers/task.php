@@ -43,6 +43,109 @@ class Task extends CI_Controller {
         $this->display_lib->display($data, $config['pathToViewDir']);
 	}
 
+
+    /**
+     * Создаем постраничную навигацию
+     * Create a page navigation
+     * @param $data
+     */
+    private function _getNavigation(&$data, $idProject)
+    {
+        $this->load->model('task_model');
+
+        if($data['curent_page'] < 1)
+            $data['curent_page'] = 0;
+
+
+        if(isset($data['countTaskInProject_all']))
+            $allCountTask = $data['countTaskInProject_all'];
+        else
+            $allCountTask = $data['countProject_all'];
+
+
+        //узнаем количество людей всего
+        if($allCountTask <= 0)
+        {
+            $data['pagination'] = ['status'=>'error'];
+            return true;
+        }
+
+        $num_per_page = 0;
+        //узнаем сколько страниц навигации будет
+        if($allCountTask != 1)
+        {
+            $num_per_page = (int)($allCountTask/$data['countOnPage']);
+            if($num_per_page == 0)
+                $num_per_page = 1;
+            else
+            {
+                if(($allCountTask % $data['countOnPage']) != 0)
+                    $num_per_page++;
+            }
+
+
+            //если текущая страница больше того что есть
+            if($data['curent_page'] > $num_per_page)
+                $data['curent_page'] = $num_per_page - 1;
+
+
+            $pervpage = $nextpage = $page2left = $page1left = $page2right = $page1right = $last = $main = '';
+            //do navigation
+            if($num_per_page > 1)
+            {
+                //делаем надписи "В конец" и "В начало"
+                if((($num_per_page-1) - $data['curent_page']) > 2)
+                    $last = $this->_paginHtmlComment(($num_per_page-1), "Последняя", $idProject);
+                if($data['curent_page'] > 2)
+                    $main = "<li ><a href='' id='' onClick='getAllTask(".$idProject.", 0); return false;'>Первая</a></li>";
+
+                // Проверяем нужны ли стрелки назад
+                if ($data['curent_page'] != 0)
+                    $pervpage = $this->_paginHtmlComment(($data['curent_page']-1),"Предыдущая", $idProject);
+                // Проверяем нужны ли стрелки вперед
+                if ($data['curent_page'] != ($num_per_page - 1))
+                    $nextpage = $this->_paginHtmlComment(($data['curent_page']+1),"Следующая", $idProject);
+
+                // Находим две ближайшие станицы с левого края
+                if(($data['curent_page'] - 2) > -1)
+                    $page2left = $this->_paginHtmlComment(($data['curent_page']-2),($data['curent_page']-1), $idProject);
+
+                if(($data['curent_page'] - 1) > -1)
+                    $page1left = $this->_paginHtmlComment(($data['curent_page']-1),$data['curent_page'], $idProject);
+
+                // Находим две ближайшие станицы с правого края
+                if($data['curent_page'] + 2 <= ($num_per_page-1))
+                    $page2right = $this->_paginHtmlComment(($data['curent_page']+2),($data['curent_page']+3), $idProject);
+                if($data['curent_page'] + 1 <= ($num_per_page - 1))
+                    $page1right = $this->_paginHtmlComment(($data['curent_page']+1),($data['curent_page']+2), $idProject);
+
+                $page = "<li class='active'><a  onClick='return false;'>".($data['curent_page']+1)."</a></li>";
+
+                // Вывод навигации
+                $data['pagination'] = ['status'=>'success', 'pagination'=> "<div class='clearfix hideForWaitAll_'><div class='pagination no-margin'><ul>".$main.$pervpage.$page2left.$page1left.$page.$page1right.$page2right.$nextpage.$last."</ul></div></div>"];
+            }
+            else
+                $data['pagination'] = ['status'=>'error'];
+        }
+
+
+    }
+
+    /*
+	* Возвращает строку с навигацией  для комментариев (для mysexstory)
+	*
+	* $num - число для подстановки в вид, нужно для аякса
+	* $title - название той самой кнопки навигации
+	*/
+    private function _paginHtmlComment($num = 0, $title = '<-|->', $idProject)
+    {
+        if($idProject > 0)
+            return "<li ><a href='' id='' onClick='getAllTask(".$idProject.", ".$num."); return false;'>".$title."</a></li>";
+        else
+            return "<li ><a href='' id='' onClick='getAllTask(undefined, ".$num."); return false;'>".$title."</a></li>";
+    }
+
+
     /**
      * Получаем некоторые данные, нужные для добавления задачи и в переменной $data['renderViewTask'] содержится вид всех задач
      * We get some data necessary to add tasks and in the variable $data['renderViewTask'] view shows all tasks
@@ -56,6 +159,14 @@ class Task extends CI_Controller {
             $data['myProjects'] = $this->_getProject($data['idUser']);
             if(!empty($data['myProjects']))
             {
+                //c какой страницы начинать (отсчет начинается с 0)
+                $data['from'] = intval($this->input->post('from'));
+                //текущая страница
+                $data['curent_page'] =  $data['from'];//intval($this->input->post('current_page'));
+                //число записей на странице
+                $data['countOnPage'] = 5;
+                $data['from'] *= $data['countOnPage'];
+
                 //получаем всех юзеров, которые прикрепленны к самому первому проекту, чтобы при добавлении задачи их показать
                 $data['myProjects'][0]['userInProject'] = $this->common_model->getResult('users', 'id_user', explode(',', $data['myProjects'][0]['team_ids']), 'result_array', 'id_user, name, login', null, '', true);
 
@@ -66,12 +177,20 @@ class Task extends CI_Controller {
                 $this->load->model('task_model');
 
                 //считаем общее количество задач и количество задач для каждого проекта
+                //тупанул и написал вместо Task, Project
                 $data['countProject_all'] = 0;
                 $data['allIdProjects'] = $allIdProjects;
                 foreach($allIdProjects as $id)
                 {
                     $data['countTask']['countProject_'.$id] = $this->task_model->getAllTasks([$id], $data['segment']);
                     $data['countProject_all'] += $data['countTask']['countProject_'.$id];
+                }
+
+                //общее количество задач для конкретного проекта, а не для всех проектов
+                if($idProject > 0)
+                {
+                    if(isset($data['countTask']['countProject_'.$idProject]))
+                        $data['countTaskInProject_all'] = $data['countTask']['countProject_'.$idProject];
                 }
 
                 //если через ajax пытаемся достать задания по какому либо проекту, то вот это...
@@ -85,15 +204,18 @@ class Task extends CI_Controller {
                     }
 
                     //[15, 0]: 15 - по сколько записей выводить на страницу. 0 - с первой страницы начинать
-                    $data['allTasks'] = $this->task_model->getAllTasks([$idProject], $data['segment'], [15, 0]);
+                    $data['allTasks'] = $this->task_model->getAllTasks([$idProject], $data['segment'], [$data['countOnPage'], $data['from']]);
                 }
                 //получаем все задания для всех проектов
                 else
-                    $data['allTasks'] = $this->task_model->getAllTasks($allIdProjects, $data['segment'], [15, 0]);
+                    $data['allTasks'] = $this->task_model->getAllTasks($allIdProjects, $data['segment'], [$data['countOnPage'], $data['from']]);
 
 
+                //делаем так, что вначале нет навигации
+                $data['pagination']['status'] = 'error';
                 if(!empty( $data['allTasks'] ))
                 {
+                    $this->_getNavigation($data, $idProject);
                     foreach($data['allTasks'] as $k=>$task)
                     {
                         switch($task['time_for_complete_value'])

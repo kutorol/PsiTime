@@ -45,8 +45,6 @@ if (defined('ENVIRONMENT'))
 	}
 }
 
-require_once 'config.php';
-
 /*
  *---------------------------------------------------------------
  * SYSTEM FOLDER NAME
@@ -200,6 +198,7 @@ require_once 'config.php';
  * And away we go...
  *
  */
+require_once 'config.php';
 require_once BASEPATH.'core/CodeIgniter.php';
 
 /* End of file index.php */

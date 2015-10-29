@@ -294,8 +294,9 @@ function attachUsers(id, name, modal)
  * Получаем все задачи для всех проектов
  * We get all the tasks for all projects
  */
-function getAllTask(idProject)
+function getAllTask(idProject, from)
 {
+    from = (from === undefined) ? 0 : parseInt(from);
     var idProject = (idProject === undefined) ? 0 : parseInt(idProject);
     //шаблон ajax запроса
     ajaxRequestJSON("task/getAllTask");
@@ -303,7 +304,7 @@ function getAllTask(idProject)
         dataType: "html"
     });
     $.ajax({
-        data: {idProject: idProject},
+        data: {idProject: idProject, curent_page: from, from: from},
         success: function(data)
         {
             var jsonResponse = $.parseJSON(data);
@@ -372,6 +373,9 @@ $(function() {
             addTaskForm.fadeOut(150, function(){
                 allTasks.fadeIn(150);
                 getAllTask();
+                //делаем активной вкладку "все проекты", т.к. после добавления задачи именно они достаются.
+                //FIXME сделать так, чтобы доставались задачи с активной вкладки и перекидывалось на их главную страницу
+                $("#allProjectsTasks").click();
             });
         }
     });

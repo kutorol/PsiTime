@@ -1,4 +1,4 @@
-<?php
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 define('IS_FILL_KEY', 'a53d6030b');
 /**
@@ -14,7 +14,7 @@ define('HOST_DB', 'localhost');
  * Первоначальные данные администратора
  * Initial data administrator
  */
-define('ADMIN_EMAIL', 'admin@admin.ru');
+define('ADMIN_EMAIL', 'admin@admin.ru'); //на email будут высылаться системные уведомления
 define('ADMIN_PASS', 'admin');
 define('ADMIN_LOGIN', 'admin');
 define('ADMIN_NAME', 'Administrator');

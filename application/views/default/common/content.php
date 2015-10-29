@@ -258,7 +258,7 @@ if($statusUser == 1):?>
                 <!--ALL PROJECTS-->
                 <?php if(!empty($myProjects)):?>
                     <div class="list-group" id="menu-projects">
-                        <a href="#" class="active list-group-item navigate-project" onclick="getAllTask();"><?=$task_views[63]?>  <span class="badge" id="countProject_all"><?=$countProject_all?></span></a>
+                        <a href="#" id="allProjectsTasks" class="active list-group-item navigate-project" onclick="getAllTask();"><?=$task_views[63]?>  <span class="badge" id="countProject_all"><?=$countProject_all?></span></a>
                     <?php foreach($myProjects as $key=>$project):?>
                         <a href="#" class="list-group-item navigate-project" onclick="getAllTask(<?=$project['id_project']?>);"><?=$project['title']?>  <span class="badge" id="countProject_<?=$project['id_project']?>"><?=$countTask['countProject_'.$project['id_project']]?></span></a>
                     <?php endforeach;?>
