@@ -12,8 +12,8 @@
 class Task extends CI_Controller {
 
     /**
-     * Главная страница личного кабинета
-     * Home private office
+     * Главная страница личного кабинета. Тут же добавляется задача и тут же их можно просматривать
+     * Home private office. Immediately add tasks and then you can view them
      */
 	public function index()
 	{
@@ -26,6 +26,7 @@ class Task extends CI_Controller {
             'pattern'           =>  ['pattern'=>['title', 'login', '%login%']]
         ];
         $data = $this->common->allInit($config);
+        //разрешаем загрузку файлов на сайт через ajax (если isset attachUploadSripts, то подгружаем нужные скрипты)
         $data['attachUploadSripts'] = true;
         $this->load->model('common_model');
         $this->_additionalGetTask($data);
@@ -45,106 +46,112 @@ class Task extends CI_Controller {
 
 
     /**
-     * Создаем постраничную навигацию
-     * Create a page navigation
+     * Создаем постраничную навигацию. Результат храниться в $data['pagination']
+     * Create a page navigation.  The result is stored in $data['pagination']
      * @param $data
+     * @param $idProject - если 0, то навигацию делаем для всех задач. Если > 1, то для конкретного проекта делаем
      */
     private function _getNavigation(&$data, $idProject)
     {
-        $this->load->model('task_model');
-
+        $data['pagination'] = ['status'=>'error'];
+        //текущая страница. Если она равна 5, то в виде она будет обозначена как 6.
         if($data['curent_page'] < 1)
             $data['curent_page'] = 0;
 
 
-        if(isset($data['countTaskInProject_all']))
-            $allCountTask = $data['countTaskInProject_all'];
-        else
-            $allCountTask = $data['countProject_all'];
+        //если выборка происходило по конкретному проекту, то и количество задач у него другое.
+        $allCountTask = (isset($data['countTaskInProject_all'])) ? $data['countTaskInProject_all'] : $data['countProject_all'];
 
-
-        //узнаем количество людей всего
+        //если нет задач вообще, то это ошибка
         if($allCountTask <= 0)
-        {
-            $data['pagination'] = ['status'=>'error'];
-            return true;
-        }
+            return;
 
-        $num_per_page = 0;
         //узнаем сколько страниц навигации будет
+        $countPage = 0;
         if($allCountTask != 1)
         {
-            $num_per_page = (int)($allCountTask/$data['countOnPage']);
-            if($num_per_page == 0)
-                $num_per_page = 1;
+            $countPage = (int)($allCountTask/COUNT_OBJECT_PER_PAGE);
+            if($countPage == 0)
+                $countPage = 1;
             else
             {
-                if(($allCountTask % $data['countOnPage']) != 0)
-                    $num_per_page++;
+                if(($allCountTask % COUNT_OBJECT_PER_PAGE) != 0)
+                    $countPage++;
             }
 
+            //количество ссылок по бокам от текущей страницы
+            $countLinkLeft = (COUNT_LINK_FOR_PAGINATION % 2 == 0) ? COUNT_LINK_FOR_PAGINATION / 2 : COUNT_LINK_FOR_PAGINATION - ceil(COUNT_LINK_FOR_PAGINATION/2);
+            $countLinkRight = COUNT_LINK_FOR_PAGINATION - $countLinkLeft;
 
             //если текущая страница больше того что есть
-            if($data['curent_page'] > $num_per_page)
-                $data['curent_page'] = $num_per_page - 1;
+            if($data['curent_page'] > $countPage)
+                $data['curent_page'] = $countPage - 1;
 
 
-            $pervpage = $nextpage = $page2left = $page1left = $page2right = $page1right = $last = $main = '';
+            $pervPage = $nextPage = $last = $main = '';
             //do navigation
-            if($num_per_page > 1)
+            if($countPage > 1)
             {
-                //делаем надписи "В конец" и "В начало"
-                if((($num_per_page-1) - $data['curent_page']) > 2)
-                    $last = $this->_paginHtmlComment(($num_per_page-1), "Последняя", $idProject);
+                //делаем ссылку "Последняя"
+                if((($countPage-1) - $data['curent_page']) > 2)
+                    $last = $this->_paginHtmlComment(($countPage-1), "Последняя", $idProject);
+
+                //делаем ссылку "Первая"
                 if($data['curent_page'] > 2)
-                    $main = "<li ><a href='' id='' onClick='getAllTask(".$idProject.", 0); return false;'>Первая</a></li>";
+                    $main = $this->_paginHtmlComment(0,"Первая", $idProject);
 
-                // Проверяем нужны ли стрелки назад
+                //делаем ссылку "Предыдущая"
                 if ($data['curent_page'] != 0)
-                    $pervpage = $this->_paginHtmlComment(($data['curent_page']-1),"Предыдущая", $idProject);
-                // Проверяем нужны ли стрелки вперед
-                if ($data['curent_page'] != ($num_per_page - 1))
-                    $nextpage = $this->_paginHtmlComment(($data['curent_page']+1),"Следующая", $idProject);
+                    $pervPage = $this->_paginHtmlComment(($data['curent_page']-1),"Предыдущая", $idProject);
 
-                // Находим две ближайшие станицы с левого края
-                if(($data['curent_page'] - 2) > -1)
-                    $page2left = $this->_paginHtmlComment(($data['curent_page']-2),($data['curent_page']-1), $idProject);
+                //делаем ссылку "Следующая"
+                if ($data['curent_page'] != ($countPage - 1))
+                    $nextPage = $this->_paginHtmlComment(($data['curent_page']+1),"Следующая", $idProject);
 
-                if(($data['curent_page'] - 1) > -1)
-                    $page1left = $this->_paginHtmlComment(($data['curent_page']-1),$data['curent_page'], $idProject);
+                //получаем все ссылки слева от текущей страницы
+                $page2left = [];
+                for($i = 0; $i < $countLinkLeft; $i++)
+                {
+                    $j = $i+1;
+                    // Находим две ближайшие станицы с левого края
+                    if(($data['curent_page'] - $j) > -1)
+                        $page2left[] = $this->_paginHtmlComment(($data['curent_page']-$j), ($data['curent_page']-$i), $idProject);
+                }
+                //последнюю ячейку массива делаем первой, а то нумерация навигации будет вида 3 2 1 4 5 6 7 и т.д., а если сделать array_reverse, то будет 1 2 3 4 5 6 7 и т.д.
+                if(!empty($page2left))
+                    $page2left = array_reverse($page2left);
 
-                // Находим две ближайшие станицы с правого края
-                if($data['curent_page'] + 2 <= ($num_per_page-1))
-                    $page2right = $this->_paginHtmlComment(($data['curent_page']+2),($data['curent_page']+3), $idProject);
-                if($data['curent_page'] + 1 <= ($num_per_page - 1))
-                    $page1right = $this->_paginHtmlComment(($data['curent_page']+1),($data['curent_page']+2), $idProject);
-
-                $page = "<li class='active'><a  onClick='return false;'>".($data['curent_page']+1)."</a></li>";
+                //получаем все ссылки справа от текущей страницы
+                $page2right = [];
+                for($i = 1; $i <= $countLinkRight; $i++)
+                {
+                    if($data['curent_page'] + $i <= ($countPage - 1))
+                        $page2right[] = $this->_paginHtmlComment(($data['curent_page']+$i),($data['curent_page']+$i+1), $idProject);
+                }
+                //текущая активная ссылка, которую нельзя нажать
+                $currentPage = $this->_paginHtmlComment(null, $data['curent_page']+1);
 
                 // Вывод навигации
-                $data['pagination'] = ['status'=>'success', 'pagination'=> "<div class='clearfix hideForWaitAll_'><div class='pagination no-margin'><ul>".$main.$pervpage.$page2left.$page1left.$page.$page1right.$page2right.$nextpage.$last."</ul></div></div>"];
+                $data['pagination'] = ['status'=>'success', 'pagination'=> "<div class='clearfix'><div class='pagination no-margin'><ul>".$main.$pervPage.implode('',$page2left).$currentPage.implode('',$page2right).$nextPage.$last."</ul></div></div>"];
             }
-            else
-                $data['pagination'] = ['status'=>'error'];
         }
-
-
     }
 
-    /*
-	* Возвращает строку с навигацией  для комментариев (для mysexstory)
-	*
-	* $num - число для подстановки в вид, нужно для аякса
-	* $title - название той самой кнопки навигации
-	*/
-    private function _paginHtmlComment($num = 0, $title = '<-|->', $idProject)
+    /**
+     * Возвращает строку с постраничной навигацией
+     * Returns a string with pagination
+     * @param int $num - номер страницы. Начиная с 0. (page number. Beginning with 0.)
+     * @param string $title - название той самой кнопки навигации (the very name of the navigation buttons)
+     * @param int $idProject - если 0, то навигацию делаем для всех задач. Если > 1, то для конкретного проекта делаем
+     * @return string
+     */
+    private function _paginHtmlComment($num = 0, $title = 'notTitle', $idProject = 0)
     {
-        if($idProject > 0)
-            return "<li ><a href='' id='' onClick='getAllTask(".$idProject.", ".$num."); return false;'>".$title."</a></li>";
+        if(is_null($num))
+            return "<li class='active'><a  onClick='return false;'>".$title."</a></li>";
         else
-            return "<li ><a href='' id='' onClick='getAllTask(undefined, ".$num."); return false;'>".$title."</a></li>";
+            return "<li ><a href='' id='' onClick='getAllTask(".$idProject.", ".$num."); return false;'>".$title."</a></li>";
     }
-
 
     /**
      * Получаем некоторые данные, нужные для добавления задачи и в переменной $data['renderViewTask'] содержится вид всех задач
@@ -163,9 +170,8 @@ class Task extends CI_Controller {
                 $data['from'] = intval($this->input->post('from'));
                 //текущая страница
                 $data['curent_page'] =  $data['from'];//intval($this->input->post('current_page'));
-                //число записей на странице
-                $data['countOnPage'] = 5;
-                $data['from'] *= $data['countOnPage'];
+                //с какой записи начинать выборку (выбранную страницу умножаем на количество задач на странице)
+                $data['from'] *= COUNT_OBJECT_PER_PAGE;
 
                 //получаем всех юзеров, которые прикрепленны к самому первому проекту, чтобы при добавлении задачи их показать
                 $data['myProjects'][0]['userInProject'] = $this->common_model->getResult('users', 'id_user', explode(',', $data['myProjects'][0]['team_ids']), 'result_array', 'id_user, name, login', null, '', true);
@@ -204,11 +210,11 @@ class Task extends CI_Controller {
                     }
 
                     //[15, 0]: 15 - по сколько записей выводить на страницу. 0 - с первой страницы начинать
-                    $data['allTasks'] = $this->task_model->getAllTasks([$idProject], $data['segment'], [$data['countOnPage'], $data['from']]);
+                    $data['allTasks'] = $this->task_model->getAllTasks([$idProject], $data['segment'], [COUNT_OBJECT_PER_PAGE, $data['from']]);
                 }
                 //получаем все задания для всех проектов
                 else
-                    $data['allTasks'] = $this->task_model->getAllTasks($allIdProjects, $data['segment'], [$data['countOnPage'], $data['from']]);
+                    $data['allTasks'] = $this->task_model->getAllTasks($allIdProjects, $data['segment'], [COUNT_OBJECT_PER_PAGE, $data['from']]);
 
 
                 //делаем так, что вначале нет навигации
@@ -306,7 +312,6 @@ class Task extends CI_Controller {
         }
         else
             return $this->common_model->getResult('projects', 'responsible', $idIser, $return, $select, 'id_project');
-
     }
 
     /**
@@ -841,7 +846,7 @@ class Task extends CI_Controller {
      * @param $src - название документа с его расширением (document title with its expansion)
      * @return bool
      */
-    public function download($src)
+    public function download($idTask = 'undefined', $src)
     {
         $config = [
             'pathToViewDir'     =>  'common',
@@ -853,7 +858,10 @@ class Task extends CI_Controller {
         $data = $this->common->allInit($config);
 
         $src = $this->common->clear($src);
-        $filePath = './img/temp/'.$data['login'].'/'.$src;
+        if(is_numeric($idTask))
+            $filePath = './file/tasks/'.intval($idTask).'/'.$src;
+        else
+            $filePath = './img/temp/'.$data['login'].'/'.$src;
         if(file_exists($filePath))
         {
             //заголовок, что сейчас будем скачивать данный файл
@@ -874,29 +882,35 @@ class Task extends CI_Controller {
     public function delAttach()
     {
         //проверяем на ajax и его параметры
-        $response = $this->common->isAjax(["src",'str']);
+        $response = $this->common->isAjax(["src",'str'], ['idTask', 'int', 'noZero']);
         if($response['status'] != 'error')
         {
             $data = $response['data'];
             unset($response['data']);
 
             $src = $this->common->clear($this->input->post('src'));
+            $idTask = intval($this->common->clear($this->input->post('idTask')));
 
             $src = explode('/', $src);
             $src = $src[count($src)-1];
-            $path = './img/temp/'.$data['login'].'/'.$src;
-
+            if($idTask <= 0)
+                $path = './img/temp/'.$data['login'].'/';
+            else
+                $path = './file/tasks/'.$idTask.'/';
+            log_message('error', $path.$src);
             $response = ['status' => 'success'];
-            if(file_exists($path))
+            if(file_exists($path.$src))
             {
-                unlink($path);
+                unlink($path.$src);
+                log_message('error', $path.$src);
 
                 //если папка пуста, то удаляем ее
-                $tempAttachFileDir = './img/temp/'.$data['login'].'/';
-                if(file_exists($tempAttachFileDir))
+                if(file_exists($path))
                 {
+                    log_message('error', $path.$src);
+
                     $files = [];
-                    $descriptor = opendir($tempAttachFileDir);
+                    $descriptor = opendir($path);
                     while($v = readdir($descriptor))
                     {
                         if($v == '.' || $v == '..')
@@ -907,11 +921,11 @@ class Task extends CI_Controller {
 
                     //удаляем папку
                     if(empty($files))
-                        rmdir($tempAttachFileDir);
+                        rmdir($path);
                 }
             }
             else
-                $response = ['status' => 'error', 'resultTitle'=> $data['languages_desc'][0]['titleError'][$data['segment']], 'resultText'=> $data['task_controller'][3]];
+                $response = ['status' => 'error', 'resultTitle'=> $data['languages_desc'][0]['titleError'][$data['segment']], 'resultText'=> $data['task_controller'][3]." ".$data['task_controller'][4], 'deleteView'=>true];
         }
 
         echo json_encode($response);
@@ -925,18 +939,20 @@ class Task extends CI_Controller {
     public function addTaskAttachFile()
     {
         //проверяем на ajax и его параметры
-        $response = $this->common->isAjax(["userfile",'int'], ['avatarOrNot', 'int', 'notZero']);
+        $response = $this->common->isAjax(["userfile",'int'], ['avatarOrNot', 'int', 'notZero'], ['idTask', 'int', 'notZero']);
         if($response['status'] != 'error')
         {
+            $data = $response['data'];
+            unset($response['data']);
+
             /**
              * Если равно 0, то это добавляем картинку к задаче. Если 1 - изменяем аватар у юзера
              */
             $avatarOrNot = intval($this->input->post('avatarOrNot', true));
+            $idTask = intval($this->input->post('idTask', true));
 
-            $data = $response['data'];
-            unset($response['data']);
 
-            $fileSize = ($avatarOrNot == 0) ? 62914560 : 10485760;
+            $fileSize = ($avatarOrNot == 0 || $avatarOrNot == 2) ? 62914560 : 10485760;
             if($_FILES['userfile']['size'] <= $fileSize)//60Mb // 10485760) //10Mb
             {
                 //получаем имя файла и обрабатываем
@@ -948,29 +964,33 @@ class Task extends CI_Controller {
                 $fileName = $fileName.'--'.$hash;
 
                 $tempPath = 'img/';
-                if($avatarOrNot == 0)
+                if($avatarOrNot == 0 || $avatarOrNot == 2)
                 {
                     //создаем папку временную, если ее не было
-                    $tempPath .= 'temp/'.$data['login'].'/';
-                    $this->_createFolder($tempPath);
+                    if($avatarOrNot == 2)
+                        $tempPath = 'file/tasks/'.$idTask.'/';
+                    else
+                        $tempPath .= 'temp/'.$data['login'].'/';
 
                     //если расширение неизвестное, то запаковываем в zip архив
                     $ext = $this->_findExt($endExt);
                 }
+
+                $this->_createFolder($tempPath);
 
 
 
                 $config = [];
                 $config['upload_path'] = './'.$tempPath;
                 $config['file_name'] = $fileName.'.'.$endExt;
-                $config['allowed_types'] = ($avatarOrNot == 0) ? '*' : "gif|jpg|png|jpeg|bmp"; //все типы файлов
+                $config['allowed_types'] = ($avatarOrNot == 0 || $avatarOrNot == 2) ? '*' : "gif|jpg|png|jpeg|bmp"; //все типы файлов
                 $config['remove_spaces']  = TRUE;
                 $this->load->library('upload', $config);
 
                 if($this->upload->do_upload())
                 {
                     //если обновляем аватар
-                    if($avatarOrNot >= 1)
+                    if($avatarOrNot == 1)
                     {
                         $this->load->model('common_model');
                         $q = $this->common_model->getResult('users', 'id_user', $data['idUser'], 'row_array', 'img');
@@ -1037,7 +1057,6 @@ class Task extends CI_Controller {
         echo json_encode($response);
     }
 
-
     /**
      * Проверяем, есть ли у человека такой проект, или же он прикреплен к нему!
      * We check whether a person has such a project, or whether it is attached to it!
@@ -1066,7 +1085,6 @@ class Task extends CI_Controller {
 
         return ['status'=>'success', 'team_ids' => $checkProject['team_ids']];
     }
-
 
     /**
      * Получаем все логины, которые привязаны к конкретному проекту
@@ -1110,7 +1128,6 @@ class Task extends CI_Controller {
 
         echo json_encode($response);
     }
-
 
     /**
      * Получаем все файлы с их расширениями содержащиеся во временной папке или уже в полноценной
@@ -1193,7 +1210,6 @@ class Task extends CI_Controller {
         return false;
     }
 
-
     /**
      * Функция обновления рабочего времени для юзеров
      * Update feature of working time for users
@@ -1259,7 +1275,6 @@ class Task extends CI_Controller {
 
        return $updateUser;
     }
-
 
     /**
      * (AJAX)
@@ -1382,4 +1397,62 @@ class Task extends CI_Controller {
         echo json_encode($response);
     }
 
+
+    public function view($idTask)
+    {
+        $config = [
+            'pathToViewDir'     =>  'common/task/view',
+            'langArray_1'       =>  'task_controller',
+            'langArray_2'       =>  12,
+            'authUser'          =>  true,
+            'noRedirect'        =>  false, //false - редиректим, true - возвращаем ошибку
+        ];
+        $data = $this->common->allInit($config);
+
+        $fail = true;
+        $idTask = intval($this->common->clear($idTask));
+        $fail = $this->common->checkData($idTask, true);
+        if($fail === false)
+            $this->common->redirect_to('task', $data['task_views'][6]);
+
+        $this->load->model('task_model');
+        $this->load->model('common_model');
+        //получаем информацию по одной задаче
+        $data['infoTask'] = $this->task_model->getInfoTask($idTask, $data['segment']);
+        if(empty($data['infoTask']))
+            $this->common->redirect_to('task', "Такой задачи не существует");
+
+        //проверям, что это проект юзера
+        $check = $this->_checkProject($data['infoTask']['project_id'], $data);
+        if($check['status'] == 'error')
+            $this->common->redirect_to('task', "Вы трогаете чужие проекты");
+
+        $data['infoTask']['time_add'] = date("Y-m-d H:i:s", $data['infoTask']['time_add']);
+        if(is_numeric($data['infoTask']['time_start']))
+            $data['infoTask']['time_start'] = date("Y-m-d H:i:s", $data['infoTask']['time_start']);
+
+        switch($data['infoTask']['time_for_complete_value'])
+        {
+            case '0':     $data['infoTask']['time_for_complete_value'] = mb_substr($data['task_views'][47], 0, 1, 'utf8'); break;
+            case '1':     $data['infoTask']['time_for_complete_value'] = mb_substr($data['task_views'][48], 0, 1, 'utf8'); break;
+            case '2':     $data['infoTask']['time_for_complete_value'] = mb_substr($data['task_views'][49], 0, 1, 'utf8'); break;
+            case '3':     $data['infoTask']['time_for_complete_value'] = mb_substr($data['task_views'][50], 0, 1, 'utf8'); break;
+            case '4':     $data['infoTask']['time_for_complete_value'] = mb_substr($data['task_views'][51], 0, ($data['segment'] == 'ru') ? 3 : 4, 'utf8'); break;
+        }
+
+        //разрешаем загрузку файлов на сайт через ajax (если isset attachUploadSripts, то подгружаем нужные скрипты)
+        $data['attachUploadSripts'] = true;
+        $data['filesAttach'] = $this->_getAllAttach($data['infoTask']['id_task'], null, $data['task_controller'][9]);
+        if(isset($data['filesAttach']['status']) || @empty($data['filesAttach']))
+            unset($data['filesAttach']);
+
+        //приоритет задания
+        $data['priority'] =  $this->common_model->getResult('priority', '', '', 'result_array', 'id_priority, icon, title_'.$data['segment'], 'id_priority', 'asc');
+        //сложность задания
+        $data['complexity'] = $this->common_model->getResult('complexity', '', '', 'result_array', 'id_complexity, color, name_complexity_'.$data['segment'], 'id_complexity', 'asc');
+        //доделываем название страницы
+        $data['title'] .= ' "'.$data['infoTask']['title'].'"';
+
+        $this->display_lib->display($data, $config['pathToViewDir']);
+    }
 }

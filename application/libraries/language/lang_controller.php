@@ -132,7 +132,6 @@ class Lang_controller
             0   =>  'Добро пожаловать в TimeBig',
             1   =>  $lang['input_form_lang'][0][$segment],
             2   =>  $lang['input_form_lang'][2][$segment],
-            3   =>  'На данный момент вам нужно дождаться активации от администратора!',
             4   =>  'Вы вошли под логином - ',
             5   =>  'Пользователя с таким логином и паролем не найдено!',
             6   =>  'Введите все данные в форму!',
@@ -144,7 +143,7 @@ class Lang_controller
                         '</i></b>'
                     ],
             11  =>  'На указанную почту было отправлено письмо с новым паролем!',
-            12  =>  'Ошибка! Не получилось отправить письмо на указанную почту.%s%',
+            12  =>  'Ошибка! Не получилось отправить письмо на указанную почту. %s%',
             13  =>  'Ошибка! Не получилось обновить данные. Попробуйте еще раз.',
             14  =>  'Пользователя с таким email не найдено!',
             15  =>  'Введите ваш email в форму!',
@@ -154,7 +153,7 @@ class Lang_controller
             19  =>  [
                         ', вы зарегистрировались в TimeBig. <br>Ваш логин: <b>',
                         '</b><br> Ваш пароль: <b><i>',
-                        '</i></b>. <br>'
+                        '</i></b>.'
                     ],
             20  =>  ', добро пожаловать в TimeBig!',
             21  =>  'На указанную почту было отправлено письмо с вашими данными и дальнейшими действиями!',
@@ -185,7 +184,6 @@ class Lang_controller
             0   =>  'Welcome to TimeBig',
             1   =>  $lang['input_form_lang'][0][$segment],
             2   =>  $lang['input_form_lang'][2][$segment],
-            3   =>  'At this point you need to wait for the activation of the administrator!',
             4   =>  'You went under the login - ',
             5   =>  'User with such password and username are not found!',
             6   =>  'Enter data into the form!',
@@ -207,7 +205,7 @@ class Lang_controller
             19  =>  [
                 ', you are logged in TimeBig. <br>Your login: <b>',
                 '</b><br> Your password: <b><i>',
-                '</i></b>. <br>'
+                '</i></b>.'
             ],
             20  =>  ', welcome to TimeBig!',
             21  =>  'On the specified e-mail was sent an email with your data and further actions!',
@@ -228,7 +226,6 @@ class Lang_controller
 
         ];
 
-        $lang['lang_'.$segment]['welcome_controller'][19][2] .= $lang['lang_'.$segment]['welcome_controller'][3];
 
 
         /********************************************
@@ -256,7 +253,6 @@ class Lang_controller
             4   =>  'Very strange error ... Try again to login!',
             5   =>  'What is wrong cookies! I ask not fun!',
         ];
-        $lang['lang_'.$segment]['common_library'][3] = $lang['lang_'.$segment]['welcome_controller'][3];
 
 
 
@@ -279,6 +275,7 @@ class Lang_controller
             9       =>  'Вы пытаетесь совершить невозможное действие! Не верно переданны параметры в функцию.',
             10      =>  'Вы пытаетесь использовать чужой проект!',
             11      =>  'Выбранный исполнитель не существует или не прикреплен к этому проекту!',
+            12      =>  'Просмотр задачи:',
 
         ];
 
@@ -300,6 +297,7 @@ class Lang_controller
             9       =>  'You are trying to do the impossible action! Not right to pass parameters to the function.',
             10      =>  'You are trying to use someone elses project!',
             11      =>  'The selected artist does not exist or is not attached to the project!',
+            12      =>  'Viewing task:',
 
 
         ];
@@ -347,7 +345,7 @@ class Lang_controller
             34  =>  "Сложность",
             38  =>  "Название задачи",
             39  =>  "Описание",
-            40  =>  "Время рабочего дня (один раз)",
+            40  =>  "Время рабочего дня (в часах)",
             41  =>  "Можно изменить в профиле",
             44  =>  "Временные рамки задачи",
             45  =>  "Примерное время выполнения",
@@ -373,6 +371,10 @@ class Lang_controller
             65  =>  "Поставил",
             66  =>  "Проект: ",
             67  =>  "Вы не создали ни одной задачи!",
+            68  =>  "Открыть",
+            69  =>  "Задача поставлена: ",
+            70  =>  "Начало работы: ",
+            71  =>  " редактирование задачи",
 
             'status_task_0'      =>  'Поставлена',
             'status_task_1'      =>  'Выполняется',
@@ -424,7 +426,7 @@ class Lang_controller
             34  =>  "Complexity",
             38  =>  "Task title",
             39  =>  "Description",
-            40  =>  "The time of the day (once)",
+            40  =>  "The time of the day (hours)",
             41  =>  "Can be changed in profile",
             44  =>  "Timeframe task",
             45  =>  "Estimated time to complete",
@@ -450,6 +452,10 @@ class Lang_controller
             65  =>  "Delivered",
             66  =>  "The project: ",
             67  =>  "You have not created any task!",
+            68  =>  "Open",
+            69  =>  "The task posed: ",
+            70  =>  "The beginning of work: ",
+            71  =>  " editing task",
 
             'status_task_0'      =>  'Supplied',
             'status_task_1'      =>  'Running',
@@ -551,6 +557,8 @@ class Lang_controller
         $lang['lang_'.$segment]['js'][40]               =   $lang['lang_'.$segment]['task_views'][46];
         $lang['lang_'.$segment]['js'][42]               =   $lang['lang_'.$segment]['task_views'][61];
         $lang['lang_'.$segment]['js'][43]               =   $lang['lang_'.$segment]['task_views'][62];
+        $lang['lang_'.$segment]['js'][44]               =   $lang['lang_'.$segment]['task_views'][58];
+        $lang['lang_'.$segment]['js'][45]               =   $lang['lang_'.$segment]['task_views'][68];
 
 
 

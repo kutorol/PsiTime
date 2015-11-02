@@ -69,9 +69,9 @@ thead th {
     display: none;
 }
 
-/**
-* Прелоадер на весь экран
-*/
+
+/** Прелоадер на весь экран */
+/** FIXME Очень плохое перекрытие, не на 100% высоты.*/
 #prel{
     width: 100%;
     height: 100%;
@@ -121,14 +121,16 @@ thead th {
     50% {transform: translateX(-50px) scale(1.2) rotate(-260deg);background:#5b3972;border-radius:0px;}
     100% {transform: translateX(0px)}
 }
-/**
-* Конец Прелоадер на весь экран
-*/
+/** Конец Прелоадер на весь экран */
+
 
 .tagit-new{
     width: 700px;
 }
 
+
+
+/** Тут все, что связанно с добавлением файлов к новой задачи*/
 .dropzone {
     border: 3px dashed #B0A7A7;
     margin-top: 10px;
@@ -196,14 +198,15 @@ thead th {
     cursor: pointer;
 }
 
+
+
 #fileAttach .thumbnail img{
     width: 90px;
     height: 90px;
 }
+/** Конец всего, что касается загрузки файлов для новой задачи*/
 
-
-
-/*Постраничная навигация*/
+/** Постраничная навигация*/
 .pagination { margin:20px 0 }
 .pagination ul { display:inline-block; margin-left:0; margin-bottom:0; -webkit-border-radius:1px; -moz-border-radius:1px; border-radius:1px; -webkit-box-shadow:0 1px 2px rgba(0, 0, 0, 0.05); -moz-box-shadow:0 1px 2px rgba(0, 0, 0, 0.05); box-shadow:0 1px 2px rgba(0, 0, 0, 0.05) }
 .pagination ul>li { display:inline }
@@ -215,4 +218,18 @@ thead th {
 .pagination ul>li:last-child>a, .pagination ul>li:last-child>span { -webkit-border-top-right-radius:1px; -moz-border-radius-topright:1px; border-top-right-radius:1px; -webkit-border-bottom-right-radius:1px; -moz-border-radius-bottomright:1px; border-bottom-right-radius:1px }
 .pagination ul { -webkit-box-shadow:none; -moz-box-shadow:none; box-shadow:none }
 .pagination ul>li>a, .pagination ul>li>span { background-color:transparent; border:1px solid transparent; border-left-width:0 }
-/*Конец Постраничная навигация*/
+/** Конец Постраничная навигация*/
+
+.small-text{
+    font-size: 14px;
+}
+
+.btn-none{color:#fff; background-color:#777}
+.btn-none:hover,.btn-none:focus{color:#fff; background-color:#5e5e5e}
+.editTaskA{
+    outline: none;
+    border-bottom: 1px dashed; text-decoration: none; font-size: 17px;
+}
+.priehaliKinaNeBudet{
+    text-decoration: line-through;
+}

@@ -1,6 +1,6 @@
 <div class="row">
     <div class="container text-center">
-        <h2><?=$title?></h2>
+        <h2 class="<?php if(isset($infoTask['status'])){ if($infoTask['status'] == 3) echo "priehaliKinaNeBudet";}?>"><?=$title?></h2>
 
         <?php /*Если есть ошибка, то показываем ее*/
         if(isset($error)):?>

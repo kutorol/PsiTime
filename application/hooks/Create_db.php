@@ -8,7 +8,8 @@ class Create_db {
     {
         $link = @mysql_connect(HOST_DB, USER_DB, PASSWORD_DB);
         if (!$link) {
-            show_error($lang['error_1']);
+            log_message('error', $lang['error_1']);
+            show_error($lang['error_1'], 500, $lang['error_8']);
             exit;
         }
 
@@ -17,7 +18,8 @@ class Create_db {
             file_put_contents($filePath, NAME_DB);
         else
         {
-            show_error($lang['error_2'].NAME_DB."': <br>". mysql_error());
+            log_message('error', $lang['error_2'].NAME_DB."': <br>". mysql_error());
+            show_error($lang['error_2'].NAME_DB."': <br>". mysql_error(), 500, $lang['error_8']);
             exit;
         }
 
@@ -44,12 +46,29 @@ class Create_db {
         if($fail === true)
         {
             include APPPATH . 'language/db_hook/ru/install.php';
-            show_error($lang['error_3']);
+            log_message('error', $lang['error_3']);
+            show_error($lang['error_3'], 500, $lang['error_8']);
             exit;
         }
         else
             //подключаем файл со словами
             include APPPATH . 'language/db_hook/' . YOUR_LANG . '/install.php';
+
+        //если число ссылок, которые должны выводиться в навигации не являются числом - ошибка
+        if(!is_numeric(COUNT_LINK_FOR_PAGINATION) || intval(COUNT_LINK_FOR_PAGINATION) <= 0)
+        {
+            log_message('error', $lang['error_7']);
+            show_error($lang['error_7'], 500, $lang['error_8']);
+            exit;
+        }
+
+        //если число выводимых задач и прочих вещей не является числом - ошибка
+        if(!is_numeric(COUNT_OBJECT_PER_PAGE) || intval(COUNT_OBJECT_PER_PAGE) <= 2)
+        {
+            log_message('error', $lang['error_7']);
+            show_error($lang['error_9'], 500, $lang['error_8']);
+            exit;
+        }
 
         if(IS_FILL_KEY != '')
         {
@@ -86,19 +105,22 @@ class Create_db {
                 }
                 catch(Exception $e)
                 {
-                    show_error($lang['error_6'].$e->getMessage());
+                    log_message('error', $lang['error_6'].$e->getMessage());
+                    show_error($lang['error_6'].$e->getMessage(), 500, $lang['error_8']);
                     exit;
                 }
             }
             else
             {
-                show_error($lang['error_3']);
+                log_message('error', $lang['error_3']);
+                show_error($lang['error_3'], 500, $lang['error_8']);
                 exit;
             }
         }
         else
         {
-            show_error($lang['error_4_1'].substr( md5(rand()), 0, 9).$lang['error_4_2']);
+            log_message('error', $lang['error_4_1'].substr( md5(rand()), 0, 9).$lang['error_4_2']);
+            show_error($lang['error_4_1'].substr( md5(rand()), 0, 9).$lang['error_4_2'], 500, $lang['error_8']);
             exit;
         }
     }

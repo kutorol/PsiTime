@@ -18,6 +18,10 @@ class Welcome extends CI_Controller {
      */
     public function install()
     {
+        $lang = [];
+        //подключаем файл со словами
+        include APPPATH . 'language/db_hook/' . YOUR_LANG . '/install.php';
+
         $filePath = APPPATH . 'migrations/install.log';
         if(file_exists($filePath))
         {
@@ -27,15 +31,13 @@ class Welcome extends CI_Controller {
             $this->load->library('migration');
             if (!$this->migration->current())
             {
+                log_message('error', $this->migration->error_string());
                 // Если произошла ошибка - выводим сообщение
-                show_error($this->migration->error_string());
+                show_error($this->migration->error_string(), 500, $lang['error_8']);
                 exit;
             }
         }
 
-        $lang = [];
-        //подключаем файл со словами
-        include APPPATH . 'language/db_hook/' . YOUR_LANG . '/install.php';
         $this->common->redirect_to('welcome', $lang['error_5'], 'text', 'success');
     }
 
@@ -184,7 +186,7 @@ class Welcome extends CI_Controller {
                     {
                         //компануем email на отправку
                         $content = $data['welcome_controller'][9][0].$q['login'].$data['welcome_controller'][9][1].$new_pass.$data['welcome_controller'][9][2];
-                        $header = "From: \"Admin\" <".$data['emailAdminSite'].">\n";
+                        $header = "From: \"Admin\" <".ADMIN_EMAIL.">\n";
                         $header .= 'Content-type: text/html; charset="utf-8"';
 
                         if(mail($data['email'], $data['welcome_controller'][8], $content, $header))
@@ -273,7 +275,7 @@ class Welcome extends CI_Controller {
 			{
 				//компануем email на отправку
 				$content = $data['name'].$data['welcome_controller'][19][0].$data['login'].$data['welcome_controller'][19][1].$pass.$data['welcome_controller'][19][2];
-                $header = "From: \"Admin\" <".$data['emailAdminSite'].">\n";
+                $header = "From: \"Admin\" <".ADMIN_EMAIL.">\n";
 				$header .= 'Content-type: text/html; charset="utf-8"';
 
 				if(mail($data['email'], $data['name'].$data['welcome_controller'][20], $content, $header))

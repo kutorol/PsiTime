@@ -15,7 +15,6 @@ class Migration_Start_db extends CI_Migration{
          */
         $sql = "CREATE TABLE IF NOT EXISTS `users` (
                   `id_user` int(11) unsigned NOT NULL AUTO_INCREMENT,
-                  `role_id` int(10) unsigned NOT NULL DEFAULT '4',
                   `name` varchar(255) NOT NULL,
                   `login` varchar(255) NOT NULL,
                   `password` varchar(255) NOT NULL,
@@ -27,7 +26,6 @@ class Migration_Start_db extends CI_Migration{
                   `hoursInDayToWork` VARCHAR(2) NOT NULL COMMENT 'сколько часов в день юзер работает',
                   PRIMARY KEY (`id_user`),
                   UNIQUE KEY `id_user` (`id_user`),
-                  KEY `role_id` (`role_id`),
                   KEY `name` (`name`),
                   KEY `login` (`login`),
                   KEY `status` (`status`)
@@ -38,35 +36,9 @@ class Migration_Start_db extends CI_Migration{
         $q = $this->db->get('users')->result_array();
         if(empty($q))
         {
-            $sql = "INSERT INTO `users` (`id_user`, `role_id`, `name`, `login`, `password`, `email`, `hash`, `status`, `count_projects`) VALUES
-                    (1, 1, '".ADMIN_NAME."', '".ADMIN_LOGIN."', '".sha1(md5(ADMIN_PASS.'Y2LVejV1zNXBne'))."', '".ADMIN_EMAIL."', 'Y2LVejV1zNXBne', '1', 1);";
-            $this->db->query($sql);
-        }
-
-
-        /**
-         * Таблица ролей юзеров
-         * Table of roles users
-         */
-        $sql = "CREATE TABLE IF NOT EXISTS `role` (
-                  `id_role` int(10) unsigned NOT NULL AUTO_INCREMENT,
-                  `title_ru` varchar(255) NOT NULL,
-                  `title_en` varchar(255) NOT NULL,
-                  `programm` varchar(255) NOT NULL,
-                  `is_delete` TINYINT(1) UNSIGNED NOT NULL DEFAULT '1' COMMENT 'если 0, то нельзя не удалять не редактировать',
-                  PRIMARY KEY (`id_role`),
-                  UNIQUE KEY `id_role` (`id_role`)
-                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
-        $this->db->query($sql);
-
-        $q = $this->db->get('role')->result_array();
-        if(empty($q))
-        {
-            $sql = "INSERT INTO `role` (`id_role`, `title_ru`, `title_en`, `programm`, `is_delete`) VALUES
-                (1, 'Администратор', 'Administrator', 'admin', 0),
-                (2, 'PHP разработчик', 'PHP developer', 'backend', 1),
-                (3, 'JS Разработчик', 'JS Developer', 'frontend', 1),
-                (4, 'Гость', 'Guest', 'guest', 0);";
+            $randHash = substr(sha1(md5(rand(5000, 5996034))), 0, 15);
+            $sql = "INSERT INTO `users` (`id_user`, `name`, `login`, `password`, `email`, `hash`, `status`, `count_projects`) VALUES
+                    (1, '".ADMIN_NAME."', '".ADMIN_LOGIN."', '".sha1(md5(ADMIN_PASS.$randHash))."', '".ADMIN_EMAIL."', '".$randHash."', '1', 1);";
             $this->db->query($sql);
         }
 

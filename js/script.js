@@ -334,9 +334,126 @@ function getAllTask(idProject, from)
     });
 }
 
+/**
+ * Проверяем число ли это и находиться ли оно в заданном диапазоне
+ * Check whether this number and whether it is in a predetermined range
+ * @param title - название поля (field name)
+ * @param num - проверяемое значение (the value to test)
+ * @param fail - true|false была ли ошибка ранее (whether the error earlier)
+ * @param zero - проверять ли на то, что меньше или равно 0 (check whether that is less than or equal to 0)
+ * @param before - до какого значения должно быть число (to which value should be a number)
+ * @param after - ниже какого числа, проверяемое значение не может быть (below a number, verifiable value can not be)
+ * @returns {{message: string, fail: *}}
+ */
+function validateNum(title, num, fail, zero, before, after)
+{
+    var errorMessage = '';
+    if(isNaN(num)) //если не число
+    {
+        errorMessage = jsLang[28]+" <i>'"+title+"'</i>";
+        fail = true;
+    }
+    else // если число
+    {
+        if(zero !== undefined)
+        {
+            if(num <= 0)
+            {
+                errorMessage += jsLang[29]+" <i>'"+title+"'</i> "+jsLang[30];
+                fail = true;
+            }
+        }
+
+        if(before !== undefined && after !== undefined)
+        {
+            if(num < after || num > before)
+            {
+                errorMessage += jsLang[29]+" <i>'"+title+"'</i> "+jsLang[31]+" " + after + " "+jsLang[32]+" " + before;
+                fail = true;
+            }
+        }
+        else if(before !== undefined)
+        {
+            if(num > before)
+            {
+                errorMessage += jsLang[29]+" <i>'"+title+"'</i> " + jsLang[33] + " " + before;
+                fail = true;
+            }
+        }
+        else if(after !== undefined)
+        {
+            if(num < after)
+            {
+                errorMessage += jsLang[29]+" <i>'"+title+"'</i> " + jsLang[31] + " " + after;
+                fail = true;
+            }
+        }
+    }
+
+    return {message: errorMessage, fail: fail};
+}
+
+
+/**
+ * При нажатии на иконку картинки, в модальном окне показывается увеличенная картинка. Если это другой файл, то либо его показываем, либо скачиваем
+ * Clicking on the icon image in a modal window shows an enlarged picture. If it's another file, or a show, or download the
+ * @param src
+ * @param ext
+ * @param title
+ * @param idTask - id задачи, чтобы скачать файл по правильному пути
+ * @returns {boolean}
+ */
+function showDownloadImageDoc(src, ext, title, idTask)
+{
+    var srcFile = src.split('/');
+    srcFile = srcFile[srcFile.length-1];
+    var windowParam = 'width=500,height=600,resizable=yes,scrollbars=yes,status=yes';
+    var secondContetn = '<br><br><div onclick="window.open(\''+base_url+'/task/download/'+idTask+'/'+srcFile+'\', \''+jsLang[23]+' '+title+'\', \''+windowParam+'\');" class="btn btn-warning">'+jsLang[23]+' <i class="fa fa-download"></i></div>';
+
+    var content;
+    switch (ext)
+    {
+        case 'img':
+            content = '<img src="' + src + '" class="img-responsive"/>'; break;
+        case 'audio':
+            content = '<audio controls><source src="'+src+'" preload="metadata">'+jsLang[22]+'</audio>'; break;
+        case 'video':
+            content = '<video src="'+src+'" width="640" height="360" controls />'; break;
+        default:
+            window.open(base_url+'/task/download/'+idTask+'/'+srcFile, jsLang[23]+' '+title, windowParam);
+            return false;
+    }
+
+    showModal(title, content+secondContetn);
+}
+
 $(function() {
 
+    $(".statusLevelInList").on('change', function(){
+        alert($(this).val());
+    });
 
+    /**
+     * Функция открывает и закрывает поля для редактирования конкретной задачи
+     * This function opens and closes the field to edit a particular task
+     */
+    $(".editTaskA").on('click', function(e){
+        if($(this).attr('data-switch') == 'open')
+        {
+            $("#showFadeEditTask").slideDown(300);
+            $(this).attr('data-switch', 'close').find("i").attr('class', "fa fa-arrow-up");
+            $(this).find("span.edit").html(jsLang[44]);
+
+        }
+        else
+        {
+            $("#showFadeEditTask").slideUp(300);
+            $(this).attr('data-switch', 'open').find("i").attr('class', "fa fa-arrow-down");
+            $(this).find("span.edit").html(jsLang[45]);
+        }
+
+        e.preventDefault();
+    });
 
     /**
      * При нажатии на кнопку закрыть в модальном окне - убираем все содержимое
@@ -374,7 +491,6 @@ $(function() {
                 allTasks.fadeIn(150);
                 getAllTask();
                 //делаем активной вкладку "все проекты", т.к. после добавления задачи именно они достаются.
-                //FIXME сделать так, чтобы доставались задачи с активной вкладки и перекидывалось на их главную страницу
                 $("#allProjectsTasks").click();
             });
         }
@@ -401,14 +517,12 @@ $(function() {
         return false;
     });
 
-
     /**
      * Если false, то разрешается event beforeTagRemoved, иначе его не выполнять. Если этого не сделать, то сообщение при завершении скрипта всегда будет с ошибкой
      * If false, then allowed event before Tag Removed, otherwise it will not perform. If you do not, then the message at the end of the script will always be an error
      * @type {boolean}
      */
     var dontDeleteUserTag = false;
-
 
     /**
      * При нажатии кнопки добавить юзера к проекту
@@ -478,7 +592,6 @@ $(function() {
                 }
             })});
     });
-
 
     /**
      * Одной кнопкой удаляем все теги

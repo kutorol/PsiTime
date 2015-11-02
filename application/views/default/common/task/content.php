@@ -1,12 +1,10 @@
 <?php if(!empty($allTasks)):?>
-
     <div style="margin-right: 15px;">
         <div class="div">
             <span class="label label-default">Выполнено</span>
             <span class="label label-default">3 задачи</span>
             <span class="label label-default">резерв времени</span>
         </div>
-
 
         <div class="table-task">
             <table>
@@ -26,7 +24,7 @@
                     <?php foreach($allTasks as $k=>$task):?>
                         <tr class="row_task_<?=$task['id_task'];?>">
                             <td colspan="6" style="border-bottom: none;">
-                                <a style="<?php if($task['status'] == 4){echo "text-decoration:line-through; color: #818289; font-weight: bold;";}?>" href="<?=$startUrl;?>/task/view/<?=$task['id_task'];?>"><?=$task['id_task'];?> - <?=$task['title'];?></a><br>
+                                <a style="<?php if($task['status'] == 3){echo "text-decoration:line-through; color: #818289; font-weight: bold;";}?>" href="<?=$startUrl;?>/task/view/<?=$task['id_task'];?>"><?=$task['id_task'];?> - <?=$task['title'];?></a><br>
                                 <?=$task_views[66]?> <?=$task['title_project'];?>
                                 <hr style="margin-bottom: -44px; border: none;">
                             </td>
@@ -35,7 +33,14 @@
 
                             <td><span style="font-size: 13px;" class="label label-<?=$task['color'];?>"><?=$task['name_complexity_'.$segment];?></span></td>
                             <td><?=$task['time_for_complete'];?> <?=$task['time_for_complete_value'];?></td>
-                            <td><?=$task_views['status_task_'.$task['status']]?></td>
+                            <td>
+                                <select id="statusLevelInList_<?=$task['id_task'];?>" class="selectpicker statusLevelInList">
+                                    <?php for($i = 0; $i < 4; $i++):?>
+                                        <option value="<?=$i;?>" <?=($task['status'] == $i) ? 'selected' : '';?> ><?=$task_views['status_task_'.$i];?></option>
+                                    <?php endfor;?>
+                                </select>
+                                <script> $(function() { $('#statusLevelInList_<?=$task['id_task'];?>').selectpicker(); });</script>
+                            </td>
 
                             <td align="center" <?=($task['user_id'] == $task['performer_id']) ? "colspan='2'" : "";?> ><img src="<?=base_url()?>img/<?=$task['img_performer'];?>"  style="height: 50px; width: 50px; display: block;"> <?=$task['name_performer'];?></td>
                             <?php if($task['user_id'] != $task['performer_id']):?>

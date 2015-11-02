@@ -3,27 +3,44 @@
  * Remove attachments to the task
  * @param src - полный путь к файлу (the full path to the file)
  * @param id - это DOM элемент, который уберем из виду, показав что файл удален (This DOM element that will clean out of sight, showing that the file is deleted)
+ * @param idTask - если не undefined, то удаляем в не во временной папке файл, а в постоянной.
  */
-function delAttach(src, id)
+function delAttach(src, id, idTask)
 {
+    idTask = (idTask === undefined) ? 0 : idTask;
+    //удаляем прикрепленный файл
+    var deleteAttach = $("#"+id);
     //шаблон ajax запроса
     ajaxRequestJSON("task/delAttach");
     $.ajax({
-        data: {src: src},
+        data: {src: src, idTask: idTask},
         success: function(data)
         {
             if(data.status == 'error')
             {
+                //если такой файл не найден
+                if(data.deleteView !== undefined)
+                {
+                    deleteAttach.fadeOut(300, function(){
+                        deleteAttach.remove();
+                    });
+                }
+
                 errorSuccessAjax({title: data.resultTitle, message: data.resultText}); //показываем модалку
                 return false;
             }
 
             hideLoad();
-            //удаляем прикрепленный файл
-            var deleteAttach = $("#"+id);
+
             deleteAttach.fadeOut(300, function(){
                 deleteAttach.remove();
+
+                //убираем заголовок "прикрепленные файлы", если прикрепленных файлов нет, и это только в инфо задания
+                if($.trim($('#fileAttach').html()) == "" && $("#attachInfoTask").html() !== undefined)
+                    $("#hideFieldsetAttach").fadeOut(300);
             });
+
+
         }
     });
 }
@@ -41,12 +58,17 @@ function uploadAttachFile()
     });
 
     //проверяем что будем загружать - или файлы для задач или картинку для аватарки
-    var id_area, variable = 0;
+    var id_area, variable = 0, idTask;
     //вставил любой скрытый блок с id и просто его проверяю, если он существует, то это аватарку грузим
     if($("#AvatarOrNo").html() !== undefined)
     {
         id_area = 'avatar';
         variable = 1;
+    }
+    else if($("#attachInfoTask").html() !== undefined)
+    {
+        variable = 2;
+        idTask = $("#idTaskInfo").html();
     }
 
     //главный id, куда будут вставляться прикрепленные файлы
@@ -56,7 +78,7 @@ function uploadAttachFile()
     $('#fileupload').fileupload({
         type: "POST",
         dataType: "json",
-        formData: {avatarOrNot: variable, userfile: 1},
+        formData: {avatarOrNot: variable, userfile: 1, idTask: idTask},
         error: function(e, x, settings, exception)
         {
             $('#bar').css('width','0%');
@@ -94,8 +116,6 @@ function uploadAttachFile()
         },
         done: function (e, data)
         {
-
-            console.log(data.result);
             hideLoad();
             progressBar.css('width','0%');
             response = data.result;
@@ -111,8 +131,8 @@ function uploadAttachFile()
             {
                 //если нужно чтобы показывалось оповещение об удачном добавление файлов к задаче, то раскоментируйте ниже
                 //addTitle({title: response.resultTitle, message: response.resultText});
-                var textAppend = '<div class="col-lg-2" id="'+response.id+'"><div title="'+jsLang[21]+'" onclick="delAttach(\''+response.fileSrc+'\', \''+response.id+'\');" class="btn btn-danger deleteAttachFile"><i class="fa fa-times"></i></div><div class="thumbnail" align="center">';
-                textAppend += '<div class="options" data-ext="'+response.extension+'" onClick="showDownloadImageDoc(\''+response.fileSrc+'\', \''+response.extension+'\', \''+response.titleFile+'\');" title="'+response.titleFile+'">';
+                var textAppend = '<div class="col-lg-2" id="'+response.id+'"><div title="'+jsLang[21]+'" onclick="delAttach(\''+response.fileSrc+'\', \''+response.id+'\', '+idTask+');" class="btn btn-danger deleteAttachFile"><i class="fa fa-times"></i></div><div class="thumbnail" align="center">';
+                textAppend += '<div class="options" data-ext="'+response.extension+'" onClick="showDownloadImageDoc(\''+response.fileSrc+'\', \''+response.extension+'\', \''+response.titleFile+'\', '+idTask+');" title="'+response.titleFile+'">';
 
                 switch(response.extension)
                 {
@@ -146,7 +166,20 @@ function uploadAttachFile()
 
                 textAppend += '<div class="longText" title="'+response.titleFile+'" >'+response.titleFile+'</div></div></div>';
 
-                attachFile.append(textAppend);
+                if(variable == 2)
+                {
+                    if($.trim(attachFile.html()) == "")
+                    {
+                        $("#hideFieldsetAttach").fadeIn(300, function(){
+                            attachFile.append(textAppend);
+                        });
+                    }
+                    else
+                        attachFile.append(textAppend);
+                }
+                else
+                    attachFile.append(textAppend);
+
             }
             //смена аватарки в профиле
             else
@@ -159,92 +192,7 @@ function uploadAttachFile()
     });
 }
 
-/**
- * При нажатии на иконку картинки, в модальном окне показывается увеличенная картинка. Если это другой файл, то либо его показываем, либо скачиваем
- * Clicking on the icon image in a modal window shows an enlarged picture. If it's another file, or a show, or download the
- */
-function showDownloadImageDoc(src, ext, title)
-{
-    var srcFile = src.split('/');
-    srcFile = srcFile[srcFile.length-1];
-    var windowParam = 'width=500,height=600,resizable=yes,scrollbars=yes,status=yes';
-    var secondContetn = '<br><br><div onclick="window.open(\''+base_url+'/task/download/'+srcFile+'\', \''+jsLang[23]+' '+title+'\', \''+windowParam+'\');" class="btn btn-warning">'+jsLang[23]+' <i class="fa fa-download"></i></div>';
 
-    var content;
-    switch (ext)
-    {
-        case 'img':
-            content = '<img src="' + src + '" class="img-responsive"/>'; break;
-        case 'audio':
-            content = '<audio controls><source src="'+src+'" preload="metadata">'+jsLang[22]+'</audio>'; break;
-        case 'video':
-            content = '<video src="'+src+'" width="640" height="360" controls />'; break;
-        default:
-            window.open(base_url+'/task/download/'+srcFile, jsLang[23]+' '+title, windowParam);
-            return false;
-    }
-
-    showModal(title, content+secondContetn);
-}
-
-/**
- * Проверяем число ли это и находиться ли оно в заданном диапазоне
- * Check whether this number and whether it is in a predetermined range
- * @param title - название поля (field name)
- * @param num - проверяемое значение (the value to test)
- * @param fail - true|false была ли ошибка ранее (whether the error earlier)
- * @param zero - проверять ли на то, что меньше или равно 0 (check whether that is less than or equal to 0)
- * @param before - до какого значения должно быть число (to which value should be a number)
- * @param after - ниже какого числа, проверяемое значение не может быть (below a number, verifiable value can not be)
- * @returns {{message: string, fail: *}}
- */
-function validateNum(title, num, fail, zero, before, after)
-{
-    var errorMessage = '';
-    if(isNaN(num)) //если не число
-    {
-        errorMessage = jsLang[28]+" <i>'"+title+"'</i>";
-        fail = true;
-    }
-    else // если число
-    {
-        if(zero !== undefined)
-        {
-            if(num <= 0)
-            {
-                errorMessage += jsLang[29]+" <i>'"+title+"'</i> "+jsLang[30];
-                fail = true;
-            }
-        }
-
-        if(before !== undefined && after !== undefined)
-        {
-            if(num < after || num > before)
-            {
-                errorMessage += jsLang[29]+" <i>'"+title+"'</i> "+jsLang[31]+" " + after + " "+jsLang[32]+" " + before;
-                fail = true;
-            }
-        }
-        else if(before !== undefined)
-        {
-            if(num > before)
-            {
-                errorMessage += jsLang[29]+" <i>'"+title+"'</i> " + jsLang[33] + " " + before;
-                fail = true;
-            }
-        }
-        else if(after !== undefined)
-        {
-            if(num < after)
-            {
-                errorMessage += jsLang[29]+" <i>'"+title+"'</i> " + jsLang[31] + " " + after;
-                fail = true;
-            }
-        }
-    }
-
-    return {message: errorMessage, fail: fail};
-}
 
 /**
  * При выборе другого проекта, подгружается выбор юзера исполнителя, если вдруг исключили из проекта, то удаляется данная строка и подгружаются заного юзеры

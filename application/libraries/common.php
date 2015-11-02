@@ -319,7 +319,7 @@ class Common
         $this->data = $this->getCookie();
 
         if(is_array($what_replace['pattern']))
-            $this->data[$what_replace['pattern'][0]] = preg_replace('/'.$what_replace['pattern'][2].'/', $this->data[$what_replace['pattern'][1]], $this->data[$what_replace['pattern'][0]]);
+            $this->data[$what_replace['pattern'][0]] = preg_replace('/'.$what_replace['pattern'][2].'/i', $this->data[$what_replace['pattern'][1]], $this->data[$what_replace['pattern'][0]]);
 
 
         //если это false, то человек не вошел в аккаунт
@@ -440,6 +440,7 @@ class Common
         }
         elseif($is_int === true)
         {
+            $data = intval($data);
             if(!is_numeric($data))
                 return false;
 
