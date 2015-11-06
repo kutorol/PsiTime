@@ -528,7 +528,17 @@ class Common
     }
 
 
-
+    /**
+     * Логирование ошибок, которые не являются ошибками php
+     * Logging of errors that are not errors php
+     * @param $str - строка содержащая элементы для замены. Например :_class_: (string containing the elements for a replacement. For example :_class_:)
+     * @param array $replace_with - то, чем будем заменять. Например :_class_: заменится константой __CLASS__ (what will replace. For example :_class_: replace the constant __CLASS__)
+     * @param array $to_replace - все элементы, которые должны заменить (All items should be replaced)
+     */
+    public function errorCodeLog($str, $replace_with = [], $to_replace = [':_class_:', ':_method_:', ':_line_:'])
+    {
+        log_message('error', "\n\r".strtr($str, array_combine($to_replace, $replace_with))."\n\r");
+    }
 
 
 }

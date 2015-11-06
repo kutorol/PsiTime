@@ -347,6 +347,9 @@ function getAllTask(idProject, from)
  */
 function validateNum(title, num, fail, zero, before, after)
 {
+    if(fail === undefined)
+        fail = false;
+
     var errorMessage = '';
     if(isNaN(num)) //если не число
     {
@@ -358,6 +361,14 @@ function validateNum(title, num, fail, zero, before, after)
         if(zero !== undefined)
         {
             if(num <= 0)
+            {
+                errorMessage += jsLang[29]+" <i>'"+title+"'</i> "+jsLang[30];
+                fail = true;
+            }
+        }
+        else
+        {
+            if(num < 0)
             {
                 errorMessage += jsLang[29]+" <i>'"+title+"'</i> "+jsLang[30];
                 fail = true;
@@ -429,8 +440,66 @@ function showDownloadImageDoc(src, ext, title, idTask)
 
 $(function() {
 
-    $(".statusLevelInList").on('change', function(){
-        alert($(this).val());
+    $(".selectpicker").on('change', function(){
+
+        var selectpicker = $(this);
+        var langText, idAttr = selectpicker.attr('id'), num;
+        if(idAttr == 'taskLevelInfo')
+            langText = jsLang[35];
+        else if(idAttr == 'statusLevelInfo')
+            langText = jsLang[46];
+        else if(idAttr == 'priorityLevelInfo')
+            langText = jsLang[43];
+        else
+        {
+            alert("error!");
+            return false;
+        }
+
+        //меняем цвет select
+        var colorSelect = selectpicker.find("option:selected").attr('data-color');
+        selectpicker.next().find("button[data-id='"+idAttr+"']").removeClass(selectpicker.attr('data-style')).addClass(colorSelect);
+        selectpicker.attr('data-style', colorSelect);
+
+        errorMessage = "<ul>";
+        num = parseInt(selectpicker.val());
+        tempErrorMessage = validateNum(langText, num);
+        errorMessage += (tempErrorMessage.message != '') ? "<li>" + tempErrorMessage.message+"</li>" : '';
+
+        //если были ошибки
+        if(tempErrorMessage.fail === true)
+        {
+            errorMessage += "</ul>";
+            addTitle({title: jsLang[5], message: errorMessage}); //показываем ошибку
+            return false;
+        }
+
+        //шаблон ajax запроса
+        ajaxRequestJSON("task/updateTask/"+idAttr);
+        $.ajax({
+            data: {num: num, idTask: $("#idTaskInfo").html()},
+            success: function(data)
+            {
+                if(data.status == 'error')
+                {
+                    errorSuccessAjax({title: data.resultTitle, message: data.resultText}); //показываем модалку
+                    return false;
+                }
+
+                //удаляем статус задачи "поставлена", чтобы больше на него не нажимали
+                if(idAttr == 'statusLevelInfo' && num > 0 && selectpicker.find("option[value='0']").val() !== undefined)
+                {
+                    selectpicker.find("option[value='0']").remove();
+                    selectpicker.next().find("ul.dropdown-menu li")[0].remove();
+                    selectpicker.selectpicker('refresh');
+                }
+
+                if(idAttr == 'statusLevelInfo' && num == 2)
+                    selectpicker.next().find("button[data-id='"+idAttr+"']").removeClass("btn-info").addClass(colorSelect);
+
+                hideLoad();
+            }
+        });
     });
 
     /**

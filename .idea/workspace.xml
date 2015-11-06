@@ -2,21 +2,17 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="72f7ccef-4494-4399-8117-87233966c1fc" name="Default" comment="">
+      <change type="DELETED" beforePath="C:\newWeb\home\time.log\www\application\logs\log-2015-11-02.php" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/migrations/001_start_db.php" afterPath="$PROJECT_DIR$/application/migrations/001_start_db.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/hooks/Create_db.php" afterPath="$PROJECT_DIR$/application/hooks/Create_db.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/libraries/common.php" afterPath="$PROJECT_DIR$/application/libraries/common.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config.php" afterPath="$PROJECT_DIR$/config.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/default/common/task/content.php" afterPath="$PROJECT_DIR$/application/views/default/common/task/content.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/language/db_hook/en/install.php" afterPath="$PROJECT_DIR$/application/language/db_hook/en/install.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/language/db_hook/ru/install.php" afterPath="$PROJECT_DIR$/application/language/db_hook/ru/install.php" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/default/common/task/view/content.php" afterPath="$PROJECT_DIR$/application/views/default/common/task/view/content.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/libraries/language/lang_controller.php" afterPath="$PROJECT_DIR$/application/libraries/language/lang_controller.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/script.js" afterPath="$PROJECT_DIR$/js/script.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/js/upload/script.js" afterPath="$PROJECT_DIR$/js/upload/script.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/css/style.css" afterPath="$PROJECT_DIR$/css/style.css" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/controllers/task.php" afterPath="$PROJECT_DIR$/application/controllers/task.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/models/task_model.php" afterPath="$PROJECT_DIR$/application/models/task_model.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/views/default/all/title.php" afterPath="$PROJECT_DIR$/application/views/default/all/title.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/application/controllers/welcome.php" afterPath="$PROJECT_DIR$/application/controllers/welcome.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="time.log.iws" />
@@ -52,12 +48,13 @@
       <file leaf-file-name="script.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/js/script.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="3285" max-vertical-offset="5049">
-              <caret line="403" column="21" selection-start-line="403" selection-start-column="21" selection-end-line="403" selection-end-column="21" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="1636" max-vertical-offset="4522">
+              <caret line="479" column="62" selection-start-line="479" selection-start-column="62" selection-end-line="479" selection-end-column="62" />
               <folding>
                 <element signature="n#!!doc;n#deleteData#0" expanded="false" />
                 <element signature="n#!!block;n#deleteData#0" expanded="false" />
                 <element signature="n#!!doc;n#ajaxRequestJSON#0" expanded="false" />
+                <element signature="n#!!block;n#ajaxRequestJSON#0" expanded="false" />
                 <element signature="n#!!doc;n#showLoad#0" expanded="false" />
                 <element signature="n#!!block;n#showLoad#0" expanded="false" />
                 <element signature="n#!!doc;n#hideLoad#0" expanded="false" />
@@ -76,34 +73,80 @@
                 <element signature="n#!!block;n#delUserProject#0" expanded="false" />
                 <element signature="n#!!doc;n#attachUsers#0" expanded="false" />
                 <element signature="n#!!block;n#attachUsers#0" expanded="false" />
-                <element signature="e#14779#15030#0" expanded="false" />
-                <element signature="e#15038#15189#0" expanded="false" />
-                <element signature="e#15237#16044#0" expanded="false" />
-                <element signature="e#16052#16271#0" expanded="false" />
-                <element signature="e#16315#16427#0" expanded="false" />
-                <element signature="e#16435#16586#0" expanded="false" />
-                <element signature="e#16629#16815#0" expanded="false" />
-                <element signature="e#16823#17189#0" expanded="false" />
-                <element signature="e#17230#17343#0" expanded="false" />
-                <element signature="e#17383#20038#0" expanded="false" />
-                <element signature="e#20046#20132#0" expanded="false" />
-                <element signature="e#20174#20666#0" expanded="false" />
-                <element signature="e#20674#20874#0" expanded="false" />
-                <element signature="e#20911#24170#0" expanded="false" />
-                <element signature="e#24179#24309#0" expanded="false" />
-                <element signature="e#24352#24753#0" expanded="false" />
-                <element signature="e#24761#24885#0" expanded="false" />
-                <element signature="e#24919#25112#0" expanded="false" />
+                <element signature="n#!!doc;n#validateNum#0" expanded="false" />
+                <element signature="n#!!doc;n#showDownloadImageDoc#0" expanded="false" />
+                <element signature="n#!!block;n#showDownloadImageDoc#0" expanded="false" />
+                <element signature="e#16553#17090#0" expanded="false" />
+                <element signature="e#17315#17566#0" expanded="false" />
+                <element signature="e#17574#17725#0" expanded="false" />
+                <element signature="e#17773#18580#0" expanded="false" />
+                <element signature="e#18588#18807#0" expanded="false" />
+                <element signature="e#18851#18963#0" expanded="false" />
+                <element signature="e#18971#19122#0" expanded="false" />
+                <element signature="e#19165#19351#0" expanded="false" />
+                <element signature="e#19359#19725#0" expanded="false" />
+                <element signature="e#19766#19879#0" expanded="false" />
+                <element signature="e#19919#22574#0" expanded="false" />
+                <element signature="e#22582#22668#0" expanded="false" />
+                <element signature="e#22710#23202#0" expanded="false" />
+                <element signature="e#23210#23410#0" expanded="false" />
+                <element signature="e#23447#26706#0" expanded="false" />
+                <element signature="e#26715#26845#0" expanded="false" />
+                <element signature="e#26888#27289#0" expanded="false" />
+                <element signature="e#27297#27421#0" expanded="false" />
+                <element signature="e#27455#27648#0" expanded="false" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="task.php" pinned="false" current-in-tab="false">
+      <file leaf-file-name="content.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/application/views/default/common/task/view/content.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-20.923077" vertical-offset="2958" max-vertical-offset="4522">
+              <caret line="206" column="19" selection-start-line="206" selection-start-column="19" selection-end-line="206" selection-end-column="19" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="title.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/application/views/default/all/title.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-2.6153846" vertical-offset="0" max-vertical-offset="272">
+              <caret line="4" column="52" selection-start-line="4" selection-start-column="52" selection-end-line="4" selection-end-column="52" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="content.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/application/views/default/common/content.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="65.88461" vertical-offset="4467" max-vertical-offset="5474">
+              <caret line="165" column="53" selection-start-line="165" selection-start-column="53" selection-end-line="165" selection-end-column="53" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="content.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/application/views/default/common/task/content.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="-10.115385" vertical-offset="60" max-vertical-offset="1224">
+              <caret line="19" column="21" selection-start-line="19" selection-start-column="21" selection-end-line="19" selection-end-column="21" />
+              <folding>
+                <element signature="e#1105#1219#0#HTML" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="task.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/application/controllers/task.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-26.076923" vertical-offset="5765" max-vertical-offset="13991">
-              <caret line="923" column="37" selection-start-line="923" selection-start-column="37" selection-end-line="923" selection-end-column="37" />
+            <state vertical-scroll-proportion="0.42271662" vertical-offset="12644" max-vertical-offset="14382">
+              <caret line="1520" column="30" selection-start-line="1520" selection-start-column="30" selection-end-line="1520" selection-end-column="30" />
               <folding>
                 <element signature="e#2437#2742#0#PHP" expanded="false" />
                 <element signature="e#6731#7169#0#PHP" expanded="false" />
@@ -113,11 +156,8 @@
                 <element signature="e#14467#14918#0#PHP" expanded="false" />
                 <element signature="n#_getProject#0;n#Task#0;n#!!top" expanded="false" />
                 <element signature="e#15679#15943#0#PHP" expanded="false" />
-                <element signature="n#addProject#0;n#Task#0;n#!!top" expanded="false" />
                 <element signature="e#22998#23120#0#PHP" expanded="false" />
-                <element signature="n#deleteProject#0;n#Task#0;n#!!top" expanded="false" />
                 <element signature="e#25711#25864#0#PHP" expanded="false" />
-                <element signature="n#updateProject#0;n#Task#0;n#!!top" expanded="false" />
                 <element signature="e#28010#28131#0#PHP" expanded="false" />
                 <element signature="n#getUsersProject#0;n#Task#0;n#!!top" expanded="false" />
                 <element signature="e#29179#29296#0#PHP" expanded="false" />
@@ -132,76 +172,52 @@
                 <element signature="e#40475#40698#0#PHP" expanded="false" />
                 <element signature="e#41712#41824#0#PHP" expanded="false" />
                 <element signature="e#43664#43912#0#PHP" expanded="false" />
+                <element signature="n#addTaskAttachFile#0;n#Task#0;n#!!top" expanded="false" />
                 <element signature="e#49802#50045#0#PHP" expanded="false" />
                 <element signature="n#_checkProject#0;n#Task#0;n#!!top" expanded="false" />
                 <element signature="e#50884#51028#0#PHP" expanded="false" />
                 <element signature="n#getAllUsersProject#0;n#Task#0;n#!!top" expanded="false" />
                 <element signature="e#52646#53273#0#PHP" expanded="false" />
+                <element signature="n#_getAllAttach#0;n#Task#0;n#!!top" expanded="false" />
                 <element signature="e#54479#54603#0#PHP" expanded="false" />
+                <element signature="n#_createFolder#0;n#Task#0;n#!!top" expanded="false" />
                 <element signature="e#54738#54835#0#PHP" expanded="false" />
+                <element signature="n#_delFolder#0;n#Task#0;n#!!top" expanded="false" />
                 <element signature="e#55232#55436#0#PHP" expanded="false" />
+                <element signature="n#_updateUsersTime#0;n#Task#0;n#!!top" expanded="false" />
                 <element signature="e#58225#58312#0#PHP" expanded="false" />
+                <element signature="n#addTask#0;n#Task#0;n#!!top" expanded="false" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="common.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/application/libraries/common.php">
+      <file leaf-file-name="001_start_db.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/application/migrations/001_start_db.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-14.269231" vertical-offset="7075" max-vertical-offset="9180">
-              <caret line="438" column="29" selection-start-line="438" selection-start-column="29" selection-end-line="438" selection-end-column="29" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="script.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/js/upload/script.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="2601" max-vertical-offset="6494">
-              <caret line="131" column="70" selection-start-line="131" selection-start-column="70" selection-end-line="131" selection-end-column="70" />
+            <state vertical-scroll-proportion="-3.2692308" vertical-offset="1836" max-vertical-offset="3247">
+              <caret line="113" column="97" selection-start-line="113" selection-start-column="97" selection-end-line="113" selection-end-column="97" />
               <folding>
-                <element signature="e#3139#4040#0" expanded="false" />
-                <element signature="e#4090#4288#0" expanded="false" />
+                <marker date="1446651104689" expanded="true" signature="357:1366" placeholder="CREATE TABLE..users..." />
+                <marker date="1446651104689" expanded="true" signature="1581:1837" placeholder="INSERT INTO ..." />
+                <marker date="1446651104689" expanded="true" signature="2057:2626" placeholder="CREATE TABLE..projects..." />
+                <marker date="1446651104689" expanded="true" signature="2772:2915" placeholder="INSERT INTO ..." />
+                <marker date="1446651104689" expanded="true" signature="3130:3612" placeholder="CREATE TABLE..complexity..." />
+                <marker date="1446651104689" expanded="true" signature="3760:4026" placeholder="INSERT INTO ..." />
+                <marker date="1446651104689" expanded="true" signature="4217:4689" placeholder="CREATE TABLE..priority..." />
+                <marker date="1446651104689" expanded="true" signature="4835:5312" placeholder="INSERT INTO ..." />
+                <marker date="1446651104689" expanded="true" signature="5503:7565" placeholder="CREATE TABLE..task..." />
+                <marker date="1446651104689" expanded="true" signature="7707:8078" placeholder="INSERT INTO ..." />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="lang_controller.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/application/libraries/language/lang_controller.php">
+      <file leaf-file-name="log-2015-11-06.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/application/logs/log-2015-11-06.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-6.7777777" vertical-offset="4207" max-vertical-offset="9690">
-              <caret line="269" column="34" selection-start-line="269" selection-start-column="34" selection-end-line="269" selection-end-column="34" />
-              <folding>
-                <element signature="e#21934#22109#0#PHP" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="content.php" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/application/views/default/common/task/view/content.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="4.378788" vertical-offset="0" max-vertical-offset="4233">
-              <caret line="221" column="68" selection-start-line="221" selection-start-column="68" selection-end-line="221" selection-end-column="68" />
-              <folding>
-                <element signature="e#3988#4010#0#HTML" expanded="true" />
-                <element signature="e#4797#4816#0#HTML" expanded="true" />
-                <element signature="e#5757#5774#0#HTML" expanded="true" />
-                <element signature="e#6510#6532#0#HTML" expanded="true" />
-                <element signature="e#6581#6603#0#HTML" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="content.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/application/views/default/login/change_profile/content.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-26.461538" vertical-offset="1063" max-vertical-offset="1921">
-              <caret line="103" column="0" selection-start-line="103" selection-start-column="0" selection-end-line="103" selection-end-column="52" />
+            <state vertical-scroll-proportion="-2.6153846" vertical-offset="1972" max-vertical-offset="2142">
+              <caret line="120" column="0" selection-start-line="120" selection-start-column="0" selection-end-line="120" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -210,19 +226,21 @@
       <file leaf-file-name="task_model.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/application/models/task_model.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-2.2692308" vertical-offset="553" max-vertical-offset="1411">
-              <caret line="36" column="12" selection-start-line="36" selection-start-column="12" selection-end-line="36" selection-end-column="12" />
+            <state vertical-scroll-proportion="-24.692308" vertical-offset="531" max-vertical-offset="1411">
+              <caret line="69" column="50" selection-start-line="69" selection-start-column="50" selection-end-line="69" selection-end-column="50" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="content.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/application/views/default/common/content.php">
+      <file leaf-file-name="lang_controller.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/application/libraries/language/lang_controller.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-11.769231" vertical-offset="2397" max-vertical-offset="5474">
-              <caret line="162" column="56" selection-start-line="162" selection-start-column="36" selection-end-line="162" selection-end-column="56" />
-              <folding />
+            <state vertical-scroll-proportion="-17.538462" vertical-offset="1839" max-vertical-offset="10047">
+              <caret line="135" column="96" selection-start-line="135" selection-start-column="96" selection-end-line="135" selection-end-column="96" />
+              <folding>
+                <element signature="e#23277#23452#0#PHP" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -240,9 +258,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/application/logs/log-2015-10-09.php" />
-        <option value="$PROJECT_DIR$/../script_cat/application/controllers/shuft.php" />
-        <option value="$PROJECT_DIR$/application/views/default/login/content.php" />
         <option value="$PROJECT_DIR$/application/views/default/login/register/content.php" />
         <option value="$PROJECT_DIR$/application/views/default/login/forgot/content.php" />
         <option value="$PROJECT_DIR$/application/views/default/login/change_pass/content.php" />
@@ -276,21 +291,24 @@
         <option value="$PROJECT_DIR$/application/controllers/welcome.php" />
         <option value="$PROJECT_DIR$/config.php" />
         <option value="$PROJECT_DIR$/application/logs/log-2015-10-31.php" />
-        <option value="$PROJECT_DIR$/application/migrations/001_start_db.php" />
         <option value="$PROJECT_DIR$/application/views/default/all/header.php" />
         <option value="$PROJECT_DIR$/css/bootstrap.css" />
-        <option value="$PROJECT_DIR$/application/models/task_model.php" />
-        <option value="$PROJECT_DIR$/css/style.css" />
-        <option value="$PROJECT_DIR$/application/views/default/all/title.php" />
-        <option value="$PROJECT_DIR$/application/views/default/common/task/content.php" />
         <option value="$PROJECT_DIR$/application/third_party/DevelBar/config/develbar.php" />
-        <option value="$PROJECT_DIR$/application/libraries/language/lang_controller.php" />
-        <option value="$PROJECT_DIR$/js/script.js" />
-        <option value="$PROJECT_DIR$/application/libraries/common.php" />
-        <option value="$PROJECT_DIR$/application/controllers/task.php" />
         <option value="$PROJECT_DIR$/application/logs/log-2015-11-02.php" />
         <option value="$PROJECT_DIR$/js/upload/script.js" />
+        <option value="$PROJECT_DIR$/application/logs/log-2015-11-04.php" />
+        <option value="$PROJECT_DIR$/application/migrations/001_start_db.php" />
+        <option value="$PROJECT_DIR$/application/libraries/common.php" />
+        <option value="$PROJECT_DIR$/css/style.css" />
+        <option value="$PROJECT_DIR$/application/logs/log-2015-11-05.php" />
+        <option value="$PROJECT_DIR$/application/views/default/all/title.php" />
+        <option value="$PROJECT_DIR$/application/views/default/common/task/content.php" />
+        <option value="$PROJECT_DIR$/application/logs/log-2015-11-06.php" />
+        <option value="$PROJECT_DIR$/application/models/task_model.php" />
+        <option value="$PROJECT_DIR$/application/libraries/language/lang_controller.php" />
         <option value="$PROJECT_DIR$/application/views/default/common/task/view/content.php" />
+        <option value="$PROJECT_DIR$/js/script.js" />
+        <option value="$PROJECT_DIR$/application/controllers/task.php" />
       </list>
     </option>
   </component>
@@ -299,7 +317,7 @@
     <option name="x" value="-8" />
     <option name="y" value="-8" />
     <option name="width" value="1936" />
-    <option name="height" value="1056" />
+    <option name="height" value="1052" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -327,6 +345,7 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -342,116 +361,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="www" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="www" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="www" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="js" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="www" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="www" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="js" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="upload" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="www" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="www" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="img" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="www" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="www" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="img" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="temp" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="www" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="www" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="file" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="www" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="www" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="file" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="tasks" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="www" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="www" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="css" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -590,6 +499,40 @@
               <option name="myItemId" value="default" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="common" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="task" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="www" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="www" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="application" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="views" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="default" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="all" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
@@ -687,7 +630,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -720,20 +662,17 @@
     <configuration default="true" type="PhpLocalRunConfigurationType" factoryName="PHP Console">
       <method />
     </configuration>
+    <configuration default="true" type="JavascriptDebugType" factoryName="JavaScript Debug">
+      <method />
+    </configuration>
     <configuration default="true" type="com.intellij.database.run.ConsoleRunConfigurationType" factoryName="Query Language Console">
       <option name="VM_PARAMETERS" value="" />
       <option name="USER_CFG_CLASS" />
       <option name="CONTEXT_PROVIDER" />
       <method />
     </configuration>
-    <configuration default="true" type="JavascriptDebugType" factoryName="JavaScript Debug">
-      <method />
-    </configuration>
     <configuration default="true" type="PhpBehatConfigurationType" factoryName="Behat">
       <BehatRunner />
-      <method />
-    </configuration>
-    <configuration default="true" type="PhpUnitRemoteRunConfigurationType" factoryName="PHPUnit on Server">
       <method />
     </configuration>
     <configuration default="true" type="js.build_tools.gulp" factoryName="Gulp.js">
@@ -742,6 +681,9 @@
       <tasks />
       <pass-parent-env-vars>false</pass-parent-env-vars>
       <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="PhpUnitRemoteRunConfigurationType" factoryName="PHPUnit on Server">
       <method />
     </configuration>
     <list size="0" />
@@ -780,7 +722,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="7" />
+    <frame x="-8" y="-8" width="1936" height="1052" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -789,19 +731,19 @@
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.44340974" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.14818764" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.15618336" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32972974" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32972974" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
     </layout>
   </component>
   <component name="Vcs.Log.UiProperties">
@@ -829,11 +771,18 @@
           <option name="timeStamp" value="21" />
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="41" />
+      <option name="time" value="42" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/application/views/default/common/content.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="2397" max-vertical-offset="5474">
+          <caret line="162" column="56" selection-start-line="162" selection-start-column="36" selection-end-line="162" selection-end-column="56" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/../../ilove.com/www/application/controllers/re_pswd.php">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.6340326" vertical-offset="7293" max-vertical-offset="11594">
@@ -968,13 +917,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://Z:/home/ilove.com/www/vers2_file/css/application.min.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-4.2115383" vertical-offset="4233" max-vertical-offset="61710">
-          <caret line="30" column="103" selection-start-line="30" selection-start-column="103" selection-end-line="30" selection-end-column="103" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/system/libraries/Email.php">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.68233943" vertical-offset="1071" max-vertical-offset="35683">
@@ -1039,13 +981,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/application/migrations/001_start_db.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.079254076" vertical-offset="0" max-vertical-offset="3247">
-          <caret line="4" column="7" selection-start-line="4" selection-start-column="7" selection-end-line="4" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/application/views/default/all/header.php">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.6004592" vertical-offset="106" max-vertical-offset="1003">
@@ -1057,7 +992,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="884">
           <caret line="0" column="80673" selection-start-line="0" selection-start-column="80673" selection-end-line="0" selection-end-column="80673" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1072,7 +1006,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.099299066" vertical-offset="0" max-vertical-offset="856">
           <caret line="5" column="599" selection-start-line="5" selection-start-column="599" selection-end-line="5" selection-end-column="599" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1083,68 +1016,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/css/style.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="3139" max-vertical-offset="4080">
-          <caret line="232" column="20" selection-start-line="232" selection-start-column="1" selection-end-line="232" selection-end-column="20" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/application/third_party/DevelBar/config/develbar.php">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.6831229" vertical-offset="0" max-vertical-offset="1037">
           <caret line="35" column="2" selection-start-line="35" selection-start-column="2" selection-end-line="35" selection-end-column="2" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/views/default/all/title.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.05944056" vertical-offset="0" max-vertical-offset="858">
-          <caret line="3" column="0" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/views/default/common/task/content.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.04895105" vertical-offset="111" max-vertical-offset="1224">
-          <caret line="9" column="19" selection-start-line="9" selection-start-column="19" selection-end-line="9" selection-end-column="19" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/views/default/common/content.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-11.769231" vertical-offset="2397" max-vertical-offset="5474">
-          <caret line="162" column="56" selection-start-line="162" selection-start-column="36" selection-end-line="162" selection-end-column="56" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/views/default/login/change_profile/content.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-26.461538" vertical-offset="1063" max-vertical-offset="1921">
-          <caret line="103" column="0" selection-start-line="103" selection-start-column="0" selection-end-line="103" selection-end-column="52" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/libraries/language/lang_controller.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-6.7777777" vertical-offset="4207" max-vertical-offset="9690">
-          <caret line="269" column="34" selection-start-line="269" selection-start-column="34" selection-end-line="269" selection-end-column="34" />
-          <folding>
-            <element signature="e#21934#22109#0#PHP" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/models/task_model.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-2.2692308" vertical-offset="553" max-vertical-offset="1411">
-          <caret line="36" column="12" selection-start-line="36" selection-start-column="12" selection-end-line="36" selection-end-column="12" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1156,14 +1031,137 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/application/views/default/login/change_profile/content.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="1063" max-vertical-offset="1921">
+          <caret line="103" column="0" selection-start-line="103" selection-start-column="0" selection-end-line="103" selection-end-column="52" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/js/upload/script.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="986" max-vertical-offset="4522">
+          <caret line="70" column="40" selection-start-line="70" selection-start-column="17" selection-end-line="70" selection-end-column="40" />
+          <folding>
+            <element signature="e#3139#4040#0" expanded="false" />
+            <element signature="e#4090#4288#0" expanded="false" />
+            <element signature="e#10390#15355#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/libraries/common.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="8479" max-vertical-offset="9350">
+          <caret line="532" column="48" selection-start-line="532" selection-start-column="48" selection-end-line="532" selection-end-column="48" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/system/database/drivers/mysql/mysql_driver.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.21469575" vertical-offset="1173" max-vertical-offset="13158">
+          <caret line="80" column="6" selection-start-line="80" selection-start-column="6" selection-end-line="80" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/css/style.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.53898305" vertical-offset="3246" max-vertical-offset="4165">
+          <caret line="219" column="119" selection-start-line="219" selection-start-column="119" selection-end-line="219" selection-end-column="119" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/views/default/common/content.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="65.88461" vertical-offset="4467" max-vertical-offset="5474">
+          <caret line="165" column="53" selection-start-line="165" selection-start-column="53" selection-end-line="165" selection-end-column="53" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/views/default/all/title.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-2.6153846" vertical-offset="0" max-vertical-offset="272">
+          <caret line="4" column="52" selection-start-line="4" selection-start-column="52" selection-end-line="4" selection-end-column="52" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/logs/log-2015-11-06.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-2.6153846" vertical-offset="1972" max-vertical-offset="2142">
+          <caret line="120" column="0" selection-start-line="120" selection-start-column="0" selection-end-line="120" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/views/default/common/task/content.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-10.115385" vertical-offset="60" max-vertical-offset="1224">
+          <caret line="19" column="21" selection-start-line="19" selection-start-column="21" selection-end-line="19" selection-end-column="21" />
+          <folding>
+            <element signature="e#1105#1219#0#HTML" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/models/task_model.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-24.692308" vertical-offset="531" max-vertical-offset="1411">
+          <caret line="69" column="50" selection-start-line="69" selection-start-column="50" selection-end-line="69" selection-end-column="50" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/migrations/001_start_db.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-3.2692308" vertical-offset="1836" max-vertical-offset="3247">
+          <caret line="113" column="97" selection-start-line="113" selection-start-column="97" selection-end-line="113" selection-end-column="97" />
+          <folding>
+            <marker date="1446651104689" expanded="true" signature="357:1366" placeholder="CREATE TABLE..users..." />
+            <marker date="1446651104689" expanded="true" signature="1581:1837" placeholder="INSERT INTO ..." />
+            <marker date="1446651104689" expanded="true" signature="2057:2626" placeholder="CREATE TABLE..projects..." />
+            <marker date="1446651104689" expanded="true" signature="2772:2915" placeholder="INSERT INTO ..." />
+            <marker date="1446651104689" expanded="true" signature="3130:3612" placeholder="CREATE TABLE..complexity..." />
+            <marker date="1446651104689" expanded="true" signature="3760:4026" placeholder="INSERT INTO ..." />
+            <marker date="1446651104689" expanded="true" signature="4217:4689" placeholder="CREATE TABLE..priority..." />
+            <marker date="1446651104689" expanded="true" signature="4835:5312" placeholder="INSERT INTO ..." />
+            <marker date="1446651104689" expanded="true" signature="5503:7565" placeholder="CREATE TABLE..task..." />
+            <marker date="1446651104689" expanded="true" signature="7707:8078" placeholder="INSERT INTO ..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/libraries/language/lang_controller.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-17.538462" vertical-offset="1839" max-vertical-offset="10047">
+          <caret line="135" column="96" selection-start-line="135" selection-start-column="96" selection-end-line="135" selection-end-column="96" />
+          <folding>
+            <element signature="e#23277#23452#0#PHP" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/application/views/default/common/task/view/content.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-20.923077" vertical-offset="2958" max-vertical-offset="4522">
+          <caret line="206" column="19" selection-start-line="206" selection-start-column="19" selection-end-line="206" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/js/script.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="2622" max-vertical-offset="5049">
-          <caret line="403" column="21" selection-start-line="403" selection-start-column="21" selection-end-line="403" selection-end-column="21" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="1636" max-vertical-offset="4522">
+          <caret line="479" column="62" selection-start-line="479" selection-start-column="62" selection-end-line="479" selection-end-column="62" />
           <folding>
             <element signature="n#!!doc;n#deleteData#0" expanded="false" />
             <element signature="n#!!block;n#deleteData#0" expanded="false" />
             <element signature="n#!!doc;n#ajaxRequestJSON#0" expanded="false" />
+            <element signature="n#!!block;n#ajaxRequestJSON#0" expanded="false" />
             <element signature="n#!!doc;n#showLoad#0" expanded="false" />
             <element signature="n#!!block;n#showLoad#0" expanded="false" />
             <element signature="n#!!doc;n#hideLoad#0" expanded="false" />
@@ -1182,32 +1180,36 @@
             <element signature="n#!!block;n#delUserProject#0" expanded="false" />
             <element signature="n#!!doc;n#attachUsers#0" expanded="false" />
             <element signature="n#!!block;n#attachUsers#0" expanded="false" />
-            <element signature="e#14779#15030#0" expanded="false" />
-            <element signature="e#15038#15189#0" expanded="false" />
-            <element signature="e#15237#16044#0" expanded="false" />
-            <element signature="e#16052#16271#0" expanded="false" />
-            <element signature="e#16315#16427#0" expanded="false" />
-            <element signature="e#16435#16586#0" expanded="false" />
-            <element signature="e#16629#16815#0" expanded="false" />
-            <element signature="e#16823#17189#0" expanded="false" />
-            <element signature="e#17230#17343#0" expanded="false" />
-            <element signature="e#17383#20038#0" expanded="false" />
-            <element signature="e#20046#20132#0" expanded="false" />
-            <element signature="e#20174#20666#0" expanded="false" />
-            <element signature="e#20674#20874#0" expanded="false" />
-            <element signature="e#20911#24170#0" expanded="false" />
-            <element signature="e#24179#24309#0" expanded="false" />
-            <element signature="e#24352#24753#0" expanded="false" />
-            <element signature="e#24761#24885#0" expanded="false" />
-            <element signature="e#24919#25112#0" expanded="false" />
+            <element signature="n#!!doc;n#validateNum#0" expanded="false" />
+            <element signature="n#!!doc;n#showDownloadImageDoc#0" expanded="false" />
+            <element signature="n#!!block;n#showDownloadImageDoc#0" expanded="false" />
+            <element signature="e#16553#17090#0" expanded="false" />
+            <element signature="e#17315#17566#0" expanded="false" />
+            <element signature="e#17574#17725#0" expanded="false" />
+            <element signature="e#17773#18580#0" expanded="false" />
+            <element signature="e#18588#18807#0" expanded="false" />
+            <element signature="e#18851#18963#0" expanded="false" />
+            <element signature="e#18971#19122#0" expanded="false" />
+            <element signature="e#19165#19351#0" expanded="false" />
+            <element signature="e#19359#19725#0" expanded="false" />
+            <element signature="e#19766#19879#0" expanded="false" />
+            <element signature="e#19919#22574#0" expanded="false" />
+            <element signature="e#22582#22668#0" expanded="false" />
+            <element signature="e#22710#23202#0" expanded="false" />
+            <element signature="e#23210#23410#0" expanded="false" />
+            <element signature="e#23447#26706#0" expanded="false" />
+            <element signature="e#26715#26845#0" expanded="false" />
+            <element signature="e#26888#27289#0" expanded="false" />
+            <element signature="e#27297#27421#0" expanded="false" />
+            <element signature="e#27455#27648#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/application/controllers/task.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-26.076923" vertical-offset="5765" max-vertical-offset="13991">
-          <caret line="923" column="37" selection-start-line="923" selection-start-column="37" selection-end-line="923" selection-end-column="37" />
+        <state vertical-scroll-proportion="0.42271662" vertical-offset="12644" max-vertical-offset="14382">
+          <caret line="1520" column="30" selection-start-line="1520" selection-start-column="30" selection-end-line="1520" selection-end-column="30" />
           <folding>
             <element signature="e#2437#2742#0#PHP" expanded="false" />
             <element signature="e#6731#7169#0#PHP" expanded="false" />
@@ -1217,11 +1219,8 @@
             <element signature="e#14467#14918#0#PHP" expanded="false" />
             <element signature="n#_getProject#0;n#Task#0;n#!!top" expanded="false" />
             <element signature="e#15679#15943#0#PHP" expanded="false" />
-            <element signature="n#addProject#0;n#Task#0;n#!!top" expanded="false" />
             <element signature="e#22998#23120#0#PHP" expanded="false" />
-            <element signature="n#deleteProject#0;n#Task#0;n#!!top" expanded="false" />
             <element signature="e#25711#25864#0#PHP" expanded="false" />
-            <element signature="n#updateProject#0;n#Task#0;n#!!top" expanded="false" />
             <element signature="e#28010#28131#0#PHP" expanded="false" />
             <element signature="n#getUsersProject#0;n#Task#0;n#!!top" expanded="false" />
             <element signature="e#29179#29296#0#PHP" expanded="false" />
@@ -1236,48 +1235,21 @@
             <element signature="e#40475#40698#0#PHP" expanded="false" />
             <element signature="e#41712#41824#0#PHP" expanded="false" />
             <element signature="e#43664#43912#0#PHP" expanded="false" />
+            <element signature="n#addTaskAttachFile#0;n#Task#0;n#!!top" expanded="false" />
             <element signature="e#49802#50045#0#PHP" expanded="false" />
             <element signature="n#_checkProject#0;n#Task#0;n#!!top" expanded="false" />
             <element signature="e#50884#51028#0#PHP" expanded="false" />
             <element signature="n#getAllUsersProject#0;n#Task#0;n#!!top" expanded="false" />
             <element signature="e#52646#53273#0#PHP" expanded="false" />
+            <element signature="n#_getAllAttach#0;n#Task#0;n#!!top" expanded="false" />
             <element signature="e#54479#54603#0#PHP" expanded="false" />
+            <element signature="n#_createFolder#0;n#Task#0;n#!!top" expanded="false" />
             <element signature="e#54738#54835#0#PHP" expanded="false" />
+            <element signature="n#_delFolder#0;n#Task#0;n#!!top" expanded="false" />
             <element signature="e#55232#55436#0#PHP" expanded="false" />
+            <element signature="n#_updateUsersTime#0;n#Task#0;n#!!top" expanded="false" />
             <element signature="e#58225#58312#0#PHP" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/libraries/common.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-14.269231" vertical-offset="7075" max-vertical-offset="9180">
-          <caret line="438" column="29" selection-start-line="438" selection-start-column="29" selection-end-line="438" selection-end-column="29" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/upload/script.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="2601" max-vertical-offset="6494">
-          <caret line="131" column="70" selection-start-line="131" selection-start-column="70" selection-end-line="131" selection-end-column="70" />
-          <folding>
-            <element signature="e#3139#4040#0" expanded="false" />
-            <element signature="e#4090#4288#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/application/views/default/common/task/view/content.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="4.378788" vertical-offset="0" max-vertical-offset="4233">
-          <caret line="221" column="68" selection-start-line="221" selection-start-column="68" selection-end-line="221" selection-end-column="68" />
-          <folding>
-            <element signature="e#3988#4010#0#HTML" expanded="true" />
-            <element signature="e#4797#4816#0#HTML" expanded="true" />
-            <element signature="e#5757#5774#0#HTML" expanded="true" />
-            <element signature="e#6510#6532#0#HTML" expanded="true" />
-            <element signature="e#6581#6603#0#HTML" expanded="true" />
+            <element signature="n#addTask#0;n#Task#0;n#!!top" expanded="false" />
           </folding>
         </state>
       </provider>

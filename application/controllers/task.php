@@ -1397,7 +1397,23 @@ class Task extends CI_Controller {
         echo json_encode($response);
     }
 
+    private function _computeTimeWork($data, $task)
+    {
+        if(!empty($task))
+        {
+            //TODO вычислить время, ушедшее на работу этой задачи
+        }
+        else
+            $this->common->errorCodeLog($data['error_code'][2], [__CLASS__, __METHOD__, __LINE__]);
+    }
 
+
+    /**
+     * Показываем полную информацию по заданию. Так сказать внутренности
+     * Shows the full information on the instructions. So to say the insides
+     * @param $idTask
+     * TODO translate
+     */
     public function view($idTask)
     {
         $config = [
@@ -1431,6 +1447,9 @@ class Task extends CI_Controller {
         if(is_numeric($data['infoTask']['time_start']))
             $data['infoTask']['time_start'] = date("Y-m-d H:i:s", $data['infoTask']['time_start']);
 
+        if(is_numeric($data['infoTask']['time_end']))
+            $data['infoTask']['time_end'] = date("Y-m-d H:i:s", $data['infoTask']['time_end']);
+
         switch($data['infoTask']['time_for_complete_value'])
         {
             case '0':     $data['infoTask']['time_for_complete_value'] = mb_substr($data['task_views'][47], 0, 1, 'utf8'); break;
@@ -1447,12 +1466,130 @@ class Task extends CI_Controller {
             unset($data['filesAttach']);
 
         //приоритет задания
-        $data['priority'] =  $this->common_model->getResult('priority', '', '', 'result_array', 'id_priority, icon, title_'.$data['segment'], 'id_priority', 'asc');
+        $data['priority'] =  $this->common_model->getResult('priority', '', '', 'result_array', 'id_priority, color, icon, title_'.$data['segment'], 'id_priority', 'asc');
         //сложность задания
         $data['complexity'] = $this->common_model->getResult('complexity', '', '', 'result_array', 'id_complexity, color, name_complexity_'.$data['segment'], 'id_complexity', 'asc');
         //доделываем название страницы
         $data['title'] .= ' "'.$data['infoTask']['title'].'"';
 
         $this->display_lib->display($data, $config['pathToViewDir']);
+    }
+
+
+
+
+    /**
+     * (AJAX)
+     * Обновляем задание, но только вываливающиеся списки
+     * Update task, but just select into html
+     * @param null $whatUpdate - ид html элемента, который отвечает за какой либо параметр (id html element that is responsible for any parameter)
+     * todo выводить данные о том, для js, "начало работы", задача выполнена, и сколько ушло времени на все это.
+     */
+    public function updateTask($whatUpdate = null)
+    {
+        //проверяем на ajax и его параметры
+        $response = $this->common->isAjax(["num",'int', 'notZero'], ['idTask', 'int']);
+        if($response['status'] != 'error')
+        {
+            $data = $response['data'];
+            unset($response['data']);
+
+            //проверяем то, какой из параметров нам стоит обновить в бд. На данный момент передаются id html элементов, которые прикреплены к определенному select в html
+            //check which of the options we should update the database. Currently transmitted id html elements, which are secured to select a certain html
+            $fail = false;
+            $whatUpdate = $this->common->clear($whatUpdate);
+            switch($whatUpdate)
+            {
+                case 'taskLevelInfo':       $row = 'complexity_id';     break;
+                case 'statusLevelInfo':     $row = 'status';            break;
+                case 'priorityLevelInfo':   $row = 'priority_id';       break;
+                default:
+                    $this->common->errorCodeLog($data['error_code'][1], [__CLASS__, __METHOD__, __LINE__]);
+                    $fail = true;
+            }
+
+
+            if($fail === false)
+            {
+                $this->load->model('common_model');
+                $idTask = intval($this->common->clear($this->input->post('idTask')));
+                $num = intval($this->common->clear($this->input->post('num')));
+
+                $check = $this->common_model->getResult('task', 'id_task', $idTask, 'row_array', 'performer_id, pause, status, time_start');
+                if(!empty($check))
+                {
+                    $new = [];
+                    //если пытаются изменить статус у задачи, которая присвоена другому юзеру
+                    if($whatUpdate == 'statusLevelInfo')
+                    {
+                        if($data['idUser'] != $check['performer_id'])
+                        {
+                            echo json_encode(['status' => 'error', 'resultTitle'=> $data['languages_desc'][0]['titleError'][$data['segment']], 'resultText'=> $data['task_controller'][10]]);
+                            return;
+                        }
+
+                        //если задача выполнена, но ее хотят поставить на паузу
+                        if($check['status'] == 2 && $num == 3)
+                        {
+                            echo json_encode(['status' => 'error', 'resultTitle'=> $data['languages_desc'][0]['titleError'][$data['segment']], 'resultText'=> $data['task_controller'][14]]);
+                            return;
+                        }
+
+                        //если изменяем статус с "поставленно" на что то другое
+                        if($check['status'] == 0 && $num > 0)
+                        {
+                            if($check['time_start'] == '')
+                                $new['time_start'] = time();
+                        }
+
+                        //если задача "выполнена"
+                        if($num == 2)
+                            $new['time_end'] = time();
+
+                        //если задача на "pause"
+                        if($num == 3 && $check['status'] != 3)
+                        {
+                            if($check['pause'] != '')
+                                $new['pause'] = unserialize($check['pause']);
+
+                            $new['pause'][]['start'] = time();
+                        }
+                        //если снимаем с паузы
+                        elseif($num < 3 && $check['status'] == 3)
+                        {
+                            if($check['pause'] != '')
+                                $new['pause'] = unserialize($check['pause']);
+                            else
+                                $new['pause'][]['start'] = time();
+
+                            //находим последнюю паузу, и у нее ставим конечное время
+                            $new['pause'][count($new['pause'])-1]['end'] = time();
+                        }
+
+                        if(isset($new['pause']))
+                            if(!empty($new['pause']))
+                                $new['pause'] = serialize($new['pause']);
+
+                    }
+
+                    $new[$row] = $num;
+
+                    //TODO сделать время начало работы таким: вначале показывать сколько секунд прошло, потом минут, потом часов, потом дней и часов, если больше 2 дней, то выводить простое date('...', data);
+                    //TODO сделать поменять исполнителя!
+
+                    $q = $this->common_model->updateData($new, 'id_task', $idTask, 'task', true);
+                    if($q > 0)
+                        $response = ['status' => 'success'];
+                    else
+                        $response = ['status' => 'error', 'resultTitle'=> $data['languages_desc'][0]['titleError'][$data['segment']], 'resultText'=> $data['welcome_controller'][13]];
+                }
+                else
+                    $response = ['status' => 'error', 'resultTitle'=> $data['languages_desc'][0]['titleError'][$data['segment']], 'resultText'=> $data['task_controller'][13]];
+            }
+            else
+                $response = ['status' => 'error', 'resultTitle'=> $data['languages_desc'][0]['titleError'][$data['segment']], 'resultText'=> $data['task_views'][6]];
+        }
+
+        echo json_encode($response);
     }
 }

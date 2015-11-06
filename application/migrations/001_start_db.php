@@ -132,7 +132,7 @@ class Migration_Start_db extends CI_Migration{
                   `user_id` int(10) unsigned NOT NULL  COMMENT 'id юзера, кто создал задачу',
                   `project_id` int(10) unsigned NOT NULL,
                   `title` varchar(255) NOT NULL,
-                  `status` enum('0','1','2','3') NOT NULL COMMENT '0-добавили,1-делаем,2-готово,3-на паузе',
+                  `status` varchar(1) NOT NULL DEFAULT '0' COMMENT '0-добавили,1-делаем,2-готово,3-на паузе',
                   `performer_id` INT NOT NULL COMMENT 'id исполнителя',
                   `time_add` VARCHAR(50) NOT NULL COMMENT 'время добавления задачи',
                   `time_start` varchar(255) NOT NULL,

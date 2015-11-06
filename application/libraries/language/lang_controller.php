@@ -123,6 +123,20 @@ class Lang_controller
                     ],
         ];
 
+        $additional_ru = "Класс: :_class_:; метод: :_method_:; строка: :_line_:.";
+        $lang['lang_ru']['error_code'] = [
+            1   =>  "Вам нужно было передавать параметр в функцию, который равен id html элемента, отвечающий за то, какой параметр задачи обновляем! ".$additional_ru." Возможно вы изменили дизайн, и некоторые html элементы были удалены, которые должны были присутствовать.",
+            2   =>  "Вы не передали данные об задаче в эту функцию! ".$additional_ru,
+
+        ];
+
+        $additional_en = "Class: :_class_:; method: :_method_:; line: :_line_:.";
+        $lang['lang_en']['error_code'] = [
+            1   =>  "You had to pass a parameter to a function, which is id html element responsible for setting a task update! ".$additional_en." Maybe you changed the design, and some html elements have been removed, which should have been present.",
+            2   =>  "You do not pass the data about the task in this function! ".$additional_en,
+
+        ];
+
         /********************************************
          * Перевод для контроллера Welcome (RU)
          * Transfer controller Welcome (RU)
@@ -276,6 +290,8 @@ class Lang_controller
             10      =>  'Вы пытаетесь использовать чужой проект!',
             11      =>  'Выбранный исполнитель не существует или не прикреплен к этому проекту!',
             12      =>  'Просмотр задачи:',
+            13      =>  'Такой задачи не существует!',
+            14      =>  "Нельзя ставить задачу на паузу, когда вы ее выполнили",
 
         ];
 
@@ -298,6 +314,8 @@ class Lang_controller
             10      =>  'You are trying to use someone elses project!',
             11      =>  'The selected artist does not exist or is not attached to the project!',
             12      =>  'Viewing task:',
+            13      =>  'This task does not exist!',
+            14      =>  "You can not set the task to pause when you performed it",
 
 
         ];
@@ -375,6 +393,7 @@ class Lang_controller
             69  =>  "Задача поставлена: ",
             70  =>  "Начало работы: ",
             71  =>  " редактирование задачи",
+            72  =>  "Задача выполнена: ",
 
             'status_task_0'      =>  'Поставлена',
             'status_task_1'      =>  'Выполняется',
@@ -456,6 +475,7 @@ class Lang_controller
             69  =>  "The task posed: ",
             70  =>  "The beginning of work: ",
             71  =>  " editing task",
+            72  =>  "Task completed: ",
 
             'status_task_0'      =>  'Supplied',
             'status_task_1'      =>  'Running',
@@ -559,6 +579,7 @@ class Lang_controller
         $lang['lang_'.$segment]['js'][43]               =   $lang['lang_'.$segment]['task_views'][62];
         $lang['lang_'.$segment]['js'][44]               =   $lang['lang_'.$segment]['task_views'][58];
         $lang['lang_'.$segment]['js'][45]               =   $lang['lang_'.$segment]['task_views'][68];
+        $lang['lang_'.$segment]['js'][46]               =   $lang['lang_'.$segment]['task_views'][64];
 
 
 

@@ -233,3 +233,8 @@ thead th {
 .priehaliKinaNeBudet{
     text-decoration: line-through;
 }
+
+.label-none, .label-{
+    color: #FFF;
+    background-color: #777;
+}
