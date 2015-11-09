@@ -48,7 +48,7 @@ if($statusUser == 1):?>
                             <div class="col-lg-12" style="margin-bottom: 15px;">
                                 <div class="label label-info" style="border-radius: 5px 5px 0px 0px;"><?=$task_views[61];?></div>
                                 <div>
-                                    <!--ALL PROJECTS-->
+                                    <!--Выбор исполнителя-->
                                     <?php if(!empty($myProjects)):?>
                                         <select id="perfomerUser" class="form-control"  style="margin-top: 4px;">
                                             <?php foreach($myProjects[0]['userInProject'] as $key=>$user):?>
@@ -56,7 +56,7 @@ if($statusUser == 1):?>
                                             <?php endforeach;?>
                                         </select>
                                     <?php endif;?>
-                                    <!--END ALL PROJECTS-->
+                                    <!--END Выбор исполнителя-->
                                 </div>
                             </div>
 

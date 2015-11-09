@@ -534,6 +534,7 @@ class Lang_controller
             33  =>  "не может быть больше",
             38  =>  "(поле может принимать значение от 1 до 20 часов - без учета обеда)",
             41  =>  "Ошибки:",
+            49  =>  'Поле \"Название задачи\" и \"Описание\" должны быть изменены для сохранения',
 
         ];
 
@@ -567,6 +568,7 @@ class Lang_controller
             33  =>  "can not be more than",
             38  =>  "(field can have a value from 1 to 20 hours - without dinner)",
             41  =>  "Errors:",
+            49  =>  'The \"Task Name\" and \"Description\" should be changed to save',
 
         ];
 

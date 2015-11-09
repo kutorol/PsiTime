@@ -1546,7 +1546,7 @@ class Task extends CI_Controller {
         //сложность задания
         $data['complexity'] = $this->common_model->getResult('complexity', '', '', 'result_array', 'id_complexity, color, name_complexity_'.$data['segment'], 'id_complexity', 'asc');
         //доделываем название страницы
-        $data['title'] .= ' "'.$data['infoTask']['title'].'"';
+        $data['title'] .= ' "<span id="changeTitleInfo">'.$data['infoTask']['title'].'</span>"';
         //получаем вид кто исполнитель и кто поставил задачу
         $data['userImageView']  = $this->load->view(DEFAULT_VIEW."/common/task/view/image_user.php", $data, true);
 
@@ -1572,6 +1572,20 @@ class Task extends CI_Controller {
      */
     public function updateTask($whatUpdate = null)
     {
+        //если обновляем основные данные о задаче
+        if($this->common->clear($whatUpdate) == "description")
+        {
+            $failDesc = false;
+            if(isset($_POST['title']) != '' && isset($_POST['text']))
+            {
+                $text = $this->common->clear($this->input->post('text', true));
+                $title = $this->common->clear($this->input->post('title', true));
+            }
+            else
+                $failDesc = true;
+        }
+
+
         //проверяем на ajax и его параметры
         $response = $this->common->isAjax(["num",'int', 'notZero'], ['idTask', 'int']);
         if($response['status'] != 'error')
@@ -1590,6 +1604,7 @@ class Task extends CI_Controller {
                 case 'statusLevelInfo':     $row = 'status';            break;
                 case 'priorityLevelInfo':   $row = 'priority_id';       break;
                 case 'performerUser':       $row = 'performer_id';       break;
+                case 'description':         $row = 'title'; $row_2 = "text";      break;
                 default:
                     $this->common->errorCodeLog($data['error_code'][1], [__CLASS__, __METHOD__, __LINE__]);
                     return $this->common->returnResponse($data, $data['task_views'][6]);
@@ -1609,6 +1624,21 @@ class Task extends CI_Controller {
                     return $this->common->returnResponse($data, $data['task_controller'][21].$data['task_controller'][22], false, ['redirectIndex'=>true]);
 
                 $new = [];
+
+                //если изменяем основные данные о задаче
+                if($row == 'title')
+                {
+                    if($failDesc === true)
+                        return $this->common->returnResponse($data, $data['task_views'][6]);
+
+                    if(preg_match("/^[а-яА-ЯёЁa-zA-Z0-9\-_ !?()]{3,256}$/iu", $title))
+                    {
+                        $new[$row_2] = $text;
+                        $new[$row] = $title;
+                    }
+                    else
+                        return $this->common->returnResponse($data,  $data['task_views'][19]." ".$data['task_views'][20]);
+                }
 
                 //если изменяют исполнителя задачи
                 if($row == "performer_id")
@@ -1735,8 +1765,12 @@ class Task extends CI_Controller {
                         $new['pause_for_complite'] = serialize($new['pause_for_complite']);
                 }
 
-                //новое значение
-                $new[$row] = $num;
+                if($row != "title")
+                {
+                    //новое значение
+                    $new[$row] = $num;
+                }
+
 
                 $q = $this->common_model->updateData($new, 'id_task', $idTask, 'task', true);
                 if($q > 0)
@@ -1765,6 +1799,12 @@ class Task extends CI_Controller {
                         $response['newViewImgUser'] = $this->load->view(DEFAULT_VIEW."/common/task/view/image_user.php", $data, true);
                     }
 
+                    //если обновляли описание задачи
+                    if($row == "title")
+                    {
+                        $response['newTitle'] = $title;
+                        $response['newText'] = $text;
+                    }
                 }
                 else
                     return $this->common->returnResponse($data, $data['welcome_controller'][13]);

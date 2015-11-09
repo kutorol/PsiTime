@@ -97,6 +97,7 @@ function ajaxRequestJSON(url, additionalDelBlock, hidePreloader)
 
 /**
  * Показываем прелоадер
+ * show preloader
  */
 function showLoad()
 {
@@ -105,6 +106,7 @@ function showLoad()
 
 /**
  * скрываем прелоадер
+ * hide preloader
  */
 function hideLoad()
 {
@@ -560,8 +562,90 @@ function changeSelect(idElement)
     });
 }
 
+/**
+ * Редактируем конкретную задачу (название и описание)
+ * We edit a specific task (the title and the description)
+ * @returns {boolean}
+ */
+function editDescTask()
+{
+    var fail = false, errorMessage = "<ul>", title = $("#titleTaskInfo"), titleHtml = $("#tastTitleInfo"), textHtml = $("#taskTextInfo");
+    //название
+    var titleTask = $.trim(title.val());
+    if(titleTask == '' || /^[a-zA-Zа-яА-ЯёЁ0-9-_ !?()]{3,256}$/.test(titleTask) === false)
+    {
+        errorMessage += "<li>" + jsLang[28] + " '<i>"+jsLang[27]+"</i>':<br>" + jsLang[6] + "</li>";
+        fail = true;
+        title.val(titleHtml.html());
+    }
+
+    //описание
+    var descTask =  $.trim($("#textTaskInfo").val());
+
+
+    //если название и описание не изменилось
+    if(titleTask == $.trim(titleHtml.html()) && descTask == $.trim(textHtml.html()))
+    {
+        errorMessage += "<li>"+jsLang[49]+"</li>";
+        fail = true;
+    }
+
+    //если были ошибки
+    if(fail === true)
+    {
+        errorMessage += "</ul>";
+        addTitle({title: jsLang[5], message: errorMessage}); //показываем ошибку
+        return false;
+    }
+
+    //шаблон ajax запроса
+    ajaxRequestJSON("task/updateTask/description");
+    $.ajax({
+        data: {num: 1, idTask: $("#idTaskInfo").html(), title: titleTask, text: descTask},
+        success: function(data)
+        {
+            if(data.status == 'error')
+            {
+                errorSuccessAjax({title: data.resultTitle, message: data.resultText}); //показываем модалку
+                return false;
+            }
+
+            //обновляем на странице название
+            if(data.newTitle != $.trim(titleHtml.html()))
+            {
+                //TODO заменить экранирование на более подходящие символы (чтобы красиво было)
+                $("#tastTitleInfo").fadeOut(150, function(){ $(this).html(data.newTitle.replace(/&amp;/g,"&")).fadeIn(150);});
+                $("#changeTitleInfo").fadeOut(150, function(){ $(this).html(data.newTitle.replace(/&amp;/g,"&")).fadeIn(150);  });
+            }
+
+            if(data.newText != textHtml.html())
+                textHtml.fadeOut(150, function(){ $(this).html(data.newText).fadeIn(150);  });
+
+
+            //закрываем форму редактирования задачи
+            $(".editTaskA").click();
+            title.val(data.newTitle);
+            $("#textTaskInfo").val(data.newText);
+
+            hideLoad();
+        }
+    });
+}
+
 $(function() {
 
+    /**
+     * Когда внесли изменения в название или в описание конкретной задачи, то по нажатию кнопки сохранить - сохраняем
+     * When made changes to the name or description of the specific problem, then clicking Save - Saves
+     */
+    $("#saveEditTask").on('click', function(){
+        editDescTask();
+    });
+
+    /**
+     * Функция сработает тогда, когда в конкретной задаче изменяем статус, сложность, приоритет и исполнителя задачи
+     * The function works when a specific task of the status change, complexity, priority and task the Executive
+     */
     $(".selectpicker").on('change', function(){
         changeSelect($(this).attr("id"));
     });
@@ -630,8 +714,8 @@ $(function() {
     });
 
     /**
-     * Когда выбираем нужную нам сложность, то цвет у самого select становиться цветом выбранного option
-     * When we select the desired complexity, the color had become a very select color selected option
+     * Когда выбираем нужную нам сложность, то цвет у самого select становиться цветом выбранного option. При добавлении новой задачи
+     * When we select the desired complexity, the color had become a very select color selected option. When you add a new task
      */
     $("#taskLevel option").click(function(){
         var color = $(this).attr("class");
@@ -727,8 +811,8 @@ $(function() {
     });
 
     /**
-     * Одной кнопкой удаляем все теги
-     * One button to remove all tags
+     * Одной кнопкой удаляем все теги. Это при удалении людей из проекта
+     * One button to remove all tags. It during removal of people from the project
      */
     $(".delUserProject").click(function(){
         var id = $(this).attr('data-id');
@@ -744,8 +828,8 @@ $(function() {
     });
 
     /**
-     * При нажатии на переименовать скрываем ссылку и показываем инпут, а так же сохраняем результат
-     * When you click on a link and rename hide show INPUT, as well as store the result
+     * При нажатии на переименовать скрываем ссылку и показываем инпут, а так же сохраняем результат. Это при переименовании проекта
+     * When you click on a link and rename hide show INPUT, as well as store the result. This is when you rename the project
      */
     $(".btnReName").click(function(){
         var id = $(this).attr("data-id"); //ну бля, ид естесно

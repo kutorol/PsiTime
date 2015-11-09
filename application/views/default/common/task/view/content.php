@@ -10,8 +10,8 @@
 
 
 
-                <h3><?=$infoTask['title']?></h3>
-                <p><?=$infoTask['text']?></p>
+                <h3 id="tastTitleInfo"><?=$infoTask['title']?></h3>
+                <p id="taskTextInfo"><?=$infoTask['text']?></p>
 
                 <hr>
                 <p >
@@ -22,7 +22,25 @@
 
                 <!--edit task-->
                 <div style="display: none;" id="showFadeEditTask">
+                    <form method="post" action="" onsubmit="editDescTask(); return false;" >
+                        <div class="form-group">
+                            <label for="titleTaskInfo"><?=$task_views[38]?>:</label>
+                            <input type="title" class="form-control" id="titleTaskInfo" placeholder="<?=$task_views[38]?>" value="<?=$infoTask['title']?>">
+                        </div>
 
+
+                        <div class="form-group">
+                            <label for="textTask"><?=$task_views[39]?>:</label>
+                            <textarea  class="form-control" placeholder="<?=$task_views[39]?>"  onkeypress="if(event.ctrlKey && event.keyCode==13) {$('#saveEditTask').click(); return false;}" rows="5" id="textTaskInfo"><?=$infoTask['text']?></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="pull-right">
+                                <button type="button" class="btn btn-primary" id="saveEditTask"><?=$task_views[17]?></button>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="clearfix"></div>
                 </div>
                 <!--end edit task-->
                 <hr>

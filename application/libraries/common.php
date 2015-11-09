@@ -550,7 +550,7 @@ class Common
      * @param bool $arrayOrNot - если true, то $title должен быть массивом (if true, $title has to be an array)
      * @param array $additionalParam - дополнительные параметры, которые нужно передать (additional parameters which need to be transferred)
      * @return bool
-     * TODO сделать файл, в котором будет содержаться инфа об ошибке, которая высвечивалась людям. Типо свой лог
+     * TODO сделать запись в файл, в котором будет содержаться инфа об ошибке, которая высвечивалась людям. Типо свой лог
      */
     public function returnResponse(&$data, $title = '', $arrayOrNot = false, $additionalParam = [])
     {
