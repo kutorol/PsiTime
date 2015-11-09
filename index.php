@@ -1,4 +1,7 @@
 <?php
+
+define('VERSION_APP', '0.7.3.67a7cbd pa');
+
 /*
  *---------------------------------------------------------------
  * APPLICATION ENVIRONMENT

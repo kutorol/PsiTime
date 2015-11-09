@@ -125,14 +125,14 @@ class Lang_controller
 
         $additional_ru = "Класс: :_class_:; метод: :_method_:; строка: :_line_:.";
         $lang['lang_ru']['error_code'] = [
-            1   =>  "Вам нужно было передавать параметр в функцию, который равен id html элемента, отвечающий за то, какой параметр задачи обновляем! ".$additional_ru." Возможно вы изменили дизайн, и некоторые html элементы были удалены, которые должны были присутствовать.",
+            1   =>  ["Вам нужно было передавать параметр в функцию, который равен id html элемента, отвечающий за то, какой параметр задачи обновляем! ".$additional_ru, " Возможно вы изменили дизайн, и некоторые html элементы были удалены, которые должны были присутствовать."],
             2   =>  "Вы не передали данные об задаче в эту функцию! ".$additional_ru,
 
         ];
 
         $additional_en = "Class: :_class_:; method: :_method_:; line: :_line_:.";
         $lang['lang_en']['error_code'] = [
-            1   =>  "You had to pass a parameter to a function, which is id html element responsible for setting a task update! ".$additional_en." Maybe you changed the design, and some html elements have been removed, which should have been present.",
+            1   =>  ["You had to pass a parameter to a function, which is id html element responsible for setting a task update! ".$additional_en, " Maybe you changed the design, and some html elements have been removed, which should have been present."],
             2   =>  "You do not pass the data about the task in this function! ".$additional_en,
 
         ];
@@ -292,7 +292,14 @@ class Lang_controller
             12      =>  'Просмотр задачи:',
             13      =>  'Такой задачи не существует!',
             14      =>  "Нельзя ставить задачу на паузу, когда вы ее выполнили",
-
+            15      =>  " сек.",
+            16      =>  " назад",
+            17      =>  " м.",
+            18      =>  " ч.",
+            19      =>  " д.",
+            20      =>  " нед.",
+            21      =>  "Досадно... Проект, к которому принадлежит данная задача, недавно был удален, а значит и задача удалена.",
+            22      =>  " Теперь вас перекинет на главную страницу через 5 секунд.",
         ];
 
         /********************************************
@@ -316,7 +323,14 @@ class Lang_controller
             12      =>  'Viewing task:',
             13      =>  'This task does not exist!',
             14      =>  "You can not set the task to pause when you performed it",
-
+            15      =>  " s.",
+            16      =>  " ago",
+            17      =>  " min.",
+            18      =>  " h.",
+            19      =>  " d.",
+            20      =>  " w.",
+            21      =>  "Annoyingly... The project to which this task belongs, was removed recently, so and the task is removed.",
+            22      =>  " Now will throw you on the homepage through 5 seconds.",
 
         ];
 
@@ -394,6 +408,7 @@ class Lang_controller
             70  =>  "Начало работы: ",
             71  =>  " редактирование задачи",
             72  =>  "Задача выполнена: ",
+            73  =>  "Изменить исполнителя",
 
             'status_task_0'      =>  'Поставлена',
             'status_task_1'      =>  'Выполняется',
@@ -476,6 +491,7 @@ class Lang_controller
             70  =>  "The beginning of work: ",
             71  =>  " editing task",
             72  =>  "Task completed: ",
+            73  =>  "To change the performer",
 
             'status_task_0'      =>  'Supplied',
             'status_task_1'      =>  'Running',
@@ -580,9 +596,12 @@ class Lang_controller
         $lang['lang_'.$segment]['js'][44]               =   $lang['lang_'.$segment]['task_views'][58];
         $lang['lang_'.$segment]['js'][45]               =   $lang['lang_'.$segment]['task_views'][68];
         $lang['lang_'.$segment]['js'][46]               =   $lang['lang_'.$segment]['task_views'][64];
+        $lang['lang_'.$segment]['js'][47]               =   $lang['lang_'.$segment]['error_code'][1][1];
+        $lang['lang_'.$segment]['js'][48]               =   $lang['lang_'.$segment]['task_views'][73];
 
 
 
+        $lang['lang_'.$segment]['error_code'][1] = $lang['lang_'.$segment]['error_code'][1][0].$lang['lang_'.$segment]['error_code'][1][1];
 		
 		return $lang['lang_'.$segment];
 	}

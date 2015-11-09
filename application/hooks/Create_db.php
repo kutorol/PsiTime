@@ -65,11 +65,37 @@ class Create_db {
         //если число выводимых задач и прочих вещей не является числом - ошибка
         if(!is_numeric(COUNT_OBJECT_PER_PAGE) || intval(COUNT_OBJECT_PER_PAGE) <= 2)
         {
-            log_message('error', $lang['error_7']);
+            log_message('error', $lang['error_9']);
             show_error($lang['error_9'], 500, $lang['error_8']);
             exit;
         }
 
+        //проверка email
+        if (!preg_match("/^[a-zA-Z0-9_\.\-]+@[a-zA-Z0-9\-]+\.[a-zA-Z\-\.]+$/iu", ADMIN_EMAIL))
+        {
+            log_message('error', $lang['error_10']);
+            show_error($lang['error_10'], 500, $lang['error_8']);
+            exit;
+        }
+
+        //проверка имени администратора
+        if(!preg_match("/^[а-яА-ЯёЁa-zA-Z0-9\-_ ]{3,20}$/iu", ADMIN_NAME))
+        {
+            log_message('error', $lang['error_11']);
+            show_error($lang['error_11'], 500, $lang['error_8']);
+            exit;
+        }
+
+        //проверка логина администратора
+        if(!preg_match("/^[a-zA-Z0-9\-_]{5,20}$/iu", ADMIN_LOGIN))
+        {
+            log_message('error', $lang['error_12']);
+            show_error($lang['error_12'], 500, $lang['error_8']);
+            exit;
+        }
+
+        //эта проверка нужна только для того, чтобы знать, заполнил ли человек config.php в корне сайта
+        //this check is necessary only in order that the nobility, whether the person of config.php in a site root filled
         if(IS_FILL_KEY != '')
         {
             if(YOUR_LANG != '')
@@ -87,21 +113,12 @@ class Create_db {
                             $redirect = $this->_createDB($lang, $filePath);
                     }
 
-
-                    /**
-                     * FIXME удалить time.log/ на другом сервере
-                     */
                     if($redirect === true)
                     {
-                        //FIXME не редиректит, если до этого не был отправлен заголовок или наоборот он не должен быть отправлен. Короче тут бред пиздец какой
-                        //самый простой и тупой способ отправить заголовки, чтобы потом редирект сработал, иначе миграции не применятся и установка не завершится.
-                        //Кто поумнее - исправьте на более правильный вариант
-                        //echo 1;
                         //header('Location: /time.log/'.YOUR_LANG.'/welcome/install');
                         header('Location: /'.YOUR_LANG.'/welcome/install');
                         exit;
                     }
-
                 }
                 catch(Exception $e)
                 {

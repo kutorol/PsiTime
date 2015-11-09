@@ -34,12 +34,14 @@
                             <td><span style="font-size: 13px;" class="label label-<?=$task['color'];?>"><?=$task['name_complexity_'.$segment];?></span></td>
                             <td><?=$task['time_for_complete'];?> <?=$task['time_for_complete_value'];?></td>
                             <td>
-                                <select id="statusLevelInList_<?=$task['id_task'];?>" class="selectpicker statusLevelInList">
-                                    <?php for($i = 0; $i < 4; $i++):?>
-                                        <option value="<?=$i;?>" <?=($task['status'] == $i) ? 'selected' : '';?> ><?=$task_views['status_task_'.$i];?></option>
-                                    <?php endfor;?>
+                                <?=$task_views['status_task_'.$task['status']];?>
+
+                                <!--<select id="statusLevelInList_<?/*=$task['id_task'];*/?>" class="selectpicker statusLevelInList">
+                                    <?php /*for($i = 0; $i < 4; $i++):*/?>
+                                        <option value="<?/*=$i;*/?>" <?/*=($task['status'] == $i) ? 'selected' : '';*/?> ><?/*=$task_views['status_task_'.$i];*/?></option>
+                                    <?php /*endfor;*/?>
                                 </select>
-                                <script> $(function() { $('#statusLevelInList_<?=$task['id_task'];?>').selectpicker(); });</script>
+                                <script> $(function() { $('#statusLevelInList_<?/*=$task['id_task'];*/?>').selectpicker(); });</script>-->
                             </td>
 
                             <td align="center" <?=($task['user_id'] == $task['performer_id']) ? "colspan='2'" : "";?> ><img src="<?=base_url()?>img/<?=$task['img_performer'];?>"  style="height: 50px; width: 50px; display: block;"> <?=$task['name_performer'];?></td>

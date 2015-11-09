@@ -14,10 +14,9 @@
 | and path to your installation. However, you should always configure this
 | explicitly and never rely on auto-guessing, especially in production
 | environments.
-| FIXME убрать дома
+|
 */
-//$config['base_url'] = 'http://localhost/time.log/';
-$config['base_url'] = 'http://time.log/';
+$config['base_url'] = SITE_URL;
 
 /*
 |--------------------------------------------------------------------------

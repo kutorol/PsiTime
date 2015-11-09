@@ -139,6 +139,7 @@ class Migration_Start_db extends CI_Migration{
                   `time_end` varchar(255) NOT NULL,
                   `text` text NOT NULL,
                   `pause` text NOT NULL,
+                  `pause_for_complite` TEXT NOT NULL COMMENT 'это пауза, когда задача выполнена, а потом ее вновь выполняют',
                   `day_start` int(10) unsigned NOT NULL,
                   `month_start` int(10) unsigned NOT NULL,
                   `year_start` int(10) unsigned NOT NULL,

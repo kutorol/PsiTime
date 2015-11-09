@@ -155,20 +155,20 @@
                     <?=$task_views[45]?>: <label class="label label-success small-text"><?=$infoTask['time_for_complete'];?> <?=$infoTask['time_for_complete_value'];?></label>
                     <hr>
                 </p>
-                <!--end time-->
 
                 <div>
                     <p>
                         <?=$task_views[69];?> <label class="label label-info small-text"><?=$infoTask['time_add']?></label>
                     </p>
-                    <p>
+                    <p id="startTimeTask">
                         <?php if($infoTask['time_start'] != ''){ echo $task_views[70]." <label class='label label-info small-text'>".$infoTask['time_start']."</label>";}?>
                     </p>
-                    <p>
+                    <p id="endTimeTask">
                         <?php if($infoTask['time_end'] != ''){ echo $task_views[72]." <label class='label label-info small-text'>".$infoTask['time_end']."</label>";}?>
                     </p>
                     <hr>
                 </div>
+                <!--end time-->
 
                 <!--task level-->
                 <p>
@@ -188,7 +188,7 @@
                 <p>
                     <?=$task_views[64]?>:<br>
                     <div align="center">
-                        <?php if($idUser == $infoTask['performer_id']):?>
+                        <?php if($idUser == $infoTask['performer_id'] || $idUser == $infoTask['user_id']):?>
                         <select class="selectpicker col-lg-12" data-style="<?php if($infoTask['status'] != 2){echo "btn-info";}?>" id="statusLevelInfo">
                             <?php if($infoTask['status'] == 0){$i = 0;}else{$i = 1;}?>
                             <?php for($i; $i < 4; $i++):?>
@@ -217,32 +217,16 @@
                 </p>
                 <!--end priority-->
 
+                <!--user performer-->
+                <div id="change_performer">
+                    <?=$changeUserView;?>
+                </div>
+                <!--end user performer-->
+
                 <!--image user-->
-                <?php if($infoTask['user_id'] != $infoTask['performer_id']):?>
-
-                    <?=$task_views[61]?>:<br>
-                    <p align="center">
-                        <img src="<?=base_url()?>img/<?=$infoTask['img_performer'];?>" style="height: 100px; width: 100px; display: block;">
-                        <?=$infoTask['name_performer'];?>
-                    </p>
-
-                    <hr>
-
-                    <br><br>
-                    <?=$task_views[65]?>:<br>
-                    <p align="center">
-                        <img src="<?=base_url()?>img/<?=$infoTask['user_img'];?>"  style="height: 100px; width: 100px; display: block;">
-                        <?=$infoTask['name'];?>
-                    </p>
-                <?php else:?>
-
-                    <?=$task_views[61]?>, <?=$task_views[65]?>:<br><br>
-                    <p align="center">
-                        <img src="<?=base_url()?>img/<?=$infoTask['img_performer'];?>"  style="height: 100px; width: 100px; display: block;">
-                        <?=$infoTask['name_performer'];?>
-                    </p>
-                    <hr>
-                <?php endif;?>
+                <div id="newViewImgUser">
+                    <?=$userImageView;?>
+                </div>
                 <!--end image user-->
 
                 <p>&nbsp;</p>

@@ -541,5 +541,30 @@ class Common
     }
 
 
+    /**
+     * (FOR AJAX)
+     * Если возникает какая то ошибка, то передаем ее в json
+     * If there is any mistake, transfer it in json
+     * @param $data
+     * @param string $title - это либо сама ошибка, либо массив с готовыми ошибками (that either a mistake, or the massif with ready mistakes)
+     * @param bool $arrayOrNot - если true, то $title должен быть массивом (if true, $title has to be an array)
+     * @param array $additionalParam - дополнительные параметры, которые нужно передать (additional parameters which need to be transferred)
+     * @return bool
+     * TODO сделать файл, в котором будет содержаться инфа об ошибке, которая высвечивалась людям. Типо свой лог
+     */
+    public function returnResponse(&$data, $title = '', $arrayOrNot = false, $additionalParam = [])
+    {
+        if($arrayOrNot === false)
+            $errorResponse = ['status' => 'error', 'resultTitle'=> $data['languages_desc'][0]['titleError'][$data['segment']], 'resultText'=>$title];
+        else
+            $errorResponse = $title;
+
+        if(!empty($additionalParam))
+            $errorResponse['additionalParam'] = $additionalParam;
+
+        echo json_encode($errorResponse);
+        return true;
+    }
+
 }
 ?>

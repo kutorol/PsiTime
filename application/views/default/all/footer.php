@@ -49,5 +49,12 @@
             <script src="<?=base_url()?>js/upload/jquery.fileupload-process.js"></script>
             <script src="<?=base_url()?>js/upload/jquery.fileupload-validate.js"></script>
         <?php endif;?>
+
+    <div class="container-fluid" style="color: #ccc;">
+        <div class="row text-center">
+            vers: <?=VERSION_APP;?>
+        </div>
+    </div>
+
     </body>
 </html>

@@ -13,11 +13,11 @@ class Display_lib
     {
         $CI =& get_instance();
 
-        $CI->load->view('default/all/header.php',$data);
-        $CI->load->view('default/all/header_menu.php',$data);
-        $CI->load->view('default/all/title.php',$data);
-        $CI->load->view('default/'.$name_folder.'/content.php',$data);
-        $CI->load->view('default/all/footer.php',$data);
+        $CI->load->view(DEFAULT_VIEW.'/all/header.php',$data);
+        $CI->load->view(DEFAULT_VIEW.'/all/header_menu.php',$data);
+        $CI->load->view(DEFAULT_VIEW.'/all/title.php',$data);
+        $CI->load->view(DEFAULT_VIEW.'/'.$name_folder.'/content.php',$data);
+        $CI->load->view(DEFAULT_VIEW.'/all/footer.php',$data);
     }
 		
 }

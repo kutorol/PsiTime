@@ -232,9 +232,19 @@ thead th {
 }
 .priehaliKinaNeBudet{
     text-decoration: line-through;
+    color: #A19A9A !important;
 }
 
 .label-none, .label-{
     color: #FFF;
     background-color: #777;
+}
+
+.perfomer-user:hover,.btn-perfomer-user:focus{
+    color: #fff !important;
+    background-color: #2d86ab !important;
+}
+.btn-perfomer-user{
+    background-color: #2CB0D4;
+    color: #fff;
 }
