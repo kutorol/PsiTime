@@ -180,11 +180,13 @@ class Lang_controller
             28  =>  'Изменение профиля',
             29  =>  'Заполните хотя бы одно из полей! Эта ошибка могла появиться из-за того, что последнее поле у вас неизменилось, а все остальные пустые!',
             30  =>  'Профиль успешно изменен',
-            31  =>  'Количество рабочих часов не может быть меньше 1 и больше 20',
+            31  =>  'Количество рабочих часов не может быть меньше 1 и больше 14',
             32  =>  "Сколько вы работаете в день часов без учета обеденного перерыва:",
             33  =>  "Максимальный размер аватаки 10 Мб",
             34  =>  "Ваш аватар",
             35  =>  "Сменить аватарку",
+            36  =>  "Логин не прошел проверку. Он может содержать латиницу, числа, - и _. Также оно должно быть минимум 5 и максимум 20 символов.",
+            37  =>  "Имя не прошло проверку. Оно может содержать латиницу, кириллицу и пробел. Также оно должно быть минимум 3 и максимум 20 символов.",
         ];
 
 
@@ -232,11 +234,13 @@ class Lang_controller
             28  =>  'Changing profile',
             29  =>  'Fill in at least one of the fields! This error can occur due to the fact that the last field you unchanged, and the rest are empty!',
             30  =>  'Profile changed successfully',
-            31  =>  'Number of working hours can not be less than 1 and more than 20',
+            31  =>  'Number of working hours can not be less than 1 and more than 14',
             32  =>  "How much are you working hours per day without a lunch break:",
             33  =>  "Maximum file size 10 MB",
             34  =>  "Your avatar",
             35  =>  "Change avatar",
+            36  =>  "Login failed validation. It may contain Latin letters, numbers, - and _. Also, it should be at least 5 and a maximum of 20 characters.",
+            37  =>  "Name failed validation. It may contain Latin, Cyrillic and space. Also, it should be at least 3 and a maximum of 20 characters.",
 
         ];
 
@@ -300,6 +304,9 @@ class Lang_controller
             20      =>  " нед.",
             21      =>  "Досадно... Проект, к которому принадлежит данная задача, недавно был удален, а значит и задача удалена.",
             22      =>  " Теперь вас перекинет на главную страницу через 5 секунд.",
+            23      =>  "Задача успешно удалена.",
+            24      =>  "Вы не являетесь исполнителем или создателем задачи.",
+            25      =>  "Ошибка. Задача не была удалена.",
         ];
 
         /********************************************
@@ -331,6 +338,9 @@ class Lang_controller
             20      =>  " w.",
             21      =>  "Annoyingly... The project to which this task belongs, was removed recently, so and the task is removed.",
             22      =>  " Now will throw you on the homepage through 5 seconds.",
+            23      =>  "The task was successfully removed.",
+            24      =>  "You aren't the performer or the founder of a task",
+            25      =>  "Error. The task was not removed.",
 
         ];
 
@@ -409,6 +419,7 @@ class Lang_controller
             71  =>  " редактирование задачи",
             72  =>  "Задача выполнена: ",
             73  =>  "Изменить исполнителя",
+            74  =>  "Удалить задачу",
 
             'status_task_0'      =>  'Поставлена',
             'status_task_1'      =>  'Выполняется',
@@ -492,6 +503,7 @@ class Lang_controller
             71  =>  " editing task",
             72  =>  "Task completed: ",
             73  =>  "To change the performer",
+            74  =>  "Delete a task",
 
             'status_task_0'      =>  'Supplied',
             'status_task_1'      =>  'Running',
@@ -532,7 +544,7 @@ class Lang_controller
             31  =>  "не может быть меньше",
             32  =>  "и больше",
             33  =>  "не может быть больше",
-            38  =>  "(поле может принимать значение от 1 до 20 часов - без учета обеда)",
+            38  =>  "(поле может принимать значение от 1 до 14 часов - без учета обеда)",
             41  =>  "Ошибки:",
             49  =>  'Поле \"Название задачи\" и \"Описание\" должны быть изменены для сохранения',
 
@@ -566,7 +578,7 @@ class Lang_controller
             31  =>  "can not be less than",
             32  =>  "and more",
             33  =>  "can not be more than",
-            38  =>  "(field can have a value from 1 to 20 hours - without dinner)",
+            38  =>  "(field can have a value from 1 to 14 hours - without dinner)",
             41  =>  "Errors:",
             49  =>  'The \"Task Name\" and \"Description\" should be changed to save',
 

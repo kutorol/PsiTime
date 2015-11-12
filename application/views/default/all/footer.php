@@ -51,6 +51,7 @@
         <?php endif;?>
 
     <div class="container-fluid" style="color: #ccc;">
+        <p>&nbsp;</p>
         <div class="row text-center">
             vers: <?=VERSION_APP;?>
         </div>

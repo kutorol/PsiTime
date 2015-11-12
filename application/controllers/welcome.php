@@ -66,7 +66,7 @@ class Welcome extends CI_Controller {
         if(isset($_POST['enter_to_time']))
         {
             //правила валидации данных из полей
-            $this->form_validation->set_rules('login', $data['welcome_controller'][1], 'trim|alpha_numeric|required|min_length[5]|max_length[20]|xss_clean');
+            $this->form_validation->set_rules('login', $data['welcome_controller'][1], 'trim|alpha_dash|required|min_length[5]|max_length[20]|xss_clean');
             $this->form_validation->set_rules('pass', $data['welcome_controller'][2], 'trim|alpha_dash|required|min_length[5]|max_length[20]|xss_clean');
 
             //если валидация не прошла проверку - показываем вьюху, а там ошибки покажут
@@ -79,6 +79,14 @@ class Welcome extends CI_Controller {
             //получаем данные из формы и чистим сразу от шлака
             $data['login'] = $this->common->clear($this->input->post('login', true));
             $data['pass'] = $this->common->clear($this->input->post('pass', true));
+
+            //проверка логина
+            if(!preg_match("/^[a-zA-Z0-9\-_]{5,20}$/iu", $data['login']))
+            {
+                $data['error'] = $data['welcome_controller'][36];
+                $this->display_lib->display($data, $config['pathToViewDir']);
+                return true;
+            }
 
             if($data['login'] != '' && $data['pass'] != '')
             {
@@ -235,25 +243,44 @@ class Welcome extends CI_Controller {
         {
             //правила валидации данных из полей
             $this->form_validation->set_rules('name', $data['welcome_controller'][17], 'trim|required|min_length[2]|max_length[20]|xss_clean');
-			$this->form_validation->set_rules('login', $data['welcome_controller'][1], 'trim|alpha_numeric|required|min_length[5]|max_length[20]|xss_clean|is_unique[users.login]');
+			$this->form_validation->set_rules('login', $data['welcome_controller'][1], 'trim|alpha_dash|required|min_length[5]|max_length[20]|xss_clean|is_unique[users.login]');
 			$this->form_validation->set_rules('email', 'Email', 'trim|required|min_length[6]|valid_email|xss_clean|is_unique[users.email]');
 			
 			$validateRulePass = 'trim|alpha_dash|required|min_length[5]|max_length[20]|xss_clean|';
             $this->form_validation->set_rules('pass', $data['welcome_controller'][2], $validateRulePass.'matches[pass_too]');
 			$this->form_validation->set_rules('pass_too', $data['welcome_controller'][18], $validateRulePass.'matches[pass]');
 
+            $fail = false;
             //если валидация не прошла проверку - показываем вьюху, а там ошибки покажут
             if($this->form_validation->run() === FALSE)
-            {
-                $this->display_lib->display($data, $config['pathToViewDir']);
-                return true;
-            }
+                $fail = true;
 
             //получаем данные из формы и чистим сразу от шлака
             $data['name'] = $this->common->clear($this->input->post('name', true));
 			$data['login'] = $this->common->clear($this->input->post('login', true));
 			$data['email'] = $this->common->clear($this->input->post('email', true));
 			$data['pass'] = $this->common->clear($this->input->post('pass', true));
+
+            //проверка логина
+            if(!preg_match("/^[a-zA-Z0-9\-_]{5,20}$/iu", $data['login']))
+            {
+                $fail = true;
+                $data['error'] = $data['welcome_controller'][36]."<br>";
+            }
+
+            //проверка имени
+            if(!preg_match("/^[а-яА-ЯёЁa-zA-Z ]{2,20}$/iu", $data['name']))
+            {
+                $fail = true;
+                $data['error'] .= $data['welcome_controller'][37];
+            }
+
+            //если были ошибки - показываем вид
+            if($fail === true)
+            {
+                $this->display_lib->display($data, $config['pathToViewDir']);
+                return true;
+            }
 
 			//загружаем библиотеку помощи для строк
 			$this->load->helper('string');
@@ -316,10 +343,10 @@ class Welcome extends CI_Controller {
         if(isset($_POST['change_pass']))
         {
             //правила валидации данных из полей
-            $validateRulePass = 'trim|alpha_dash|required|min_length[5]|max_length[20]|xss_clean|';
-            $this->form_validation->set_rules('passOld', $data['input_form_lang'][10][$data['segment']], 'trim|alpha_dash|required|min_length[5]|max_length[20]|xss_clean');
-            $this->form_validation->set_rules('passNew', $data['input_form_lang'][11][$data['segment']], $validateRulePass.'matches[passNewRepeat]');
-            $this->form_validation->set_rules('passNewRepeat', $data['input_form_lang'][12][$data['segment']], $validateRulePass.'matches[passNew]');
+            $validateRulePass = 'trim|alpha_dash|required|min_length[5]|max_length[20]|xss_clean';
+            $this->form_validation->set_rules('passOld', $data['input_form_lang'][10][$data['segment']], $validateRulePass);
+            $this->form_validation->set_rules('passNew', $data['input_form_lang'][11][$data['segment']], $validateRulePass.'|matches[passNewRepeat]');
+            $this->form_validation->set_rules('passNewRepeat', $data['input_form_lang'][12][$data['segment']], $validateRulePass.'|matches[passNew]');
 
             //если валидация не прошла проверку - показываем вьюху, а там ошибки покажут
             if($this->form_validation->run() === FALSE)
@@ -399,16 +426,16 @@ class Welcome extends CI_Controller {
         {
             //правила валидации данных из полей
             $this->form_validation->set_rules('name', $data['input_form_lang'][1][$data['segment']], 'trim|min_length[2]|max_length[20]|xss_clean');
-            $this->form_validation->set_rules('login', $data['input_form_lang'][0][$data['segment']], 'trim|alpha_numeric|min_length[5]|max_length[20]|xss_clean|is_unique[users.login]');
+            $this->form_validation->set_rules('login', $data['input_form_lang'][0][$data['segment']], 'trim|alpha_dash|min_length[5]|max_length[20]|xss_clean|is_unique[users.login]');
             $this->form_validation->set_rules('hours', "", 'trim|required|numeric|integer|is_natural_no_zero|min_length[1]|max_length[2]|xss_clean');
             $this->form_validation->set_rules('email', 'Email', 'trim|min_length[6]|valid_email|xss_clean|is_unique[users.email]');
 
+            //проверяем на бональные ошибки
+            $fail = false;
             //если валидация не прошла проверку - показываем вьюху, а там ошибки покажут
             if($this->form_validation->run() === FALSE)
-            {
-                $this->display_lib->display($data, $config['pathToViewDir']);
-                return true;
-            }
+                $fail = true;
+
 
 
             $data['profile']['name'] = $this->common->clear($this->input->post('name', true));
@@ -417,19 +444,40 @@ class Welcome extends CI_Controller {
             //количество рабочих часов в день
             $data['profile']['hoursInDayToWork'] = intval($this->common->clear($this->input->post('hours', true)));
 
-            //проверяем на бональные ошибки
-            $fail = false;
+
+            if($data['profile']['login'] != "")
+            {
+                //проверка логина
+                if(!preg_match("/^[a-zA-Z0-9\-_]{5,20}$/iu", $data['profile']['login']))
+                {
+                    $fail = true;
+                    $data['error'] = $data['welcome_controller'][36]."<br>";
+                }
+            }
+
+
+            if($data['profile']['name'] != "")
+            {
+                //проверка имени
+                if(!preg_match("/^[а-яА-ЯёЁa-zA-Z ]{2,20}$/iu", $data['profile']['name']))
+                {
+                    $fail = true;
+                    $data['error'] .= $data['welcome_controller'][37]."<br>";
+                }
+            }
+
+
             if(($data['userData']['hoursInDayToWork'] == $data['profile']['hoursInDayToWork']) && $data['profile']['name'] == '' && $data['profile']['login'] == '' && $data['profile']['email'] == '')
             {
                 $fail = true;
-                $data['error'] = $data['welcome_controller'][29];
+                $data['error'] .= $data['welcome_controller'][29]."<br>";
             }
             else
             {
-                //человек  не может работать больше чем 20 часов
-                if($data['profile']['hoursInDayToWork'] > 20 || $data['profile']['hoursInDayToWork'] <= 0)
+                //человек  не может работать больше чем 14 часов
+                if($data['profile']['hoursInDayToWork'] > 14 || $data['profile']['hoursInDayToWork'] <= 0)
                 {
-                    $data['error'] = $data['welcome_controller'][31];
+                    $data['error'] .= $data['welcome_controller'][31]."<br>";
                     $fail = true;
                 }
             }

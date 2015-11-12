@@ -4,6 +4,13 @@
 class Create_db {
 
 
+    /**
+     * Создаем базу данных
+     * Creating a database
+     * @param $lang
+     * @param $filePath
+     * @return bool
+     */
     private function _createDB($lang, $filePath)
     {
         $link = @mysql_connect(HOST_DB, USER_DB, PASSWORD_DB);
@@ -79,7 +86,7 @@ class Create_db {
         }
 
         //проверка имени администратора
-        if(!preg_match("/^[а-яА-ЯёЁa-zA-Z0-9\-_ ]{3,20}$/iu", ADMIN_NAME))
+        if(!preg_match("/^[а-яА-ЯёЁa-zA-Z ]{2,20}$/iu", ADMIN_NAME))
         {
             log_message('error', $lang['error_11']);
             show_error($lang['error_11'], 500, $lang['error_8']);

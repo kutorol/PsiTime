@@ -511,6 +511,7 @@ class Task extends CI_Controller {
                         $this->common_model->updateData($new, 'id_user', $v['id_user'], 'users');
                     }
 
+                    //удалеям все задания, которые были прикреплены к этому проекту
                     $this->common_model->deleteData('task', 'project_id', $idProject);
                     $response = ['status'=>'success', 'resultTitle' => $data['task_views'][13]];
                 }
@@ -1572,8 +1573,9 @@ class Task extends CI_Controller {
      */
     public function updateTask($whatUpdate = null)
     {
+        $whatUpdate = $this->common->clear($whatUpdate);
         //если обновляем основные данные о задаче
-        if($this->common->clear($whatUpdate) == "description")
+        if($whatUpdate == "description")
         {
             $failDesc = false;
             if(isset($_POST['title']) != '' && isset($_POST['text']))
@@ -1595,7 +1597,6 @@ class Task extends CI_Controller {
 
             //проверяем то, какой из параметров нам стоит обновить в бд. На данный момент передаются id html элементов, которые прикреплены к определенному select в html
             //check which of the options we should update the database. Currently transmitted id html elements, which are secured to select a certain html
-            $whatUpdate = $this->common->clear($whatUpdate);
             switch($whatUpdate)
             {
                 //FIXME Если сделали редизайн, то замените эти id html элементов ( case 'taskLevelInfo': =>  case 'новый-html-id':)
@@ -1771,8 +1772,8 @@ class Task extends CI_Controller {
                     $new[$row] = $num;
                 }
 
-
                 $q = $this->common_model->updateData($new, 'id_task', $idTask, 'task', true);
+                log_message('error',$q);
                 if($q > 0)
                 {
                     $response = ['status' => 'success'];
@@ -1789,7 +1790,6 @@ class Task extends CI_Controller {
                     if(isset($data['changeUserView']))
                         $response['changeUserView'] = $data['changeUserView'];
 
-
                     //если изменяли юзера
                     if($row == "performer_id")
                     {
@@ -1797,6 +1797,10 @@ class Task extends CI_Controller {
                         //получаем информацию по одной задаче
                         $data['infoTask'] = $this->task_model->getInfoTask($idTask, $data['segment']);
                         $response['newViewImgUser'] = $this->load->view(DEFAULT_VIEW."/common/task/view/image_user.php", $data, true);
+
+                        //если изменили юзера и я теперь не являюсь постановителем и исполнителем задачи, то удаляем select и еще некоторые html элементы
+                        if($data['idUser'] != $num && $data['idUser'] != $check['user_id'])
+                            $response['deleteSelectPerformer'] = true;
                     }
 
                     //если обновляли описание задачи
@@ -1810,7 +1814,62 @@ class Task extends CI_Controller {
                     return $this->common->returnResponse($data, $data['welcome_controller'][13]);
             }
             else
-                return $this->common->returnResponse($data, $data['task_controller'][13]);
+                return $this->common->returnResponse($data, $data['task_controller'][13].$data['task_controller'][22], false, ['redirectIndex'=>true]);
+        }
+
+        echo json_encode($response);
+    }
+
+    /**
+     * (AJAX)
+     * Удаление задачи
+     * Deleting a task
+     */
+    public function deleteTask()
+    {
+        //проверяем на ajax и его параметры
+        $response = $this->common->isAjax(["id",'int']);
+        if($response['status'] != 'error')
+        {
+            $data = $response['data'];
+            unset($response['data']);
+
+            $idTask = intval($this->common->clear($this->input->post('id', true)));
+
+            $this->load->model('common_model');
+            //проверям на существование задачи
+            $check = $this->common_model->getResult('task', 'id_task', $idTask, 'row_array', 'project_id, user_id, performer_id');
+            if(!empty($check))
+            {
+                //если человек является исполнителем или создателем задачи
+                if($check['user_id'] == $data['idUser'] || $check['performer_id'] == $data['idUser'])
+                {
+                    //проверяем проект на существование
+                    $project = $this->common_model->getResult('projects', 'id_project', $check['project_id'], 'row_array', 'team_ids');
+                    //редиректим на главную страницу, если проекта больше нет
+                    if(empty($project))
+                        return $this->common->returnResponse($data, $data['task_controller'][21].$data['task_controller'][22], false, ['redirectIndex'=>true]);
+
+                    //если юзер не пренадлежит проекту
+                    $checkProject = $this->_checkProject($check['project_id'], $data);
+                    if($checkProject['status'] == 'error')
+                    {
+                        unset($checkProject['remove']);
+                        return $this->common->returnResponse($data, $checkProject, true);
+                    }
+
+                    //удаляем задачу
+                    $q = $this->common_model->deleteData('task', 'id_task', $idTask, true);
+                    if($q > 0)
+                        $response = ['status' => 'success', 'resultTitle' => $data['task_views'][22], "resultText" => $data['task_controller'][23].$data['task_controller'][22]];
+                    else
+                        return $this->common->returnResponse($data, $data['task_controller'][25]);
+                }
+                else
+                    return $this->common->returnResponse($data, $data['task_controller'][24]);
+            }
+            else
+                return $this->common->returnResponse($data, $data['task_controller'][13].$data['task_controller'][22], false, ['redirectIndex'=>true]);
         }
 
         echo json_encode($response);

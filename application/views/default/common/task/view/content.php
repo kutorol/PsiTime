@@ -14,36 +14,41 @@
                 <p id="taskTextInfo"><?=$infoTask['text']?></p>
 
                 <hr>
-                <p >
-                    <a href="" class="editTaskA" data-switch="open">
-                        <span class="edit"><?=$task_views[68];?></span> <?=$task_views[71];?> <i class="fa fa-arrow-down"></i>
-                    </a>
-                </p>
 
-                <!--edit task-->
-                <div style="display: none;" id="showFadeEditTask">
-                    <form method="post" action="" onsubmit="editDescTask(); return false;" >
-                        <div class="form-group">
-                            <label for="titleTaskInfo"><?=$task_views[38]?>:</label>
-                            <input type="title" class="form-control" id="titleTaskInfo" placeholder="<?=$task_views[38]?>" value="<?=$infoTask['title']?>">
+                <?php if($idUser == $infoTask['performer_id'] || $idUser == $infoTask['user_id']):?>
+                    <div id="editMyTask">
+                        <p >
+                            <a href="" class="editTaskA" data-switch="open">
+                                <span class="edit"><?=$task_views[68];?></span> <?=$task_views[71];?> <i class="fa fa-arrow-down"></i>
+                            </a>
+                        </p>
+
+                        <!--edit task-->
+                        <div style="display: none;" id="showFadeEditTask">
+                            <form method="post" action="" onsubmit="editDescTask(); return false;" >
+                                <div class="form-group">
+                                    <label for="titleTaskInfo"><?=$task_views[38]?>:</label>
+                                    <input type="title" class="form-control" id="titleTaskInfo" placeholder="<?=$task_views[38]?>" value="<?=$infoTask['title']?>">
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label for="textTask"><?=$task_views[39]?>:</label>
+                                    <textarea  class="form-control" placeholder="<?=$task_views[39]?>"  onkeypress="if(event.ctrlKey && event.keyCode==13) {$('#saveEditTask').click(); return false;}" rows="5" id="textTaskInfo"><?=$infoTask['text']?></textarea>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="pull-right">
+                                        <button type="button" class="btn btn-primary" id="saveEditTask"><?=$task_views[17]?></button>
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="clearfix"></div>
                         </div>
-
-
-                        <div class="form-group">
-                            <label for="textTask"><?=$task_views[39]?>:</label>
-                            <textarea  class="form-control" placeholder="<?=$task_views[39]?>"  onkeypress="if(event.ctrlKey && event.keyCode==13) {$('#saveEditTask').click(); return false;}" rows="5" id="textTaskInfo"><?=$infoTask['text']?></textarea>
-                        </div>
-
-                        <div class="form-group">
-                            <div class="pull-right">
-                                <button type="button" class="btn btn-primary" id="saveEditTask"><?=$task_views[17]?></button>
-                            </div>
-                        </div>
-                    </form>
-                    <div class="clearfix"></div>
-                </div>
-                <!--end edit task-->
-                <hr>
+                        <!--end edit task-->
+                        <hr>
+                    </div>
+                <?php endif;?>
 
 
 
@@ -161,6 +166,7 @@
 
 
             <div class="col-lg-4">
+
                 <!--project-->
                 <p>
                     <?=$task_views[66]?> "<?=$infoTask['title_project'];?>"
@@ -192,7 +198,7 @@
                 <p>
                     <?=$task_views[34]?>:
                     <p align="center">
-                        <select class="selectpicker col-lg-12" id="taskLevelInfo" data-style="btn-<?php if($infoTask['color'] != ''):?><?=$infoTask['color']?><?php endif;?>">
+                        <select onchange="changeSelectTask('taskLevelInfo');" class="selectpicker col-lg-12" id="taskLevelInfo" data-style="btn-<?php if($infoTask['color'] != ''):?><?=$infoTask['color']?><?php endif;?>">
                             <?php $i = 0; foreach($complexity as $v):?>
                                 <option data-color="btn-<?=$v['color']?>" value="<?=$v['id_complexity']?>" <?=($v['id_complexity'] == $infoTask['id_complexity']) ? 'selected' : '';?> > <?=$v['name_complexity_'.$segment]?></option>
                             <?php endforeach;?>
@@ -205,9 +211,9 @@
                 <!--status task-->
                 <p>
                     <?=$task_views[64]?>:<br>
-                    <div align="center">
+                    <div align="center" id="tutStatus">
                         <?php if($idUser == $infoTask['performer_id'] || $idUser == $infoTask['user_id']):?>
-                        <select class="selectpicker col-lg-12" data-style="<?php if($infoTask['status'] != 2){echo "btn-info";}?>" id="statusLevelInfo">
+                        <select onchange="changeSelectTask('statusLevelInfo');" class="selectpicker col-lg-12" data-style="<?php if($infoTask['status'] != 2){echo "btn-info";}?>" id="statusLevelInfo">
                             <?php if($infoTask['status'] == 0){$i = 0;}else{$i = 1;}?>
                             <?php for($i; $i < 4; $i++):?>
                                 <option data-color="<?php if($i != 2){echo "btn-info";}?>" value="<?=$i;?>" <?=($infoTask['status'] == $i) ? 'selected' : '';?> ><?=$task_views['status_task_'.$i];?></option>
@@ -225,7 +231,7 @@
                 <p>
                     <?=$task_views[62]?>:<br>
                     <p align="center">
-                        <select class="selectpicker col-lg-12" id="priorityLevelInfo" data-style="btn-<?php if($infoTask['color_priority'] != ''):?><?=$infoTask['color_priority']?><?php endif;?>">
+                        <select class="selectpicker col-lg-12" id="priorityLevelInfo" onchange="changeSelectTask('priorityLevelInfo');" data-style="btn-<?php if($infoTask['color_priority'] != ''):?><?=$infoTask['color_priority']?><?php endif;?>">
                             <?php foreach($priority as $v):?>
                                 <option  data-color="btn-<?=$v['color']?>" value="<?=$v['id_priority']?>" <?=($v['id_priority'] == $infoTask['id_priority']) ? 'selected' : '';?> data-icon="<?=$v['icon']?>" > <?=$v['title_'.$segment]?></option>
                             <?php endforeach;?>
@@ -246,6 +252,18 @@
                     <?=$userImageView;?>
                 </div>
                 <!--end image user-->
+
+
+                <?php if($idUser == $infoTask['performer_id'] || $idUser == $infoTask['user_id']):?>
+                    <!--delete-->
+                    <div align="center" id="deleteTask">
+                        <p>&nbsp;</p>
+                        <p>
+                            <div class="btn btn-danger" id="deleteTask_<?=$infoTask['id_task']?>" onclick="deleteData('task/deleteTask', 'deleteTask_', <?=$infoTask['id_task']?>, {check: true, url: '/task'});"><?=$task_views[74]?> <i class="fa fa-trash-o"></i></div>
+                        </p>
+                    </div>
+                    <!--end delete-->
+                <?php endif; ?>
 
                 <p>&nbsp;</p>
                 <p>&nbsp;</p>

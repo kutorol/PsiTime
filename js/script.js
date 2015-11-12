@@ -5,8 +5,9 @@
  * @param url - на какую страницу делаем запрос (on what page we do request)
  * @param selector - как называется селектор той строки, которую впоследствии из вида удалим (the name of the selector line, which was later remove from view)
  * @param id - ид того, что удаляем (id that remove)
+ * @param dontRemoveNext - {check: true, second: 5, url: "" }. если не dontRemoveNext.check != undefined, то удаляем просто указанный элемент, если dontRemoveNext.second == числу, то делаем редирект на dontRemoveNext.url или на главную страницу через dontRemoveNext.second секунд
  */
-function deleteData(url, selector, id)
+function deleteData(url, selector, id, dontRemoveNext)
 {
     bootbox.confirm(jsLang[20], function(result) {
         if(result)
@@ -16,21 +17,54 @@ function deleteData(url, selector, id)
                 // параметры запроса, передаваемые на сервер (последний - подстрока для поиска):
                 data: {id: id},
                 // обработка успешного выполнения запроса
-                success: function(data){
+                success: function(data)
+                {
                     if(data.status == 'error')
+                    {
+                        if(data.additionalParam !== undefined)
+                        {
+                            //если проект удалили, то редиректим человека через 5 секунд
+                            if(data.additionalParam.redirectIndex !== undefined)
+                                setTimeout(function(){ document.location.href = base_url+"/task";}, 5000);
+                        }
+
                         errorSuccessAjax({title: data.resultTitle, message: data.resultText}); //показываем модалку
+                    }
                     else
                     {
-                        var rowProject = $("#"+selector+id);
-                        rowProject.fadeOut(300, function(){
-                            rowProject.next().remove();
-                            rowProject.remove();
+                        if(dontRemoveNext !== undefined)
+                        {
+                            //если удаляем другое, а не проект
+                            if(dontRemoveNext.check !== undefined)
+                            {
+                                $("#"+selector+id).fadeOut(300, function(){ $(this).remove(); });
+                                //если указан url для редиректа
+                                if(dontRemoveNext.url !== undefined )
+                                {
+                                    var toUrl = base_url+dontRemoveNext.url;
+                                    var second = (dontRemoveNext.second !== undefined) ? dontRemoveNext.second * 1000 : 5000;
 
-                            if($(".project").html() === undefined)
-                                $("#addProject").remove();
+                                    setTimeout(function(){
+                                        document.location.href = toUrl;
+                                    }, second);
+                                }
 
-                            errorSuccessAjax(data.resultTitle, {del: "danger", add: "success"}); //сообщение вставляем под главный title
-                        });
+                                errorSuccessAjax({title: data.resultTitle, message: data.resultText}); //сообщение вставляем под главный title
+                            }
+                        }
+                        //если удаляем проект
+                        else
+                        {
+                            var rowProject = $("#"+selector+id);
+                            rowProject.fadeOut(300, function(){
+                                rowProject.next().remove();
+                                rowProject.remove();
+                                if($(".project").html() === undefined)
+                                    $("#addProject").remove();
+
+                                errorSuccessAjax(data.resultTitle, {del: "danger", add: "success"}); //сообщение вставляем под главный title
+                            });
+                        }
                     }
                 }
             });
@@ -131,6 +165,7 @@ function showModal(title, content, footer)
 
 /**
  * Вставляет сообщение под заголовок и поднимает вверх
+ * Inserts a message header, and holds up
  *
  * @param response - текст
  * @param classHtml - класс стилей для отображения в json {del: '', add: ''}
@@ -158,7 +193,8 @@ function addTitle(response, classHtml)
 }
 
 /**
- * Вставляет сообщение под заголовок, скрывает кнопку загрузки страницы и поднимает к самому верху
+ * Вставляет сообщение под заголовок или показывает ответ в модальном окне, скрывает кнопку загрузки страницы и поднимает к самому верху
+ * Inserts a caption or message shows the response in a modal window, hide the button and the page load rises to the very top
  * @param response - содержит овтет в json
  * @param classHtml - json {del: '', add: ''}
  * @param showForm - если не undefined, то показываем скрытые элементы
@@ -411,8 +447,8 @@ function validateNum(title, num, fail, zero, before, after)
  * При нажатии на иконку картинки, в модальном окне показывается увеличенная картинка. Если это другой файл, то либо его показываем, либо скачиваем
  * Clicking on the icon image in a modal window shows an enlarged picture. If it's another file, or a show, or download the
  * @param src
- * @param ext
- * @param title
+ * @param ext - расширение файла
+ * @param title - название файла
  * @param idTask - id задачи, чтобы скачать файл по правильному пути
  * @returns {boolean}
  */
@@ -446,7 +482,7 @@ function showDownloadImageDoc(src, ext, title, idTask)
  * @param idElement
  * @returns {boolean}
  */
-function changeSelect(idElement)
+function changeSelectTask(idElement)
 {
     var selectpicker = $("#"+idElement);
     var langText, idAttr = idElement, num;
@@ -493,24 +529,28 @@ function changeSelect(idElement)
         {
             if(data.status == 'error')
             {
-                //если кто то попытался поставить на паузу задачу, когда она уже выполнена, то возвращаем select обратно
-                if(data.additionalParam.returnFinish !== undefined)
+                //если существуют дополнительные параметры
+                if(data.additionalParam !== undefined)
                 {
-                    selectpicker.find("option:selected").prop('selected', false);
-                    selectpicker.find("option[value=2]").prop('selected', true);
-                    selectpicker.selectpicker('refresh');
-                    selectpicker.next().find("button[data-id='"+idAttr+"']").removeClass("btn-info").add("btn-");
-                }
+                    //если кто то попытался поставить на паузу задачу, когда она уже выполнена, то возвращаем select обратно
+                    if(data.additionalParam.returnFinish !== undefined)
+                    {
+                        selectpicker.find("option:selected").prop('selected', false);
+                        selectpicker.find("option[value=2]").prop('selected', true);
+                        selectpicker.selectpicker('refresh');
+                        selectpicker.next().find("button[data-id='"+idAttr+"']").removeClass("btn-info").add("btn-");
+                    }
 
-                //если проект удалили, то редиректим человека через 10 секунд
-                if(data.additionalParam.redirectIndex !== undefined)
-                    setTimeout(function(){ document.location.href = base_url+"/task";}, 5000);
+                    //если проект удалили, то редиректим человека через 5 секунд
+                    if(data.additionalParam.redirectIndex !== undefined)
+                        setTimeout(function(){ document.location.href = base_url+"/task";}, 5000);
+                }
 
                 errorSuccessAjax({title: data.resultTitle, message: data.resultText}); //показываем модалку
                 return false;
             }
 
-            //если поменяли юзера, который выполняет данное задание
+            //если поменяли юзера, который выполняет данное задание, то обновляем вид картинок юзера
             if(data.newViewImgUser !== undefined)
             {
                 //вставляем новый вид, если поменялся юзер
@@ -519,22 +559,27 @@ function changeSelect(idElement)
                 });
             }
 
+            //если ранее был удален выбор исполнителя, то сейчас его возвращаем
             var change_performer = $("#change_performer");
             if(data.changeUserView !== undefined)
                 change_performer.css({'display':'none'}).html(data.changeUserView).fadeIn(300);
 
+            //если статус отличается от "поставлена", то вставляем время начала работы над задачей
             var startTime = $("#startTimeTask");
             if(data.startTime !== undefined && startTime.html() != '')
                 startTime.css({'display':'none'}).html(data.startTime).fadeIn(300);
 
+            //если закончили выполнение задания, то вставляем время, когда закончили
             var endTime = $("#endTimeTask");
             if(data.endTime !== undefined)
             {
                 endTime.css({'display':'none'}).html(data.endTime).fadeIn(300);
                 $("#mainTitle").addClass("priehaliKinaNeBudet"); //добавляем перечеркивание заголовка
             }
+            //если еще нет конца выполнения задачи
             else
             {
+                //и если мы изменяли статус, то удаляем перечеркивание заголовка и если было, то удаляем время конца работы над задачей
                 if(idAttr == 'statusLevelInfo')
                 {
                     $("#mainTitle").removeClass("priehaliKinaNeBudet");//удаляем перечеркивание заголовка
@@ -551,10 +596,26 @@ function changeSelect(idElement)
                 selectpicker.selectpicker('refresh');
             }
 
+            //если задача выполнена
             if(idAttr == 'statusLevelInfo' && num == 2)
             {
+                //удаляем цвет у статуса задачи (делаем его серым)
                 selectpicker.next().find("button[data-id='"+idAttr+"']").removeClass("btn-info").addClass(colorSelect);
+                //удаляем выбор исполнителя, т.к. задачу выполнил этот юзер, и чтобы его не сменили случайно
                 change_performer.fadeOut(300, function(){ $(this).html(""); });
+            }
+
+            //если изменили исполнителя, то возможно удаляем некоторые html элементы, чтобы их не изменяли
+            if(data.deleteSelectPerformer !== undefined)
+            {
+                //вместо выбора статуса задачи, получаем текущее значение и удаляем select
+                $("#tutStatus").html($("#statusLevelInfo option:selected").text());
+                //удаляем выбор исполнителя
+                $("#change_performer").fadeOut(300, function(){ $(this).remove(); });
+                //удаляем редактирование задания
+                $("#editMyTask").fadeOut(300, function(){ $(this).remove(); });
+                //удаляем кнопку "удалить задание"
+                $("#deleteTask").fadeOut(300, function(){ $(this).remove(); });
             }
 
             hideLoad();
@@ -606,6 +667,13 @@ function editDescTask()
         {
             if(data.status == 'error')
             {
+                if(data.additionalParam !== undefined)
+                {
+                    //если проект удалили, то редиректим человека через 5 секунд
+                    if(data.additionalParam.redirectIndex !== undefined)
+                        setTimeout(function(){ document.location.href = base_url+"/task";}, 5000);
+                }
+
                 errorSuccessAjax({title: data.resultTitle, message: data.resultText}); //показываем модалку
                 return false;
             }
@@ -640,14 +708,6 @@ $(function() {
      */
     $("#saveEditTask").on('click', function(){
         editDescTask();
-    });
-
-    /**
-     * Функция сработает тогда, когда в конкретной задаче изменяем статус, сложность, приоритет и исполнителя задачи
-     * The function works when a specific task of the status change, complexity, priority and task the Executive
-     */
-    $(".selectpicker").on('change', function(){
-        changeSelect($(this).attr("id"));
     });
 
     /**

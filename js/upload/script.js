@@ -195,15 +195,22 @@ function uploadAttachFile()
 
 
 /**
- * При выборе другого проекта, подгружается выбор юзера исполнителя, если вдруг исключили из проекта, то удаляется данная строка и подгружаются заного юзеры
- * When you select a different project loaded selection of user artist if suddenly eliminated from the project, then this string is removed and loaded, users zanogo
+ * При выборе другого проекта, подгружается выбор юзера исполнителя, если вдруг исключили из проекта, то удаляется данная строка и подгружаются заново юзеры. при добавлении задачи
+ * When you select a different project loaded selection of user artist if suddenly eliminated from the project, then this string is removed and re-loaded, users. adding tasks
  * @returns {boolean}
  */
 function changeSelect()
 {
     var idProject = parseInt($("#projectSelect").val()), errorMessage = "<ul>", tempErrorMessage;
     if(idProject == '')
-        alert("f");
+    {
+        bootbox.alert({
+            title: jsLang[7],
+            message: jsLang[47]
+        });
+        return false;
+    }
+
     tempErrorMessage = validateNum(jsLang[34], idProject, false, 'yes');
     errorMessage += (tempErrorMessage.message != '') ? "<li>"+tempErrorMessage.message+"</li>" : '';
     if(tempErrorMessage.fail === true)
@@ -309,7 +316,7 @@ $(document).ready(function(){
         {
             hoursInDayToWork = parseInt($("#hoursInDayToWork").val());
 
-            tempErrorMessage = validateNum(jsLang[36], hoursInDayToWork, fail, undefined, 24, 0);
+            tempErrorMessage = validateNum(jsLang[36], hoursInDayToWork, fail, undefined, 14, 1);
             errorMessage += (tempErrorMessage.message != '') ? "<li>"+tempErrorMessage.message+" "+jsLang[38]+"</li>" : '';
             fail = tempErrorMessage.fail;
         }

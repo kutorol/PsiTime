@@ -11,7 +11,7 @@ $lang['error_7']    =   "Constant <b>COUNT_LINK_FOR_PAGINATION</b> is not a numb
 $lang['error_8']    =   "Installation Error";
 $lang['error_9']    =   "Constant <b>COUNT_OBJECT_PER_PAGE</b> is not a number, or it is less than / equal to 2. Change in config.php";
 $lang['error_10']   =   "Constant <b>ADMIN_EMAIL</b> didn't undergo testing. Probably you made a mistake. Change in config.php";
-$lang['error_11']   =   "Constant <b>ADMIN_NAME</b> didn't undergo testing. It may contain Cyrillics, Latin, numbers, -, _ and space. Also it has to be at least 3 and at most 20 symbols. Change in config.php";
+$lang['error_11']   =   "Constant <b>ADMIN_NAME</b> didn't undergo testing. It may contain Cyrillics, Latin and space. Also it has to be at least 2 and at most 20 symbols. Change in config.php";
 $lang['error_12']   =   "Constant <b>ADMIN_LOGIN</b> didn't undergo testing. It may contain Latin, numbers, - and _. Also it has to be at least 5 and at most 20 symbols. Change in config.php";
 
 

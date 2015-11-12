@@ -1,7 +1,8 @@
+<?php if($idUser == $infoTask['performer_id'] || $idUser == $infoTask['user_id']):?>
 <p>
     <?=$task_views[73]?>:<br>
     <p align="center">
-        <select class="selectpicker col-lg-12" id="performerUser" onchange="changeSelect('performerUser');" data-style="btn-perfomer-user">
+        <select class="selectpicker col-lg-12" id="performerUser" onchange="changeSelectTask('performerUser');" data-style="btn-perfomer-user">
             <?php foreach($allUserInProject as $v):?>
                 <option  data-color="btn-perfomer-user" value="<?=$v['id_user']?>" <?=($infoTask['performer_id'] == $v['id_user']) ? 'selected' : '';?> ><?=$v['name']?> (<?=$v['login']?>)</option>
             <?php endforeach;?>
@@ -11,3 +12,5 @@
 </p>
 
 <script>$(function(){$("#performerUser").selectpicker('refresh');});</script>
+
+<?php endif;?>
