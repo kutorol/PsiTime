@@ -190,6 +190,10 @@
                     <p id="endTimeTask">
                         <?php if($infoTask['time_end'] != ''){ echo $task_views[72]." <label class='label label-info small-text'>".$infoTask['time_end']."</label>";}?>
                     </p>
+
+                    <p id="myTimeCompliteForTask">
+                        <?php if(isset($infoTask['myTimeCompliteForTask'])){ echo $js[50]." <label class='label label-danger small-text'>".$infoTask['myTimeCompliteForTask']."</label>";}?>
+                    </p>
                     <hr>
                 </div>
                 <!--end time-->

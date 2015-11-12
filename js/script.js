@@ -611,12 +611,20 @@ function changeSelectTask(idElement)
                 //вместо выбора статуса задачи, получаем текущее значение и удаляем select
                 $("#tutStatus").html($("#statusLevelInfo option:selected").text());
                 //удаляем выбор исполнителя
-                $("#change_performer").fadeOut(300, function(){ $(this).remove(); });
+                change_performer.fadeOut(300, function(){ $(this).remove(); });
                 //удаляем редактирование задания
                 $("#editMyTask").fadeOut(300, function(){ $(this).remove(); });
                 //удаляем кнопку "удалить задание"
                 $("#deleteTask").fadeOut(300, function(){ $(this).remove(); });
             }
+
+            //если статус задачи еще не выполнен, то удаляем строку, где точное время выполнения задания
+            if(idAttr == 'statusLevelInfo' && num != 2)
+                $("#myTimeCompliteForTask").fadeOut(300, function(){ $(this).html(""); });
+
+            //вставляем за сколько выполнили задание
+            if(data.myTimeCompliteForTask !== undefined)
+                $("#myTimeCompliteForTask").css({'display':'none'}).html(jsLang[50]+"<label class='label label-danger small-text'>"+data.myTimeCompliteForTask+"</label>").fadeIn(300);
 
             hideLoad();
         }

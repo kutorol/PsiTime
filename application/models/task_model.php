@@ -70,7 +70,7 @@ class Task_model extends CI_Model {
         $this->db->where('task.id_task', $idTask);
         $this->_additionalInfoTask($segment);
         //дополнительно получаем еще некоторые значения
-        $this->db->select("task.text, task.time_add, task.time_start, task.time_end, task.project_id, projects.team_ids");
+        $this->db->select("task.text, task.time_add, task.time_start, task.time_end, task.project_id, projects.team_ids, task.pause_for_complite, task.pause");
         return $this->db->get('task')->row_array();
     }
 

@@ -547,6 +547,7 @@ class Lang_controller
             38  =>  "(поле может принимать значение от 1 до 14 часов - без учета обеда)",
             41  =>  "Ошибки:",
             49  =>  'Поле \"Название задачи\" и \"Описание\" должны быть изменены для сохранения',
+            50  =>  'Выполнено за: ',
 
         ];
 
@@ -581,7 +582,7 @@ class Lang_controller
             38  =>  "(field can have a value from 1 to 14 hours - without dinner)",
             41  =>  "Errors:",
             49  =>  'The \"Task Name\" and \"Description\" should be changed to save',
-
+            50  =>  'Achieved for: ',
         ];
 
 

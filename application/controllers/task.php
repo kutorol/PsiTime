@@ -1447,7 +1447,7 @@ class Task extends CI_Controller {
      * @param array $array - $array[0] содержит ячейку, в которой язык содержиться, а $array[1] содержит какую именно брать ячейку ($array[0] contains the cell in which language contains, and $array[1] contains what kind of taking a cell)
      * @return array|bool|string
      */
-    private function _additionalTime($isNotAjax = false, $computeSec, $data, $array = ['task_views', 69])
+    private function _additionalTime($isNotAjax = false, $computeSec, $data, $array = ['task_views', 69], $withoutAgo = false)
     {
         //минуты
         if($computeSec[0] >= 60 && $computeSec[0] < 3600)
@@ -1465,10 +1465,17 @@ class Task extends CI_Controller {
         //если вызываем не через ajax
         if($isNotAjax === true)
         {
-            if($computeSec[0] >= 2419200) //месяцы
-                $computeSec = date("Y-m-d H:i:s", $computeSec[0]);
+            //если нужно в конце слово " назад"
+            //if necessary at the end of a word " ago"
+            if($withoutAgo === false)
+            {
+                if($computeSec[0] >= 2419200) //месяцы
+                    $computeSec = date("Y-m-d H:i:s", $computeSec[0]);
+                else
+                    $computeSec = floor($computeSec[0]).$computeSec[1]." ".$data['task_controller'][16];
+            }
             else
-                $computeSec = floor($computeSec[0]).$computeSec[1]." ".$data['task_controller'][16];
+                $computeSec = floor($computeSec[0]).$computeSec[1];
         }
         //если ajax
         else
@@ -1559,10 +1566,127 @@ class Task extends CI_Controller {
             $data['allUserInProject'] = $this->common_model->getResult('users', 'id_user', explode(",", $data['infoTask']['team_ids']), 'result_array', 'id_user, login, name', 'id_user', 'desc', true);
             $data['changeUserView'] = $this->load->view(DEFAULT_VIEW."/common/task/view/change_performer.php", $data, true);
         }
+        else
+        {
+            $user = $this->common_model->getResult('users', 'id_user', $data['infoTask']['performer_id'], 'row_array', 'hoursInDayToWork');
+            $this->_computeTimeForEnd($data['infoTask'], $user, $data);
+            $data['infoTask']['myTimeCompliteForTask'] = $data['myTimeCompliteForTask'];
+            unset($data['myTimeCompliteForTask']);
+        }
 
         $this->display_lib->display($data, $config['pathToViewDir']);
     }
 
+
+    /**
+     * Считаем реальное количество времени, потраченное на выполнение задачи
+     * We consider the real amount of time spent for performance of a task
+     * @param $task - данные по задаче (data on a task)
+     * @param $user - данные по юзеру (data on a user)
+     * @param $data
+     */
+    private function _computeTimeForEnd($task, $user, &$data)
+    {
+        //получаем все время, которая показывает когда начинали задачу и заканчивали
+        $num_pause_complite = 0;
+        if($task['pause_for_complite'] != "")
+        {
+            $task['pause_for_complite'] = unserialize($task['pause_for_complite']);
+
+            foreach($task['pause_for_complite'] as $k=>$v)
+                $num_pause_complite += $v['time_end'] - $v['time_start'];
+        }
+
+        //получаем все паузы и считаем ответ в секундах, который содержит точное время бездействия данной задачи
+        $num_pause = 0;
+        if($task['pause'] != "")
+        {
+            $task['pause'] = unserialize($task['pause']);
+
+            foreach($task['pause'] as $k=>$v)
+                $num_pause += $v['end'] - $v['start'];
+        }
+
+        //получаем время в секундах, которое потребовалось на выполнение задачи
+        if($num_pause_complite > 0)
+        {
+            if($num_pause > 0)
+                $howInSecond = $num_pause_complite - $num_pause;
+            else
+                $howInSecond = $num_pause_complite;
+        }
+        //вот тут ошибка, хотя не может быть, чтобы поле "pause_for_complite" будет пустым, поэтому вероятность мала, что $howInSecond будет равен 1 секунде.
+        else
+            $howInSecond = 1;
+
+        $user['hoursInDayToWork'] = (intval($user['hoursInDayToWork']) > 0) ? $user['hoursInDayToWork'] : 8;
+        //получаем количество рабочих часов в секундах
+        $user['hoursInDayToWork'] = $user['hoursInDayToWork'] * 3600;
+
+        //получаем количество рабочих дней, которое потратили на выполнение задания
+        $howWorkDay = $howInSecond / $user['hoursInDayToWork'];
+        $howWorkDay = floor($howWorkDay); //сколько рабочих дней
+
+        //сколько осталось еще времени в секундах
+        $howLeft = $howInSecond - ($howWorkDay * $user['hoursInDayToWork']);
+
+        //узнаем количество часов
+        $howHour = $howLeft / 3600;
+        $howMinute = $howHour - floor($howHour);
+
+        //узнаем количество минут
+        $howMinute = $howMinute * 60;
+        $howSecond = $howMinute - floor($howMinute);
+
+        //узнаем количество секунд
+        $howSecond = $howSecond * 60;
+
+        //в этой ячейки будет содержаться ответ - сколько времени было потрачено на задачу
+        $data['myTimeCompliteForTask'] = "";
+
+        $howHour = floor($howHour);
+        $howMinute = floor($howMinute);
+        $howSecond = round($howSecond);
+
+        /**
+         * Следующие три проверки нужны для того, что иногда высвечивается ответ в формате 1 час 60 секунд, но по факту это должно быть 1 час 1 минута
+         * The following three checks are necessary for this purpose that the answer in a format is sometimes highlighted 1 hour 60 seconds, but upon it has to be 1 hour 1 minute
+         */
+        //если часов равно количеству часов в рабочем дне, то увеличиваем день, а часы обнуляем
+        if($howHour == $user['hoursInDayToWork'])
+        {
+            $howWorkDay++;
+            $howHour = 0;
+        }
+
+        //если минут равно 1 часу, то увеличиваем часы, а минуты обнуляем
+        if($howMinute == 60)
+        {
+            $howHour++;
+            $howMinute = 0;
+        }
+
+        //если количество секунд равно 1 минуте, то увеличиваем минуты, а секунды обнуляем
+        if($howSecond == 60)
+        {
+            $howMinute++;
+            $howSecond = 0;
+        }
+
+        //заносим ответ в массив
+        if($howWorkDay > 0)
+            $data['myTimeCompliteForTask'] = $howWorkDay.$data['task_controller'][19]." ";
+
+        if($howHour > 0)
+            $data['myTimeCompliteForTask'] .= $howHour.$data['task_controller'][18]." ";
+
+        if($howMinute > 0)
+            $data['myTimeCompliteForTask'] .= $howMinute.$data['task_controller'][17]." ";
+
+        if($howSecond > 0)
+            $data['myTimeCompliteForTask'] .= $howSecond.$data['task_controller'][15];
+
+    }
 
     /**
      * (AJAX)
@@ -1773,7 +1897,6 @@ class Task extends CI_Controller {
                 }
 
                 $q = $this->common_model->updateData($new, 'id_task', $idTask, 'task', true);
-                log_message('error',$q);
                 if($q > 0)
                 {
                     $response = ['status' => 'success'];
@@ -1789,6 +1912,19 @@ class Task extends CI_Controller {
 
                     if(isset($data['changeUserView']))
                         $response['changeUserView'] = $data['changeUserView'];
+
+                    //если задача выполнена, считаем реальное время выполнения с учетом рабочего дня данного юзера
+                    if($row == "status" && $num == 2)
+                    {
+                        $task = $this->common_model->getResult('task', 'id_task', $idTask, 'row_array', 'pause, pause_for_complite');
+                        $user = $this->common_model->getResult('users', 'id_user', $check['performer_id'], 'row_array', 'hoursInDayToWork');
+
+                        if(!empty($check))
+                        {
+                            $this->_computeTimeForEnd($task, $user, $data);
+                            $response['myTimeCompliteForTask'] = $data['myTimeCompliteForTask'];
+                        }
+                    }
 
                     //если изменяли юзера
                     if($row == "performer_id")
