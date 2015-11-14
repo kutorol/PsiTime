@@ -102,22 +102,23 @@ if($statusUser == 1):?>
                         </fieldset>
 
 
-                            <?php if(!is_numeric($hoursInDayToWork)):?>
-                                <fieldset id="onceTime" >
-                            <?php else:?>
-                                <fieldset id="onceTime" class="hidden">
-                            <?php endif;?>
-                                <legend><?=$task_views[40]?></legend>
-                                <div style="margin-top: -20px; margin-bottom: 20px; color: #ccc;"><?=$task_views[41]?></div>
+                    <?php if(!is_numeric($hoursInDayToWork)):?>
+                        <fieldset id="onceTime" >
+                    <?php else:?>
+                        <fieldset id="onceTime" class="hidden">
+                    <?php endif;?>
 
-                                <div class="col-lg-12">
-                                    <div class="label label-info" style="border-radius: 5px 5px 0px 0px;"><?=$task_views[40]?></div>
-                                    <div class="input-group col-xs-12">
-                                        <input type="number" required id="hoursInDayToWork" class="form-control col-xs-12" placeholder="<?=$task_views[40]?>" value="8">
-                                    </div>
+                            <legend><?=$task_views[40]?></legend>
+                            <div style="margin-top: -20px; margin-bottom: 20px; color: #ccc;"><?=$task_views[41]?></div>
+
+                            <div class="col-lg-12">
+                                <div class="label label-info" style="border-radius: 5px 5px 0px 0px;"><?=$task_views[40]?></div>
+                                <div class="input-group col-xs-12">
+                                    <input type="number" required id="hoursInDayToWork" class="form-control col-xs-12" placeholder="<?=$task_views[40]?>" value="8">
                                 </div>
+                            </div>
 
-                            </fieldset>
+                        </fieldset>
 
 
 
@@ -257,18 +258,70 @@ if($statusUser == 1):?>
 
                 <!--ALL PROJECTS-->
                 <?php if(!empty($myProjects)):?>
+                    <fieldset><legend><?=$task_views[7]?>:</legend></fieldset>
+
                     <div class="list-group" id="menu-projects">
-                        <a href="#" id="allProjectsTasks" class="active list-group-item navigate-project" onclick="getAllTask();"><?=$task_views[63]?>  <span class="badge" id="countProject_all"><?=$countProject_all?></span></a>
+                        <a href="#" id="allProjectsTasks" data-id-project="all" class="<?php if(!isset($dontUseSelectProject)){ echo "active"; }?> list-group-item navigate-project" onclick="getAllTask();"><?=$task_views[63]?>  <span class="badge" id="countProject_all"><?=$countProject_all?></span></a>
                     <?php foreach($myProjects as $key=>$project):?>
-                        <a href="#" class="list-group-item navigate-project" onclick="getAllTask(<?=$project['id_project']?>);"><?=$project['title']?>  <span class="badge" id="countProject_<?=$project['id_project']?>"><?=$countTask['countProject_'.$project['id_project']]?></span></a>
+                        <a href="#" class="list-group-item navigate-project" data-id-project="<?=$project['id_project']?>" onclick="getAllTask(<?=$project['id_project']?>);"><?=$project['title']?>  <span class="badge" id="countProject_<?=$project['id_project']?>"><?=$countTask['countProject_'.$project['id_project']]?></span></a>
                     <?php endforeach;?>
                     </div>
                 <?php endif;?>
                 <!--END ALL PROJECTS-->
 
+                <!--FILTER START-->
+                <fieldset><legend><?=$task_views[78]?></legend></fieldset>
+                <div id="checkboxForFilterStatus">
+                    <p>
+                        <b><?=$task_views[79]?></b>
+                        <ul class="ul-top-margin">
+                            <?php for($counterStatus = 0; $counterStatus < 4; $counterStatus++):?>
+                                <li class="max-height-li"><?=$task_views['status_task_'.$counterStatus]?> <input type="checkbox" class="checkbox" value="<?=$counterStatus?>"/></li>
+                            <?php endfor;?>
+                        </ul>
+                    </p>
+                    <br>
+                    <hr>
+                </div>
 
+                <div id="checkboxForFilterPriority">
+                    <p>
+                        <b><?=$task_views[80]?></b>
+                        <ul class="ul-top-margin">
+                            <?php foreach($priority as $v):?>
+                                <li class="max-height-li"><?=$v['title_'.$segment]?> <i class="<?=$v['icon']?>"></i> <input type="checkbox" class="checkbox" value="<?=$v['id_priority']?>"/></li>
+                            <?php endforeach;?>
+                        </ul>
+                    </p>
+                    <br>
+                    <hr>
+                </div>
+
+                <div id="checkboxForFilterComplexity">
+                    <p>
+                        <b><?=$task_views[81]?></b>
+                        <ul class="ul-top-margin">
+                            <?php foreach($complexity as $v):?>
+                                <li class="max-height-li"><?=$v['name_complexity_'.$segment]?> <input type="checkbox" class="checkbox" value="<?=$v['id_complexity']?>"/></li>
+                            <?php endforeach;?>
+                        </ul>
+                    </p>
+                    <br>
+                    <hr>
+                </div>
+
+                <div class="btn btn-primary" onclick="getAllTaskWithFilter();"><?=$task_views[82]?></div>
+
+                <script>
+                    $(function(){
+                        $('.checkbox').checkbox();
+                    });
+                </script>
+                <!--FILTER END-->
             </div>
             <!--END ALL PROJECT, FILTER-->
+
+
 
             <!--ALL TASK-->
             <div class="col-lg-9" >

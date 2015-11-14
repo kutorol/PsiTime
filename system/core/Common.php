@@ -347,15 +347,21 @@ if ( ! function_exists('log_message'))
 {
 	function log_message($level = 'error', $message, $php_error = FALSE)
 	{
-		static $_log;
+        //если не исключить эту ошибку, то она постоянно при каждом действии будет добавляться в лог
+        // if not exclude this error, it is constantly at each action will be added to the log
+        $excludeError = 'Severity: 8192  --> mysql_pconnect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead Z:\home\time.log\www\system\database\drivers\mysql\mysql_driver.php 92';
+        if($excludeError != $message)
+        {
+            static $_log;
 
-		if (config_item('log_threshold') == 0)
-		{
-			return;
-		}
+            if (config_item('log_threshold') == 0)
+            {
+                return;
+            }
 
-		$_log =& load_class('Log');
-		$_log->write_log($level, $message, $php_error);
+            $_log =& load_class('Log');
+            $_log->write_log($level, $message, $php_error);
+        }
 	}
 }
 

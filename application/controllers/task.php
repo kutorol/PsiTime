@@ -28,6 +28,8 @@ class Task extends CI_Controller {
         $data = $this->common->allInit($config);
         //разрешаем загрузку файлов на сайт через ajax (если isset attachUploadSripts, то подгружаем нужные скрипты)
         $data['attachUploadSripts'] = true;
+        //разрешаем подключение скриптов, чтобы сделать красивые checkbox
+        $data['useCheckbox'] = true;
         $this->load->model('common_model');
         $this->_additionalGetTask($data);
 
@@ -49,15 +51,15 @@ class Task extends CI_Controller {
      * Создаем постраничную навигацию. Результат храниться в $data['pagination']
      * Create a page navigation.  The result is stored in $data['pagination']
      * @param $data
-     * @param $idProject - если 0, то навигацию делаем для всех задач. Если > 1, то для конкретного проекта делаем
+     * @param $idProject - если 0, то навигацию делаем для всех задач. Если > 1, то для конкретного проекта делаем (if 0, then we do all the navigation tasks. If a> 1, then for a particular project do)
+     * @param bool $useFilter - если false, до последний параметр в ссылке будет undefined, иначе поставим true. нужно для того, чтобы мы знали, брать нам фильтры или нет при получении задач (If false, to the last parameter in the link is undefined, otherwise deliver true. need for us to know, to take us to filter or not when receiving tasks)
      */
-    private function _getNavigation(&$data, $idProject)
+    private function _getNavigation(&$data, $idProject, $useFilter = false)
     {
         $data['pagination'] = ['status'=>'error'];
         //текущая страница. Если она равна 5, то в виде она будет обозначена как 6.
         if($data['curent_page'] < 1)
             $data['curent_page'] = 0;
-
 
         //если выборка происходило по конкретному проекту, то и количество задач у него другое.
         $allCountTask = (isset($data['countTaskInProject_all'])) ? $data['countTaskInProject_all'] : $data['countProject_all'];
@@ -92,21 +94,25 @@ class Task extends CI_Controller {
             //do navigation
             if($countPage > 1)
             {
+                //эту переменную покажем рядом с навигацией, чтобы юзер знал сколько всего страниц
+                $data['countPageView'] = $countPage;
+
+
                 //делаем ссылку "Последняя"
                 if((($countPage-1) - $data['curent_page']) > 2)
-                    $last = $this->_paginHtmlComment(($countPage-1), "Последняя", $idProject);
+                    $last = $this->_paginHtmlComment(($countPage-1), $data['languages_desc'][0]['perPageLang'][$data['segment']]['last_link'], $idProject, $useFilter);
 
                 //делаем ссылку "Первая"
                 if($data['curent_page'] > 2)
-                    $main = $this->_paginHtmlComment(0,"Первая", $idProject);
+                    $main = $this->_paginHtmlComment(0, $data['languages_desc'][0]['perPageLang'][$data['segment']]['first_link'], $idProject, $useFilter);
 
                 //делаем ссылку "Предыдущая"
                 if ($data['curent_page'] != 0)
-                    $pervPage = $this->_paginHtmlComment(($data['curent_page']-1),"Предыдущая", $idProject);
+                    $pervPage = $this->_paginHtmlComment(($data['curent_page']-1), $data['languages_desc'][0]['perPageLang'][$data['segment']]['prev_link'], $idProject, $useFilter);
 
                 //делаем ссылку "Следующая"
                 if ($data['curent_page'] != ($countPage - 1))
-                    $nextPage = $this->_paginHtmlComment(($data['curent_page']+1),"Следующая", $idProject);
+                    $nextPage = $this->_paginHtmlComment(($data['curent_page']+1), $data['languages_desc'][0]['perPageLang'][$data['segment']]['next_link'], $idProject, $useFilter);
 
                 //получаем все ссылки слева от текущей страницы
                 $page2left = [];
@@ -115,7 +121,7 @@ class Task extends CI_Controller {
                     $j = $i+1;
                     // Находим две ближайшие станицы с левого края
                     if(($data['curent_page'] - $j) > -1)
-                        $page2left[] = $this->_paginHtmlComment(($data['curent_page']-$j), ($data['curent_page']-$i), $idProject);
+                        $page2left[] = $this->_paginHtmlComment(($data['curent_page']-$j), ($data['curent_page']-$i), $idProject, $useFilter);
                 }
                 //последнюю ячейку массива делаем первой, а то нумерация навигации будет вида 3 2 1 4 5 6 7 и т.д., а если сделать array_reverse, то будет 1 2 3 4 5 6 7 и т.д.
                 if(!empty($page2left))
@@ -126,8 +132,9 @@ class Task extends CI_Controller {
                 for($i = 1; $i <= $countLinkRight; $i++)
                 {
                     if($data['curent_page'] + $i <= ($countPage - 1))
-                        $page2right[] = $this->_paginHtmlComment(($data['curent_page']+$i),($data['curent_page']+$i+1), $idProject);
+                        $page2right[] = $this->_paginHtmlComment(($data['curent_page']+$i),($data['curent_page']+$i+1), $idProject, $useFilter);
                 }
+
                 //текущая активная ссылка, которую нельзя нажать
                 $currentPage = $this->_paginHtmlComment(null, $data['curent_page']+1);
 
@@ -145,12 +152,18 @@ class Task extends CI_Controller {
      * @param int $idProject - если 0, то навигацию делаем для всех задач. Если > 1, то для конкретного проекта делаем
      * @return string
      */
-    private function _paginHtmlComment($num = 0, $title = 'notTitle', $idProject = 0)
+    private function _paginHtmlComment($num = 0, $title = 'notTitle', $idProject = 0, $useFilter = false)
     {
         if(is_null($num))
             return "<li class='active'><a  onClick='return false;'>".$title."</a></li>";
         else
-            return "<li ><a href='' id='' onClick='getAllTask(".$idProject.", ".$num."); return false;'>".$title."</a></li>";
+        {
+            //если НЕ используем фильтры
+            if($useFilter === false)
+                return "<li ><a href='' id='' onClick='getAllTask(".$idProject.", ".$num.", undefined); return false;'>".$title."</a></li>";
+            else
+                return "<li ><a href='' id='' onClick='getAllTask(".$idProject.", ".$num.", true); return false;'>".$title."</a></li>";
+        }
     }
 
     /**
@@ -158,9 +171,11 @@ class Task extends CI_Controller {
      * We get some data necessary to add tasks and in the variable $data['renderViewTask'] view shows all tasks
      * @param $data - ссылка  на сам массив, поэтому нет смысла его возвращать (a reference to the array, so it makes no sense to return)
      * @param int $idProject
+     * @param $allFilter - тут содержаться все данные, по которым нужно получить задачи - фильтры. (here contain all the data by which to get the problem - filters.)
      */
-    private function _additionalGetTask(&$data, $idProject = 0)
+    private function _additionalGetTask(&$data, $idProject = 0, $allFilter = '')
     {
+        //если юзер имеет хотя бы один проект
         if($data['statusUser'] == 1)
         {
             $data['myProjects'] = $this->_getProject($data['idUser']);
@@ -169,7 +184,7 @@ class Task extends CI_Controller {
                 //c какой страницы начинать (отсчет начинается с 0)
                 $data['from'] = intval($this->input->post('from'));
                 //текущая страница
-                $data['curent_page'] =  $data['from'];//intval($this->input->post('current_page'));
+                $data['curent_page'] =  $data['from'];
                 //с какой записи начинать выборку (выбранную страницу умножаем на количество задач на странице)
                 $data['from'] *= COUNT_OBJECT_PER_PAGE;
 
@@ -182,13 +197,43 @@ class Task extends CI_Controller {
 
                 $this->load->model('task_model');
 
+                //получаем фильтры
+                $filter = [];
+                if($allFilter != "")
+                {
+                    //если false, то хорошие данные для фильтра переданы
+                    $data['errorFilters'] = true;
+
+                    if(!is_string($allFilter))
+                    {
+                        //$whatFilter - тут название столба в бд, по которому делаем фильтрацию
+                        foreach($allFilter as $whatFilter => $numberArray)
+                        {
+                            foreach(json_decode($numberArray) as $number)
+                            {
+                                $data['errorFilters'] = false; //если false, то хорошие данные для фильтра переданы
+                                $filter[$whatFilter][] = intval($number);
+                            }
+                        }
+                    }
+
+                    //если данные не валидны для фильтра
+                    if($data['errorFilters'] === true)
+                    {
+                        $this->common->errorCodeLog($data['error_code'][3][0].$data['error_code'][3][1], [__CLASS__, __METHOD__, __LINE__], 'same', $allFilter);
+
+                        $allFilter = "";
+                        $filter = [];
+                    }
+                }
+
                 //считаем общее количество задач и количество задач для каждого проекта
                 //тупанул и написал вместо Task, Project
                 $data['countProject_all'] = 0;
                 $data['allIdProjects'] = $allIdProjects;
                 foreach($allIdProjects as $id)
                 {
-                    $data['countTask']['countProject_'.$id] = $this->task_model->getAllTasks([$id], $data['segment']);
+                    $data['countTask']['countProject_'.$id] = $this->task_model->getAllTasks([$id], $data['segment'], [], $filter);
                     $data['countProject_all'] += $data['countTask']['countProject_'.$id];
                 }
 
@@ -203,25 +248,30 @@ class Task extends CI_Controller {
                 if($idProject > 0)
                 {
                     $checkProject = $this->_checkProject($idProject, $data);
-                    if($checkProject['status'] == 'error')
+                    if ($checkProject['status'] == 'error')
                     {
                         $data['status_project'] = $data['task_views'][16];
                         return true;
                     }
 
                     //[15, 0]: 15 - по сколько записей выводить на страницу. 0 - с первой страницы начинать
-                    $data['allTasks'] = $this->task_model->getAllTasks([$idProject], $data['segment'], [COUNT_OBJECT_PER_PAGE, $data['from']]);
+                    $data['allTasks'] = $this->task_model->getAllTasks([$idProject], $data['segment'], [COUNT_OBJECT_PER_PAGE, $data['from']], $filter);
                 }
                 //получаем все задания для всех проектов
                 else
-                    $data['allTasks'] = $this->task_model->getAllTasks($allIdProjects, $data['segment'], [COUNT_OBJECT_PER_PAGE, $data['from']]);
+                    $data['allTasks'] = $this->task_model->getAllTasks($allIdProjects, $data['segment'], [COUNT_OBJECT_PER_PAGE, $data['from']], $filter);
 
 
                 //делаем так, что вначале нет навигации
                 $data['pagination']['status'] = 'error';
                 if(!empty( $data['allTasks'] ))
                 {
-                    $this->_getNavigation($data, $idProject);
+                    //используем ли фильтры или нет
+                    $useFilter = false;
+                    if(!empty($filter))
+                        $useFilter = true;
+
+                    $this->_getNavigation($data, $idProject, $useFilter);
                     foreach($data['allTasks'] as $k=>$task)
                     {
                         switch($task['time_for_complete_value'])
@@ -234,9 +284,11 @@ class Task extends CI_Controller {
                         }
 
                     }
-
-                    //$data['renderNavigationTask'] = $this->load->view('default/common/task/navigation.php', $data, true);
                 }
+                //если попадаем сюда, то в левом меню (выбор проекта) - делаем их все не активными
+                //If we get here, then in the left menu (choice of projects) - makes them inactive
+                else
+                    $data['dontUseSelectProject'] = true;
 
                 $data['renderViewTask'] = $this->load->view('default/common/task/content.php', $data, true);
                 unset($data['allTasks']);
@@ -255,16 +307,26 @@ class Task extends CI_Controller {
      */
     public function getAllTask()
     {
-        $response = $this->common->isAjax(["idProject", 'int', 'notZero']);
+        $response = $this->common->isAjax(["idProject", 'int', 'notZero', 'notZero'], ['curent_page', 'int', 'notZero'], ['from', 'int', 'notZero'], ['allFilter', 'str']);
         if($response['status'] != 'error')
         {
             $idProject = intval($this->common->clear($this->input->post('idProject', true)));
+
+            //если есть фильтры, то получаем их
+            $allFilter = "";
+            if(isset($_POST['allFilter']))
+            {
+                if($_POST['allFilter'] != "undefined")
+                    $allFilter = json_decode($this->input->post('allFilter', true));
+            }
+
+
             $data = $response['data'];
             unset($response['data']);
             $this->load->model('common_model');
 
             //получаем вид всех задач
-            $this->_additionalGetTask($data, $idProject);
+            $this->_additionalGetTask($data, $idProject, $allFilter);
             //если существует вид задач
             if(isset($data['renderViewTask']))
             {
@@ -281,6 +343,17 @@ class Task extends CI_Controller {
 
                     $response['idProjects'] = implode('|', $data['allIdProjects']);
                 }
+
+                //если не валидны данные для фильтра задач
+                if(isset($data['errorFilters']))
+                {
+                    if($data['errorFilters'] === true)
+                        $response['errorFilters'] = $data['error_code'][3][0]."<br>".$data['error_code'][3][2];
+                }
+
+                if(isset($data['dontUseSelectProject']))
+                    $response['dontUseSelectProject'] = true;
+
             }
             else
                 $response = ['status'=>'error', 'resultTitle'=>$data['languages_desc'][0]['titleError'][$data['segment']], 'resultText'=>''];
@@ -288,6 +361,7 @@ class Task extends CI_Controller {
             //если ранее была ошибка
             if(isset($data['status_project']))
                 $response['resultText'] = $data['status_project'];
+
         }
 
         echo json_encode($response);
@@ -898,18 +972,15 @@ class Task extends CI_Controller {
                 $path = './img/temp/'.$data['login'].'/';
             else
                 $path = './file/tasks/'.$idTask.'/';
-            log_message('error', $path.$src);
+
             $response = ['status' => 'success'];
             if(file_exists($path.$src))
             {
                 unlink($path.$src);
-                log_message('error', $path.$src);
 
                 //если папка пуста, то удаляем ее
                 if(file_exists($path))
                 {
-                    log_message('error', $path.$src);
-
                     $files = [];
                     $descriptor = opendir($path);
                     while($v = readdir($descriptor))
@@ -1533,7 +1604,7 @@ class Task extends CI_Controller {
         if($check['status'] == 'error')
             $this->common->redirect_to('task', $data['task_views'][16]);
 
-
+        //обрезаем слова "минуты, дни, недели и пр." что бы осталось только "м. д. нед. мес."
         switch($data['infoTask']['time_for_complete_value'])
         {
             case '0':     $data['infoTask']['time_for_complete_value'] = mb_substr($data['task_views'][47], 0, 1, 'utf8'); break;
@@ -1956,6 +2027,7 @@ class Task extends CI_Controller {
         echo json_encode($response);
     }
 
+
     /**
      * (AJAX)
      * Удаление задачи
@@ -1964,13 +2036,14 @@ class Task extends CI_Controller {
     public function deleteTask()
     {
         //проверяем на ajax и его параметры
-        $response = $this->common->isAjax(["id",'int']);
+        $response = $this->common->isAjax(["id",'int'], ['redirect', 'str']);
         if($response['status'] != 'error')
         {
             $data = $response['data'];
             unset($response['data']);
 
             $idTask = intval($this->common->clear($this->input->post('id', true)));
+            $redirect = $this->common->clear($this->input->post('redirect', true));
 
             $this->load->model('common_model');
             //проверям на существование задачи
@@ -1997,7 +2070,12 @@ class Task extends CI_Controller {
                     //удаляем задачу
                     $q = $this->common_model->deleteData('task', 'id_task', $idTask, true);
                     if($q > 0)
-                        $response = ['status' => 'success', 'resultTitle' => $data['task_views'][22], "resultText" => $data['task_controller'][23].$data['task_controller'][22]];
+                    {
+                        if($redirect != 'undefined')
+                            $response = ['status' => 'success', 'resultTitle' => $data['task_views'][22], "resultText" => $data['task_controller'][23]];
+                        else
+                            $response = ['status' => 'success', 'resultTitle' => $data['task_views'][22], "resultText" => $data['task_controller'][23].$data['task_controller'][22]];
+                    }
                     else
                         return $this->common->returnResponse($data, $data['task_controller'][25]);
                 }

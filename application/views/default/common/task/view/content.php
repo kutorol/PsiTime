@@ -167,6 +167,19 @@
 
             <div class="col-lg-4">
 
+                <!--btn pause-->
+                <div id="btnPause">
+                    <?php if($idUser == $infoTask['performer_id'] || $idUser == $infoTask['user_id']):?>
+                        <?php if($infoTask['status'] != 2 && $infoTask['status'] != 3):?>
+                            <div class="btn btn-danger" onclick="doPause();"><?=$js[51]?></div>
+                        <?php elseif($infoTask['status'] == 3):?>
+                            <div class="btn btn-success" onclick="removePause();"><?=$js[52]?></div>
+                        <?php endif;?>
+                    <?php endif;?>
+                    <hr>
+                </div>
+                <!--end btn pause-->
+
                 <!--project-->
                 <p>
                     <?=$task_views[66]?> "<?=$infoTask['title_project'];?>"
@@ -175,11 +188,17 @@
                 <!--end project-->
 
                 <!--time-->
-                <p>
-                    <?=$task_views[45]?>: <label class="label label-success small-text"><?=$infoTask['time_for_complete'];?> <?=$infoTask['time_for_complete_value'];?></label>
-                    <hr>
-                </p>
-
+				<div>
+					<p>
+						<?=$task_views[45]?>: <label class="label label-success small-text"><?=$infoTask['time_for_complete'];?> <?=$infoTask['time_for_complete_value'];?></label>
+					   
+					</p>
+					 <p id="myTimeCompliteForTask">
+						<?php if(isset($infoTask['myTimeCompliteForTask'])){ echo $js[50]." <label class='label label-danger small-text'>".$infoTask['myTimeCompliteForTask']."</label>";}?>
+					</p>
+					<hr>
+				</div>
+				
                 <div>
                     <p>
                         <?=$task_views[69];?> <label class="label label-info small-text"><?=$infoTask['time_add']?></label>
@@ -189,11 +208,7 @@
                     </p>
                     <p id="endTimeTask">
                         <?php if($infoTask['time_end'] != ''){ echo $task_views[72]." <label class='label label-info small-text'>".$infoTask['time_end']."</label>";}?>
-                    </p>
-
-                    <p id="myTimeCompliteForTask">
-                        <?php if(isset($infoTask['myTimeCompliteForTask'])){ echo $js[50]." <label class='label label-danger small-text'>".$infoTask['myTimeCompliteForTask']."</label>";}?>
-                    </p>
+                    </p>   
                     <hr>
                 </div>
                 <!--end time-->

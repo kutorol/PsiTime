@@ -26,11 +26,19 @@ class Task_model extends CI_Model {
      * @param array $config - тут передаются данные для постраничной навигации
      * @return mixed
      */
-    public function getAllTasks($allIdProjects = [], $segment = 'ru', $config = [])
+    public function getAllTasks($allIdProjects = [], $segment = 'ru', $config = [], $filters = [])
     {
+        //если применяются фильтры
+        if(!empty($filters))
+        {
+            foreach($filters as $key=>$filter)
+                $this->db->where_in("task.".$key, $filter);
+        }
+
         if(!empty($config))
         {
             $this->db->where_in('task.project_id', $allIdProjects);
+
             $this->_additionalInfoTask($segment);
             return $this->db->get('task', $config[0], $config[1])->result_array();
         }

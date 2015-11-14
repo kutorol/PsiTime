@@ -22,9 +22,9 @@ class Lang_controller
 
                         //DON'T TOUCH!!!
                         'perPageLang'   =>  [
-                                                'ru'    =>  ['first_link'   =>  'Первая', 'last_link' =>  'Последняя'],
-                                                'en'    =>  ['first_link'   =>  'First', 'last_link' =>  'Last'],
-                                                //'de'  =>  ['first_link'   =>  'Erste', 'last_link' =>  'Letzte'],
+                                                'ru'    =>  ['first_link'   =>  'Первая', 'last_link' =>  'Последняя', 'prev_link'=>"Предыдущая", "next_link" => "Следующая"],
+                                                'en'    =>  ['first_link'   =>  'First', 'last_link' =>  'Last', 'prev_link'=>"Previous", "next_link" => "Next"],
+                                                //'de'  =>  ['first_link'   =>  'Erste', 'last_link' =>  'Letzte', 'prev_link'=>"Zurück", "next_link" => "Der nächste"],
                                             ],
                         'errorAuth'     =>  [
                                                 'ru'    =>  'Вам необходимо авторизоваться!',
@@ -127,6 +127,7 @@ class Lang_controller
         $lang['lang_ru']['error_code'] = [
             1   =>  ["Вам нужно было передавать параметр в функцию, который равен id html элемента, отвечающий за то, какой параметр задачи обновляем! ".$additional_ru, " Возможно вы изменили дизайн, и некоторые html элементы были удалены, которые должны были присутствовать."],
             2   =>  "Вы не передали данные об задаче в эту функцию! ".$additional_ru,
+            3   =>  [0=>"Задачи ищутся с применением фильтра, но вот данные для фильтра не валидны. ", 1=> $additional_ru, 2 => "На данный момент показаны все задачи без фильтра."],
 
         ];
 
@@ -134,6 +135,7 @@ class Lang_controller
         $lang['lang_en']['error_code'] = [
             1   =>  ["You had to pass a parameter to a function, which is id html element responsible for setting a task update! ".$additional_en, " Maybe you changed the design, and some html elements have been removed, which should have been present."],
             2   =>  "You do not pass the data about the task in this function! ".$additional_en,
+            3   =>  [0=>"Tasks are looked for with use of the filter, but here data for the filter are not valid. ", 1=> $additional_en, 2 => "At this moment all of the tasks are shown without the filter."],
 
         ];
 
@@ -412,7 +414,7 @@ class Lang_controller
             64  =>  "Статус",
             65  =>  "Поставил",
             66  =>  "Проект: ",
-            67  =>  "Вы не создали ни одной задачи!",
+            67  =>  "Вы не создали ни одной задачи! Также возможно вы перешли на несуществующую страницу!",
             68  =>  "Открыть",
             69  =>  "Задача поставлена: ",
             70  =>  "Начало работы: ",
@@ -420,6 +422,14 @@ class Lang_controller
             72  =>  "Задача выполнена: ",
             73  =>  "Изменить исполнителя",
             74  =>  "Удалить задачу",
+            75  =>  "Всего страниц:",
+            76  =>  "Номер страницы",
+            77  =>  "Перейти на страницу:",
+            78  =>  "Фильтры:",
+            79  =>  "По статусу:",
+            80  =>  "По приоритету:",
+            81  =>  "По сложности:",
+            82  =>  "Применить фильтры",
 
             'status_task_0'      =>  'Поставлена',
             'status_task_1'      =>  'Выполняется',
@@ -496,7 +506,7 @@ class Lang_controller
             64  =>  "Status",
             65  =>  "Delivered",
             66  =>  "The project: ",
-            67  =>  "You have not created any task!",
+            67  =>  "You have not created any task! Also, you may have switched to a non-existent page!",
             68  =>  "Open",
             69  =>  "The task posed: ",
             70  =>  "The beginning of work: ",
@@ -504,6 +514,14 @@ class Lang_controller
             72  =>  "Task completed: ",
             73  =>  "To change the performer",
             74  =>  "Delete a task",
+            75  =>  "Total pages:",
+            76  =>  "Page number",
+            77  =>  "Go to page:",
+            78  =>  "Filters:",
+            79  =>  "By status:",
+            80  =>  "By priority:",
+            81  =>  "By complexity:",
+            82  =>  "Apply filters",
 
             'status_task_0'      =>  'Supplied',
             'status_task_1'      =>  'Running',
@@ -548,6 +566,8 @@ class Lang_controller
             41  =>  "Ошибки:",
             49  =>  'Поле \"Название задачи\" и \"Описание\" должны быть изменены для сохранения',
             50  =>  'Выполнено за: ',
+            51  =>  'Поставить на паузу',
+            52  =>  'Снять с паузы',
 
         ];
 
@@ -583,6 +603,9 @@ class Lang_controller
             41  =>  "Errors:",
             49  =>  'The \"Task Name\" and \"Description\" should be changed to save',
             50  =>  'Achieved for: ',
+            51  =>  'Pause',
+            52  =>  'Remove pause',
+
         ];
 
 
@@ -613,6 +636,7 @@ class Lang_controller
         $lang['lang_'.$segment]['js'][46]               =   $lang['lang_'.$segment]['task_views'][64];
         $lang['lang_'.$segment]['js'][47]               =   $lang['lang_'.$segment]['error_code'][1][1];
         $lang['lang_'.$segment]['js'][48]               =   $lang['lang_'.$segment]['task_views'][73];
+        $lang['lang_'.$segment]['js'][53]               =   $lang['lang_'.$segment]['task_views'][76];
 
 
 

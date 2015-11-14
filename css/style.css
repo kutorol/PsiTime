@@ -248,3 +248,11 @@ thead th {
     background-color: #2CB0D4;
     color: #fff;
 }
+
+.max-height-li{
+    max-height: 30px;
+}
+
+.ul-top-margin{
+    margin-top: -25px;
+}

@@ -6,8 +6,9 @@
  * @param selector - как называется селектор той строки, которую впоследствии из вида удалим (the name of the selector line, which was later remove from view)
  * @param id - ид того, что удаляем (id that remove)
  * @param dontRemoveNext - {check: true, second: 5, url: "" }. если не dontRemoveNext.check != undefined, то удаляем просто указанный элемент, если dontRemoveNext.second == числу, то делаем редирект на dontRemoveNext.url или на главную страницу через dontRemoveNext.second секунд
+ * @param redirect - если undefined, то перекидываем на главную страницу
  */
-function deleteData(url, selector, id, dontRemoveNext)
+function deleteData(url, selector, id, dontRemoveNext, redirect)
 {
     bootbox.confirm(jsLang[20], function(result) {
         if(result)
@@ -15,7 +16,7 @@ function deleteData(url, selector, id, dontRemoveNext)
             ajaxRequestJSON(url);
             $.ajax({
                 // параметры запроса, передаваемые на сервер (последний - подстрока для поиска):
-                data: {id: id},
+                data: {id: id, redirect: redirect},
                 // обработка успешного выполнения запроса
                 success: function(data)
                 {
@@ -29,43 +30,47 @@ function deleteData(url, selector, id, dontRemoveNext)
                         }
 
                         errorSuccessAjax({title: data.resultTitle, message: data.resultText}); //показываем модалку
+                        return false;
                     }
+
+                    //если есть дополнительный параметр
+                    if(dontRemoveNext !== undefined)
+                    {
+                        //если удаляем другое, а не проект
+                        if(dontRemoveNext.check !== undefined)
+                        {
+                            $("#"+selector+id).fadeOut(300, function(){ $(this).remove(); });
+                            //если указан url для редиректа
+                            if(dontRemoveNext.url !== undefined )
+                            {
+                                var toUrl = base_url+dontRemoveNext.url;
+                                var second = (dontRemoveNext.second !== undefined) ? dontRemoveNext.second * 1000 : 5000;
+
+                                setTimeout(function(){
+                                    document.location.href = toUrl;
+                                }, second);
+                            }
+
+                            errorSuccessAjax({title: data.resultTitle, message: data.resultText}); //сообщение вставляем под главный title
+                        }
+                    }
+                    //если удаляем проект (или задачу на главной странице)
                     else
                     {
-                        if(dontRemoveNext !== undefined)
-                        {
-                            //если удаляем другое, а не проект
-                            if(dontRemoveNext.check !== undefined)
-                            {
-                                $("#"+selector+id).fadeOut(300, function(){ $(this).remove(); });
-                                //если указан url для редиректа
-                                if(dontRemoveNext.url !== undefined )
-                                {
-                                    var toUrl = base_url+dontRemoveNext.url;
-                                    var second = (dontRemoveNext.second !== undefined) ? dontRemoveNext.second * 1000 : 5000;
+                        var rowProject = $("#"+selector+id);
+                        rowProject.fadeOut(300, function(){
+                            rowProject.next().remove();
+                            rowProject.remove();
+                            if($(".project").html() === undefined)
+                                $("#addProject").remove();
 
-                                    setTimeout(function(){
-                                        document.location.href = toUrl;
-                                    }, second);
-                                }
-
-                                errorSuccessAjax({title: data.resultTitle, message: data.resultText}); //сообщение вставляем под главный title
-                            }
-                        }
-                        //если удаляем проект
-                        else
-                        {
-                            var rowProject = $("#"+selector+id);
-                            rowProject.fadeOut(300, function(){
-                                rowProject.next().remove();
-                                rowProject.remove();
-                                if($(".project").html() === undefined)
-                                    $("#addProject").remove();
-
+                            if(data.resultText === undefined)
                                 errorSuccessAjax(data.resultTitle, {del: "danger", add: "success"}); //сообщение вставляем под главный title
-                            });
-                        }
+                            else
+                                hideLoad();
+                        });
                     }
+
                 }
             });
         }
@@ -328,21 +333,57 @@ function attachUsers(id, name, modal)
 }
 
 
+function getAllTaskWithFilter()
+{
+    var idProject = $("#menu-projects a.active").attr("data-id-project");
+    if(idProject == 'all')
+        idProject = undefined;
+
+    //получаем все задания с фильтрами
+    getAllTask(idProject, undefined, true);
+}
+
 /**
  * Получаем все задачи для всех проектов
  * We get all the tasks for all projects
  */
-function getAllTask(idProject, from)
+function getAllTask(idProject, from, allFilterBool)
 {
     from = (from === undefined) ? 0 : parseInt(from);
-    var idProject = (idProject === undefined) ? 0 : parseInt(idProject);
+
+    idProject = (idProject === undefined) ? 0 : parseInt(idProject);
+
+    var allFilter = undefined;
+
+    if(allFilterBool !== undefined || arrayForFilterStatus.length > 0 || arrayForFilterComplexity.length > 0 || arrayForFilterPriority.length > 0)
+    {
+        allFilter = {};
+
+        //кладем каждый массив в свою ячейку
+        if(arrayForFilterStatus.length > 0)
+            allFilter['status'] = JSON.stringify(arrayForFilterStatus);
+
+        if(arrayForFilterComplexity.length > 0)
+            allFilter['complexity_id'] = JSON.stringify(arrayForFilterComplexity);
+
+        if(arrayForFilterPriority.length > 0)
+            allFilter['priority_id'] = JSON.stringify(arrayForFilterPriority);
+
+
+        //если в массиве нет ни одного фильтра
+        if(allFilter.priority_id === undefined && allFilter.complexity_id === undefined && allFilter.status === undefined)
+            allFilter = undefined;
+        else
+            allFilter = JSON.stringify(allFilter); //преобразуем массив в строку
+    }
+
     //шаблон ajax запроса
     ajaxRequestJSON("task/getAllTask");
     $.ajaxSetup({
         dataType: "html"
     });
     $.ajax({
-        data: {idProject: idProject, curent_page: from, from: from},
+        data: {idProject: idProject, curent_page: from, from: from, allFilter: allFilter},
         success: function(data)
         {
             var jsonResponse = $.parseJSON(data);
@@ -350,6 +391,25 @@ function getAllTask(idProject, from)
             {
                 errorSuccessAjax({title: jsonResponse.resultTitle, message: jsonResponse.resultText}); //показываем модалку
                 return false;
+            }
+
+            //если перешли на неизвестную страницу, то выключаем активную вкладку выбора проекта
+            if(jsonResponse.dontUseSelectProject !== undefined)
+                $("#menu-projects a.active").removeClass("active");
+
+            //если параметры для фильтра не правильно переданы
+            if(jsonResponse.errorFilters !== undefined)
+            {
+                showModal(jsLang[7], jsonResponse.errorFilters);
+                //снимаем все фильтры
+                $("input[type='checkbox'].activeCheckbox").click();
+
+                //ставим узатель на "Все проекты", в меню слева.
+                $.each($("#menu-projects a"), function( index, value ) {
+                    $(value).removeClass("active");
+                });
+                $("#allProjectsTasks").addClass("active");
+
             }
 
             //вставляем количество заданий у всех проектов в левую навигацию
@@ -521,6 +581,9 @@ function changeSelectTask(idElement)
         return false;
     }
 
+    //если стоит на паузе, или выполняется задание, то в id btnPause отображаются кнопки "на паузу" и "снять с паузы"
+    var btnPauseInHtml = $("#btnPause");
+
     //шаблон ajax запроса
     ajaxRequestJSON("task/updateTask/"+idAttr);
     $.ajax({
@@ -592,7 +655,6 @@ function changeSelectTask(idElement)
             if(idAttr == 'statusLevelInfo' && num > 0 && selectpicker.find("option[value='0']").val() !== undefined)
             {
                 selectpicker.find("option[value='0']").remove();
-                selectpicker.next().find("ul.dropdown-menu li")[0].remove();
                 selectpicker.selectpicker('refresh');
             }
 
@@ -603,6 +665,7 @@ function changeSelectTask(idElement)
                 selectpicker.next().find("button[data-id='"+idAttr+"']").removeClass("btn-info").addClass(colorSelect);
                 //удаляем выбор исполнителя, т.к. задачу выполнил этот юзер, и чтобы его не сменили случайно
                 change_performer.fadeOut(300, function(){ $(this).html(""); });
+                btnPauseInHtml.fadeOut(300, function(){ $(this).html(""); });
             }
 
             //если изменили исполнителя, то возможно удаляем некоторые html элементы, чтобы их не изменяли
@@ -616,11 +679,33 @@ function changeSelectTask(idElement)
                 $("#editMyTask").fadeOut(300, function(){ $(this).remove(); });
                 //удаляем кнопку "удалить задание"
                 $("#deleteTask").fadeOut(300, function(){ $(this).remove(); });
+                btnPauseInHtml.fadeOut(300, function(){ $(this).html(""); });
             }
+            else
+            {
+                //если статус задачи еще не выполнен, то удаляем строку, где точное время выполнения задания
+                if(idAttr == 'statusLevelInfo' && num != 2)
+                {
+                    $("#myTimeCompliteForTask").fadeOut(300, function(){ $(this).html(""); });
 
-            //если статус задачи еще не выполнен, то удаляем строку, где точное время выполнения задания
-            if(idAttr == 'statusLevelInfo' && num != 2)
-                $("#myTimeCompliteForTask").fadeOut(300, function(){ $(this).html(""); });
+                    //если ставим на паузу
+                    if(num == 3)
+                    {
+                        //заменяем кнопку на "снять с паузы"
+                        btnPauseInHtml.fadeOut(150, function(){
+                            $(this).html('<div class="btn btn-success" onclick="removePause();">'+jsLang[52]+'</div>').fadeIn(150);
+                        });
+                    }
+                    //если это не пауза и не "выполнено"
+                    else
+                    {
+                        //заменяем кнопку на "снять с паузы"
+                        btnPauseInHtml.fadeOut(150, function(){
+                            $(this).html('<div class="btn btn-danger" onclick="doPause();">'+jsLang[51]+'</div>').fadeIn(150);
+                        });
+                    }
+                }
+            }
 
             //вставляем за сколько выполнили задание
             if(data.myTimeCompliteForTask !== undefined)
@@ -689,7 +774,7 @@ function editDescTask()
             //обновляем на странице название
             if(data.newTitle != $.trim(titleHtml.html()))
             {
-                //TODO заменить экранирование на более подходящие символы (чтобы красиво было)
+                //TODO заменить экранирование на более подходящие символы (чтобы красиво было). Это чтобы нормально отображало титл и описание задачи (в конкретной задачи)
                 $("#tastTitleInfo").fadeOut(150, function(){ $(this).html(data.newTitle.replace(/&amp;/g,"&")).fadeIn(150);});
                 $("#changeTitleInfo").fadeOut(150, function(){ $(this).html(data.newTitle.replace(/&amp;/g,"&")).fadeIn(150);  });
             }
@@ -708,7 +793,174 @@ function editDescTask()
     });
 }
 
+/**
+ * При нажатии на кнопку "поставить на паузу", заменяем select на паузу и выполняем changeSelectTask(idElement)
+ * When you click on "pause", replace select pause and perform changeSelectTask (idElement)
+ */
+function doPause()
+{
+    //делаем неактивными все выбранные элементы
+    $('#statusLevelInfo option:selected').prop("selected", false);
+    //выбираем паузу
+    $("#statusLevelInfo option[value=3]").prop("selected", true);
+    //применяем данное действие
+    $("#statusLevelInfo").change();
+}
+
+/**
+ * Снимаем с паузы и ставим статус "выполняется"
+ * Remove from the break and set the status "Running"
+ */
+function removePause()
+{
+    //делаем неактивными все выбранные элементы
+    $('#statusLevelInfo option:selected').prop("selected", false);
+    //выбираем статус "выполняется"
+    $("#statusLevelInfo option[value=1]").prop("selected", true);
+    //применяем данное действие
+    $("#statusLevelInfo").change();
+}
+
+/**
+ * Показываем задачи в соответствии с тем, какую страницу хочет видеть юзер
+ * Showing tasks in accordance with what page the user wants to see
+ * @returns {boolean}
+ */
+function getMeMyPage()
+{
+    var fail = false,  errorMessage = "<ul>";
+    var numberPage = parseInt($("#getMyPage").val());
+
+    //проверяем цифру
+    tempErrorMessage = validateNum(jsLang[53], numberPage, fail);
+    errorMessage += (tempErrorMessage.message != '') ? "<li>"+tempErrorMessage.message +"</li>" : '';
+    fail = tempErrorMessage.fail;
+
+    //если были ошибки
+    if(fail === true)
+    {
+        errorMessage += "</ul>";
+        addTitle({title: jsLang[5], message: errorMessage}); //показываем ошибку
+        return false;
+    }
+
+    //если юзер хочет 5 страницу, то в контроллере число должно быть на 1 меньше
+    //if the user wants to page 5, the controller number must be 1 below
+    if(numberPage > 0)
+        numberPage--;
+
+    //получаем id проекта
+    var idProject = $("#menu-projects a.active").attr("data-id-project");
+    if(idProject == 'all')
+        idProject = undefined;
+
+    //получаем все задания с фильтрами
+    getAllTask(idProject, numberPage, true);
+
+    return false;
+}
+
+/**
+ * В этот массив будут складываться значения фильтра по статусу
+ * This array will be folded filter value status
+ * @type {Array}
+ */
+var arrayForFilterStatus = [];
+
+/**
+ * В этот массив будут складываться значения фильтра по сложности
+ *
+ * @type {Array}
+ */
+var arrayForFilterComplexity = [];
+
+/**
+ * В этот массив будут складываться значения фильтра по приоритету
+ *
+ * @type {Array}
+ */
+var arrayForFilterPriority = [];
+
 $(function() {
+
+
+
+    /**
+     * Если кликают на чекбоксы, для фильтра по статусу задачи
+     * If you click on the checkboxes to filter tasks by status
+     */
+    $("#checkboxForFilterStatus input[type=checkbox]").click(function(){
+        if($(this).hasClass("activeCheckbox"))
+        {
+            $(this).removeClass("activeCheckbox");
+            var myThis = $(this);
+            $.each(arrayForFilterStatus, function( index, value ) {
+                //удаляем из массива ненужное значение фильтра
+                if(value == myThis.val())
+                    arrayForFilterStatus.splice(index, 1);
+            });
+        }
+        else
+        {
+            //добавляем значение фильтра в массив
+            $(this).addClass("activeCheckbox");
+            arrayForFilterStatus.push($(this).val());
+        }
+    });
+
+
+
+    /**
+     * Если кликают на чекбоксы, для фильтра по сложности задачи
+     *
+     */
+    $("#checkboxForFilterComplexity input[type=checkbox]").click(function(){
+        if($(this).hasClass("activeCheckbox"))
+        {
+            $(this).removeClass("activeCheckbox");
+            var myThis = $(this);
+            $.each(arrayForFilterComplexity, function( index, value ) {
+                //удаляем из массива ненужное значение фильтра
+                if(value == myThis.val())
+                    arrayForFilterComplexity.splice(index, 1);
+            });
+        }
+        else
+        {
+            //добавляем значение фильтра в массив
+            $(this).addClass("activeCheckbox");
+            arrayForFilterComplexity.push($(this).val());
+        }
+    });
+
+
+
+
+    /**
+     * Если кликают на чекбоксы, для фильтра по приоритету задачи
+     *
+     */
+    $("#checkboxForFilterPriority input[type=checkbox]").click(function(){
+        if($(this).hasClass("activeCheckbox"))
+        {
+            $(this).removeClass("activeCheckbox");
+            var myThis = $(this);
+            $.each(arrayForFilterPriority, function( index, value ) {
+                //удаляем из массива ненужное значение фильтра
+                if(value == myThis.val())
+                    arrayForFilterPriority.splice(index, 1);
+            });
+        }
+        else
+        {
+            //добавляем значение фильтра в массив
+            $(this).addClass("activeCheckbox");
+            arrayForFilterPriority.push($(this).val());
+        }
+    });
+
+
+
 
     /**
      * Когда внесли изменения в название или в описание конкретной задачи, то по нажатию кнопки сохранить - сохраняем

@@ -489,23 +489,29 @@ class Common
                     $postError = true;
                 else
                 {
+                    //если название в аргументе не содержиться этой надписи
                     if($arg_list[$i][0] != 'noPost')
                     {
+                        //если существует такое название в post массиве
                         if(!isset($_POST[$arg_list[$i][0]]))
                             $postError = true;
                         else
                         {
+                            //если это число
                             if($arg_list[$i][1] == 'int')
                             {
+                                //если существует третий параметр, то не проверяем на "равно 0"
                                 if(isset($arg_list[$i][2]))
                                 {
                                     if(@$this->checkData($_POST[$arg_list[$i][0]], true, false, true, false) !== true)
                                         $postError = true;
                                 }
+                                //если нет третьего параметра, то проверяем и на "равно 0"
                                 else
                                     if(@$this->checkData($_POST[$arg_list[$i][0]], true) !== true)
                                         $postError = true;
                             }
+                            //если это строка
                             else
                                 if(@$this->checkData($_POST[$arg_list[$i][0]], false, true) !== true)
                                     $postError = true;
@@ -524,7 +530,7 @@ class Common
 
         }
         else
-            return ['status'=>'error', 'resultTitle'=>"NU NIXUYA SEBE TI CHEGO SDELAL", "resultText"=>"NU NIXUYA SEBE TI CHEGO SDELAL"];
+            return ['status'=>'error', 'resultTitle'=>"NU NIXUYA SEBE TI CHEGO SDELAL ;)", "resultText"=>"NU NIXUYA SEBE TI CHEGO SDELAL ;)"];
     }
 
 
@@ -534,10 +540,18 @@ class Common
      * @param $str - строка содержащая элементы для замены. Например :_class_: (string containing the elements for a replacement. For example :_class_:)
      * @param array $replace_with - то, чем будем заменять. Например :_class_: заменится константой __CLASS__ (what will replace. For example :_class_: replace the constant __CLASS__)
      * @param array $to_replace - все элементы, которые должны заменить (All items should be replaced)
+     * @param $json_encode_data - это не валидные данные, которые пытались передать серверу. (this is not valid data that tried to pass the server.)
      */
-    public function errorCodeLog($str, $replace_with = [], $to_replace = [':_class_:', ':_method_:', ':_line_:'])
+    public function errorCodeLog($str, $replace_with = [], $to_replace = [':_class_:', ':_method_:', ':_line_:'], $json_encode_data = null)
     {
-        log_message('error', "\n\r".strtr($str, array_combine($to_replace, $replace_with))."\n\r");
+        if($to_replace == 'same')
+            $to_replace = [':_class_:', ':_method_:', ':_line_:'];
+
+        $strError = "\n --> " . strtr($str, array_combine($to_replace, $replace_with)) . "\n";
+        if(!is_null($json_encode_data))
+            $strError .= " --> Invalid data: ".json_encode($json_encode_data)."\n\r";
+
+        log_message('error', $strError);
     }
 
 

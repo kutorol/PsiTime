@@ -50,6 +50,10 @@
             <script src="<?=base_url()?>js/upload/jquery.fileupload-validate.js"></script>
         <?php endif;?>
 
+        <?php if(isset($useCheckbox)):?>
+            <script src="<?=base_url()?>js/bootstrap-checkbox.js"></script>
+        <?php endif;?>
+
     <div class="container-fluid" style="color: #ccc;">
         <p>&nbsp;</p>
         <div class="row text-center">
