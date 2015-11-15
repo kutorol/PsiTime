@@ -34,13 +34,13 @@ define('SITE_URL', 'http://time.log/');
 /**
  * Постраничная навигация.
  * Pagination.
- * @define COUNT_LINK_FOR_PAGINATION - Количество ссылок. На данный момент она равна 10 (Number of references to the pagination. At the moment it is 10)
- * @define COUNT_OBJECT_PER_PAGE - Количество задач, отображаемых в виде. На данный момент 10 (Number of references to the pagination. At the moment it is 10)
+ * @define MAX_COUNT_LINK_FOR_PAGINATION - Количество ссылок. На данный момент она равна 10 (Number of references to the pagination. At the moment it is 10)
+ * @define MAX_COUNT_OBJECT_PER_PAGE - Количество задач, отображаемых в виде. На данный момент 10 (Number of references to the pagination. At the moment it is 10)
  */
 //если слишком много ссылок навигации, то уменьшить (if there are too much links of navigation, to reduce)
-define('COUNT_LINK_FOR_PAGINATION', 10);
+define('MAX_COUNT_LINK_FOR_PAGINATION', 10);
 //если мало отображаются заданий на одной странице, то увеличить это число (if are a little displayed tasks on one page, to increase this number)
-define('COUNT_OBJECT_PER_PAGE', 5);
+define('MAX_COUNT_OBJECT_PER_PAGE', 5);
 
 /**
  * Путь к главной папке с файлами отображения сайта

@@ -76,18 +76,18 @@ class Task extends CI_Controller {
         $countPage = 0;
         if($allCountTask != 1)
         {
-            $countPage = (int)($allCountTask/COUNT_OBJECT_PER_PAGE);
+            $countPage = (int)($allCountTask/MAX_COUNT_OBJECT_PER_PAGE);
             if($countPage == 0)
                 $countPage = 1;
             else
             {
-                if(($allCountTask % COUNT_OBJECT_PER_PAGE) != 0)
+                if(($allCountTask % MAX_COUNT_OBJECT_PER_PAGE) != 0)
                     $countPage++;
             }
 
             //количество ссылок по бокам от текущей страницы
-            $countLinkLeft = (COUNT_LINK_FOR_PAGINATION % 2 == 0) ? COUNT_LINK_FOR_PAGINATION / 2 : COUNT_LINK_FOR_PAGINATION - ceil(COUNT_LINK_FOR_PAGINATION/2);
-            $countLinkRight = COUNT_LINK_FOR_PAGINATION - $countLinkLeft;
+            $countLinkLeft = (MAX_COUNT_LINK_FOR_PAGINATION % 2 == 0) ? MAX_COUNT_LINK_FOR_PAGINATION / 2 : MAX_COUNT_LINK_FOR_PAGINATION - ceil(MAX_COUNT_LINK_FOR_PAGINATION/2);
+            $countLinkRight = MAX_COUNT_LINK_FOR_PAGINATION - $countLinkLeft;
 
             //если текущая страница больше того что есть
             if($data['curent_page'] > $countPage)
@@ -190,7 +190,7 @@ class Task extends CI_Controller {
                 //текущая страница
                 $data['curent_page'] =  $data['from'];
                 //с какой записи начинать выборку (выбранную страницу умножаем на количество задач на странице)
-                $data['from'] *= COUNT_OBJECT_PER_PAGE;
+                $data['from'] *= MAX_COUNT_OBJECT_PER_PAGE;
 
                 //тут будут храниться все данные для фильтра по юзерам
                 $data['allUsersForFilters'] = [];
@@ -283,11 +283,11 @@ class Task extends CI_Controller {
                     }
 
                     //[15, 0]: 15 - по сколько записей выводить на страницу. 0 - с первой страницы начинать
-                    $data['allTasks'] = $this->task_model->getAllTasks([$idProject], $data['segment'], [COUNT_OBJECT_PER_PAGE, $data['from']], $filter);
+                    $data['allTasks'] = $this->task_model->getAllTasks([$idProject], $data['segment'], [MAX_COUNT_OBJECT_PER_PAGE, $data['from']], $filter);
                 }
                 //получаем все задания для всех проектов
                 else
-                    $data['allTasks'] = $this->task_model->getAllTasks($allIdProjects, $data['segment'], [COUNT_OBJECT_PER_PAGE, $data['from']], $filter);
+                    $data['allTasks'] = $this->task_model->getAllTasks($allIdProjects, $data['segment'], [MAX_COUNT_OBJECT_PER_PAGE, $data['from']], $filter);
 
 
                 //делаем так, что вначале нет навигации
