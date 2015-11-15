@@ -256,3 +256,25 @@ thead th {
 .ul-top-margin{
     margin-top: -25px;
 }
+
+#resetFilters{
+    display: none;
+}
+
+.clickHideShow{
+    cursor: pointer;
+}
+
+.nameFilter{
+    border-bottom: 1px dashed #333;
+}
+
+.nameFilter:hover{
+    border-bottom: none;
+}
+.clickHideShow i{
+    color: #8DD9F0;
+}
+.clickHideShow:hover i{
+    color: #337AB7;
+}

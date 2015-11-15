@@ -260,58 +260,106 @@ if($statusUser == 1):?>
                 <?php if(!empty($myProjects)):?>
                     <fieldset><legend><?=$task_views[7]?>:</legend></fieldset>
 
-                    <div class="list-group" id="menu-projects">
-                        <a href="#" id="allProjectsTasks" data-id-project="all" class="<?php if(!isset($dontUseSelectProject)){ echo "active"; }?> list-group-item navigate-project" onclick="getAllTask();"><?=$task_views[63]?>  <span class="badge" id="countProject_all"><?=$countProject_all?></span></a>
-                    <?php foreach($myProjects as $key=>$project):?>
-                        <a href="#" class="list-group-item navigate-project" data-id-project="<?=$project['id_project']?>" onclick="getAllTask(<?=$project['id_project']?>);"><?=$project['title']?>  <span class="badge" id="countProject_<?=$project['id_project']?>"><?=$countTask['countProject_'.$project['id_project']]?></span></a>
-                    <?php endforeach;?>
+                    <div class="col-lg-offset-1">
+                        <div class="list-group" id="menu-projects">
+                            <a href="#" id="allProjectsTasks" data-id-project="all" class="<?php if(!isset($dontUseSelectProject)){ echo "active"; }?> list-group-item navigate-project" onclick="getAllTask();"><?=$task_views[63]?>  <span class="badge" id="countProject_all"><?=$countProject_all?></span></a>
+                        <?php foreach($myProjects as $key=>$project):?>
+                            <a href="#" class="list-group-item navigate-project" data-id-project="<?=$project['id_project']?>" onclick="getAllTask(<?=$project['id_project']?>);"><?=$project['title']?>  <span class="badge" id="countProject_<?=$project['id_project']?>"><?=$countTask['countProject_'.$project['id_project']]?></span></a>
+                        <?php endforeach;?>
+                        </div>
                     </div>
                 <?php endif;?>
                 <!--END ALL PROJECTS-->
 
+                <p>&nbsp;</p>
+                <p>&nbsp;</p>
+
                 <!--FILTER START-->
                 <fieldset><legend><?=$task_views[78]?></legend></fieldset>
-                <div id="checkboxForFilterStatus">
-                    <p>
-                        <b><?=$task_views[79]?></b>
-                        <ul class="ul-top-margin">
-                            <?php for($counterStatus = 0; $counterStatus < 4; $counterStatus++):?>
-                                <li class="max-height-li"><?=$task_views['status_task_'.$counterStatus]?> <input type="checkbox" class="checkbox" value="<?=$counterStatus?>"/></li>
-                            <?php endfor;?>
-                        </ul>
-                    </p>
-                    <br>
-                    <hr>
+                <div class="col-lg-offset-1">
+                    <div id="checkboxForFilterStatus">
+                        <b class="clickHideShow"><span class="nameFilter"><?=$task_views[79]?></span> <i class="fa fa-arrow-down"></i></b>
+                        <div style="display: none;">
+                            <p>
+                                <ul class="ul-top-margin" >
+                                    <?php for($counterStatus = 0; $counterStatus < 4; $counterStatus++):?>
+                                        <li class="max-height-li"><?=$task_views['status_task_'.$counterStatus]?> <input type="checkbox" class="checkbox" value="<?=$counterStatus?>"/></li>
+                                    <?php endfor;?>
+                                </ul>
+                                <br>
+                            </p>
+                        </div>
+
+                        <hr>
+                    </div>
+
+                    <div id="checkboxForFilterPriority">
+                        <b class="clickHideShow"><span class="nameFilter"><?=$task_views[80]?></span> <i class="fa fa-arrow-down"></i></b>
+                        <div style="display: none;">
+                            <p >
+                                <ul class="ul-top-margin">
+                                    <?php foreach($priority as $v):?>
+                                        <li class="max-height-li"><?=$v['title_'.$segment]?> <i class="<?=$v['icon']?>"></i> <input type="checkbox" class="checkbox" value="<?=$v['id_priority']?>"/></li>
+                                    <?php endforeach;?>
+                                </ul>
+                                <br>
+                            </p>
+                        </div>
+
+                        <hr>
+                    </div>
+
+                    <div id="checkboxForFilterComplexity">
+                        <b class="clickHideShow"><span class="nameFilter"><?=$task_views[81]?></span> <i class="fa fa-arrow-down"></i></b>
+                        <div style="display: none;">
+                            <p >
+                                <ul class="ul-top-margin">
+                                    <?php foreach($complexity as $v):?>
+                                        <li class="max-height-li"><?=$v['name_complexity_'.$segment]?> <input type="checkbox" class="checkbox" value="<?=$v['id_complexity']?>"/></li>
+                                    <?php endforeach;?>
+                                </ul>
+                                <br>
+                            </p>
+                        </div>
+
+                        <hr>
+                    </div>
+
+                    <div id="checkboxForFilterPerformer">
+                        <b class="clickHideShow"><span class="nameFilter"><?=$task_views[83]?></span> <i class="fa fa-arrow-down"></i></b>
+                        <div style="display: none;">
+                            <p>
+                                <ul class="ul-top-margin">
+                                    <li class="max-height-li"><span class="label label-info small-text"><?=$task_views[84]?></span> <input type="checkbox" class="checkbox" value="<?=$idUser?>"/></li>
+                                    <?php foreach($allUsersForFilters as $user):?>
+                                        <li class="max-height-li"><?=$user['name']?> (<?=$user['login']?>) <input type="checkbox" class="checkbox" value="<?=$user['id_user']?>"/></li>
+                                    <?php endforeach;?>
+                                </ul>
+                                <br>
+                            </p>
+                        </div>
+
+                        <hr>
+                    </div>
+
+                    <div class="btn btn-primary" onclick="getAllTaskWithFilter();"><?=$task_views[82]?></div>
+
+
+                    <div id="resetFilters" >
+                        <div class="clearfix"></div>
+                        <hr>
+                        <div class="pull-left">
+                            <div class="btn btn-danger disabled">Сохранить фильтр</div>
+                        </div>
+
+                        <div class="pull-right">
+                            <div class="btn btn-danger" onclick="resetFilters();"><?=$task_views[85]?></div>
+                        </div>
+
+
+                    </div>
+
                 </div>
-
-                <div id="checkboxForFilterPriority">
-                    <p>
-                        <b><?=$task_views[80]?></b>
-                        <ul class="ul-top-margin">
-                            <?php foreach($priority as $v):?>
-                                <li class="max-height-li"><?=$v['title_'.$segment]?> <i class="<?=$v['icon']?>"></i> <input type="checkbox" class="checkbox" value="<?=$v['id_priority']?>"/></li>
-                            <?php endforeach;?>
-                        </ul>
-                    </p>
-                    <br>
-                    <hr>
-                </div>
-
-                <div id="checkboxForFilterComplexity">
-                    <p>
-                        <b><?=$task_views[81]?></b>
-                        <ul class="ul-top-margin">
-                            <?php foreach($complexity as $v):?>
-                                <li class="max-height-li"><?=$v['name_complexity_'.$segment]?> <input type="checkbox" class="checkbox" value="<?=$v['id_complexity']?>"/></li>
-                            <?php endforeach;?>
-                        </ul>
-                    </p>
-                    <br>
-                    <hr>
-                </div>
-
-                <div class="btn btn-primary" onclick="getAllTaskWithFilter();"><?=$task_views[82]?></div>
-
                 <script>
                     $(function(){
                         $('.checkbox').checkbox();

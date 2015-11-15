@@ -83,4 +83,13 @@ class Task_model extends CI_Model {
     }
 
 
+    public function getAllMyTask($idUser, $idTask)
+    {
+        $this->db->select("pause, pause_for_complite")
+                ->where('performer_id', $idUser)
+                ->where('status', 1)
+
+                ->where_not_in('status', [0,2]);
+    }
+
 }

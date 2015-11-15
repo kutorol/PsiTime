@@ -332,7 +332,10 @@ function attachUsers(id, name, modal)
 
 }
 
-
+/**
+ * Сработает тогда, когда нажмем на кнопку "применить фильтр"
+ * It works when click on the "Apply Filter"
+ */
 function getAllTaskWithFilter()
 {
     var idProject = $("#menu-projects a.active").attr("data-id-project");
@@ -346,6 +349,9 @@ function getAllTaskWithFilter()
 /**
  * Получаем все задачи для всех проектов
  * We get all the tasks for all projects
+ * @param idProject
+ * @param from - на какую страницу перейти (which page to go)
+ * @param allFilterBool - если не равно undefined, то ищем задачи вместе с фильтром (if not undefined, then we look for the task together with the filter)
  */
 function getAllTask(idProject, from, allFilterBool)
 {
@@ -355,7 +361,7 @@ function getAllTask(idProject, from, allFilterBool)
 
     var allFilter = undefined;
 
-    if(allFilterBool !== undefined || arrayForFilterStatus.length > 0 || arrayForFilterComplexity.length > 0 || arrayForFilterPriority.length > 0)
+    if(allFilterBool !== undefined || arrayForFilterStatus.length > 0 || arrayForFilterComplexity.length > 0 || arrayForFilterPriority.length > 0 || arrayForFilterPerformer.length > 0)
     {
         allFilter = {};
 
@@ -369,9 +375,12 @@ function getAllTask(idProject, from, allFilterBool)
         if(arrayForFilterPriority.length > 0)
             allFilter['priority_id'] = JSON.stringify(arrayForFilterPriority);
 
+        if(arrayForFilterPerformer.length > 0)
+            allFilter['performer_id'] = JSON.stringify(arrayForFilterPerformer);
+
 
         //если в массиве нет ни одного фильтра
-        if(allFilter.priority_id === undefined && allFilter.complexity_id === undefined && allFilter.status === undefined)
+        if(allFilter.priority_id === undefined && allFilter.complexity_id === undefined && allFilter.status === undefined && allFilter.performer_id === undefined)
             allFilter = undefined;
         else
             allFilter = JSON.stringify(allFilter); //преобразуем массив в строку
@@ -861,6 +870,16 @@ function getMeMyPage()
 }
 
 /**
+ * Сбрасываем фильтр и показываем изначальные задачи без фильтра
+ * Clear the filter and show the initial problem without filter
+ */
+function resetFilters()
+{
+    $("input[type=checkbox].activeCheckbox").click();
+    $("#allProjectsTasks").click();
+}
+
+/**
  * В этот массив будут складываться значения фильтра по статусу
  * This array will be folded filter value status
  * @type {Array}
@@ -869,20 +888,81 @@ var arrayForFilterStatus = [];
 
 /**
  * В этот массив будут складываться значения фильтра по сложности
- *
+ * This array will be formed on the complexity of the filter values
  * @type {Array}
  */
 var arrayForFilterComplexity = [];
 
 /**
  * В этот массив будут складываться значения фильтра по приоритету
- *
+ * This array will be folded filter values by priority
  * @type {Array}
  */
 var arrayForFilterPriority = [];
 
+/**
+ * В этот массив будут складываться значения фильтра по исполнителю
+ * This array will be folded filter values by performer
+ * @type {Array}
+ */
+var arrayForFilterPerformer = [];
+
+/**
+ * общая функция для добавления данных в массивы фильтров
+ * common function to add data to the array of filters
+ * @param myThis - идентификатор checkbox, на который кикни
+ * @param array - массив определенного фильтра, в который записываем данные
+ */
+function overallCheckboxClick(myThis, array)
+{
+    //если уже кликали на этот checkbox, то его деактивируем
+    if(myThis.hasClass("activeCheckbox"))
+    {
+        myThis.removeClass("activeCheckbox");
+
+        //удаляем из массива данный checkbox из массива данного фильтра
+        $.each(array, function( index, value ) {
+            //удаляем из массива ненужное значение фильтра
+            if(value == myThis.val())
+                array.splice(index, 1);
+        });
+    }
+    else
+    {
+        //добавляем значение фильтра в массив
+        myThis.addClass("activeCheckbox");
+        array.push(myThis.val());
+    }
+}
+
+
 $(function() {
 
+
+    /**
+     ********************************
+     *  Фильтры (Filters)
+     ********************************
+     */
+
+    /**
+     * При клике на название фильтра - открываем доступные параметры
+     * Clicking on the name of the filter - open the available options
+     */
+    $(".clickHideShow").on("click", function(){
+        var nextEl = $(this).next();
+        var icon = $(this).find("i");
+        if(nextEl.hasClass("openDiv"))
+        {
+            icon.removeClass("fa-arrow-up").addClass("fa-arrow-down").attr("style", "");
+            nextEl.slideUp(300).removeClass("openDiv");
+        }
+        else
+        {
+            icon.removeClass("fa-arrow-down").addClass("fa-arrow-up").css({'color': "#337AB7"});
+            nextEl.slideDown(300).addClass("openDiv");
+        }
+    });
 
 
     /**
@@ -890,76 +970,62 @@ $(function() {
      * If you click on the checkboxes to filter tasks by status
      */
     $("#checkboxForFilterStatus input[type=checkbox]").click(function(){
-        if($(this).hasClass("activeCheckbox"))
-        {
-            $(this).removeClass("activeCheckbox");
-            var myThis = $(this);
-            $.each(arrayForFilterStatus, function( index, value ) {
-                //удаляем из массива ненужное значение фильтра
-                if(value == myThis.val())
-                    arrayForFilterStatus.splice(index, 1);
-            });
-        }
-        else
-        {
-            //добавляем значение фильтра в массив
-            $(this).addClass("activeCheckbox");
-            arrayForFilterStatus.push($(this).val());
-        }
+        overallCheckboxClick($(this), arrayForFilterStatus);
     });
-
-
 
     /**
      * Если кликают на чекбоксы, для фильтра по сложности задачи
-     *
+     * If you click on the checkboxes to filter complexity of the task
      */
     $("#checkboxForFilterComplexity input[type=checkbox]").click(function(){
-        if($(this).hasClass("activeCheckbox"))
-        {
-            $(this).removeClass("activeCheckbox");
-            var myThis = $(this);
-            $.each(arrayForFilterComplexity, function( index, value ) {
-                //удаляем из массива ненужное значение фильтра
-                if(value == myThis.val())
-                    arrayForFilterComplexity.splice(index, 1);
-            });
-        }
-        else
-        {
-            //добавляем значение фильтра в массив
-            $(this).addClass("activeCheckbox");
-            arrayForFilterComplexity.push($(this).val());
-        }
+        overallCheckboxClick($(this), arrayForFilterComplexity);
     });
-
-
-
 
     /**
      * Если кликают на чекбоксы, для фильтра по приоритету задачи
-     *
+     * If you click on the checkboxes to filter tasks by priority
      */
     $("#checkboxForFilterPriority input[type=checkbox]").click(function(){
-        if($(this).hasClass("activeCheckbox"))
-        {
-            $(this).removeClass("activeCheckbox");
-            var myThis = $(this);
-            $.each(arrayForFilterPriority, function( index, value ) {
-                //удаляем из массива ненужное значение фильтра
-                if(value == myThis.val())
-                    arrayForFilterPriority.splice(index, 1);
-            });
-        }
-        else
-        {
-            //добавляем значение фильтра в массив
-            $(this).addClass("activeCheckbox");
-            arrayForFilterPriority.push($(this).val());
-        }
+        overallCheckboxClick($(this), arrayForFilterPriority);
     });
 
 
+    /**
+     * Если кликают на чекбоксы, для фильтра по исполнителю задачи
+     * If you click on the checkboxes to filter tasks by Performer
+     */
+    $("#checkboxForFilterPerformer input[type=checkbox]").click(function(){
+        overallCheckboxClick($(this), arrayForFilterPerformer);
+    });
+
+    /**
+     * !!!
+     * !!! НЕ ВЫНОСИТЬ ВЫШЕ ФУНКЦИЙ $("#checkboxForFilterPerformer input[type=checkbox]"), $("#checkboxForFilterPriority input[type=checkbox]") И ПРОЧИХ. ИНАЧЕ CHECKBOX НЕ БУДЕТ АКТИВЕН, ДАЖЕ ЕСЛИ ЕГО АКТИВИРОВАЛИ
+     * !!! NOT TO TAKE OUT ABOVE FUNCTIONS $("#checkboxForFilterPerformer input[type=checkbox]"), $("#checkboxForFilterPriority input[type=checkbox]") AND OTHER. OTHERWISE CHECKBOX WON'T BE ACTIVE EVEN IF IT WAS ACTIVATED
+     * !!!
+     *
+     * После того как checkbox активен или нет, проверяем все активные checkbox и если их больше 0, то показываем кнопку "сбросить фильтр", а если равно 0, то убираем кнопку
+     * Once the checkbox is active or not, check all active checkbox, and if more than 0, then show the "Reset Filter", and if equal to 0, remove the button
+     */
+    $("input[type=checkbox]").on('click', function(){
+        var countActive = 0;
+        $.each($("input[type=checkbox]"), function( index, value ) {
+            if($(value).hasClass("activeCheckbox"))
+                countActive++;
+        });
+
+        if(countActive > 0 && !$("#resetFilters").hasClass("openResetBtn"))
+            $("#resetFilters").addClass("openResetBtn").slideDown(300);
+        else if(countActive == 0)
+            $("#resetFilters").removeClass("openResetBtn").slideUp(300);
+
+    });
+
+    /**
+     ********************************
+     *  Конец Фильтры (END Filters)
+     ********************************
+     */
 
 
     /**

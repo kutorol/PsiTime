@@ -141,7 +141,7 @@ class Lang_controller
 
         /********************************************
          * Перевод для контроллера Welcome (RU)
-         * Transfer controller Welcome (RU)
+         * Translations controller Welcome (RU)
          * ******************************************
          */
         $lang['lang_ru']['welcome_controller'] = [
@@ -195,7 +195,7 @@ class Lang_controller
 
         /********************************************
          * Перевод для контроллера Welcome (EN)
-         * Transfer controller Welcome (EN)
+         * Translations controller Welcome (EN)
          * ******************************************
          */
         $lang['lang_en']['welcome_controller'] = [
@@ -278,8 +278,8 @@ class Lang_controller
 
 
         /********************************************
-         * Перевод для контроллера Welcome (RU)
-         * Transfer controller Welcome (RU)
+         * Перевод для контроллера task (RU)
+         * Translation controller task (RU)
          * ******************************************
          */
         $lang['lang_ru']['task_controller'] = [
@@ -312,8 +312,8 @@ class Lang_controller
         ];
 
         /********************************************
-         * Перевод для контроллера Welcome (EN)
-         * Transfer controller Welcome (EN)
+         * Перевод для контроллера task (EN)
+         * Translation controller task (EN)
          * ******************************************
          */
         $lang['lang_en']['task_controller'] = [
@@ -430,6 +430,9 @@ class Lang_controller
             80  =>  "По приоритету:",
             81  =>  "По сложности:",
             82  =>  "Применить фильтры",
+            83  =>  "По исполнителю:",
+            84  =>  "Мои задачи",
+            85  =>  "Сбросить фильтры",
 
             'status_task_0'      =>  'Поставлена',
             'status_task_1'      =>  'Выполняется',
@@ -522,6 +525,9 @@ class Lang_controller
             80  =>  "By priority:",
             81  =>  "By complexity:",
             82  =>  "Apply filters",
+            83  =>  "By performer:",
+            84  =>  "My tasks",
+            85  =>  "Reset filters",
 
             'status_task_0'      =>  'Supplied',
             'status_task_1'      =>  'Running',
@@ -529,6 +535,26 @@ class Lang_controller
             'status_task_3'      =>  'Pause',
         ];
 
+
+        /********************************************
+         * Перевод для контроллера chart (RU)
+         * Translation controller chart (RU)
+         * ******************************************
+         */
+        $lang['lang_ru']['chart_controller'] = [
+            0   =>  "Графики затраченного мной времени",
+
+        ];
+
+        /********************************************
+         * Перевод для контроллера chart (EN)
+         * Translation controller chart (EN)
+         * ******************************************
+         */
+        $lang['lang_en']['chart_controller'] = [
+            0   =>  "Charts spent my time",
+
+        ];
 
         /********************************************
          * Перевод для jquery

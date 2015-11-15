@@ -31,12 +31,16 @@ class Task extends CI_Controller {
         //разрешаем подключение скриптов, чтобы сделать красивые checkbox
         $data['useCheckbox'] = true;
         $this->load->model('common_model');
+
+        //указываем то, что мы обращаемся не через ajax
+        $data['imFromIndexFunction'] = true;
         $this->_additionalGetTask($data);
 
         //приоритет задания
         $data['priority'] =  $this->common_model->getResult('priority', '', '', 'result_array', 'id_priority, icon, title_'.$data['segment'], 'id_priority', 'asc');
         //сложность задания
         $data['complexity'] = $this->common_model->getResult('complexity', '', '', 'result_array', 'id_complexity, color, name_complexity_'.$data['segment'], 'id_complexity', 'asc');
+
         //проверяем, не оставил ли юзер файлы в папке, при создании задачи
         //это может быть тогда, когда он не добавил задачу, а просто все загрузил!
         $data['filesAttach'] = $this->_getAllAttach(null, $data['login'], $data['task_controller'][9]);
@@ -188,8 +192,32 @@ class Task extends CI_Controller {
                 //с какой записи начинать выборку (выбранную страницу умножаем на количество задач на странице)
                 $data['from'] *= COUNT_OBJECT_PER_PAGE;
 
-                //получаем всех юзеров, которые прикрепленны к самому первому проекту, чтобы при добавлении задачи их показать
-                $data['myProjects'][0]['userInProject'] = $this->common_model->getResult('users', 'id_user', explode(',', $data['myProjects'][0]['team_ids']), 'result_array', 'id_user, name, login', null, '', true);
+                //тут будут храниться все данные для фильтра по юзерам
+                $data['allUsersForFilters'] = [];
+
+                //если мы обращаемся не через ajax
+                if(isset($data['imFromIndexFunction']))
+                {
+                    //получаем имена, логины и id юзеров, которые прикреплены к проектам, которые есть у меня. Нужно для фильтра задач и для добавления задач
+                    foreach($data['myProjects'] as $key=>$value)
+                    {
+                        //если это не тот проект, которые будет отображаться первым, тогда исключаем мой id, чтобы лишний раз не брать
+                        if($key != 0)
+                            $this->db->where_not_in('id_user', [$data['idUser']]);
+
+                        //получаем всех юзеров, которые прикрепленны к самому первому проекту, чтобы при добавлении задачи их показать
+                        $data['myProjects'][$key]['userInProject'] = $this->common_model->getResult('users', 'id_user', explode(',', $value['team_ids']), 'result_array', 'id_user, name, login', null, '', true);
+                        if(!empty($data['myProjects'][$key]['userInProject']))
+                        {
+                            foreach($data['myProjects'][$key]['userInProject'] as $user)
+                            {
+                                //в массив записываем только тех юзеров, которые не являются мной
+                                if($user['id_user'] != $data['idUser'])
+                                    $data['allUsersForFilters'][] =  ['id_user' => $user['id_user'], 'login' => $user['login'], 'name' => $user['name']];
+                            }
+                        }
+                    }
+                }
 
                 $allIdProjects = [];
                 foreach($data['myProjects'] as $project)
@@ -351,6 +379,8 @@ class Task extends CI_Controller {
                         $response['errorFilters'] = $data['error_code'][3][0]."<br>".$data['error_code'][3][2];
                 }
 
+
+                //если существует, то убираем указатель в левом меню (выбор проектов), чтобы показать, что не один проект не нажат
                 if(isset($data['dontUseSelectProject']))
                     $response['dontUseSelectProject'] = true;
 
@@ -1760,6 +1790,36 @@ class Task extends CI_Controller {
     }
 
     /**
+     * Обновляем все задачи, ставя их в статус "пауза"
+     * Update all tasks, placing them in the status of a "pause"
+     *
+     * @param $idUser - id юзера, который является исполнителем задачи $idTask
+     * @param $idTask - задача, которую не нужно обновлять
+     */
+    private function _updateOtherTaskOnPause($idUser, $idTask)
+    {
+        //получаем все задачи, кроме той, что в $idTask, у которых статус "выполняется"
+        $this->db->where_not_in('id_task', [$idTask]);
+        $allTasks = $this->common_model->getResult('task', ['performer_id', 'status'], [$idUser, 1], 'result_array', 'id_task, pause', 'id_task');
+
+        if(!empty($allTasks))
+        {
+            foreach($allTasks as $k=>$task)
+            {
+                //если ранее задача ставилась на паузу, то получаем все данные
+                if($task['pause'] != '')
+                    $new['pause'] = unserialize($task['pause']);
+
+                //в последнюю ячейку добавляем начало паузы
+                $new['pause'][]['start'] = time();
+                $new['pause'] = serialize($new['pause']);
+                $new['status'] = 3;
+                $this->common_model->updateData($new, 'id_task', $task['id_task'], 'task');
+            }
+        }
+    }
+
+    /**
      * (AJAX)
      * Обновляем задание, но только вываливающиеся списки
      * Update task, but just select into html
@@ -1906,6 +1966,13 @@ class Task extends CI_Controller {
                         }
                     }
 
+                    //если задачу ставят в статус "выполняется"
+                    if($num == 1)
+                    {
+                        //то все остальные задачи ставяться на паузу
+                        $this->_updateOtherTaskOnPause($check['performer_id'], $idTask);
+                    }
+
                     //если задача была выполнена, а сейчас ее вновь активируют
                     if($num != 2 && $check['status'] == 2)
                     {
@@ -1932,7 +1999,7 @@ class Task extends CI_Controller {
                         $data['changeUserView'] = $this->load->view(DEFAULT_VIEW."/common/task/view/change_performer.php", $data, true);
                     }
 
-                    //если задача на "pause"
+                    //если ставим задачу на "pause"
                     if($num == 3 && $check['status'] != 3)
                     {
                         if($check['pause'] != '')
