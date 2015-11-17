@@ -44,6 +44,9 @@
                         <li><a href="<?=$startUrl;?>/welcome/changeProfile"><?=$welcome_controller[28]?></a></li>
                         <li><a href="<?=$startUrl;?>/welcome/changePassword"><?=$input_form_lang[9][$segment]?></a></li>
                         <li><a href="<?=$startUrl;?>/task/addProject"><?=$task_views[0]?></a></li>
+
+                        <li><a href="<?=$startUrl;?>/chart">Графики</a></li>
+
                         <li><a href="<?=$startUrl;?>/welcome/logout"><?=$header_menu_lang[1][$segment]?></a></li>
 
                     <?php else:?>

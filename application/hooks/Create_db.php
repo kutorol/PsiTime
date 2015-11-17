@@ -62,7 +62,7 @@ class Create_db {
             include APPPATH . 'language/db_hook/' . YOUR_LANG . '/install.php';
 
         //если число ссылок, которые должны выводиться в навигации не являются числом - ошибка
-        if(!is_numeric(COUNT_LINK_FOR_PAGINATION) || intval(COUNT_LINK_FOR_PAGINATION) <= 0)
+        if(!is_numeric(MAX_COUNT_LINK_FOR_PAGINATION) || intval(MAX_COUNT_LINK_FOR_PAGINATION) <= 0)
         {
             log_message('error', $lang['error_7']);
             show_error($lang['error_7'], 500, $lang['error_8']);
@@ -70,7 +70,7 @@ class Create_db {
         }
 
         //если число выводимых задач и прочих вещей не является числом - ошибка
-        if(!is_numeric(COUNT_OBJECT_PER_PAGE) || intval(COUNT_OBJECT_PER_PAGE) <= 2)
+        if(!is_numeric(MAX_COUNT_OBJECT_PER_PAGE) || intval(MAX_COUNT_OBJECT_PER_PAGE) <= 2)
         {
             log_message('error', $lang['error_9']);
             show_error($lang['error_9'], 500, $lang['error_8']);
