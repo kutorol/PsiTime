@@ -245,7 +245,8 @@ class Welcome extends CI_Controller {
             $this->form_validation->set_rules('name', $data['welcome_controller'][17], 'trim|required|min_length[2]|max_length[20]|xss_clean');
 			$this->form_validation->set_rules('login', $data['welcome_controller'][1], 'trim|alpha_dash|required|min_length[5]|max_length[20]|xss_clean|is_unique[users.login]');
 			$this->form_validation->set_rules('email', 'Email', 'trim|required|min_length[6]|valid_email|xss_clean|is_unique[users.email]');
-			
+			$this->form_validation->set_rules('hoursInDayToWork', $data['task_views'][40], 'trim|required|min_length[1]|max_length[2]|numeric|xss_clean');
+
 			$validateRulePass = 'trim|alpha_dash|required|min_length[5]|max_length[20]|xss_clean|';
             $this->form_validation->set_rules('pass', $data['welcome_controller'][2], $validateRulePass.'matches[pass_too]');
 			$this->form_validation->set_rules('pass_too', $data['welcome_controller'][18], $validateRulePass.'matches[pass]');
@@ -260,6 +261,7 @@ class Welcome extends CI_Controller {
 			$data['login'] = $this->common->clear($this->input->post('login', true));
 			$data['email'] = $this->common->clear($this->input->post('email', true));
 			$data['pass'] = $this->common->clear($this->input->post('pass', true));
+			$data['hoursInDayToWork'] = intval($this->common->clear($this->input->post('hoursInDayToWork', true)));
 
             //проверка логина
             if(!preg_match("/^[a-zA-Z0-9\-_]{5,20}$/iu", $data['login']))
@@ -272,7 +274,14 @@ class Welcome extends CI_Controller {
             if(!preg_match("/^[а-яА-ЯёЁa-zA-Z ]{2,20}$/iu", $data['name']))
             {
                 $fail = true;
-                $data['error'] .= $data['welcome_controller'][37];
+                $data['error'] .= $data['welcome_controller'][37]."<br>";
+            }
+
+            //проверка количества рабочего времени, без учета обеда
+            if($data['hoursInDayToWork'] <= 0 || $data['hoursInDayToWork'] > 14)
+            {
+                $fail = true;
+                $data['error'] .= $data['task_views'][40]." ".$data['js'][38];
             }
 
             //если были ошибки - показываем вид
@@ -293,7 +302,7 @@ class Welcome extends CI_Controller {
 			//получаем пароль
 			$new['password'] = $pass = $data['pass'];
 			$new['password'] = sha1(md5($new['password'].$new['hash']));
-            $new['role_id'] = 4; //guest
+			$new['hoursInDayToWork'] = $data['hoursInDayToWork'];
 
             //подгружаем модель
             $this->load->model('common_model');

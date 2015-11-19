@@ -33,6 +33,13 @@
                 </div>
 
                 <div class="input-group col-xs-12">
+                    <input type="number" class="form-control col-xs-12" name="hoursInDayToWork" placeholder="<?=$task_views[40]?>" required>
+                    <br><br>
+                    <span class="label label-danger error"><?=strip_tags(form_error('hoursInDayToWork'))?></span>
+                </div>
+
+
+                <div class="input-group col-xs-12">
                     <button type="submit" class="btn btn-primary col-xs-12" name="registration_btn"><?=$input_form_lang[6][$segment]?></button>
                 </div>
 
