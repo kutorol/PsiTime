@@ -23,7 +23,8 @@ define('ADMIN_EMAIL', 'admin@admin.ru'); //на email будут высылат�
 define('ADMIN_PASS', 'admin');
 define('ADMIN_LOGIN', 'admin');
 define('ADMIN_NAME', 'Administrator');
-define('YOUR_LANG', 'en'); //ru, en . now no other language
+define('YOUR_LANG', 'ru'); //ru, en . now no other language
+define('MAX_WORK_TIME_IN_DAY', '8'); //количество рабочих часов в день, не считая обеденного перерыва
 
 //вконце обязательно поставить "/"
 //be sure to put at the end of "/"

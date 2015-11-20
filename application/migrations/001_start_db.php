@@ -37,8 +37,8 @@ class Migration_Start_db extends CI_Migration{
         if(empty($q))
         {
             $randHash = substr(sha1(md5(rand(5000, 5996034))), 0, 15);
-            $sql = "INSERT INTO `users` (`id_user`, `name`, `login`, `password`, `email`, `hash`, `status`, `count_projects`) VALUES
-                    (1, '".ADMIN_NAME."', '".ADMIN_LOGIN."', '".sha1(md5(ADMIN_PASS.$randHash))."', '".ADMIN_EMAIL."', '".$randHash."', '1', 1);";
+            $sql = "INSERT INTO `users` (`id_user`, `name`, `login`, `password`, `email`, `hash`, `status`, `count_projects`, `hoursInDayToWork`) VALUES
+                    (1, '".ADMIN_NAME."', '".ADMIN_LOGIN."', '".sha1(md5(ADMIN_PASS.$randHash))."', '".ADMIN_EMAIL."', '".$randHash."', '1', 1, ".intval(MAX_WORK_TIME_IN_DAY).");";
             $this->db->query($sql);
         }
 
@@ -63,7 +63,7 @@ class Migration_Start_db extends CI_Migration{
         if(empty($q))
         {
             $sql = "INSERT INTO `projects` (`id_project`, `title`, `responsible`, `team_ids`) VALUES
-                                    (1, 'Первая задача', 1, 1);";
+                                    (1, 'Первай проект', 1, 1);";
             $this->db->query($sql);
         }
 
@@ -111,7 +111,7 @@ class Migration_Start_db extends CI_Migration{
         $q = $this->db->get('priority')->result_array();
         if(empty($q))
         {
-            $sql = "INSERT INTO `priority` (`id_priority`, `title_ru`, `title_en`, `icon`) VALUES
+            $sql = "INSERT INTO `priority` (`id_priority`, `title_ru`, `title_en`, `icon`, `color`) VALUES
                     (1, 'Обычный', 'Normal', 'fa fa-mars', ''),
                     (2, 'Важный', 'Significant', 'fa fa-venus', 'default'),
                     (3, 'Серьезный', 'Serious', 'fa fa-venus-mars', 'primary'),
@@ -128,8 +128,8 @@ class Migration_Start_db extends CI_Migration{
         $sql = "CREATE TABLE IF NOT EXISTS `task` (
                   `id_task` int(10) unsigned NOT NULL AUTO_INCREMENT,
                   `complexity_id` int(10) unsigned NOT NULL,
-                  `priority_id` INT unsigned NOT NULL,
-                  `user_id` int(10) unsigned NOT NULL  COMMENT 'id юзера, кто создал задачу',
+                  `priority_id` INT unsigned DEFAULT '1',
+                  `user_id` int(10) unsigned NOT NULL COMMENT 'id юзера, кто создал задачу',
                   `project_id` int(10) unsigned NOT NULL,
                   `title` varchar(255) NOT NULL,
                   `status` varchar(1) NOT NULL DEFAULT '0' COMMENT '0-добавили,1-делаем,2-готово,3-на паузе',
@@ -165,8 +165,8 @@ class Migration_Start_db extends CI_Migration{
         $q = $this->db->get('task')->result_array();
         if(empty($q))
         {
-            $sql = "INSERT INTO `task` (`id_task`, `complexity_id`, `user_id`, `project_id`, `title`, `status`, `time_add`, `text`, `day_start`, `month_start`, `year_start`, `time_for_complete`, `time_for_complete_value`) VALUES
-                    ('1', '2', '1', '1', 'Первая задача', '0', '".time()."', 'Комментарий к задаче', '".date('d')."', '".date('m')."', '".date('Y')."', '12', '1');";
+            $sql = "INSERT INTO `task` (`id_task`, `performer_id`, `complexity_id`, `user_id`, `project_id`, `title`, `status`, `time_add`, `text`, `day_start`, `month_start`, `year_start`, `time_for_complete`, `time_for_complete_value`) VALUES
+                    ('1', '1', '2', '1', '1', 'Первая задача', '0', '".time()."', 'Комментарий к задаче', '".date('d')."', '".date('m')."', '".date('Y')."', '12', '1');";
             $this->db->query($sql);
         }
 
@@ -179,9 +179,9 @@ class Migration_Start_db extends CI_Migration{
     public function down()
     {
         $this->dbforge->drop_table('users');
-        $this->dbforge->drop_table('role');
         $this->dbforge->drop_table('projects');
         $this->dbforge->drop_table('complexity');
+        $this->dbforge->drop_table('priority');
         $this->dbforge->drop_table('task');
     }
 }

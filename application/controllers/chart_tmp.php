@@ -20,7 +20,8 @@ class Chart_tmp extends CI_Controller {
             'langArray_1'       =>  'chart_controller',
             'langArray_2'       =>  0,
             'authUser'          =>  true,
-            'noRedirect'        =>  false //false - редиректим, true - возвращаем ошибку
+            'noRedirect'        =>  false, //false - редиректим, true - возвращаем ошибку
+            'name_file'         =>  'content_tmp.php'
         ];
         $data = $this->common->allInit($config);
 
@@ -30,10 +31,6 @@ class Chart_tmp extends CI_Controller {
         $allMyTask = $this->common_model->getResult('task', ['performer_id', 'status'], [$data['idUser'], 2], 'result_array', 'complexity_id, priority_id, project_id, pause, pause_for_complite', 'id_task');
 
         $q = $this->db->query("SELECT id_task,complexity_id, COUNT(*) FROM task WHERE performer_id = ".$data['idUser']." AND status = 2 GROUP BY complexity_id")->result_array();
-        echo "<pre>";
-        print_r($q);
-        echo "</pre>";
-        exit;
 
         $data['complexity'] = $this->common_model->getResult('task', ['performer_id', 'status'], [$data['idUser'], 2]);
 
@@ -111,6 +108,17 @@ class Chart_tmp extends CI_Controller {
         }
 
 
+        echo "<pre>";
+        print_r($data['myTime']['allWorkDays']." d <br>");
+        print_r($data['myTime']['allWorkHours']." h <br>");
+        print_r($data['myTime']['allWorkMinutes']." m <br>");
+        print_r($data['myTime']['allWorkSeconds']." s <br>");
+        echo "</pre>";
+
+        $data['hours__'] = $data['myTime']['allWorkDays'] * 24 + $data['myTime']['allWorkHours'] + $data['myTime']['allWorkMinutes']/60 + $data['myTime']['allWorkSeconds']/3600;
+        $data['hours__'] = round($data['hours__'],2) ;
+        echo $data['hours__']." h<br>";
+        //$timeline = range(0, $hours); // [1, 2, 3, ... $hours]
 
 
 
@@ -149,7 +157,8 @@ class Chart_tmp extends CI_Controller {
 
 
 
-        $this->display_lib->display($data, $config['pathToViewDir']);
+
+        $this->display_lib->display($data, $config['pathToViewDir'], $config['name_file']);
     }
 
 

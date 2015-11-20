@@ -42,6 +42,46 @@
     </div>
 
 
+    <h2 align="center">NEW</h2>
+    <hr>
+
+    <div class="container" style="color: red">
+        <div class="row">
+            <div class="col-lg-6">
+                <div id="containerPriorityAll" style="min-width: 310px; height: 300px; max-width: 500px; margin: 0 auto"></div>
+            </div>
+
+            <div class="col-lg-6">
+                <div id="containerPriorityProject" style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>
+            </div>
+
+            <div class="clearfix"></div>
+            <hr>
+
+            <div class="col-lg-6">
+                <div id="containerPriorityAllComplete" style="min-width: 310px; height: 300px; max-width: 500px; margin: 0 auto"></div>
+            </div>
+
+            <div class="col-lg-6">
+                <div id="containerPriorityProjectComplete" style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>
+            </div>
+
+
+            <div class="clearfix"></div>
+            <hr>
+
+            <div class="col-lg-6">
+                <div id="containerPriorityAllNeedDo" style="min-width: 310px; height: 300px; max-width: 500px; margin: 0 auto"></div>
+            </div>
+
+            <div class="col-lg-6">
+                <div id="containerPriorityProjectNeedDo" style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>
+            </div>
+        </div>
+    </div>
+
+
+
     <script>
 
 
@@ -88,7 +128,6 @@
                     data: <?=$seriesForJsComplexityAll?>
                 }]
             });
-
 
             $('#containerComplexityProject').highcharts({
                 chart: {
@@ -144,16 +183,6 @@
             });
 
 
-
-
-
-
-
-
-
-
-
-            // Build the chart
             $('#containerComplexityAllComplete').highcharts({
                 chart: {
                     plotBackgroundColor: null,
@@ -247,8 +276,6 @@
             });
 
 
-
-            // Build the chart
             $('#containerComplexityAllNeedDo').highcharts({
                 chart: {
                     plotBackgroundColor: null,
@@ -339,6 +366,312 @@
                 },
 
                 series: <?=$seriesForJsComplexityProjectNeedDo?>
+            });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            $('#containerPriorityAll').highcharts({
+                chart: {
+                    plotBackgroundColor: null,
+                    plotBorderWidth: null,
+                    plotShadow: false,
+                    type: 'pie',
+                    options3d: {
+                        enabled: true,
+                        alpha: 45,
+                        beta: 0
+                    }
+                },
+                colors: [<?=$colorsForJsPriority?>],
+                title: {
+                    text: 'Число всех задач, с сортировкой по приоритету'
+                },
+                subtitle: {
+                    text: '(за все время)'
+                },
+                tooltip: {
+                    pointFormat: '<b>{point.percentage:.1f}%</b>'
+                },
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        depth: 35,
+                        dataLabels: {
+                            enabled: false
+                        },
+                        showInLegend: true
+                    }
+                },
+                series: [{
+                    colorByPoint: true,
+                    data: <?=$seriesForJsPriorityAll?>
+                }]
+            });
+
+            $('#containerPriorityProject').highcharts({
+                chart: {
+                    type: 'column',
+                    options3d: {
+                        enabled: true,
+                        alpha: 15,
+                        beta: 15,
+                        viewDistance: 25,
+                        depth: 40
+                    },
+                    marginTop: 80,
+                    marginRight: 40
+                },
+                colors: [<?=$colorsForJsPriority?>],
+                title: {
+                    text: 'Число всех задач, с сортировкой по приоритету и проекту'
+                },
+                subtitle: {
+                    text: '(за все время)'
+                },
+                plotOptions: {
+                    column: {
+                        depth: 25
+                    }
+                },
+                xAxis: {
+                    categories: [<?=$titleForJsPriorityProject?>],
+                    title: {
+                        text: 'Название проекта'
+                    }
+                },
+                yAxis: {
+                    allowDecimals: false,
+                    min: 0,
+                    title: {
+                        text: 'Количество задач'
+                    }
+                },
+                tooltip: {
+                    headerFormat: '<b>{point.key}</b><br>',
+                    pointFormat: '<span style="color:{series.color}">\u25CF</span> {series.name}: {point.y} / {point.stackTotal}'
+                },
+
+                plotOptions: {
+                    column: {
+                        stacking: 'normal',
+                        depth: 50
+                    }
+                },
+
+                series: <?=$seriesForJsPriorityProject?>
+            });
+
+
+            $('#containerPriorityAllComplete').highcharts({
+                chart: {
+                    plotBackgroundColor: null,
+                    plotBorderWidth: null,
+                    plotShadow: false,
+                    type: 'pie',
+                    options3d: {
+                        enabled: true,
+                        alpha: 45,
+                        beta: 0
+                    }
+                },
+                colors: [<?=$colorsForJsPriority?>],
+                title: {
+                    text: 'Число всех задач, с сортировкой по приоритету и статусом "выполнено"'
+                },
+                subtitle: {
+                    text: '(за все время)'
+                },
+                tooltip: {
+                    pointFormat: '<b>{point.percentage:.1f}%</b>'
+                },
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        depth: 35,
+                        dataLabels: {
+                            enabled: false
+                        },
+                        showInLegend: true
+                    }
+                },
+                series: [{
+                    colorByPoint: true,
+                    data: <?=$seriesForJsPriorityAllComplete?>
+                }]
+            });
+
+            $('#containerPriorityProjectComplete').highcharts({
+                chart: {
+                    type: 'column',
+                    options3d: {
+                        enabled: true,
+                        alpha: 15,
+                        beta: 15,
+                        viewDistance: 25,
+                        depth: 40
+                    },
+                    marginTop: 80,
+                    marginRight: 40
+                },
+                colors: [<?=$colorsForJsPriority?>],
+                title: {
+                    text: 'Число всех задач, с сортировкой по приоритету и проекту и статусом "выполнено"'
+                },
+                subtitle: {
+                    text: '(за все время)'
+                },
+                plotOptions: {
+                    column: {
+                        depth: 25
+                    }
+                },
+                xAxis: {
+                    categories: [<?=$titleForJsPriorityProjectComplete?>],
+                    title: {
+                        text: 'Название проекта'
+                    }
+                },
+                yAxis: {
+                    allowDecimals: false,
+                    min: 0,
+                    title: {
+                        text: 'Количество задач'
+                    }
+                },
+                tooltip: {
+                    headerFormat: '<b>{point.key}</b><br>',
+                    pointFormat: '<span style="color:{series.color}">\u25CF</span> {series.name}: {point.y} / {point.stackTotal}'
+                },
+
+                plotOptions: {
+                    column: {
+                        stacking: 'normal',
+                        depth: 50
+                    }
+                },
+
+                series: <?=$seriesForJsPriorityProjectComplete?>
+            });
+
+
+            $('#containerPriorityAllNeedDo').highcharts({
+                chart: {
+                    plotBackgroundColor: null,
+                    plotBorderWidth: null,
+                    plotShadow: false,
+                    type: 'pie',
+                    options3d: {
+                        enabled: true,
+                        alpha: 45,
+                        beta: 0
+                    }
+                },
+                colors: [<?=$colorsForJsPriority?>],
+                title: {
+                    text: 'Число всех задач, с сортировкой по приоритету, которые ждут выполнения'
+                },
+                subtitle: {
+                    text: '(за все время)'
+                },
+                tooltip: {
+                    pointFormat: '<b>{point.percentage:.1f}%</b>'
+                },
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        depth: 35,
+                        dataLabels: {
+                            enabled: false
+                        },
+                        showInLegend: true
+                    }
+                },
+                series: [{
+                    colorByPoint: true,
+                    data: <?=$seriesForJsPriorityAllNeedDo?>
+                }]
+            });
+
+            $('#containerPriorityProjectNeedDo').highcharts({
+                chart: {
+                    type: 'column',
+                    options3d: {
+                        enabled: true,
+                        alpha: 15,
+                        beta: 15,
+                        viewDistance: 25,
+                        depth: 40
+                    },
+                    marginTop: 80,
+                    marginRight: 40
+                },
+                colors: [<?=$colorsForJsPriority?>],
+                title: {
+                    text: 'Число всех задач, с сортировкой по приоритету и проекту, которые ждут выполнения'
+                },
+                subtitle: {
+                    text: '(за все время)'
+                },
+                plotOptions: {
+                    column: {
+                        depth: 25
+                    }
+                },
+                xAxis: {
+                    categories: [<?=$titleForJsPriorityProjectNeedDo?>],
+                    title: {
+                        text: 'Название проекта'
+                    }
+                },
+                yAxis: {
+                    allowDecimals: false,
+                    min: 0,
+                    title: {
+                        text: 'Количество задач'
+                    }
+                },
+                tooltip: {
+                    headerFormat: '<b>{point.key}</b><br>',
+                    pointFormat: '<span style="color:{series.color}">\u25CF</span> {series.name}: {point.y} / {point.stackTotal}'
+                },
+
+                plotOptions: {
+                    column: {
+                        stacking: 'normal',
+                        depth: 50
+                    }
+                },
+
+                series: <?=$seriesForJsPriorityProjectNeedDo?>
             });
 
         });

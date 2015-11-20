@@ -12,6 +12,12 @@
 class Chart extends CI_Controller {
 
 
+    public function __construct()
+    {
+        parent::__construct();
+        $this->load->model('common_model');
+    }
+
     /**
      * Если такой ячейки не существовало, то мы ее создаем и увеличиваем на единицу.
      * @param $data
@@ -186,20 +192,26 @@ class Chart extends CI_Controller {
         ];
         $data = $this->common->allInit($config);
 
-        $this->load->model('chart_model');
-        $this->load->model('common_model');
-
-
-        //названия сложности задания
-        $complexity = $this->common_model->getResult('complexity', '', '', 'result_array', 'id_complexity, name_complexity_'.$data['segment'], 'id_complexity', 'asc');
-
         //получаем все мои задания с названием проекта, к которому они принадлежат
         $this->db->join("projects", "projects.id_project = task.project_id", "left");
         $this->db->join("complexity", "complexity.id_complexity = task.complexity_id", "left");
-        $allTasks = $this->common_model->getResult('task', 'task.performer_id', $data['idUser'], 'result_array', 'task.project_id, task.complexity_id, projects.title, task.status, complexity.name_complexity_'.$data['segment']);
+        $this->db->join("priority", "priority.id_priority = task.priority_id", "left");
+        $allTasks = $this->common_model->getResult('task', 'task.performer_id', $data['idUser'], 'result_array', 'task.project_id, task.complexity_id, task.priority_id, projects.title, task.status, complexity.name_complexity_'.$data['segment'].", priority.title_".$data['segment']);
+
+        $this->_getMyCharts($data, $allTasks);
+
+        $this->display_lib->display($data, $config['pathToViewDir']);
+    }
+
+    private function _getMyCharts(&$data, $allTasks)
+    {
+        //названия сложности задания
+        $complexity = $this->common_model->getResult('complexity', '', '', 'result_array', 'id_complexity, name_complexity_'.$data['segment'], 'id_complexity', 'asc');
+        $priority = $this->common_model->getResult('priority', '', '', 'result_array', 'id_priority, title_'.$data['segment'], 'id_priority', 'asc');
 
         //цвета для графика. 1 - легкая, 2 - средняя, 3 - сложная задача
         $data['colorsForJsComplexity'] = "'#449D44', '#EC971F', '#C9302C'";
+        $data['colorsForJsPriority'] = "'#B0B0B0', '#777777', '#337AB7', '#F0AD4E', '#D9534F'";
 
         //если есть вообще задания
         if(!empty($allTasks))
@@ -209,8 +221,11 @@ class Chart extends CI_Controller {
             {
                 //количество всех задач для круглых графиков
                 $this->_countTaskForFilter($data, $task, $task['complexity_id']);
+                $this->_countTaskForFilter($data, $task, $task['priority_id'], false, ['priorityJsAll', 'priorityJsAllComplete', 'priorityJsAllNeedDo']);
+
                 //количество всех задач для квадратных графиков
                 $this->_countTaskForFilter($data, $task, $task['complexity_id'], true, ['complexityJs', 'complexityJsComplete', 'complexityJsNeedDo']);
+                $this->_countTaskForFilter($data, $task, $task['priority_id'], true, ['priorityJs', 'priorityJsComplete', 'priorityJsNeedDo']);
             }
 
 
@@ -234,6 +249,26 @@ class Chart extends CI_Controller {
                 $i++;
             }
 
+            $i = 0;
+            //сортировка по сложности
+            foreach($priority as $k=>$onePriority)
+            {
+                //проверяем, существуют ли данные, а если нет, то дописываем их
+                $this->_checkExist($data, $onePriority['id_priority'], false, ['priorityJsAll', 'priorityJsAllComplete', 'priorityJsAllNeedDo']);
+                $this->_checkExist($data, $onePriority['id_priority'], true, ['priorityJs', 'priorityJsComplete', 'priorityJsNeedDo']);
+
+                $tmpName = $onePriority['title_'.$data['segment']];
+                $tempArray = [
+                    ['priorityJsAll', 'seriesForJsPriorityAll'],
+                    ['priorityJsAllComplete', 'seriesForJsPriorityAllComplete'],
+                    ['priorityJsAllNeedDo', 'seriesForJsPriorityAllNeedDo']
+                ];
+                //объединяем все данные для каждого графика в один массив
+                $this->_concatDataCirckle($data, $tmpName, $onePriority['id_priority'], $tempArray, $i);
+
+                $i++;
+            }
+
             //получаем название проектов, для каждого из квадратных графиков
             $this->_nameForChartSquare($data);
             $tempArray = [
@@ -244,16 +279,27 @@ class Chart extends CI_Controller {
             //объединяем все в 1 массив
             $this->_concatDataSquare($data, $tempArray, [$complexity, 'name_complexity_'.$data['segment']]);
 
+
+            //получаем название проектов, для каждого из квадратных графиков
+            $this->_nameForChartSquare($data, ['priorityJs', 'priorityJsComplete', 'priorityJsNeedDo']);
+            $tempArray = [
+                ['priorityJs', 'seriesForJsPriorityProject', 'titleForJsPriorityProject'],
+                ['priorityJsComplete', 'seriesForJsPriorityProjectComplete', 'titleForJsPriorityProjectComplete'],
+                ['priorityJsNeedDo', 'seriesForJsPriorityProjectNeedDo', 'titleForJsPriorityProjectNeedDo']
+            ];
+            //объединяем все в 1 массив
+            $this->_concatDataSquare($data, $tempArray, [$priority, 'title_'.$data['segment']]);
+
+
+
             //преобразуем в строку, нужные нам данные
             $this->_jsonConvert($data);
+            $this->_jsonConvert($data, ['seriesForJsPriorityAll', 'seriesForJsPriorityAllComplete', 'seriesForJsPriorityAllNeedDo']);
             $this->_jsonConvert($data, ['seriesForJsComplexityProject', 'seriesForJsComplexityProjectComplete', 'seriesForJsComplexityProjectNeedDo']);
+            $this->_jsonConvert($data, ['seriesForJsPriorityProject', 'seriesForJsPriorityProjectComplete', 'seriesForJsPriorityProjectNeedDo']);
         }
         else
             $data['notTask'] = true;
-
-
-
-        $this->display_lib->display($data, $config['pathToViewDir']);
     }
 
 }

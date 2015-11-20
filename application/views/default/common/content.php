@@ -278,8 +278,8 @@ if($statusUser == 1):?>
                 <fieldset><legend><?=$task_views[78]?></legend></fieldset>
                 <div class="col-lg-offset-1">
                     <div id="checkboxForFilterStatus">
-                        <b class="clickHideShow"><span class="nameFilter"><?=$task_views[79]?></span> <i class="fa fa-arrow-down"></i></b>
-                        <div style="display: none;">
+                        <b class="clickHideShow"><span class="nameFilter"><?=$task_views[79]?></span> <i class="fa fa-arrow-up"></i></b>
+                        <div class="openDiv">
                             <p>
                                 <ul class="ul-top-margin" >
                                     <?php for($counterStatus = 0; $counterStatus < 4; $counterStatus++):?>
