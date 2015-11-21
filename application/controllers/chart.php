@@ -142,9 +142,7 @@ class Chart extends CI_Controller {
 
             //тут названия проектов
             $data[$names[2]] = $data[$names[0]]['allTitle'];
-
         }
-
     }
 
     private function _jsonConvert(&$data, $nameArray = ['seriesForJsComplexityAll', 'seriesForJsComplexityAllComplete', 'seriesForJsComplexityAllNeedDo'])
@@ -173,9 +171,40 @@ class Chart extends CI_Controller {
                     $i++;
                 }
             }
-
-            $data[$name]['allTitle'] = "'".implode("', '", $data[$name]['allTitle'])."'";
         }
+    }
+
+    private function _getLangForCPChar(&$data)
+    {
+        $data['titleForJsCPCircle'] = [
+            'all'       =>  [
+                'main'      =>  $data['chart_controller']['circleChar'][0],
+                "subtitle"  =>  $data['chart_controller']['circleChar'][1]
+            ],
+            'complete'  =>  [
+                'main'      =>  $data['chart_controller']['circleChar'][2]
+            ],
+            'needDo'    =>  [
+                'main'      =>  $data['chart_controller']['circleChar'][3]
+            ]
+        ];
+        $data['titleForJsCPCircle']['complete']['subtitle'] = $data['titleForJsCPCircle']['needDo']['subtitle'] = $data['titleForJsCPCircle']['all']['subtitle'];
+
+        $data['titleForJsCPSquare'] = [
+            'all'       =>  [
+                'main'      =>  $data['chart_controller']['squareChar'][0],
+                "subtitle"  =>  $data['chart_controller']['circleChar'][1]
+            ],
+            'complete'  =>  [
+                'main'      =>  $data['chart_controller']['squareChar'][1]
+            ],
+            'needDo'    =>  [
+                'main'      =>  $data['chart_controller']['squareChar'][2]
+            ]
+        ];
+        $data['titleForJsCPSquare']['complete']['subtitle'] = $data['titleForJsCPSquare']['needDo']['subtitle'] = $data['titleForJsCPSquare']['all']['subtitle'];
+
+        $this->_jsonConvert($data, ['titleForJsCPCircle', 'titleForJsCPSquare']);
     }
 
     /**
@@ -192,6 +221,8 @@ class Chart extends CI_Controller {
         ];
         $data = $this->common->allInit($config);
 
+        $data['additionalInfoUser']  = $this->common_model->getResult('users', 'id_user', $data['idUser'], 'row_array', 'showOrNot3DChars, showOrNotExportChars');
+
         //получаем все мои задания с названием проекта, к которому они принадлежат
         $this->db->join("projects", "projects.id_project = task.project_id", "left");
         $this->db->join("complexity", "complexity.id_complexity = task.complexity_id", "left");
@@ -199,6 +230,8 @@ class Chart extends CI_Controller {
         $allTasks = $this->common_model->getResult('task', 'task.performer_id', $data['idUser'], 'result_array', 'task.project_id, task.complexity_id, task.priority_id, projects.title, task.status, complexity.name_complexity_'.$data['segment'].", priority.title_".$data['segment']);
 
         $this->_getMyCharts($data, $allTasks);
+
+        $this->_getLangForCPChar($data);
 
         $this->display_lib->display($data, $config['pathToViewDir']);
     }
@@ -210,8 +243,10 @@ class Chart extends CI_Controller {
         $priority = $this->common_model->getResult('priority', '', '', 'result_array', 'id_priority, title_'.$data['segment'], 'id_priority', 'asc');
 
         //цвета для графика. 1 - легкая, 2 - средняя, 3 - сложная задача
-        $data['colorsForJsComplexity'] = "'#449D44', '#EC971F', '#C9302C'";
-        $data['colorsForJsPriority'] = "'#B0B0B0', '#777777', '#337AB7', '#F0AD4E', '#D9534F'";
+        $data['colorsForJsComplexity'] = ['#449D44', '#EC971F', '#C9302C'];
+        $data['colorsForJsPriority'] = ['#B0B0B0', '#777777', '#337AB7', '#F0AD4E', '#D9534F'];
+        $this->_jsonConvert($data, ['colorsForJsComplexity', 'colorsForJsPriority']);
+
 
         //если есть вообще задания
         if(!empty($allTasks))
@@ -297,6 +332,9 @@ class Chart extends CI_Controller {
             $this->_jsonConvert($data, ['seriesForJsPriorityAll', 'seriesForJsPriorityAllComplete', 'seriesForJsPriorityAllNeedDo']);
             $this->_jsonConvert($data, ['seriesForJsComplexityProject', 'seriesForJsComplexityProjectComplete', 'seriesForJsComplexityProjectNeedDo']);
             $this->_jsonConvert($data, ['seriesForJsPriorityProject', 'seriesForJsPriorityProjectComplete', 'seriesForJsPriorityProjectNeedDo']);
+
+            $this->_jsonConvert($data, ['titleForJsPriorityProject', 'titleForJsPriorityProjectComplete', 'titleForJsPriorityProjectNeedDo']);
+            $this->_jsonConvert($data, ['titleForJsComplexityProject', 'titleForJsComplexityProjectComplete', 'titleForJsComplexityProjectNeedDo']);
         }
         else
             $data['notTask'] = true;

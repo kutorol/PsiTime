@@ -21,6 +21,8 @@ class Migration_Start_db extends CI_Migration{
                   `email` varchar(255) NOT NULL,
                   `hash` varchar(255) NOT NULL,
                   `img` varchar(255) NOT NULL DEFAULT 'noimg.png' COMMENT 'все аватарки находятся в папке img',
+                  `showOrNot3DChars` int(1) unsigned NOT NULL DEFAULT '1' COMMENT '1 - показывать 3D графики, 2 - не показывать',
+                  `showOrNotExportChars` int(1) unsigned NOT NULL DEFAULT '1' COMMENT '1 - показывать экспорт графиков, 2 - не показывать',
                   `count_projects` INT(5) UNSIGNED NOT NULL DEFAULT '0',
                   `status` enum('0','1') NOT NULL DEFAULT '0',
                   `hoursInDayToWork` VARCHAR(2) NOT NULL COMMENT 'сколько часов в день юзер работает',

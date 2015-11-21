@@ -278,3 +278,22 @@ thead th {
 .clickHideShow:hover i{
     color: #337AB7;
 }
+
+.clickLabel{
+    border: 1px dashed rgb(91, 192, 222);
+    border-radius: 5px;
+    padding: 5px;
+
+}
+
+.clickLabel:hover{
+    background-color: rgb(91, 192, 222);
+    color: #fff;
+    cursor: pointer;
+}
+
+.activeLabel{
+    border: 1px solid rgb(91, 192, 222);
+    background-color: rgb(91, 192, 222);
+    color: #fff;
+}

@@ -543,7 +543,19 @@ class Lang_controller
          */
         $lang['lang_ru']['chart_controller'] = [
             0   =>  "Графики затраченного мной времени",
-
+            1   =>  "Графики с сортировкой по сложности",
+            2   =>  "Графики с сортировкой по приоритету",
+            'circleChar'    =>  [
+                0   =>  "Процентное соотношение задач",
+                1   =>  "(за все время)",
+                2   =>  "Процентное соотношение задач, со статусом 'выполнено'",
+                3   =>  "Процентное соотношение задач, которые выполняются",
+            ],
+            'squareChar'    =>  [
+                0   =>  "Количественное соотношение задач в проекте",
+                1   =>  "Количественное соотношение задач в проекте, со статусом 'выполнено'",
+                2   =>  "Количественное соотношение задач в проекте, которые выполняются",
+            ],
         ];
 
         /********************************************
@@ -553,7 +565,19 @@ class Lang_controller
          */
         $lang['lang_en']['chart_controller'] = [
             0   =>  "Charts spent my time",
-
+            1   =>  "Charts sorted by complexity",
+            2   =>  "Charts sorted by priority",
+            'circleChar'    =>  [
+                0   =>  "Percentage ratio of tasks",
+                1   =>  "(during all the time)",
+                2   =>  "The percentage ratio of tasks, with the status 'Implemented'",
+                3   =>  "Percentage ratio of tasks which are carried out",
+            ],
+            'squareChar'    =>  [
+                0   =>  "Quantitative ratio of tasks in the project",
+                1   =>  "The quantitative ratio of tasks in the project, with the status 'Implemented'",
+                2   =>  "Quantitative ratio of tasks in the project which are carried out",
+            ],
         ];
 
         /********************************************
