@@ -1,17 +1,166 @@
 <?php if(!isset($notTask)):?>
 
+    <!--Подключаем обобщенные функции для построения графиков-->
+    <script src="<?=base_url()?>js/charts.js"></script>
+    <script>
+
+        /**
+         * Показываем вкладку с графиками, сортированными по приоритету
+         * We show the tab with the schedules sorted by a priority
+         */
+        function showPriority()
+        {
+            var data, categories;
+            /**
+             * Круглые графики - приоритет
+             * Round charts - priority
+             */
+            getCircleChar("containerPriorityAll", <?=$seriesForJsPriorityAll?>, colorPriority, titleCircle, 'all');
+            getCircleChar("containerPriorityAllComplete", <?=$seriesForJsPriorityAllComplete?>, colorPriority, titleCircle, 'complete');
+            getCircleChar("containerPriorityAllNeedDo", <?=$seriesForJsPriorityAllNeedDo?>, colorPriority, titleCircle, 'needDo');
+
+            /**
+             * Квадратные графики - приоритет
+             * Square charts - priority
+             */
+            getSquareChar('containerPriorityProject', <?=$seriesForJsPriorityProject?>, colorPriority, titleSquare, <?=$titleForJsPriorityProject?>, 'all');
+            getSquareChar('containerPriorityProjectComplete', <?=$seriesForJsPriorityProjectComplete?>, colorPriority, titleSquare, <?=$titleForJsPriorityProjectComplete?>, 'complete');
+            getSquareChar('containerPriorityProjectNeedDo', <?=$seriesForJsPriorityProjectNeedDo?>, colorPriority, titleSquare, <?=$titleForJsPriorityProjectNeedDo?>, 'needDo');
+        }
+
+        /**
+         * Показываем вкладку с графиками, сортированными по сложности
+         * We show the tab with the schedules sorted by a complexity
+         */
+        function showComplexity()
+        {
+            /**
+             * Круглые графики - сложность
+             * Round charts - complexity
+             */
+            getCircleChar("containerComplexityAll", <?=$seriesForJsComplexityAll?>, colorComplexity, titleCircle, 'all');
+            getCircleChar("containerComplexityAllComplete", <?=$seriesForJsComplexityAllComplete?>, colorComplexity, titleCircle, 'complete');
+            getCircleChar("containerComplexityAllNeedDo", <?=$seriesForJsComplexityAllNeedDo?>, colorComplexity, titleCircle, 'needDo');
+
+            /**
+             * Квадратные графики - сложность
+             * Square charts - complexity
+             */
+            getSquareChar('containerComplexityProject', <?=$seriesForJsComplexityProject?>, colorComplexity, titleSquare, <?=$titleForJsComplexityProject?>, 'all');
+            getSquareChar('containerComplexityProjectComplete', <?=$seriesForJsComplexityProjectComplete?>, colorComplexity, titleSquare, <?=$titleForJsComplexityProjectComplete?>, 'complete');
+            getSquareChar('containerComplexityProjectNeedDo', <?=$seriesForJsComplexityProjectNeedDo?>, colorComplexity, titleSquare, <?=$titleForJsComplexityProjectNeedDo?>, 'needDo');
+        }
+
+        //цвета графиков для "сложности"
+        var colorComplexity =  <?=$colorsForJsComplexity?>;
+        //цвета графиков для "приоритета"
+        var colorPriority =  <?=$colorsForJsPriority?>;
+
+        //языковые данные, по каждому из графиков, на том языке, который выбрал юзер в строке браузера
+        var titleCircle = <?=$titleForJsCPCircle?>;
+        var titleSquare = <?=$titleForJsCPSquare?>;
+
+        $(function () {
+            //показываем вначале только графиги с сортировкой по сложности
+            $('#containerTimeAllUsers').highcharts({
+                chart: {
+                    type: 'column',
+                    options3d: {
+                        enabled: true,
+                        alpha: 15,
+                        beta: 15,
+                        viewDistance: 25,
+                        depth: 40
+                    },
+                    marginTop: 80,
+                    marginRight: 40
+                },
+                title: {
+                    text: 'Сколько потрачено времени всеми участниками'
+                },
+                subtitle: {
+                    text: '(за все время, по всем проектам)'
+                },
+                plotOptions: {
+                    column: {
+                        depth: 25
+                    }
+                },
+
+                yAxis: {
+                    allowDecimals: false,
+                    min: 0,
+                    title: {
+                        text: 'Количество часов'
+                    }
+                },
+                tooltip: {
+                    headerFormat: '<span style="color:{series.color}">\u25CF</span> {series.name}: {point.y} ч.',
+                    //pointFormat: '<span style="color:{series.color}">\u25CF</span> {point.y} ч.'
+                    pointFormat: ''
+                },
+
+                plotOptions: {
+                    column: {
+                        stacking: 'normal',
+                        depth: 50
+                    }
+                },
+
+                series: <?=$series;?>
+            });
+        });
+    </script>
+
+
+
     <div class="container">
         <div class="row">
             <p>Сортировать по:</p>
-            <span class="clickLabel activeLabel" show="content_complexity">Сложности</span>
+            <span class="clickLabel activeLabel" show="content_time">Времени</span>
+            <span class="clickLabel" show="content_complexity">Сложности</span>
             <span class="clickLabel" show="content_priority">Приоритету</span>
         </div>
     </div>
 
 
     <div id="allCharts">
+        <!--TIME-->
+        <div id="content_time">
+            <p>&nbsp;</p>
+            <div class="container">
+                <div class="row">
+                    <p>
+                        Всего потрачено времени (на все проекты):
+                    <ul>
+                        <?php $i=0; $showUsers = false; foreach($allTimesUser as $k=>$time):?>
+                            <?php if($i > 0):?>
+                                <?php if($showUsers === false): $showUsers = true;?>
+                                    <li><a href="" style="text-decoration: dashed;" id="showUsersLink">Показать всех</a></li>
+                                <?php endif;?>
+                                <li style="margin-top: 5px; display: none;"><?=$timeForUser[$k]['name']?>: <label class="label label-<?php if($k == $idUser){ echo "info";}?> small-text"><?=$time?></label></li>
+                            <?php else:?>
+                                <li style="margin-top: 5px;"><?=$timeForUser[$k]['name']?>: <label class="label label-<?php if($k == $idUser){ echo "info";}?> small-text"><?=$time?></label></li>
+                            <?php endif;?>
+                        <?php $i++; endforeach;?>
+                    </ul>
+                    </p>
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="container" >
+                <div class="row">
+                    <div id="containerTimeAllUsers" style="min-width: 310px; height: 400px; max-width: 900px; margin: 0 auto"></div>
+                </div>
+            </div>
+        </div>
+        <!--END TIME-->
+
+
         <!--COMPLEXITY-->
-            <div  id="content_complexity">
+        <div  style="display: none;" id="content_complexity">
 
             <div class="container">
                 <div class="row" align="center">
@@ -60,7 +209,7 @@
         <!--END COMPLEXITY-->
 
         <!--PRIORITY-->
-            <div  style="display: none;" id="content_priority">
+        <div  style="display: none;" id="content_priority">
 
             <div class="container">
                 <div class="row" align="center">
@@ -124,107 +273,7 @@
         <script src="<?=base_url()?>js/exporting.js"></script>
     <?php endif;?>
 
-    <!--Подключаем обобщенные функции для построения графиков-->
-    <script src="<?=base_url()?>js/charts.js"></script>
-    <script>
 
-        function showPriority()
-        {
-            var data, categories;
-            /**
-             * Круглые графики - приоритет
-             */
-            data =  <?=$seriesForJsPriorityAll?>;
-            getCircleChar("containerPriorityAll", data, colorPriority, titleCircle, 'all');
-
-            data =  <?=$seriesForJsPriorityAllComplete?>;
-            getCircleChar("containerPriorityAllComplete", data, colorPriority, titleCircle, 'complete');
-
-            data =  <?=$seriesForJsPriorityAllNeedDo?>;
-            getCircleChar("containerPriorityAllNeedDo", data, colorPriority, titleCircle, 'needDo');
-
-            /**
-             * Квадратные графики - приоритет
-             */
-            data =  <?=$seriesForJsPriorityProject?>;
-            categories = <?=$titleForJsPriorityProject?>;
-            getSquareChar('containerPriorityProject', data, colorPriority, titleSquare, categories, 'all');
-
-            data =  <?=$seriesForJsPriorityProjectComplete?>;
-            categories = <?=$titleForJsPriorityProjectComplete?>;
-            getSquareChar('containerPriorityProjectComplete', data, colorPriority, titleSquare, categories, 'complete');
-
-            data =  <?=$seriesForJsPriorityProjectNeedDo?>;
-            categories = <?=$titleForJsPriorityProjectNeedDo?>;
-            getSquareChar('containerPriorityProjectNeedDo', data, colorPriority, titleSquare, categories, 'needDo');
-        }
-
-        //цвета графиков для "сложности"
-        var colorComplexity =  <?=$colorsForJsComplexity?>;
-        //цвета графиков для "приоритета"
-        var colorPriority =  <?=$colorsForJsPriority?>;
-        //языковые данные, по каждому из графиков, на том языке, который выбрал юзер в строке браузера
-        var titleCircle = <?=$titleForJsCPCircle?>;
-        var titleSquare = <?=$titleForJsCPSquare?>;
-
-        $(function () {
-
-
-
-
-
-
-
-            /**
-             * Круглые графики - сложность
-             */
-            var data =  <?=$seriesForJsComplexityAll?>;
-            getCircleChar("containerComplexityAll", data, colorComplexity, titleCircle, 'all');
-
-            data =  <?=$seriesForJsComplexityAllComplete?>;
-            getCircleChar("containerComplexityAllComplete", data, colorComplexity, titleCircle, 'complete');
-
-            data =  <?=$seriesForJsComplexityAllNeedDo?>;
-            getCircleChar("containerComplexityAllNeedDo", data, colorComplexity, titleCircle, 'needDo');
-
-            /**
-             * Квадратные графики - сложность
-             */
-            data =  <?=$seriesForJsComplexityProject?>;
-            var categories = <?=$titleForJsComplexityProject?>;
-            getSquareChar('containerComplexityProject', data, colorComplexity, titleSquare, categories, 'all');
-
-            data =  <?=$seriesForJsComplexityProjectComplete?>;
-            categories = <?=$titleForJsComplexityProjectComplete?>;
-            getSquareChar('containerComplexityProjectComplete', data, colorComplexity, titleSquare, categories, 'complete');
-
-            data =  <?=$seriesForJsComplexityProjectNeedDo?>;
-            categories = <?=$titleForJsComplexityProjectNeedDo?>;
-            getSquareChar('containerComplexityProjectNeedDo', data, colorComplexity, titleSquare, categories, 'needDo');
-
-
-            var showPriorityBool = false;
-            $(".clickLabel").on('click', function(){
-                $(".activeLabel").removeClass("activeLabel");
-                $(this).addClass("activeLabel");
-
-                var whatShow = $(this).attr("show");
-                $("#allCharts").fadeOut(150, function(){
-                    $(this).children().hide();
-                    $("#"+whatShow).show();
-                    $(this).fadeIn(150,function(){
-                        if(whatShow == "content_priority" && showPriorityBool === false)
-                        {
-                            showPriorityBool = true;
-                            showPriority();
-                        }
-                    });
-                });
-            });
-
-
-        });
-    </script>
 
 <?php else:?>
 

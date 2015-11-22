@@ -1328,4 +1328,32 @@ $(function() {
     });
 
 
+    /**
+     * При клике на любую из сортировок
+     * Clicking on any of the sorts
+     */
+    $(".clickLabel").on('click', function(){
+
+        $(".activeLabel").removeClass("activeLabel");
+        $(this).addClass("activeLabel");
+
+        //получаем из атрибута id элемента, который нужно показать
+        var whatShow = $(this).attr("show");
+        //скрываем все элементы на странице
+        $("#allCharts").fadeOut(150, function(){
+            //скрываем потомков
+            $(this).children().hide();
+            //показываем нужный элемент
+            $("#"+whatShow).show();
+            //показываем все элементы
+            $(this).fadeIn(150,function(){
+                //если было нажато на "приоритет", то показываем графики
+                if(whatShow == "content_priority")
+                    showPriority();
+                else if(whatShow == "content_complexity")
+                    showComplexity();
+            });
+        });
+    });
+
 });
