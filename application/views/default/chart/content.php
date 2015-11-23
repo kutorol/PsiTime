@@ -1,5 +1,20 @@
 <?php if(!isset($notTask)):?>
 
+    <div class="container" >
+        <div class="row">
+            <div class="col-lg-4">
+                Показывать графики в 3D: <input id="showOrNot3DChars" type="checkbox" <?php if($additionalInfoUser['showOrNot3DChars'] == 1){echo "checked class='activeCheckbox'";}?>  value="1"/>
+            </div>
+            <div class="col-lg-4" >
+                Показывать кнопку экспорта графика: <input id="showOrNotExportChars" type="checkbox" <?php if($additionalInfoUser['showOrNotExportChars'] == 1){echo "checked class='activeCheckbox'";}?> value="1"/>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+
+
     <!--Подключаем обобщенные функции для построения графиков-->
     <script src="<?=base_url()?>js/charts.js"></script>
     <script>
@@ -61,6 +76,7 @@
         var titleSquare = <?=$titleForJsCPSquare?>;
 
         $(function () {
+
             //показываем вначале только графиги с сортировкой по сложности
             $('#containerTimeAllUsers').highcharts({
                 chart: {
@@ -133,12 +149,19 @@
                     <p>
                         Всего потрачено времени (на все проекты):
                     <ul>
-                        <?php $i=0; $showUsers = false; foreach($allTimesUser as $k=>$time):?>
+                        <?php $i=0; $showUsers = false; $countTime = count($allTimesUser) - 1; foreach($allTimesUser as $k=>$time):?>
                             <?php if($i > 0):?>
+
                                 <?php if($showUsers === false): $showUsers = true;?>
-                                    <li><a href="" style="text-decoration: dashed;" id="showUsersLink">Показать всех</a></li>
+                                    <li id="showUsersLink"><a href="">Показать остальных членов команды <i class="fa fa-long-arrow-down"></i></a></li>
                                 <?php endif;?>
-                                <li style="margin-top: 5px; display: none;"><?=$timeForUser[$k]['name']?>: <label class="label label-<?php if($k == $idUser){ echo "info";}?> small-text"><?=$time?></label></li>
+
+                                <li class="liNotDisplayUserTime" style="margin-top: 5px; display: none;"><?=$timeForUser[$k]['name']?>: <label class="label label-<?php if($k == $idUser){ echo "info";}?> small-text"><?=$time?></label></li>
+
+                                <?php if($i == $countTime):?>
+                                    <li class="liNotDisplayUserTime aDisplay" style="margin-top: 5px; display: none;"><a href="">Скрыть остальных  членов команды <i class="fa fa-long-arrow-up"></i></a></li>
+                                <?php endif;?>
+
                             <?php else:?>
                                 <li style="margin-top: 5px;"><?=$timeForUser[$k]['name']?>: <label class="label label-<?php if($k == $idUser){ echo "info";}?> small-text"><?=$time?></label></li>
                             <?php endif;?>

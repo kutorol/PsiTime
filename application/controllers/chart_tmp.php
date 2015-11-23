@@ -27,17 +27,122 @@ class Chart_tmp extends CI_Controller {
 
         $this->load->model('common_model');
 
+        //получаем все проекты, к которым я прикреплен и которыя я создал
+        $myProjects = $this->_getProject($data['idUser']);
+        if(!empty($myProjects))
+        {
+            //получаем все id юзеров, которые есть в моих проектах
+            $allIdTeam = [$data['idUser']];
+            foreach($myProjects as $project)
+            {
+                foreach(explode(",", $project['team_ids']) as $idOneUser)
+                {
+                    if($idOneUser != $data['idUser'] && array_search($idOneUser, $allIdTeam) === false)
+                        $allIdTeam[] = $idOneUser;
+                }
+            }
+
+            foreach($allIdTeam as $k=>$idOneUser)
+            {
+                $this->db->join("users", "users.id_user = task.performer_id", "left");
+                $taskUsers[$k] = $this->common_model->getResult('task', ['task.performer_id', 'task.status'], [$idOneUser, 2], 'result_array', 'task.project_id, task.pause, task.pause_for_complite, users.hoursInDayToWork, users.name, users.login', 'id_task');
+
+                if(!empty($taskUsers[$k]))
+                {
+                    $data['myTimeCompliteForTask'] = 0;
+                    $data['timeForUser'][$idOneUser]['allWorkDays'] = $data['timeForUser'][$idOneUser]['allWorkHours'] = $data['timeForUser'][$idOneUser]['allWorkMinutes'] = $data['timeForUser'][$idOneUser]['allWorkSeconds'] = 0;
+                    foreach($taskUsers[$k] as $key=>$task)
+                    {
+                        $data['timeForUser'][$idOneUser]['hoursInDayToWork'] = $task['hoursInDayToWork'];
+                        $data['timeForUser'][$idOneUser]['name'] = $task['name']." (".$task['login'].")";
+
+                        $this->_computeTimeForEnd($taskUsers[$k][$key], $data);
+
+                        //считаем сколько всего было затрачено времени на выполнение всех задач
+                        $data['timeForUser'][$idOneUser]['allWorkDays'] += $taskUsers[$k][$key]['howWorkDay'];
+
+                        $data['timeForUser'][$idOneUser]['allWorkHours'] += $taskUsers[$k][$key]['howHour'];
+                        if($data['timeForUser'][$idOneUser]['allWorkHours'] >= $taskUsers[$k][$key]['hoursInDayToWork'])
+                        {
+                            $data['timeForUser'][$idOneUser]['allWorkDays']++;
+                            $data['timeForUser'][$idOneUser]['allWorkHours'] -= $data['hoursInDayToWork'];
+                        }
+
+                        $data['timeForUser'][$idOneUser]['allWorkMinutes'] += $taskUsers[$k][$key]['howMinute'];
+                        if($data['timeForUser'][$idOneUser]['allWorkMinutes'] >= 60)
+                        {
+                            $data['timeForUser'][$idOneUser]['allWorkHours']++;
+                            $data['timeForUser'][$idOneUser]['allWorkMinutes'] -= 60;
+                        }
+
+                        $data['timeForUser'][$idOneUser]['allWorkSeconds'] += $taskUsers[$k][$key]['howSecond'];
+                        if($data['timeForUser'][$idOneUser]['allWorkSeconds'] >= 60)
+                        {
+                            $data['timeForUser'][$idOneUser]['allWorkMinutes']++;
+                            $data['timeForUser'][$idOneUser]['allWorkSeconds'] -= 60;
+                        }
+
+                    }
+
+
+                    $data['timeForUser'][$idOneUser]['allTime'] = ($data['timeForUser'][$idOneUser]['allWorkDays'] * $data['timeForUser'][$idOneUser]['hoursInDayToWork']) + $data['timeForUser'][$idOneUser]['allWorkHours'] + $data['timeForUser'][$idOneUser]['allWorkMinutes']/60 + $data['timeForUser'][$idOneUser]['allWorkSeconds']/3600;
+                    $data['timeForUser'][$idOneUser]['allTime'] = round($data['timeForUser'][$idOneUser]['allTime'], 4);
+
+                    if($k == 0)
+                        $data['series'][] = ['name'=>$data['timeForUser'][$idOneUser]['name'], "data"=> [$data['timeForUser'][$idOneUser]['allTime']]];
+                    else
+                    {
+                        $nulls = [];
+                        for($i = $k - 1; $i >= 0; $i--)
+                            $nulls[] = "null";
+
+                        $nulls[] = $data['timeForUser'][$idOneUser]['allTime'];
+                        $data['series'][] = ['name'=>$data['timeForUser'][$idOneUser]['name'], "data"=> $nulls];
+                    }
+
+                    if(!isset($data['myTimeCompliteForTask']))
+                        $data['myTimeCompliteForTask'] = [];
+
+                    $temp = "";
+                    if(!isset($data['allTimesUser']))
+                        $data['allTimesUser'] = [];
+
+                    //заносим ответ в массив
+                    if( $data['timeForUser'][$idOneUser]['allWorkDays'] > 0)
+                        $temp = $data['timeForUser'][$idOneUser]['allWorkDays'].$data['task_controller'][19]." ";
+
+                    if($data['timeForUser'][$idOneUser]['allWorkHours'] > 0)
+                        $temp .= $data['timeForUser'][$idOneUser]['allWorkHours'].$data['task_controller'][18]." ";
+
+                    if($data['timeForUser'][$idOneUser]['allWorkMinutes'] > 0)
+                        $temp .= $data['timeForUser'][$idOneUser]['allWorkMinutes'].$data['task_controller'][17]." ";
+
+                    if($data['timeForUser'][$idOneUser]['allWorkSeconds'] > 0)
+                        $temp .= $data['timeForUser'][$idOneUser]['allWorkSeconds'].$data['task_controller'][15];
+
+                    $data['allTimesUser'][$idOneUser] = $temp;
+                }
+                else
+                {
+
+                }
+            }
+
+            $data['series'] = json_encode($data['series']);
+            $data['series'] = preg_replace('/\"null\"/iu', 'null', $data['series']);
+
+
+        }
+        else
+            $data['notProject'] = true;
+
+/*
         //получаем все выполненые мной задания
         $allMyTask = $this->common_model->getResult('task', ['performer_id', 'status'], [$data['idUser'], 2], 'result_array', 'complexity_id, priority_id, project_id, pause, pause_for_complite', 'id_task');
 
-        $q = $this->db->query("SELECT id_task,complexity_id, COUNT(*) FROM task WHERE performer_id = ".$data['idUser']." AND status = 2 GROUP BY complexity_id")->result_array();
-
-        $data['complexity'] = $this->common_model->getResult('task', ['performer_id', 'status'], [$data['idUser'], 2]);
-
-
         if(!empty($allMyTask))
         {
-            //изначально все данные равны 0
+            //изначально время, которое потрачено на все проекты данным юзером, равно 0
             $data['myTime']['allWorkDays'] = $data['myTime']['allWorkHours'] = $data['myTime']['allWorkMinutes'] = $data['myTime']['allWorkSeconds'] = 0;
 
             foreach($allMyTask as $k=>$task)
@@ -68,6 +173,7 @@ class Chart_tmp extends CI_Controller {
                     $data['myTime']['allWorkSeconds'] -= 60;
                 }
 
+                //получаем сколько времени (в секундах) потрачено на каждый проект, в котором есть выполненые задания
                 if(!isset($data['time']['by_project']['secondProject_'.$task['project_id']]))
                     $data['time']['by_project']['secondProject_'.$task['project_id']] = 0;
 
@@ -79,7 +185,7 @@ class Chart_tmp extends CI_Controller {
 
 
 
-
+            $data['myTimeCompliteForTask'] = "";
             $data['time']['allSeconds'] = 0;
             //заносим ответ в массив
             if($data['myTime']['allWorkDays'] > 0)
@@ -106,22 +212,13 @@ class Chart_tmp extends CI_Controller {
                 $data['time']['allSeconds'] += $data['myTime']['allWorkSeconds'];
             }
         }
+*/
 
 
-        echo "<pre>";
-        print_r($data['myTime']['allWorkDays']." d <br>");
-        print_r($data['myTime']['allWorkHours']." h <br>");
-        print_r($data['myTime']['allWorkMinutes']." m <br>");
-        print_r($data['myTime']['allWorkSeconds']." s <br>");
-        echo "</pre>";
-
-        $data['hours__'] = $data['myTime']['allWorkDays'] * 24 + $data['myTime']['allWorkHours'] + $data['myTime']['allWorkMinutes']/60 + $data['myTime']['allWorkSeconds']/3600;
-        $data['hours__'] = round($data['hours__'],2) ;
-        echo $data['hours__']." h<br>";
+        //$data['hours__'] = ($data['myTime']['allWorkDays'] *1) + $data['myTime']['allWorkHours'] + $data['myTime']['allWorkMinutes']/60 + $data['myTime']['allWorkSeconds']/3600;
+        //$data['hours__'] = $data['hours__'] ;
+        //echo $data['hours__']." h<br>";
         //$timeline = range(0, $hours); // [1, 2, 3, ... $hours]
-
-
-
 
 
 
@@ -162,110 +259,7 @@ class Chart_tmp extends CI_Controller {
     }
 
 
-    /**
-     * Считаем реальное количество времени, потраченное на выполнение задачи
-     * We consider the real amount of time spent for performance of a task
-     * @param $task - данные по задаче (data on a task)
-     * @param $user - данные по юзеру (data on a user)
-     * @param $data
-     */
-    private function _computeTimeForEnd(&$task, &$data)
-    {
-        //получаем все время, которая показывает когда начинали задачу и заканчивали
-        $num_pause_complite = 0;
-        if($task['pause_for_complite'] != "")
-        {
-            $task['pause_for_complite'] = unserialize($task['pause_for_complite']);
 
-            foreach($task['pause_for_complite'] as $k=>$v)
-                $num_pause_complite += $v['time_end'] - $v['time_start'];
-        }
-
-        //получаем все паузы и считаем ответ в секундах, который содержит точное время бездействия данной задачи
-        $num_pause = 0;
-        if($task['pause'] != "")
-        {
-            $task['pause'] = unserialize($task['pause']);
-
-            foreach($task['pause'] as $k=>$v)
-                $num_pause += $v['end'] - $v['start'];
-
-            //получаем всю паузу в секундах
-            $task['howMuchPause'] = $num_pause;
-        }
-
-        //получаем время в секундах, которое потребовалось на выполнение задачи
-        if($num_pause_complite > 0)
-        {
-            if($num_pause > 0)
-                $howInSecond = $num_pause_complite - $num_pause;
-            else
-                $howInSecond = $num_pause_complite;
-        }
-        //вот тут ошибка, хотя не может быть, чтобы поле "pause_for_complite" будет пустым, поэтому вероятность мала, что $howInSecond будет равен 1 секунде.
-        else
-            $howInSecond = 1;
-
-        $data['hoursInDayToWork'] = (intval($data['hoursInDayToWork']) > 0) ? $data['hoursInDayToWork'] : 8;
-        //получаем количество рабочих часов в секундах
-        $data['hoursInDayToWork'] = $data['hoursInDayToWork'] * 3600;
-
-        //получаем количество рабочих дней, которое потратили на выполнение задания
-        $howWorkDay = $howInSecond / $data['hoursInDayToWork'];
-        $howWorkDay = floor($howWorkDay); //сколько рабочих дней
-
-        //сколько осталось еще времени в секундах
-        $howLeft = $howInSecond - ($howWorkDay * $data['hoursInDayToWork']);
-
-        //узнаем количество часов
-        $howHour = $howLeft / 3600;
-        $howMinute = $howHour - floor($howHour);
-
-        //узнаем количество минут
-        $howMinute = $howMinute * 60;
-        $howSecond = $howMinute - floor($howMinute);
-
-        //узнаем количество секунд
-        $howSecond = $howSecond * 60;
-
-        //в этой ячейки будет содержаться ответ - сколько времени было потрачено на задачу
-        $data['myTimeCompliteForTask'] = "";
-
-        $howHour = floor($howHour);
-        $howMinute = floor($howMinute);
-        $howSecond = round($howSecond);
-
-        /**
-         * Следующие три проверки нужны для того, что иногда высвечивается ответ в формате 1 час 60 секунд, но по факту это должно быть 1 час 1 минута
-         * The following three checks are necessary for this purpose that the answer in a format is sometimes highlighted 1 hour 60 seconds, but upon it has to be 1 hour 1 minute
-         */
-        //если часов равно количеству часов в рабочем дне, то увеличиваем день, а часы обнуляем
-        if($howHour == $data['hoursInDayToWork'])
-        {
-            $howWorkDay++;
-            $howHour = 0;
-        }
-
-        //если минут равно 1 часу, то увеличиваем часы, а минуты обнуляем
-        if($howMinute == 60)
-        {
-            $howHour++;
-            $howMinute = 0;
-        }
-
-        //если количество секунд равно 1 минуте, то увеличиваем минуты, а секунды обнуляем
-        if($howSecond == 60)
-        {
-            $howMinute++;
-            $howSecond = 0;
-        }
-
-
-        $task['howWorkDay'] = $howWorkDay;
-        $task['howHour']    = $howHour;
-        $task['howMinute']  = $howMinute;
-        $task['howSecond']  = $howSecond;
-    }
 
 
 }

@@ -458,6 +458,9 @@ class Chart extends CI_Controller {
         ];
         $data = $this->common->allInit($config);
 
+        //разрешаем подключение скриптов, чтобы сделать красивые checkbox
+        $data['useCheckbox'] = true;
+
         $data['additionalInfoUser']  = $this->common_model->getResult('users', 'id_user', $data['idUser'], 'row_array', 'showOrNot3DChars, showOrNotExportChars');
 
         $this->_getTimeForAllUser($data);

@@ -360,11 +360,6 @@ if($statusUser == 1):?>
                     </div>
 
                 </div>
-                <script>
-                    $(function(){
-                        $('.checkbox').checkbox();
-                    });
-                </script>
                 <!--FILTER END-->
             </div>
             <!--END ALL PROJECT, FILTER-->

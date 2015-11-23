@@ -1356,4 +1356,75 @@ $(function() {
         });
     });
 
+    $("#showUsersLink a").on('click', function(e){
+        $("#showUsersLink").fadeOut(150, function(){
+            $(".liNotDisplayUserTime").fadeIn(150);
+        });
+        e.preventDefault();
+    });
+
+    $(".aDisplay a").on('click', function(e){
+        $(".liNotDisplayUserTime").fadeOut(150, function(){
+            $("#showUsersLink").fadeIn(150);
+        });
+        e.preventDefault();
+    });
+
+    /**
+     * Активируем checkbox
+     * activate the checkbox
+     */
+    $('input[type=checkbox]').checkbox();
+
+
+    /**
+     * Если нажимают на checkbox "показывать графики в 3D" и "показывать кнопку экспорта графика"
+     * If you click on the checkbox "show graphics in 3D" and "show the export button graphics"
+     */
+    $("#showOrNot3DChars, #showOrNotExportChars").on('click', function(){
+        var myThis = $(this);
+        var num = 1, id = myThis.attr("id");
+
+        if(myThis.hasClass("activeCheckbox"))
+        {
+            myThis.removeClass("activeCheckbox");
+            num = 2;
+        }
+        else
+            myThis.addClass("activeCheckbox");
+
+        //шаблон ajax запроса
+        ajaxRequestJSON("welcome/updateUser");
+        $.ajax({
+            data: {num: num, id: id},
+            success: function(data)
+            {
+                if(data.status == 'error')
+                {
+                    //если чекбокс активирован, то откатываем его обратно
+                    if(myThis.hasClass("activeCheckbox"))
+                    {
+                        myThis.removeClass("activeCheckbox");
+                        myThis.next().find(".cb-icon-check").css({'display':'none'});
+                        myThis.next().find(".cb-icon-check-empty").css({'display':'inline-block'});
+                    }
+                    //если чекбокс деактевирован, то делаем его активным
+                    else
+                    {
+                        myThis.addClass("activeCheckbox");
+                        myThis.next().find(".cb-icon-check").css({'display':'inline-block'});
+                        myThis.next().find(".cb-icon-check-empty").css({'display':'none'});
+                    }
+
+                    errorSuccessAjax({title: data.resultTitle, message: data.resultText}); //показываем модалку
+                    return false;
+                }
+
+                //если все удачно, то перезагружаем страницу
+                document.location.href = base_url+"/chart";
+
+                hideLoad();
+            }
+        });
+    });
 });

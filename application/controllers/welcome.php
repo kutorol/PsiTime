@@ -527,4 +527,51 @@ class Welcome extends CI_Controller {
 
         $this->display_lib->display($data, $config['pathToViewDir']);
     }
+
+    /**
+     * (AJAX)
+     * Обновляем данные о юзере (показывать графики в 3D и показывать ли кнопку экспорта графиков)
+     * Updating of the user (to show graphics in 3D and show whether the export button schedules)
+     * @return bool
+     */
+    public function updateUser()
+    {
+        //проверяем на ajax и его параметры
+        $response = $this->common->isAjax(["num",'int'], ['id', 'str']);
+        if($response['status'] != 'error')
+        {
+            $data = $response['data'];
+            unset($response['data']);
+            $this->load->model('common_model');
+
+            //получаем число, которое должны обновить
+            $tmpNum = intval($this->common->clear($this->input->post('num', true)));
+            if($tmpNum <= 0 || $tmpNum > 2)
+                $tmpNum = 1;
+
+            $idEl = $this->common->clear($this->input->post('id', true));
+            switch($idEl)
+            {
+                case "showOrNot3DChars": case "showOrNotExportChars": break;
+                default:
+                    return $this->common->returnResponse($data, $data['welcome_controller'][13]);
+            }
+
+            //проверяем на то, что возможно у нас в бд уже стоит это же значение
+            $answer = $this->common_model->getResult('users', 'id_user', $data['idUser'], 'row_array', 'showOrNot3DChars, showOrNotExportChars');
+            if($answer[$idEl] == $tmpNum)
+                return $this->common->returnResponse($data, $data['welcome_controller'][13]);
+
+            $new[$idEl] = $tmpNum;
+
+            //удаляем задачу
+            $q = $this->common_model->updateData($new, 'id_user', $data['idUser'], 'users', true);
+            if($q > 0)
+                $response = ['status' => 'success'];
+            else
+                return $this->common->returnResponse($data, $data['welcome_controller'][13]);
+        }
+
+        echo json_encode($response);
+    }
 }
