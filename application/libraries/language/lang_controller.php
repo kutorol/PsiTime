@@ -121,6 +121,10 @@ class Lang_controller
                         'ru'    =>  'Выйти',
                         'en'    =>  'Logout'
                     ],
+            2   =>  [
+                        'ru'    =>  'Графики',
+                        'en'    =>  'Graphics'
+                    ],
         ];
 
         $additional_ru = "Класс: :_class_:; метод: :_method_:; строка: :_line_:.";
@@ -543,8 +547,8 @@ class Lang_controller
          */
         $lang['lang_ru']['chart_controller'] = [
             0   =>  "Графики затраченного мной времени",
-            1   =>  "Графики с сортировкой по сложности",
-            2   =>  "Графики с сортировкой по приоритету",
+            1   =>  "Графики с сортировкой по сложности (для меня)",
+            2   =>  "Графики с сортировкой по приоритету (для меня)",
             'circleChar'    =>  [
                 0   =>  "Процентное соотношение задач",
                 1   =>  "(за все время)",
@@ -565,8 +569,8 @@ class Lang_controller
          */
         $lang['lang_en']['chart_controller'] = [
             0   =>  "Charts spent my time",
-            1   =>  "Charts sorted by complexity",
-            2   =>  "Charts sorted by priority",
+            1   =>  "Charts sorted by complexity (for me)",
+            2   =>  "Charts sorted by priority (for me)",
             'circleChar'    =>  [
                 0   =>  "Percentage ratio of tasks",
                 1   =>  "(during all the time)",
@@ -578,6 +582,51 @@ class Lang_controller
                 1   =>  "The quantitative ratio of tasks in the project, with the status 'Implemented'",
                 2   =>  "Quantitative ratio of tasks in the project which are carried out",
             ],
+        ];
+
+
+        /********************************************
+         * Перевод для Вьюх chart (RU)
+         * Translation for View chart (RU)
+         * ******************************************
+         */
+        $lang['lang_ru']['chart_view'] = [
+            0   =>  "Показывать графики в 3D:",
+            1   =>  "Показывать кнопку экспорта графика:",
+            2   =>  "Сортировать по:",
+            3   =>  "Времени",
+            4   =>  "Сложности",
+            5   =>  "Приоритету",
+            6   =>  "Всего потрачено времени (на все проекты):",
+            7   =>  "Показать остальных членов команды",
+            8   =>  "Скрыть остальных членов команды",
+            9   =>  "У вас нет выполненых задач, по которым расчитывается статистика!",
+            10   =>  "Сколько потрачено времени всеми участниками",
+            11   =>  "(за все время, по всем проектам)",
+            12   =>  "Количество часов",
+
+        ];
+
+        /********************************************
+         * Перевод для Вьюх chart (EN)
+         * Translation for View chart (EN)
+         * ******************************************
+         */
+        $lang['lang_en']['chart_view'] = [
+            0   =>  "Display graphics in 3D:",
+            1   =>  "Show button exports graphics:",
+            2   =>  "Sort by:",
+            3   =>  "Time",
+            4   =>  "Complexities",
+            5   =>  "Priority",
+            6   =>  "Total time spent (for all projects):",
+            7   =>  "Show the rest of the team",
+            8   =>  "Hide rest of the team",
+            9   =>  "You have not completed the tasks for which the calculated statistics!",
+            10   =>  "How much time is spent by all participants",
+            11   =>  "(for all time, for all projects)",
+            12   =>  "Number of hours",
+
         ];
 
         /********************************************
