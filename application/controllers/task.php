@@ -34,6 +34,7 @@ class Task extends CI_Controller {
 
         //указываем то, что мы обращаемся не через ajax
         $data['imFromIndexFunction'] = true;
+        //получаем задачи, которые на главной странице, так же исполнителей и некоторые первоначальные данные для добавления задачи
         $this->_additionalGetTask($data);
 
         //приоритет задания
@@ -213,7 +214,17 @@ class Task extends CI_Controller {
                             {
                                 //в массив записываем только тех юзеров, которые не являются мной
                                 if($user['id_user'] != $data['idUser'])
-                                    $data['allUsersForFilters'][] =  ['id_user' => $user['id_user'], 'login' => $user['login'], 'name' => $user['name']];
+                                {
+                                    $hereHaveUser = false;
+                                    foreach($data['allUsersForFilters'] as $performer)
+                                    {
+                                        if($performer['id_user'] == $user['id_user'])
+                                            $hereHaveUser = true;
+                                    }
+
+                                    if($hereHaveUser === false)
+                                        $data['allUsersForFilters'][] =  ['id_user' => $user['id_user'], 'login' => $user['login'], 'name' => $user['name']];
+                                }
                             }
                         }
                     }

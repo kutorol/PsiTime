@@ -535,7 +535,7 @@ class Lang_controller
 
             'status_task_0'      =>  'Supplied',
             'status_task_1'      =>  'Running',
-            'status_task_2'      =>  'Implemented',
+            'status_task_2'      =>  'Completed',
             'status_task_3'      =>  'Pause',
         ];
 
@@ -574,12 +574,12 @@ class Lang_controller
             'circleChar'    =>  [
                 0   =>  "Percentage ratio of tasks",
                 1   =>  "(during all the time)",
-                2   =>  "The percentage ratio of tasks, with the status 'Implemented'",
+                2   =>  "The percentage ratio of tasks, with the status 'Completed'",
                 3   =>  "Percentage ratio of tasks which are carried out",
             ],
             'squareChar'    =>  [
                 0   =>  "Quantitative ratio of tasks in the project",
-                1   =>  "The quantitative ratio of tasks in the project, with the status 'Implemented'",
+                1   =>  "The quantitative ratio of tasks in the project, with the status 'Completed'",
                 2   =>  "Quantitative ratio of tasks in the project which are carried out",
             ],
         ];
