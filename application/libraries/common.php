@@ -481,10 +481,9 @@ class Common
 
             //получаем все аргументы переданные в функцию
             $arg_list = func_get_args();
+            $postError = false;
             for ($i = 0; $i < $numargs; $i++)
             {
-                $postError = false;
-
                 if(!is_array($arg_list[$i]))
                     $postError = true;
                 else
@@ -492,7 +491,7 @@ class Common
                     //если название в аргументе не содержиться этой надписи
                     if($arg_list[$i][0] != 'noPost')
                     {
-                        //если существует такое название в post массиве
+                        //если НЕ существует такое название в post массиве
                         if(!isset($_POST[$arg_list[$i][0]]))
                             $postError = true;
                         else
@@ -518,16 +517,14 @@ class Common
                         }
                     }
                 }
-
-
-
-
-                if($postError === true)
-                    return ['status' => 'error', 'resultTitle'=> $data['js'][0], 'resultText'=>$data['task_views'][6]];
-
-                return ['status'=>"success", 'data'=>$data];
             }
 
+            log_message('error', $postError);
+
+            if($postError === true)
+                return ['status' => 'error', 'resultTitle'=> $data['js'][0], 'resultText'=>$data['task_views'][6]];
+
+            return ['status'=>"success", 'data'=>$data];
         }
         else
             return ['status'=>'error', 'resultTitle'=>"NU NIXUYA SEBE TI CHEGO SDELAL ;)", "resultText"=>"NU NIXUYA SEBE TI CHEGO SDELAL ;)"];

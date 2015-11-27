@@ -298,4 +298,8 @@ thead th {
     color: #fff;
 }
 
+.removeFilter i:hover{
+    color: red !important;
+}
+
 

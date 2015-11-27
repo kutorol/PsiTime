@@ -114,7 +114,7 @@
                         }
                     },
                     tooltip: {
-                        headerFormat: '<span style="color:{series.color}">\u25CF</span> {series.name}: {point.y} ч.',
+                        headerFormat: '<span style="color:{series.color}">\u25CF</span> {series.name}: {point.y} <?=$task_controller[18]?>',
                         pointFormat: ''
                     },
                     plotOptions: {

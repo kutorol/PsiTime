@@ -27,10 +27,11 @@
         <!--Преобразуем стандартный select-->
         <script src="<?=base_url()?>js/bootstrap-select.min.js"></script>
 
-        <!--MULTI TAGS INPUT JQUERY-->
-        <script src="<?=base_url()?>js/tag-it.min.js" type="text/javascript" charset="utf-8"></script>
-        <!--END TAGS INPUT-->
-
+        <?php if(isset($useTagIt)):?>
+            <!--MULTI TAGS INPUT JQUERY-->
+            <script src="<?=base_url()?>js/tag-it.min.js" type="text/javascript" charset="utf-8"></script>
+            <!--END TAGS INPUT-->
+        <?php endif;?>
 
 
         <script src="<?=base_url()?>js/script.js"></script>

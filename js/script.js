@@ -339,12 +339,161 @@ function attachUsers(id, name, modal)
 function getAllTaskWithFilter()
 {
     var idProject = $("#menu-projects a.active").attr("data-id-project");
+    if(idProject === undefined)
+        $("#allProjectsTasks").addClass("active");
+
     if(idProject == 'all')
         idProject = undefined;
 
     //получаем все задания с фильтрами
     getAllTask(idProject, undefined, true);
 }
+
+/**
+ * Получаем все активные checkbox и заносим все в один массив, а потом преобразуем в строку
+ * We get all active checkbox and enter everything in one array and then convert to a string
+ * @returns {{}}
+ */
+function getAllFilterStr()
+{
+    var allFilter = {};
+
+    //кладем каждый массив в свою ячейку
+    if(arrayForFilterStatus.length > 0)
+        allFilter['status'] = JSON.stringify(arrayForFilterStatus);
+
+    if(arrayForFilterComplexity.length > 0)
+        allFilter['complexity_id'] = JSON.stringify(arrayForFilterComplexity);
+
+    if(arrayForFilterPriority.length > 0)
+        allFilter['priority_id'] = JSON.stringify(arrayForFilterPriority);
+
+    if(arrayForFilterPerformer.length > 0)
+        allFilter['performer_id'] = JSON.stringify(arrayForFilterPerformer);
+
+
+    //если в массиве нет ни одного фильтра
+    if(allFilter.priority_id === undefined && allFilter.complexity_id === undefined && allFilter.status === undefined && allFilter.performer_id === undefined)
+        allFilter = undefined;
+    else
+        allFilter = JSON.stringify(allFilter); //преобразуем массив в строку
+
+    return allFilter
+}
+
+/**
+ * Сохраняем фильтры, чтобы потом ими пользоваться. Отправляем полученные данные на сервер
+ * Save filters to then use them. We send the data to the server
+ * @param allFilter - тут в строке содержаться все выбранные для сохранения фильтры
+ */
+function saveMyFilter_2()
+{
+    //проверяем фильтры
+    var allFilter = getAllFilterStrOrError();
+
+    if(allFilter !== false)
+    {
+        //fixme не могу получить значени из input (пробовал textarea и div с аттрибутом contenteditable), поэтому я прохожусь в цикле и беру самое последнее значение!!!.
+        //получаем название фильтра
+        var nameFilter;
+        $('.nameFilterSaveInput').each(function() {
+            nameFilter = $(this).val();
+        });
+
+        var fail = false, errorMessage = "<ul>", tempErrorMessage;
+        //имя фильтра
+        if($.trim(nameFilter) == '' || /^[a-zA-Zа-яА-ЯёЁ0-9-_ !?()]{3,256}$/.test($.trim(nameFilter)) === false)
+        {
+            errorMessage += "<li>" + jsLang[28] + " '<i>"+jsLang[55]+"</i>':<br>" + jsLang[6] + "</li>";
+            fail = true;
+        }
+
+        //получаем данные - показывать фильтр по умолчанию или нет
+        var num = parseInt($(".radioSaveFilter:checked").val());
+        tempErrorMessage = validateNum(jsLang[54], num, fail, "yes", 2, 1);
+        errorMessage += (tempErrorMessage.message != '') ? "<li>" + tempErrorMessage.message+"</li>" : '';
+        fail = tempErrorMessage.fail;
+
+        //если были ошибки
+        if(fail === true)
+        {
+            errorMessage += "</ul>";
+            addTitle({title: jsLang[5], message: errorMessage}); //показываем ошибку
+            return false;
+        }
+
+        //шаблон ajax запроса
+        ajaxRequestJSON("task/saveMyFilter");
+        $.ajax({
+            data: {nameFilter: nameFilter, defaultFilter: num, allFilter: allFilter},
+            success: function(data)
+            {
+                if(data.status == 'error')
+                {
+                    errorSuccessAjax({title: data.resultTitle, message: data.resultText}); //показываем модалку
+                    return false;
+                }
+
+                //закрываем модальное окно и очищаем его содержимое
+                closeMyModal();
+                //удаляем кнопку сохранить из модального окна
+                $("#saveGreenBtnFilter").remove();
+                $("#applyFilterBtn").click();
+                errorSuccessAjax({title: data.resultTitle, message: data.resultText}); //показываем модалку
+            }
+        });
+
+    }
+}
+
+/**
+ * закрываем модальное окно и очищаем его содержимое
+ * close the modal window and clear the contents
+ */
+function closeMyModal()
+{
+    $("#closeMyModal").click();
+    $(".modal-body p").html("");
+    $("h4.modal-title").html("");
+}
+
+/**
+ * Если нет фильтров, то выдаем ошибку в модалке
+ * If there is no filter, it produces an error in modalke
+ * @returns {*}
+ */
+function getAllFilterStrOrError()
+{
+    var allFilter = getAllFilterStr();
+    if(allFilter === undefined)
+    {
+        bootbox.alert({
+            title: jsLang[5],
+            message: jsLang[56]
+        });
+        return false;
+    }
+
+    return allFilter;
+}
+
+/**
+ * Показываем модальное окно с формой заполнения
+ * Showing a modal window with the form filling
+ * @returns {boolean}
+ */
+function saveMyFilter_1()
+{
+    //проверяем фильтры
+    var allFilter = getAllFilterStrOrError();
+
+    if(allFilter !== false)
+    {
+        $("#myModal .modal-footer").prepend('<button type="button" class="btn btn-success" id="saveGreenBtnFilter" onclick="saveMyFilter_2();">Сохранить</button>');
+        showModal("Сохраняем фильтр", $("#contentSaveFilter").html());
+    }
+}
+
 
 /**
  * Получаем все задачи для всех проектов
@@ -362,29 +511,7 @@ function getAllTask(idProject, from, allFilterBool)
     var allFilter = undefined;
 
     if(allFilterBool !== undefined || arrayForFilterStatus.length > 0 || arrayForFilterComplexity.length > 0 || arrayForFilterPriority.length > 0 || arrayForFilterPerformer.length > 0)
-    {
-        allFilter = {};
-
-        //кладем каждый массив в свою ячейку
-        if(arrayForFilterStatus.length > 0)
-            allFilter['status'] = JSON.stringify(arrayForFilterStatus);
-
-        if(arrayForFilterComplexity.length > 0)
-            allFilter['complexity_id'] = JSON.stringify(arrayForFilterComplexity);
-
-        if(arrayForFilterPriority.length > 0)
-            allFilter['priority_id'] = JSON.stringify(arrayForFilterPriority);
-
-        if(arrayForFilterPerformer.length > 0)
-            allFilter['performer_id'] = JSON.stringify(arrayForFilterPerformer);
-
-
-        //если в массиве нет ни одного фильтра
-        if(allFilter.priority_id === undefined && allFilter.complexity_id === undefined && allFilter.status === undefined && allFilter.performer_id === undefined)
-            allFilter = undefined;
-        else
-            allFilter = JSON.stringify(allFilter); //преобразуем массив в строку
-    }
+        allFilter = getAllFilterStr();
 
     //шаблон ajax запроса
     ajaxRequestJSON("task/getAllTask");
@@ -404,7 +531,13 @@ function getAllTask(idProject, from, allFilterBool)
 
             //если перешли на неизвестную страницу, то выключаем активную вкладку выбора проекта
             if(jsonResponse.dontUseSelectProject !== undefined)
+            {
                 $("#menu-projects a.active").removeClass("active");
+                $("#menu-projects a span.badge").each(function() {
+                    $(this).html("0");
+                });
+            }
+
 
             //если параметры для фильтра не правильно переданы
             if(jsonResponse.errorFilters !== undefined)
@@ -416,6 +549,7 @@ function getAllTask(idProject, from, allFilterBool)
                 //ставим узатель на "Все проекты", в меню слева.
                 $.each($("#menu-projects a"), function( index, value ) {
                     $(value).removeClass("active");
+                    $(value).find("span.badge").html("0");
                 });
                 $("#allProjectsTasks").addClass("active");
 
@@ -577,7 +711,7 @@ function changeSelectTask(idElement)
     selectpicker.next().find("button[data-id='"+idAttr+"']").removeClass(selectpicker.attr('data-style')).addClass(colorSelect);
     selectpicker.attr('data-style', colorSelect);
 
-    errorMessage = "<ul>";
+    var errorMessage = "<ul>";
     num = parseInt(selectpicker.val());
     tempErrorMessage = validateNum(langText, num);
     errorMessage += (tempErrorMessage.message != '') ? "<li>" + tempErrorMessage.message+"</li>" : '';
@@ -702,7 +836,7 @@ function changeSelectTask(idElement)
                     {
                         //заменяем кнопку на "снять с паузы"
                         btnPauseInHtml.fadeOut(150, function(){
-                            $(this).html('<div class="btn btn-success" onclick="removePause();">'+jsLang[52]+'</div>').fadeIn(150);
+                            $(this).html('<div class="btn btn-success" onclick="removePause();">'+jsLang[52]+'</div><hr>').fadeIn(150);
                         });
                     }
                     //если это не пауза и не "выполнено"
@@ -710,7 +844,7 @@ function changeSelectTask(idElement)
                     {
                         //заменяем кнопку на "снять с паузы"
                         btnPauseInHtml.fadeOut(150, function(){
-                            $(this).html('<div class="btn btn-danger" onclick="doPause();">'+jsLang[51]+'</div>').fadeIn(150);
+                            $(this).html('<div class="btn btn-danger" onclick="doPause();">'+jsLang[51]+'</div><hr>').fadeIn(150);
                         });
                     }
                 }
@@ -1092,7 +1226,6 @@ $(function() {
 
             addTaskForm.fadeOut(150, function(){
                 allTasks.fadeIn(150);
-                getAllTask();
                 //делаем активной вкладку "все проекты", т.к. после добавления задачи именно они достаются.
                 $("#allProjectsTasks").click();
             });

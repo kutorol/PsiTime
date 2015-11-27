@@ -342,14 +342,14 @@ if($statusUser == 1):?>
                         <hr>
                     </div>
 
-                    <div class="btn btn-primary" onclick="getAllTaskWithFilter();"><?=$task_views[82]?></div>
+                    <div class="btn btn-primary" id="applyFilterBtn" onclick="getAllTaskWithFilter();"><?=$task_views[82]?></div>
 
 
                     <div id="resetFilters" >
                         <div class="clearfix"></div>
                         <hr>
                         <div class="pull-left">
-                            <div class="btn btn-danger disabled">Сохранить фильтр</div>
+                            <div class="btn btn-danger" onclick="saveMyFilter_1();">Сохранить фильтр</div>
                         </div>
 
                         <div class="pull-right">
@@ -369,6 +369,17 @@ if($statusUser == 1):?>
             <!--ALL TASK-->
             <div class="col-lg-9" >
 
+                <div id="myFilters" class="row">
+                    <div class="div">
+                        <p><?=$chart_view[2]?></p>
+
+                        <?php if(!empty($myFilters)):?>
+                            <?php foreach($myFilters as $filter):?>
+                                <span class="clickLabel <?php if(isset($filter['filterDefault'])){echo "activeLabel";}?>"><?=$filter['nameFilter']?> <span class="removeFilter"><i class="fa fa-times"></i></span></span>
+                            <?php endforeach;?>
+                        <?php endif;?>
+                    </div>
+                </div>
                 <div class="row table-task" id="allTaskHere">
                     <?php if(!empty($myProjects)):?>
 
@@ -390,6 +401,29 @@ if($statusUser == 1):?>
     <p>&nbsp;</p>
 
 
+    <div style="display: none;" id="contentSaveFilter">
+        <p>
+
+
+            <input type="text" class="form-control nameFilterSaveInput" name="nameFilterSaveInput" value="" placeholder="Имя фильтра">
+
+
+            <div class="input-group col-xs-6">
+                Сделать фильтр по умолчанию? <br>
+
+                <div class="btn-group" data-toggle="buttons" id="filterAgree">
+                    <label class="btn btn-default active">
+                        <input type="radio" class="radioSaveFilter" name="saveMePLS" value="1" checked>
+                        Да
+                    </label>
+                    <label class="btn btn-default">
+                        <input type="radio" class="radioSaveFilter" name="saveMePLS" value="2">
+                        Нет
+                    </label>
+                </div>
+            </div>
+        </p>
+    </div>
 
 <?php
 /**

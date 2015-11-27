@@ -26,6 +26,7 @@ class Migration_Start_db extends CI_Migration{
                   `count_projects` INT(5) UNSIGNED NOT NULL DEFAULT '0',
                   `status` enum('0','1') NOT NULL DEFAULT '0',
                   `hoursInDayToWork` VARCHAR(2) NOT NULL COMMENT 'сколько часов в день юзер работает',
+                  `myFilters` TEXT NOT NULL,
                   PRIMARY KEY (`id_user`),
                   UNIQUE KEY `id_user` (`id_user`),
                   KEY `name` (`name`),

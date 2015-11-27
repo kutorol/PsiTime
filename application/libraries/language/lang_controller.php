@@ -313,6 +313,9 @@ class Lang_controller
             23      =>  "Задача успешно удалена.",
             24      =>  "Вы не являетесь исполнителем или создателем задачи.",
             25      =>  "Ошибка. Задача не была удалена.",
+            26      =>  "Фильтр сохранен.",
+            27      =>  "Ошибка. Данные не могут обновиться. Вскоре наши сотрудники разберуться с этой проблемой.",
+            28      =>  " Фильтр появиться после перезагрузки страницы",
         ];
 
         /********************************************
@@ -347,6 +350,9 @@ class Lang_controller
             23      =>  "The task was successfully removed.",
             24      =>  "You aren't the performer or the founder of a task",
             25      =>  "Error. The task was not removed.",
+            26      =>  "The filter is saved",
+            27      =>  "Error. Data can not be updated. Soon, our staff will understand this problem.",
+            28      =>  " Filter occur after reloading the page",
 
         ];
 
@@ -667,6 +673,9 @@ class Lang_controller
             50  =>  'Выполнено за: ',
             51  =>  'Поставить на паузу',
             52  =>  'Снять с паузы',
+            54  =>  'Сделать фильтр по умолчанию?',
+            55  =>  'Название фильтра',
+            56  =>  'Вы пытаетесь сохранить фильтр, которого даже не создали?! С какой планеты ты взялся? А, слыш?',
 
         ];
 
@@ -704,6 +713,9 @@ class Lang_controller
             50  =>  'Achieved for: ',
             51  =>  'Pause',
             52  =>  'Remove pause',
+            54  =>  'Make the default filter?',
+            55  =>  'Name filter',
+            56  =>  'You are trying to save the filter, which is not even created?! On what planet do you come from? Hey, do you hear?',
 
         ];
 

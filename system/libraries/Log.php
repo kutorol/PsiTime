@@ -60,6 +60,20 @@ class CI_Log {
 
 	// --------------------------------------------------------------------
 
+    /**
+     * Функция находит текущую страницу и с какой пришли, чтобы выявить больше ошибок
+     * @return string
+     */
+    private function _getUrlError()
+    {
+        $urlError = $_SERVER['REQUEST_URI'];
+        $urlRefer = 'Неизвестно';
+        if(isset($_SERVER['HTTP_REFERER']))
+            $urlRefer = $_SERVER['HTTP_REFERER'];
+
+        return "Ошибка на странице - ".$urlError.', Пришел со страницы - '.$urlRefer;
+    }
+
 	/**
 	 * Write Log File
 	 *
@@ -72,6 +86,9 @@ class CI_Log {
 	 */
 	public function write_log($level = 'error', $msg, $php_error = FALSE)
 	{
+        if(trim($msg) == "")
+            return FALSE;
+
 		if ($this->_enabled === FALSE)
 		{
 			return FALSE;
@@ -98,7 +115,7 @@ class CI_Log {
 		}
 
 		$message .= $level.' '.(($level == 'INFO') ? ' -' : '-').' '.date($this->_date_fmt). ' --> '.$msg."\n";
-
+        //$message .= $level.' '.(($level == 'INFO') ? ' -' : '-').' '.date($this->_date_fmt). ' --> '.$this->_getUrlError().' ---- '.$msg."\n\n";
 		flock($fp, LOCK_EX);
 		fwrite($fp, $message);
 		flock($fp, LOCK_UN);
