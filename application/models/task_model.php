@@ -82,14 +82,27 @@ class Task_model extends CI_Model {
         return $this->db->get('task')->row_array();
     }
 
-
-    public function getAllMyTask($idUser, $idTask)
+    /**
+     * Ищем задачи по идентификатору или по ключевому слову в названии или в тексте задачи
+     * We are looking for the problem by ID or by keyword in the title or in the text of the problem
+     * @param $projects
+     * @param string $searchWords
+     * @param bool $is_num
+     * @param string $segment
+     * @return mixed
+     */
+    public function searchTask($projects, $searchWords = '', $is_num = false, $segment = 'ru')
     {
-        $this->db->select("pause, pause_for_complite")
-                ->where('performer_id', $idUser)
-                ->where('status', 1)
+        $this->_additionalInfoTask($segment);
+        $this->db->select("task.id_task")
+                    ->where_in('task.project_id', $projects);
 
-                ->where_not_in('status', [0,2]);
+        if($is_num === false)
+            $this->db->like('task.title', $searchWords)->or_like('task.text', $searchWords);
+        else
+            $this->db->where('task.id_task', $searchWords);
+
+        return $this->db->get('task')->result_array();
     }
 
 }

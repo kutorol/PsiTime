@@ -1,4 +1,59 @@
 /**
+ * Ищем задачи по ключевому слову или идентификатору
+ * We are looking for the problem by keyword or ID
+ * @returns {boolean}
+ */
+function getMeMySearch()
+{
+    var fail = false, errorMessage = "<ul>";
+    //название
+    var titleTask = $.trim($("#getMySearch").val());
+    if(titleTask == '')
+    {
+        //если поисковая строка пуста, то просто имитируем нажатие на "Все проекты", чтобы получить все задачи
+        resetFilters();
+        return false;
+    }
+
+    if(/^[a-zA-Zа-яА-ЯёЁ0-9-_ ]{3,256}$/.test(titleTask) === false)
+    {
+        errorMessage += "<li>" + jsLang[28] + " '<i>"+"Введите поисковую фразу"+"</i>':<br>" + jsLang[6] + "</li>";
+        fail = true;
+    }
+
+    //если были ошибки
+    if(fail === true)
+    {
+        errorMessage += "</ul>";
+        addTitle({title: jsLang[5], message: errorMessage}); //показываем ошибку
+        return false;
+    }
+
+    ajaxRequestJSON("task/searchTask");
+    $.ajaxSetup({
+        dataType: "html"
+    });
+    $.ajax({
+        // параметры запроса, передаваемые на сервер (последний - подстрока для поиска):
+        data: {titleTask: titleTask},
+        // обработка успешного выполнения запроса
+        success: function(data)
+        {
+            var jsonResponse = $.parseJSON(data);
+            if(jsonResponse.status == 'error')
+            {
+                errorSuccessAjax({title: jsonResponse.resultTitle, message: jsonResponse.resultText}); //показываем модалку
+                return false;
+            }
+
+            //вставляем полученные данные в html
+            $("#allTaskHere").html(jsonResponse.content);
+            hideLoad();
+        }
+    });
+}
+
+/**
  * Удаляем любые данные
  * Remove any data
  *

@@ -368,7 +368,7 @@ class Task extends CI_Controller {
                 else
                     $data['dontUseSelectProject'] = true;
 
-                $data['renderViewTask'] = $this->load->view('default/common/task/content.php', $data, true);
+                $data['renderViewTask'] = $this->load->view(DEFAULT_VIEW.'/common/task/content.php', $data, true);
                 unset($data['allTasks']);
             }
             else
@@ -2208,6 +2208,7 @@ class Task extends CI_Controller {
     }
 
     /**
+     * (AJAX)
      * Сохраняем фильтр в бд, чтобы потом быстро им пользоваться
      * Save the filter in the database, then to use it quickly
      */
@@ -2292,6 +2293,7 @@ class Task extends CI_Controller {
 
 
     /**
+     * (AJAX)
      * Удаляем фильтр и делаем новый по дефолту
      * Remove the filter and make new by default
      * @return bool
@@ -2371,20 +2373,69 @@ class Task extends CI_Controller {
         echo json_encode($response);
     }
 
-    public function getM()
+    /**
+     * Ищем задачи по названию и тексту или же только по идентификатору
+     * We are looking for challenges by name and text, or just by ID
+     */
+    public function searchTask()
     {
-        $this->load->model('common_model');
-        $additionalInfoUser = $this->common_model->getResult('users', 'id_user', 1, 'row_array', 'myFilters');
+        //проверяем на ajax и его параметры
+        $response = $this->common->isAjax(["titleTask", 'str']);
+        if($response['status'] != 'error')
+        {
+            $data = $response['data'];
+            unset($response['data']);
 
-        $q = unserialize($additionalInfoUser['myFilters']);
+            $this->load->model('common_model');
+
+            //вначале мы думаем, что это строка, а не число
+            $is_num = false;
+            //получаем поисковую фразу
+            $titleTask = preg_replace("/&amp;/iu", "&", $this->common->clear($this->input->post('titleTask', true)));
+            if(is_numeric($titleTask))
+                $is_num = true;
+
+            //получаем все проекты, к которым я прикреплен и которые я создал
+            $myProjects = $this->_getProject($data['idUser']);
+            $myIdProjects = [];
+            if(!empty($myProjects))
+            {
+                foreach($myProjects as $project)
+                    $myIdProjects[] = $project['id_project'];
+            }
+            else
+                return $this->common->returnResponse($data, "У вас нет ни одного проекта");
 
 
-        $new['myFilters'] = serialize($q);
-        //$this->common_model->updateData($new, 'id_user',1, 'users');
-        echo "<pre>";
-        print_r($q);
-        echo "</pre>";
-        exit;
+            $this->load->model('task_model');
+            $data['allTasks'] = $this->task_model->searchTask($myIdProjects, $titleTask, $is_num, $data['segment']);
 
+            //мне ненужна тут навигация
+            $data['pagination']['status'] = 'error';
+            if(!empty( $data['allTasks'] ))
+            {
+                //сокращаем название времени (вместо минут - м., вместо секунд - сек.)
+                foreach($data['allTasks'] as $k=>$task)
+                {
+                    switch($task['time_for_complete_value'])
+                    {
+                        case '0':     $data['allTasks'][$k]['time_for_complete_value'] = mb_substr($data['task_views'][47], 0, 1, 'utf8'); break;
+                        case '1':     $data['allTasks'][$k]['time_for_complete_value'] = mb_substr($data['task_views'][48], 0, 1, 'utf8'); break;
+                        case '2':     $data['allTasks'][$k]['time_for_complete_value'] = mb_substr($data['task_views'][49], 0, 1, 'utf8'); break;
+                        case '3':     $data['allTasks'][$k]['time_for_complete_value'] = mb_substr($data['task_views'][50], 0, 1, 'utf8'); break;
+                        case '4':     $data['allTasks'][$k]['time_for_complete_value'] = mb_substr($data['task_views'][51], 0, ($data['segment'] == 'ru') ? 3 : 4, 'utf8'); break;
+                    }
+                }
+            }
+
+            //получаем view для всех задач
+            $data['renderViewTask'] = $this->load->view(DEFAULT_VIEW.'/common/task/content.php', $data, true);
+            unset($data['allTasks']);
+
+            //возвращаем юзеру
+            $response = ['status' => 'success', 'content' => $data['renderViewTask']];
+        }
+
+        echo json_encode($response);
     }
 }

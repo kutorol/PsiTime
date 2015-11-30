@@ -372,6 +372,21 @@ if($statusUser == 1):?>
             <!--ALL TASK-->
             <div class="col-lg-9" >
 
+                <div class="row">
+                    <fieldset style="margin-top: 20px;"><legend>Поиск:</legend></fieldset>
+                </div>
+                <div class="row">
+                    <form class="form-inline " onsubmit="getMeMySearch(); return false;">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <input style="min-width: 300px;" type="text" class="form-control col-lg-6" id="getMySearch" placeholder="Введите поисковую фразу">
+                                <div class="input-group-addon btn btn-success" onclick="getMeMySearch();"> Искать</div>
+                            </div>
+                            <div><span style="color: #b6b4b4;">Если ввести число, то поиск будет происходить по идентификатору задачи!</span></div>
+                        </div>
+                    </form>
+                </div>
+
                 <?php if(!empty($myFilters)):?>
                     <div class="row">
                         <fieldset><legend>Мои фильтры:</legend></fieldset>
@@ -419,6 +434,7 @@ if($statusUser == 1):?>
                         });
                     </script>
                 <?php endif;?>
+
                 <div class="row">
                     <fieldset style="margin-top: 20px;"><legend>Задачи:</legend></fieldset>
                 </div>
