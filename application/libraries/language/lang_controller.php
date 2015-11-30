@@ -316,6 +316,9 @@ class Lang_controller
             26      =>  "Фильтр сохранен.",
             27      =>  "Ошибка. Данные не могут обновиться. Вскоре наши сотрудники разберуться с этой проблемой.",
             28      =>  " Фильтр появиться после перезагрузки страницы",
+            29      =>  "Фильтр удален. Теперь самый первый фильтр будет отображаться по умолчанию",
+            30      =>  "У вас нет никаких фильтров, а вы пытаетесь удалить их! Наглец... Полиция!! Полиция!!!",
+            31      =>  "У вас нет фильтра с таким идентификатором!",
         ];
 
         /********************************************
@@ -353,6 +356,9 @@ class Lang_controller
             26      =>  "The filter is saved",
             27      =>  "Error. Data can not be updated. Soon, our staff will understand this problem.",
             28      =>  " Filter occur after reloading the page",
+            29      =>  "The filter is removed. Now the very first filter will be displayed by default",
+            30      =>  "You have no filters, and you try to remove them! Squirt ... Police !! Police!!!",
+            31      =>  "You do not have a filter with this id!",
 
         ];
 
@@ -676,6 +682,7 @@ class Lang_controller
             54  =>  'Сделать фильтр по умолчанию?',
             55  =>  'Название фильтра',
             56  =>  'Вы пытаетесь сохранить фильтр, которого даже не создали?! С какой планеты ты взялся? А, слыш?',
+            57  =>  'Вы действительно хотите удалить фильтр?',
 
         ];
 
@@ -716,6 +723,7 @@ class Lang_controller
             54  =>  'Make the default filter?',
             55  =>  'Name filter',
             56  =>  'You are trying to save the filter, which is not even created?! On what planet do you come from? Hey, do you hear?',
+            57  =>  'Are you sure want to remove the filter?',
 
         ];
 

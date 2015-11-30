@@ -282,8 +282,7 @@ thead th {
 .clickLabel{
     border: 1px dashed rgb(91, 192, 222);
     border-radius: 5px;
-    padding: 5px;
-
+    padding: 5px 10px;
 }
 
 .clickLabel:hover{
@@ -298,8 +297,22 @@ thead th {
     color: #fff;
 }
 
-.removeFilter i:hover{
-    color: red !important;
+.removeFilter:hover{
+    cursor: pointer;
+    background-color: red;
+    color: #fff;
+    border-color: red;
+}
+
+.removeFilter{
+    padding: 5px;
+    border: 1px dashed rgb(91, 192, 222);
+    border-radius: 0px 5px 5px 0px;
+    margin-left: -5px;
+}
+
+.noBorder{
+    border-radius: 5px 0 0 5px !important;
 }
 
 

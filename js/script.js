@@ -135,8 +135,8 @@ function ajaxRequestJSON(url, additionalDelBlock, hidePreloader)
 }
 
 /**
- * Показываем прелоадер
- * show preloader
+ * Показываем прелоадер (используется при каждом ajax запросе)
+ * show preloader (used with each ajax request)
  */
 function showLoad()
 {
@@ -144,8 +144,8 @@ function showLoad()
 }
 
 /**
- * скрываем прелоадер
- * hide preloader
+ * скрываем прелоадер (используется при каждом ajax запросе)
+ * hide preloader (used with each ajax request)
  */
 function hideLoad()
 {
@@ -917,9 +917,8 @@ function editDescTask()
             //обновляем на странице название
             if(data.newTitle != $.trim(titleHtml.html()))
             {
-                //TODO заменить экранирование на более подходящие символы (чтобы красиво было). Это чтобы нормально отображало титл и описание задачи (в конкретной задачи)
-                $("#tastTitleInfo").fadeOut(150, function(){ $(this).html(data.newTitle.replace(/&amp;/g,"&")).fadeIn(150);});
-                $("#changeTitleInfo").fadeOut(150, function(){ $(this).html(data.newTitle.replace(/&amp;/g,"&")).fadeIn(150);  });
+                $("#tastTitleInfo").fadeOut(150, function(){ $(this).html(data.newTitle.fadeIn(150));});
+                $("#changeTitleInfo").fadeOut(150, function(){ $(this).html(data.newTitle.fadeIn(150));  });
             }
 
             if(data.newText != textHtml.html())
@@ -1010,6 +1009,11 @@ function getMeMyPage()
 function resetFilters()
 {
     $("input[type=checkbox].activeCheckbox").click();
+    //удаляем из массивов данные по фильтрам
+    arrayForFilterStatus = [];
+    arrayForFilterComplexity = [];
+    arrayForFilterPriority = [];
+    arrayForFilterPerformer = [];
     $("#allProjectsTasks").click();
 }
 
@@ -1054,6 +1058,9 @@ function overallCheckboxClick(myThis, array)
     {
         myThis.removeClass("activeCheckbox");
 
+        myThis.next().find("span.cb-icon-check-empty").attr("style", "");
+        myThis.next().find("span.cb-icon-check").css({"display":"none"});
+
         //удаляем из массива данный checkbox из массива данного фильтра
         $.each(array, function( index, value ) {
             //удаляем из массива ненужное значение фильтра
@@ -1063,11 +1070,14 @@ function overallCheckboxClick(myThis, array)
     }
     else
     {
+        myThis.next().find("span.cb-icon-check-empty").css({"display":"none"});
+        myThis.next().find("span.cb-icon-check").attr("style", "");
         //добавляем значение фильтра в массив
         myThis.addClass("activeCheckbox");
         array.push(myThis.val());
     }
 }
+
 
 
 $(function() {
@@ -1231,6 +1241,7 @@ $(function() {
             });
         }
     });
+
 
     /**
      * Когда выбираем нужную нам сложность, то цвет у самого select становиться цветом выбранного option. При добавлении новой задачи
@@ -1450,8 +1461,8 @@ $(function() {
     });
 
     /**
-     * скрывает автокоплит, если выбран чекбокс
-     * It hides 'input autocomplete' if the checkbox is selected
+     * скрывает автокоплит, если выбран чекбокс (в добавлении проекта)
+     * It hides 'input autocomplete' if the checkbox is selected (the addition project)
      */
     $("#iAdmin").click(function(){
         if(document.getElementById('iAdmin').checked)
@@ -1462,33 +1473,9 @@ $(function() {
 
 
     /**
-     * При клике на любую из сортировок
-     * Clicking on any of the sorts
+     * Показываем всех юзеров, с их потраченным временем на все проекты (в графиках)
+     * Show all users, their time spent on all projects (in the charts)
      */
-    $(".clickLabel").on('click', function(){
-
-        $(".activeLabel").removeClass("activeLabel");
-        $(this).addClass("activeLabel");
-
-        //получаем из атрибута id элемента, который нужно показать
-        var whatShow = $(this).attr("show");
-        //скрываем все элементы на странице
-        $("#allCharts").fadeOut(150, function(){
-            //скрываем потомков
-            $(this).children().hide();
-            //показываем нужный элемент
-            $("#"+whatShow).show();
-            //показываем все элементы
-            $(this).fadeIn(150,function(){
-                //если было нажато на "приоритет", то показываем графики
-                if(whatShow == "content_priority")
-                    showPriority();
-                else if(whatShow == "content_complexity")
-                    showComplexity();
-            });
-        });
-    });
-
     $("#showUsersLink a").on('click', function(e){
         $("#showUsersLink").fadeOut(150, function(){
             $(".liNotDisplayUserTime").fadeIn(150);
@@ -1496,6 +1483,10 @@ $(function() {
         e.preventDefault();
     });
 
+    /**
+     * Скрывает всех юзеров, кроме "меня", с их потраченным временем на все проекты (в графиках)
+     * It hides all users, except for "I", from their time spent on all projects (in the charts)
+     */
     $(".aDisplay a").on('click', function(e){
         $(".liNotDisplayUserTime").fadeOut(150, function(){
             $("#showUsersLink").fadeIn(150);
@@ -1509,6 +1500,93 @@ $(function() {
      */
     $('input[type=checkbox]').checkbox();
 
+
+    /**
+     * При клике на любую из сортировок (в графиках)
+     * Clicking on any of the sorts (in charts)
+     */
+    $(".clickLabel").on('click', function(){
+
+        if($(this).hasClass("activeLabel"))
+            return false;
+
+        $(".activeLabel").removeClass("activeLabel");
+        $(this).addClass("activeLabel");
+
+        //получаем из атрибута id элемента, который нужно показать
+        var whatShow = $(this).attr("show");
+        var filter = $(this).attr("filter");
+        //если мы находимся на странице графиков
+        if(whatShow !== undefined && filter === undefined)
+        {
+            //скрываем все элементы на странице
+            $("#allCharts").fadeOut(150, function(){
+                //скрываем потомков
+                $(this).children().hide();
+                //показываем нужный элемент
+                $("#"+whatShow).show();
+                //показываем все элементы
+                $(this).fadeIn(150,function(){
+                    //если было нажато на "приоритет", то показываем графики
+                    if(whatShow == "content_priority")
+                        showPriority();
+                    else if(whatShow == "content_complexity")
+                        showComplexity();
+                });
+            });
+        }
+        //если мы переключаем фильтры на главной странице
+        else if(filter !== undefined && whatShow === undefined)
+        {
+            //обнуляем все массивы с фильтрами
+            arrayForFilterStatus = [];
+            arrayForFilterComplexity = [];
+            arrayForFilterPriority = [];
+            arrayForFilterPerformer = [];
+
+            //если нажали по фильтру "без фильтров", то показываем все доступные фильтры в левой части сайта
+            if($(this).attr("id") == "withoutFilterLabel")
+                $("#showOrHideAllFilter").fadeIn(500);
+            else
+            {
+                //убираем все активные чекбоксы
+                $("span.cb-icon-check").each(function(){
+                    $(this).css({'display':'none'});
+                    $(this).next().attr("style","");
+                });
+                //убираем со всех активных чекбоксов то, что они активные :D
+                $("#showOrHideAllFilter input[type=checkbox].activeCheckbox").removeClass("activeCheckbox");
+
+
+                //если нажали на сохраненый фильтр, то скрываем выбор фильтров в ручном режиме
+                $("#showOrHideAllFilter").fadeOut(500);
+                //получаем все фильтры, которые могут быть у этого элемента
+                var status = $(this).attr("status");
+                var complexity_id = $(this).attr("complexity_id");
+                var priority_id = $(this).attr("priority_id");
+                var performer_id = $(this).attr("performer_id");
+
+                //если такой фильтр существует, то разбиваем его по запятой и вносим в массив
+                if(status !== undefined)
+                    arrayForFilterStatus = status.split(",");
+                if(complexity_id !== undefined)
+                    arrayForFilterComplexity = complexity_id.split(",");
+                if(priority_id !== undefined)
+                    arrayForFilterPriority = priority_id.split(",");
+                if(performer_id !== undefined)
+                    arrayForFilterPerformer = performer_id.split(",");
+            }
+
+
+
+            //делаем активной вкладкой "Все проекты", в меню "Мои проекты"
+            $("#menu-projects a.active").removeClass("active");
+            $("#allProjectsTasks").addClass("active");
+            //получаем задания с сохраненным фильтром
+            getAllTask();
+        }
+
+    });
 
     /**
      * Если нажимают на checkbox "показывать графики в 3D" и "показывать кнопку экспорта графика"
@@ -1557,6 +1635,41 @@ $(function() {
                 document.location.href = base_url+"/chart";
 
                 hideLoad();
+            }
+        });
+    });
+
+    /**
+     * Удаляем фильтр, когда нажимаем на крестик на главной странице
+     * Remove the filter when the push on the cross on the main page
+     */
+    $(".removeFilter").on("click", function(){
+
+        var myThis = $(this);
+        var idFilter = myThis.attr("data-id");
+
+        bootbox.confirm(jsLang[57], function(result) {
+            if(result)
+            {
+                ajaxRequestJSON("task/deleteMyFilter");
+                $.ajax({
+                    data: {idFilter: idFilter},
+                    success: function(data)
+                    {
+                        errorSuccessAjax({title: data.resultTitle, message: data.resultText}); //показываем модалку
+
+                        if(data.status == 'error')
+                            return false;
+
+                        //если мы удаляем  фильтр, который активен сейчас, то мы активным делаем "без фильтров" и удаляем все фильтры из массивов
+                        if(myThis.prev().hasClass("activeLabel"))
+                            $("#withoutFilterLabel").click();
+
+
+                        myThis.prev().remove();
+                        myThis.remove();
+                    }
+                });
             }
         });
     });

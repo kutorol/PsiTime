@@ -267,30 +267,30 @@ class Common
     /**
      * Получаем часть url, которая идет после указателя языка, чтобы человека перекинуть на ту же страницу
      * We get a piece of url, which comes after the sign language that would throw the man to the same page
-     * @param bool $test - нужна, пока работаю на разных локалках
      */
-    public function getLangUrl($test = false)
+    public function getLangUrl()
     {
-        $this->data['currentUrl'] = $_SERVER['REQUEST_URI'];
-        if(trim($this->data['currentUrl']) != '')
-        {
-            $this->data['currentUrl'] = preg_replace('/'.$this->data['segment'].'\/|\/'.$this->data['segment'].'/i', '', $this->data['currentUrl']);
+        //получаем полное url и получаем http, ftp или https из url домена
+        $this->data['currentUrl'] = explode("/",SITE_URL)[0].'//'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
 
-            //FIXME УДАЛИТЬ ДОМА ЭТОТ ИФ
-            /*if($test === true)
-                $this->data['currentUrl'] = preg_replace('/time.log\/|\/time.log|time.log/i', '', $this->data['currentUrl']);*/
+        //из url удаляем название домена
+        $this->data['currentUrl'] = preg_replace('/'.implode("\/",explode("/",SITE_URL)).'/iu', '', $this->data['currentUrl']);
+        //заменяем текущий язык в url на пустоту
+        $this->data['currentUrl'] = preg_replace('/'.$this->data['segment'].'\/|\/'.$this->data['segment'].'/iu', '', $this->data['currentUrl']);
 
-            $url = explode('/', $this->data['currentUrl']);
+        //разбиваем получившийся результат
+        $url = explode('/', $this->data['currentUrl']);
 
-            foreach($url as $k=>$v)
-                if(trim($v) == '')
-                    unset($url[$k]);
+        //удаляем пустые ячейки
+        foreach($url as $k=>$v)
+            if(trim($v) == '')
+                unset($url[$k]);
 
-            if(!empty($url))
-                $this->data['currentUrl'] = implode('/', $url);
-            else
-                $this->data['currentUrl'] = '';
-        }
+        //складываем все воедино, но без указания языка, а только то, что идет после него. Язык подставляем во view
+        if(!empty($url))
+            $this->data['currentUrl'] = implode('/', $url);
+        else
+            $this->data['currentUrl'] = '';
     }
 
     /**
@@ -308,8 +308,6 @@ class Common
     public function initApp($controller_lang = 'welcome_controller', $name_lang = 0,  $folder = 'login', $auth_user = true, $ajax = false, $what_replace = ['pattern'=>''])
     {
         //тут получаем нужный нам кусок url
-        //FIXME УБРАТЬ ДОМА ЭТОТ ПАРАМЕТР
-        //$this->getLangUrl(true);
         $this->getLangUrl();
 
         //название получаем из языкового файла
@@ -518,8 +516,6 @@ class Common
                     }
                 }
             }
-
-            log_message('error', $postError);
 
             if($postError === true)
                 return ['status' => 'error', 'resultTitle'=> $data['js'][0], 'resultText'=>$data['task_views'][6]];

@@ -1,5 +1,5 @@
 <?php if(!empty($allTasks)):?>
-    <div style="margin-right: 15px;">
+    <div style="margin-right: 15px; margin-top: -30px;">
 
         <div class="table-task">
             <table>
