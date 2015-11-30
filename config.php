@@ -4,7 +4,7 @@
  * Если заполнено - это значит то, что человек закончил установку и то, что он вообще редактировал этот файл
  * If filled - it means that the person has finished the installation and the fact that he did edit this file
  */
-define('IS_FILL_KEY', 'a53d6030b');
+define('IS_FILL_KEY', 'a5s3d6030b');
 
 /**
  * Настройка базы данных
