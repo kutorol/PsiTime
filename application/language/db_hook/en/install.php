@@ -13,5 +13,7 @@ $lang['error_9']    =   "Constant <b>COUNT_OBJECT_PER_PAGE</b> is not a number, 
 $lang['error_10']   =   "Constant <b>ADMIN_EMAIL</b> didn't undergo testing. Probably you made a mistake. Change in config.php";
 $lang['error_11']   =   "Constant <b>ADMIN_NAME</b> didn't undergo testing. It may contain Cyrillics, Latin and space. Also it has to be at least 2 and at most 20 symbols. Change in config.php";
 $lang['error_12']   =   "Constant <b>ADMIN_LOGIN</b> didn't undergo testing. It may contain Latin, numbers, - and _. Also it has to be at least 5 and at most 20 symbols. Change in config.php";
+$lang['error_13']   =   "Constant <b>MAX_WORK_TIME_IN_DAY</b> didn't undergo testing. It may contain a value from 1 to 14, as one can not work anymore 14 hours. Change in config.php";
+$lang['error_14']   =   "Constant <b>NAME_DB</b> didn't undergo testing. It may contain Latin, numbers and _. Change in config.php";
 
 

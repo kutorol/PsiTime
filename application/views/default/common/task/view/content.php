@@ -239,7 +239,7 @@
                             <?php endfor;?>
                         </select>
                         <?php else:?>
-                            <?=$task_views['status_task_'.$i];?>
+                            <?=$task_views['status_task_'.$infoTask['status']];?>
                         <?php endif;?>
                     </div>
                 <hr>

@@ -23,13 +23,12 @@ define('ADMIN_EMAIL', 'admin@admin.ru'); //на email будут высылат�
 define('ADMIN_PASS', 'admin');
 define('ADMIN_LOGIN', 'admin');
 define('ADMIN_NAME', 'Administrator');
-define('YOUR_LANG', 'en'); //ru, en . now no other language
+define('YOUR_LANG', 'ru'); //ru, en . now no other language
+define('MAX_WORK_TIME_IN_DAY', '8'); //количество рабочих часов в день, не считая обеденного перерыва
 
-//вконце обязательно поставить "/"
-//be sure to put at the end of "/"
+//!!!!!!!! вконце обязательно поставить "/", а в начале http://
+//!!!!!!!! be sure to put at the end of "/", do not forget http://
 define('SITE_URL', 'http://time.log/');
-//FIXME если вы обращаетесь к сайту через localhost, то измените эту строчку, а также...
-//define('SITE_URL', 'http://localhost/time.log/');
 
 /**
  * Постраничная навигация.
@@ -41,6 +40,13 @@ define('SITE_URL', 'http://time.log/');
 define('MAX_COUNT_LINK_FOR_PAGINATION', 10);
 //если мало отображаются заданий на одной странице, то увеличить это число (if are a little displayed tasks on one page, to increase this number)
 define('MAX_COUNT_OBJECT_PER_PAGE', 5);
+
+/**
+ * Если false, то искользуются красивые чекбоксы, но порой при нажатии они неактивируются... , если true - стандартные
+ * If false, then use the checkboxes beautiful, but sometimes when you are non-inducing ..., if true - standard
+ * TODO - сделать стили для css и некоторые функции в js переработать
+ */
+define('DEFAULT_CHECKBOX', false);
 
 /**
  * Путь к главной папке с файлами отображения сайта

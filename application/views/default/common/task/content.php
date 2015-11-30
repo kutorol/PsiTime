@@ -1,12 +1,5 @@
 <?php if(!empty($allTasks)):?>
-    <div style="margin-right: 15px;">
-        <div class="div">
-            <span class="label label-default small-text">x Без фильтров</span>
-            <span class="label label-info small-text">x Мой фильтр 1</span>
-            <span class="label label-primary small-text">x Мой фильтр 2</span>
-            <span class="label label-primary small-text">x Мой фильтр 3</span>
-
-        </div>
+    <div style="margin-right: 15px; margin-top: -30px;">
 
         <div class="table-task">
             <table>

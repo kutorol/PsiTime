@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="<?=base_url()?>/img/favicon.ico" type="image/x-icon">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <title><?=strip_tags(stripcslashes($title))?></title>
 

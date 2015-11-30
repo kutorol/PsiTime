@@ -121,6 +121,10 @@ class Lang_controller
                         'ru'    =>  'Выйти',
                         'en'    =>  'Logout'
                     ],
+            2   =>  [
+                        'ru'    =>  'Графики',
+                        'en'    =>  'Graphics'
+                    ],
         ];
 
         $additional_ru = "Класс: :_class_:; метод: :_method_:; строка: :_line_:.";
@@ -309,6 +313,12 @@ class Lang_controller
             23      =>  "Задача успешно удалена.",
             24      =>  "Вы не являетесь исполнителем или создателем задачи.",
             25      =>  "Ошибка. Задача не была удалена.",
+            26      =>  "Фильтр сохранен.",
+            27      =>  "Ошибка. Данные не могут обновиться. Вскоре наши сотрудники разберуться с этой проблемой.",
+            28      =>  " Фильтр появиться после перезагрузки страницы",
+            29      =>  "Фильтр удален. Теперь самый первый фильтр будет отображаться по умолчанию",
+            30      =>  "У вас нет никаких фильтров, а вы пытаетесь удалить их! Наглец... Полиция!! Полиция!!!",
+            31      =>  "У вас нет фильтра с таким идентификатором!",
         ];
 
         /********************************************
@@ -343,6 +353,12 @@ class Lang_controller
             23      =>  "The task was successfully removed.",
             24      =>  "You aren't the performer or the founder of a task",
             25      =>  "Error. The task was not removed.",
+            26      =>  "The filter is saved",
+            27      =>  "Error. Data can not be updated. Soon, our staff will understand this problem.",
+            28      =>  " Filter occur after reloading the page",
+            29      =>  "The filter is removed. Now the very first filter will be displayed by default",
+            30      =>  "You have no filters, and you try to remove them! Squirt ... Police !! Police!!!",
+            31      =>  "You do not have a filter with this id!",
 
         ];
 
@@ -531,7 +547,7 @@ class Lang_controller
 
             'status_task_0'      =>  'Supplied',
             'status_task_1'      =>  'Running',
-            'status_task_2'      =>  'Implemented',
+            'status_task_2'      =>  'Completed',
             'status_task_3'      =>  'Pause',
         ];
 
@@ -543,7 +559,19 @@ class Lang_controller
          */
         $lang['lang_ru']['chart_controller'] = [
             0   =>  "Графики затраченного мной времени",
-
+            1   =>  "Графики с сортировкой по сложности (для меня)",
+            2   =>  "Графики с сортировкой по приоритету (для меня)",
+            'circleChar'    =>  [
+                0   =>  "Процентное соотношение задач",
+                1   =>  "(за все время)",
+                2   =>  "Процентное соотношение задач, со статусом 'выполнено'",
+                3   =>  "Процентное соотношение задач, которые выполняются",
+            ],
+            'squareChar'    =>  [
+                0   =>  "Количественное соотношение задач в проекте",
+                1   =>  "Количественное соотношение задач в проекте, со статусом 'выполнено'",
+                2   =>  "Количественное соотношение задач в проекте, которые выполняются",
+            ],
         ];
 
         /********************************************
@@ -553,6 +581,63 @@ class Lang_controller
          */
         $lang['lang_en']['chart_controller'] = [
             0   =>  "Charts spent my time",
+            1   =>  "Charts sorted by complexity (for me)",
+            2   =>  "Charts sorted by priority (for me)",
+            'circleChar'    =>  [
+                0   =>  "Percentage ratio of tasks",
+                1   =>  "(during all the time)",
+                2   =>  "The percentage ratio of tasks, with the status 'Completed'",
+                3   =>  "Percentage ratio of tasks which are carried out",
+            ],
+            'squareChar'    =>  [
+                0   =>  "Quantitative ratio of tasks in the project",
+                1   =>  "The quantitative ratio of tasks in the project, with the status 'Completed'",
+                2   =>  "Quantitative ratio of tasks in the project which are carried out",
+            ],
+        ];
+
+
+        /********************************************
+         * Перевод для Вьюх chart (RU)
+         * Translation for View chart (RU)
+         * ******************************************
+         */
+        $lang['lang_ru']['chart_view'] = [
+            0   =>  "Показывать графики в 3D:",
+            1   =>  "Показывать кнопку экспорта графика:",
+            2   =>  "Сортировать по:",
+            3   =>  "Времени",
+            4   =>  "Сложности",
+            5   =>  "Приоритету",
+            6   =>  "Всего потрачено времени (на все проекты):",
+            7   =>  "Показать остальных членов команды",
+            8   =>  "Скрыть остальных членов команды",
+            9   =>  "У вас нет выполненых задач, по которым расчитывается статистика!",
+            10   =>  "Сколько потрачено времени всеми участниками",
+            11   =>  "(за все время, по всем проектам)",
+            12   =>  "Количество часов",
+
+        ];
+
+        /********************************************
+         * Перевод для Вьюх chart (EN)
+         * Translation for View chart (EN)
+         * ******************************************
+         */
+        $lang['lang_en']['chart_view'] = [
+            0   =>  "Display graphics in 3D:",
+            1   =>  "Show button exports graphics:",
+            2   =>  "Sort by:",
+            3   =>  "Time",
+            4   =>  "Complexities",
+            5   =>  "Priority",
+            6   =>  "Total time spent (for all projects):",
+            7   =>  "Show the rest of the team",
+            8   =>  "Hide rest of the team",
+            9   =>  "You have not completed the tasks for which the calculated statistics!",
+            10   =>  "How much time is spent by all participants",
+            11   =>  "(for all time, for all projects)",
+            12   =>  "Number of hours",
 
         ];
 
@@ -594,6 +679,10 @@ class Lang_controller
             50  =>  'Выполнено за: ',
             51  =>  'Поставить на паузу',
             52  =>  'Снять с паузы',
+            54  =>  'Сделать фильтр по умолчанию?',
+            55  =>  'Название фильтра',
+            56  =>  'Вы пытаетесь сохранить фильтр, которого даже не создали?! С какой планеты ты взялся? А, слыш?',
+            57  =>  'Вы действительно хотите удалить фильтр?',
 
         ];
 
@@ -631,6 +720,10 @@ class Lang_controller
             50  =>  'Achieved for: ',
             51  =>  'Pause',
             52  =>  'Remove pause',
+            54  =>  'Make the default filter?',
+            55  =>  'Name filter',
+            56  =>  'You are trying to save the filter, which is not even created?! On what planet do you come from? Hey, do you hear?',
+            57  =>  'Are you sure want to remove the filter?',
 
         ];
 

@@ -34,7 +34,31 @@ class Task extends CI_Controller {
 
         //указываем то, что мы обращаемся не через ajax
         $data['imFromIndexFunction'] = true;
-        $this->_additionalGetTask($data);
+
+        //получаем все сохраненные фильтры
+        $filters = $this->common_model->getResult('users', 'id_user', $data['idUser'], 'row_array', 'myFilters');
+        $filterForGetTask = "";
+        $data['myFilters'] = [];
+        if(!empty($filters))
+        {
+            if($filters['myFilters'] != "")
+            {
+                $data['myFilters'] = unserialize($filters['myFilters']);
+                foreach($data['myFilters'] as $k=>$v)
+                {
+                    //если фильтр должен отображаться по умолчанию, то передаем его в следующую функцию, чтобы он достал отфильтрованные задачи
+                    if(isset($v['filterDefault']))
+                    {
+                        $data['defaultFilter'] = $v; //эта ячейка нужна для того, чтобы правильно расставить фильтры при помощи js
+                        $filterForGetTask = $v; //эта нужна для выборки задач с фильтром
+                        break;
+                    }
+                }
+            }
+        }
+
+        //получаем задачи, которые на главной странице, так же исполнителей и некоторые первоначальные данные для добавления задачи
+        $this->_additionalGetTask($data, 0, $filterForGetTask);
 
         //приоритет задания
         $data['priority'] =  $this->common_model->getResult('priority', '', '', 'result_array', 'id_priority, icon, title_'.$data['segment'], 'id_priority', 'asc');
@@ -47,9 +71,12 @@ class Task extends CI_Controller {
         if(isset($data['filesAttach']['status']) || @empty($data['filesAttach']))
             unset($data['filesAttach']);
 
+
+
+
+
         $this->display_lib->display($data, $config['pathToViewDir']);
 	}
-
 
     /**
      * Создаем постраничную навигацию. Результат храниться в $data['pagination']
@@ -213,7 +240,19 @@ class Task extends CI_Controller {
                             {
                                 //в массив записываем только тех юзеров, которые не являются мной
                                 if($user['id_user'] != $data['idUser'])
-                                    $data['allUsersForFilters'][] =  ['id_user' => $user['id_user'], 'login' => $user['login'], 'name' => $user['name']];
+                                {
+                                    //проверяем, есть ли уже такой юзер в массиве
+                                    $hereHaveUser = false;
+                                    foreach($data['allUsersForFilters'] as $performer)
+                                    {
+                                        if($performer['id_user'] == $user['id_user'])
+                                            $hereHaveUser = true;
+                                    }
+
+                                    //если нет - добавляем
+                                    if($hereHaveUser === false)
+                                        $data['allUsersForFilters'][] =  ['id_user' => $user['id_user'], 'login' => $user['login'], 'name' => $user['name']];
+                                }
                             }
                         }
                     }
@@ -225,22 +264,33 @@ class Task extends CI_Controller {
 
                 $this->load->model('task_model');
 
+
                 //получаем фильтры
                 $filter = [];
                 if($allFilter != "")
                 {
                     //если false, то хорошие данные для фильтра переданы
                     $data['errorFilters'] = true;
-
                     if(!is_string($allFilter))
                     {
                         //$whatFilter - тут название столба в бд, по которому делаем фильтрацию
                         foreach($allFilter as $whatFilter => $numberArray)
                         {
-                            foreach(json_decode($numberArray) as $number)
+                            $numbersForFilter = [];
+                            //если через ajax обращаемся
+                            if(!isset($data['imFromIndexFunction']))
+                                $numbersForFilter = json_decode($numberArray);
+                            else
+                                $numbersForFilter = $numberArray;
+
+                            //проверяем объект ли это или массив
+                            if(is_array($numbersForFilter) || is_object($numbersForFilter))
                             {
-                                $data['errorFilters'] = false; //если false, то хорошие данные для фильтра переданы
-                                $filter[$whatFilter][] = intval($number);
+                                foreach($numbersForFilter as $number)
+                                {
+                                    $data['errorFilters'] = false; //если false, то хорошие данные для фильтра переданы
+                                    $filter[$whatFilter][] = intval($number);
+                                }
                             }
                         }
                     }
@@ -335,7 +385,7 @@ class Task extends CI_Controller {
      */
     public function getAllTask()
     {
-        $response = $this->common->isAjax(["idProject", 'int', 'notZero', 'notZero'], ['curent_page', 'int', 'notZero'], ['from', 'int', 'notZero'], ['allFilter', 'str']);
+        $response = $this->common->isAjax(["idProject", 'int', 'notZero'], ['curent_page', 'int', 'notZero'], ['from', 'int', 'notZero']);
         if($response['status'] != 'error')
         {
             $idProject = intval($this->common->clear($this->input->post('idProject', true)));
@@ -440,6 +490,8 @@ class Task extends CI_Controller {
         //получаем все проекты для данного юзера
         $data['myProjects'] = $this->_getProject($data['idUser'], 'id_project, title, team_ids', 'result_array', true);
 
+        //разрешаем подгрузку скриптов для input autocomplete
+        $data['useTagIt'] = true;
         //получаем всех прикрепленных юзеров к проекту и вставляем в ячейку, чтобы потом их отобразить во вьюхе
         foreach($data['myProjects'] as $val)
         {
@@ -1435,7 +1487,7 @@ class Task extends CI_Controller {
                 $new['title']           =   $titleTask;
                 $new['priority_id']     =   $priorityLevel;
                 $new['status']          =   '0'; // 0 - пока еще только добавленна
-                $new['text']            =   $this->common->clear($this->input->post('descTask', true));
+                $new['text']            =   preg_replace("/&amp;/iu", "&", $this->common->clear($this->input->post('descTask', true)));
                 $new['time_add']        =   time();
                 $new['day_start']       =   date('d');
                 $new['month_start']     =   date('m');
@@ -1590,7 +1642,6 @@ class Task extends CI_Controller {
         return $computeSec;
     }
 
-
     /**
      * Показываем полную информацию по заданию. Так сказать внутренности
      * Shows the full information on the instructions. So to say the insides
@@ -1677,7 +1728,6 @@ class Task extends CI_Controller {
 
         $this->display_lib->display($data, $config['pathToViewDir']);
     }
-
 
     /**
      * Считаем реальное количество времени, потраченное на выполнение задачи
@@ -1889,8 +1939,10 @@ class Task extends CI_Controller {
 
                     if(preg_match("/^[а-яА-ЯёЁa-zA-Z0-9\-_ !?()]{3,256}$/iu", $title))
                     {
-                        $new[$row_2] = $text;
+                        $text = preg_replace("/&amp;/iu", "&", $text);
+                        $title = preg_replace("/&amp;/iu", "&", $title);
                         $new[$row] = $title;
+                        $new[$row_2] = $text;
                     }
                     else
                         return $this->common->returnResponse($data,  $data['task_views'][19]." ".$data['task_views'][20]);
@@ -2094,7 +2146,6 @@ class Task extends CI_Controller {
         echo json_encode($response);
     }
 
-
     /**
      * (AJAX)
      * Удаление задачи
@@ -2154,5 +2205,186 @@ class Task extends CI_Controller {
         }
 
         echo json_encode($response);
+    }
+
+    /**
+     * Сохраняем фильтр в бд, чтобы потом быстро им пользоваться
+     * Save the filter in the database, then to use it quickly
+     */
+    public function saveMyFilter()
+    {
+        //проверяем на ajax и его параметры
+        $response = $this->common->isAjax(["nameFilter",'str'], ['defaultFilter', 'int'], ['allFilter', 'str']);
+        if($response['status'] != 'error')
+        {
+            $data = $response['data'];
+            unset($response['data']);
+
+            $this->load->model('common_model');
+
+            //проверяем значение поля "Сделать фильтр по умолчанию?"
+            $defaultFilter = intval($this->common->clear($this->input->post('defaultFilter')));
+            if($defaultFilter < 1 || $defaultFilter > 2)
+                return $this->common->returnResponse($data, $data['js'][29]." <i>'".$data['js'][54]."'</i> ".$data['js'][31]." <b>1</b> ".$data['js'][32]." <b>2</b>");
+
+            //проверяем имя фильтра
+            $nameFilter = $this->common->clear($this->input->post('nameFilter', true));
+            if(!preg_match("/^[а-яА-ЯёЁa-zA-Z0-9\-_ !?()]{3,256}$/iu", $nameFilter))
+                return $this->common->returnResponse($data, $data['js'][29]." '<i>".$data['js'][55]."</i>':<br> ".$data['js'][6].", !, ?, (, )");
+
+
+            $filterArr = [];
+            //получаем фильтры из бд, и если они были, то помещаем их в массив
+            $additionalInfoUser = $this->common_model->getResult('users', 'id_user', $data['idUser'], 'row_array', 'myFilters');
+            if($additionalInfoUser['myFilters'] != "")
+                $filterArr = unserialize($additionalInfoUser['myFilters']);
+
+            //делаем другой фильтр, который раньше был по дефолту, неактивным. Теперь новый фильтр будет по стандарту отображать задачи
+            if(!empty($filterArr) && $defaultFilter == 1)
+            {
+                foreach($filterArr as $k=>$v)
+                {
+                    if(isset($v['filterDefault']))
+                        unset($filterArr[$k]['filterDefault']);
+                }
+            }
+            //получаем последнюю ячейку массива, в которую вписываем новую информацию
+            $countFilter = count($filterArr);
+            if(isset($filterArr[$countFilter]))
+            {
+                //если ячейки уже существуют, то просто увеличиваем на 1 счетчик
+                while(true)
+                {
+                    $countFilter++;
+                    if(!isset($filterArr[$countFilter]))
+                        break;
+                }
+            }
+
+            //получаем все новые фильтры
+            $allFilter = json_decode($this->input->post('allFilter', true));
+            //заносим в общий массив фильтры
+            foreach($allFilter as $nameArray=>$arrayWithFilter)
+            {
+                foreach(json_decode($arrayWithFilter) as $num)
+                {
+                    $filterArr[$countFilter]['nameFilter'] = $nameFilter;
+                    $filterArr[$countFilter][$nameArray][] = intval($num);
+                }
+            }
+
+            //если хотят, чтобы фильтр был по умолчанию
+            if($defaultFilter == 1)
+                $filterArr[$countFilter]['filterDefault'] = 1;
+
+            $new = [];
+            $new['myFilters'] = serialize($filterArr);
+            //обновляем
+            $q = $this->common_model->updateData($new, 'id_user', $data['idUser'], 'users', true);
+            if($q > 0)
+                $response = ['status' => 'success', 'resultTitle' => $data['task_views'][22], "resultText" => $data['task_controller'][26].$data['task_controller'][28]];
+            else
+                return $this->common->returnResponse($data, $data['task_controller'][27]);
+        }
+
+        echo json_encode($response);
+    }
+
+
+    /**
+     * Удаляем фильтр и делаем новый по дефолту
+     * Remove the filter and make new by default
+     * @return bool
+     */
+    public function deleteMyFilter()
+    {
+        //проверяем на ajax и его параметры
+        $response = $this->common->isAjax(["idFilter", 'int', 'notZero']);
+        if($response['status'] != 'error')
+        {
+            $data = $response['data'];
+            unset($response['data']);
+
+            $this->load->model('common_model');
+
+            //проверяем значение поля "Сделать фильтр по умолчанию?"
+            $idFilter = intval($this->common->clear($this->input->post('idFilter')));
+
+            $filterArr = [];
+            //получаем фильтры из бд, и если они были, то помещаем их в массив
+            $additionalInfoUser = $this->common_model->getResult('users', 'id_user', $data['idUser'], 'row_array', 'myFilters');
+            if($additionalInfoUser['myFilters'] != "")
+                $filterArr = unserialize($additionalInfoUser['myFilters']);
+            else
+                return $this->common->returnResponse($data, $data['task_controller'][30]);
+
+            //если false, то это был фильтр не по дефолту
+            $filterDefault = false;
+            $findFilter = false;
+            //заносим в общий массив фильтры
+            foreach($filterArr as $k=>$filter)
+            {
+                //если ид равен с тем, который мы хотим удалить
+                if($k == $idFilter)
+                {
+                    $findFilter = true;
+                    //если это тот фильтр, который по дефолту
+                    if(isset($filter['filterDefault']))
+                        $filterDefault = true;
+
+                    unset($filterArr[$k]);
+                    break;
+                }
+            }
+
+            //если не нашли фильтр с таким id
+            if($findFilter === false)
+                return $this->common->returnResponse($data, $data['task_controller'][31]);
+
+            $new = [];
+            if(!empty($filterArr))
+            {
+                //делаем самый первый фильтр по дефолту
+                if($filterDefault === true)
+                {
+                    foreach ($filterArr as $k=>$v)
+                    {
+                        $filterArr[$k]['filterDefault'] = 1;
+                        break;
+                    }
+                }
+
+                $new['myFilters'] = serialize($filterArr);
+            }
+            else
+                $new['myFilters'] = "";
+
+
+            //обновляем
+            $q = $this->common_model->updateData($new, 'id_user', $data['idUser'], 'users', true);
+            if($q > 0)
+                $response = ['status' => 'success', 'resultTitle' => $data['task_views'][22], "resultText" => $data['task_controller'][29]];
+            else
+                return $this->common->returnResponse($data, $data['task_controller'][27]);
+        }
+
+        echo json_encode($response);
+    }
+
+    public function getM()
+    {
+        $this->load->model('common_model');
+        $additionalInfoUser = $this->common_model->getResult('users', 'id_user', 1, 'row_array', 'myFilters');
+
+        $q = unserialize($additionalInfoUser['myFilters']);
+
+
+        $new['myFilters'] = serialize($q);
+        //$this->common_model->updateData($new, 'id_user',1, 'users');
+        echo "<pre>";
+        print_r($q);
+        echo "</pre>";
+        exit;
+
     }
 }
