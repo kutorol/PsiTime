@@ -972,8 +972,8 @@ function editDescTask()
             //обновляем на странице название
             if(data.newTitle != $.trim(titleHtml.html()))
             {
-                $("#tastTitleInfo").fadeOut(150, function(){ $(this).html(data.newTitle.fadeIn(150));});
-                $("#changeTitleInfo").fadeOut(150, function(){ $(this).html(data.newTitle.fadeIn(150));  });
+                $("#tastTitleInfo").fadeOut(150, function(){ $(this).html(data.newTitle).fadeIn(150);});
+                $("#changeTitleInfo").fadeOut(150, function(){ $(this).html(data.newTitle).fadeIn(150);  });
             }
 
             if(data.newText != textHtml.html())
