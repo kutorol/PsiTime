@@ -350,7 +350,7 @@ if($statusUser == 1):?>
                             <div class="clearfix"></div>
                             <hr>
                             <div class="pull-left">
-                                <div class="btn btn-danger" onclick="saveMyFilter_1();">Сохранить фильтр</div>
+                                <div class="btn btn-danger" onclick="saveMyFilter_1();"><?=$task_views[94]?></div>
                             </div>
 
                             <div class="pull-right">
@@ -373,28 +373,28 @@ if($statusUser == 1):?>
             <div class="col-lg-9" >
 
                 <div class="row">
-                    <fieldset style="margin-top: 20px;"><legend>Поиск:</legend></fieldset>
+                    <fieldset style="margin-top: 20px;"><legend><?=$task_views[86]?>:</legend></fieldset>
                 </div>
                 <div class="row">
                     <form class="form-inline " onsubmit="getMeMySearch(); return false;">
                         <div class="form-group">
                             <div class="input-group">
-                                <input style="min-width: 300px;" type="text" class="form-control col-lg-6" id="getMySearch" placeholder="Введите поисковую фразу">
-                                <div class="input-group-addon btn btn-success" onclick="getMeMySearch();"> Искать</div>
+                                <input style="min-width: 300px;" type="text" class="form-control col-lg-6" id="getMySearch" placeholder="<?=$js[59]?>">
+                                <div class="input-group-addon btn btn-success" onclick="getMeMySearch();"> <?=$task_views[86]?></div>
                             </div>
-                            <div><span style="color: #b6b4b4;">Если ввести число, то поиск будет происходить по идентификатору задачи!</span></div>
+                            <div><span style="color: #b6b4b4;"><?=$task_views[87]?></span></div>
                         </div>
                     </form>
                 </div>
 
                 <?php if(!empty($myFilters)):?>
                     <div class="row">
-                        <fieldset><legend>Мои фильтры:</legend></fieldset>
+                        <fieldset><legend><?=$task_views[88]?></legend></fieldset>
                     </div>
 
                     <div id="myFilters" class="row">
 
-                            <span class="clickLabel" filter="yes" id="withoutFilterLabel">Без фильтров</span>
+                            <span class="clickLabel" filter="yes" id="withoutFilterLabel"><?=$task_views[89]?></span>
 
                             <?php
                             $haveDefault = false;
@@ -421,7 +421,9 @@ if($statusUser == 1):?>
                         <script>
                             $(function(){
                                 <?php if($haveDefault === false):?>
+                                    //если нет по дефолту фильтра сохраненого, то делаем активной вкладку "без фильтров"
                                     $("#withoutFilterLabel").addClass("activeLabel");
+                                    //и показываем выбор фильтров вручную
                                     $("#showOrHideAllFilter").fadeIn(500);
                                 <?php endif;?>
                             });
@@ -436,7 +438,7 @@ if($statusUser == 1):?>
                 <?php endif;?>
 
                 <div class="row">
-                    <fieldset style="margin-top: 20px;"><legend>Задачи:</legend></fieldset>
+                    <fieldset style="margin-top: 20px;"><legend><?=$task_views[90]?></legend></fieldset>
                 </div>
                 <div class="row table-task" style="margin-top: -10px;" id="allTaskHere">
                     <?php if(!empty($myProjects)):?>
@@ -463,22 +465,18 @@ if($statusUser == 1):?>
 
     <div style="display: none;" id="contentSaveFilter">
         <p>
-
-
-            <input type="text" class="form-control nameFilterSaveInput" name="nameFilterSaveInput" value="" placeholder="Имя фильтра">
-
-
+            <input type="text" class="form-control nameFilterSaveInput" name="nameFilterSaveInput" value="" placeholder="<?=$task_views[91]?>">
             <div class="input-group col-xs-6">
-                Сделать фильтр по умолчанию? <br>
+                <?=$js[54]?> <br>
 
                 <div class="btn-group" data-toggle="buttons" id="filterAgree">
                     <label class="btn btn-default active">
                         <input type="radio" class="radioSaveFilter" name="saveMePLS" value="1" checked>
-                        Да
+                        <?=$task_views[92]?>
                     </label>
                     <label class="btn btn-default">
                         <input type="radio" class="radioSaveFilter" name="saveMePLS" value="2">
-                        Нет
+                        <?=$task_views[93]?>
                     </label>
                 </div>
             </div>

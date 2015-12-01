@@ -17,7 +17,7 @@ function getMeMySearch()
 
     if(/^[a-zA-Zа-яА-ЯёЁ0-9-_ ]{3,256}$/.test(titleTask) === false)
     {
-        errorMessage += "<li>" + jsLang[28] + " '<i>"+"Введите поисковую фразу"+"</i>':<br>" + jsLang[6] + "</li>";
+        errorMessage += "<li>" + jsLang[28] + " '<i>"+jsLang[59]+"</i>':<br>" + jsLang[6] + "</li>";
         fail = true;
     }
 
@@ -450,7 +450,7 @@ function saveMyFilter_2()
     {
         //fixme не могу получить значени из input (пробовал textarea и div с аттрибутом contenteditable), поэтому я прохожусь в цикле и беру самое последнее значение!!!.
         //получаем название фильтра
-        var nameFilter;
+        var nameFilter = '';
         $('.nameFilterSaveInput').each(function() {
             nameFilter = $(this).val();
         });
@@ -544,8 +544,8 @@ function saveMyFilter_1()
 
     if(allFilter !== false)
     {
-        $("#myModal .modal-footer").prepend('<button type="button" class="btn btn-success" id="saveGreenBtnFilter" onclick="saveMyFilter_2();">Сохранить</button>');
-        showModal("Сохраняем фильтр", $("#contentSaveFilter").html());
+        $("#myModal .modal-footer").prepend('<button type="button" class="btn btn-success" id="saveGreenBtnFilter" onclick="saveMyFilter_2();">'+jsLang[4]+'</button>');
+        showModal(jsLang[58], $("#contentSaveFilter").html());
     }
 }
 

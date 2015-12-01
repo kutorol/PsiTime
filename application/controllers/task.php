@@ -2404,7 +2404,7 @@ class Task extends CI_Controller {
                     $myIdProjects[] = $project['id_project'];
             }
             else
-                return $this->common->returnResponse($data, "У вас нет ни одного проекта");
+                return $this->common->returnResponse($data, $data['task_controller'][32]);
 
 
             $this->load->model('task_model');

@@ -319,6 +319,7 @@ class Lang_controller
             29      =>  "Фильтр удален. Теперь самый первый фильтр будет отображаться по умолчанию",
             30      =>  "У вас нет никаких фильтров, а вы пытаетесь удалить их! Наглец... Полиция!! Полиция!!!",
             31      =>  "У вас нет фильтра с таким идентификатором!",
+            32      =>  "У вас нет ни одного проекта!",
         ];
 
         /********************************************
@@ -359,6 +360,7 @@ class Lang_controller
             29      =>  "The filter is removed. Now the very first filter will be displayed by default",
             30      =>  "You have no filters, and you try to remove them! Squirt ... Police !! Police!!!",
             31      =>  "You do not have a filter with this id!",
+            32      =>  "You do not have any project!",
 
         ];
 
@@ -449,6 +451,15 @@ class Lang_controller
             83  =>  "По исполнителю:",
             84  =>  "Мои задачи",
             85  =>  "Сбросить фильтры",
+            86  =>  "Поиск",
+            87  =>  "Если ввести число, то поиск будет происходить по идентификатору задачи!",
+            88  =>  "Мои фильтры:",
+            89  =>  "Без фильтров",
+            90  =>  "Задачи:",
+            91  =>  "Имя фильтра",
+            92  =>  "Да",
+            93  =>  "Нет",
+            94  =>  "Сохранить фильтр",
 
             'status_task_0'      =>  'Поставлена',
             'status_task_1'      =>  'Выполняется',
@@ -544,6 +555,15 @@ class Lang_controller
             83  =>  "By performer:",
             84  =>  "My tasks",
             85  =>  "Reset filters",
+            86  =>  "Search",
+            87  =>  "If you enter a number, the search will be on the identifier of the task!",
+            88  =>  "My filters:",
+            89  =>  "Without filter",
+            90  =>  "Tasks:",
+            91  =>  "Filter name",
+            92  =>  "Yes",
+            93  =>  "No",
+            94  =>  "Save the filter",
 
             'status_task_0'      =>  'Supplied',
             'status_task_1'      =>  'Running',
@@ -683,6 +703,8 @@ class Lang_controller
             55  =>  'Название фильтра',
             56  =>  'Вы пытаетесь сохранить фильтр, которого даже не создали?! С какой планеты ты взялся? А, слыш?',
             57  =>  'Вы действительно хотите удалить фильтр?',
+            58  =>  'Сохраняем фильтр',
+            59  =>  'Введите поисковую фразу',
 
         ];
 
@@ -724,6 +746,8 @@ class Lang_controller
             55  =>  'Name filter',
             56  =>  'You are trying to save the filter, which is not even created?! On what planet do you come from? Hey, do you hear?',
             57  =>  'Are you sure want to remove the filter?',
+            58  =>  'Save Filter',
+            59  =>  'Enter search phrase',
 
         ];
 
