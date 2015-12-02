@@ -18,7 +18,7 @@ class Chart_model extends CI_Model {
      */
     public function getAllTaskForMyProjects($performer_id, $projects)
     {
-        $sql = "SELECT task.project_id, task.pause, task.pause_for_complite, users.hoursInDayToWork, users.name, users.login
+        $sql = "SELECT task.project_id, task.pause, task.pause_for_complite, task.project_id ,users.hoursInDayToWork, users.name, users.login
                 FROM task
                 LEFT JOIN users ON (users.id_user = task.performer_id)
                 WHERE task.performer_id = ".$performer_id."

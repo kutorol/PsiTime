@@ -252,6 +252,9 @@ class Chart extends CI_Controller {
             ],
             'needDo'    =>  [
                 'main'      =>  $data['chart_controller']['squareChar'][2]
+            ],
+            'time'      =>  [
+                'title' =>  $data['chart_controller']['squareChar'][3]
             ]
         ];
         $data['titleForJsCPSquare']['complete']['subtitle'] = $data['titleForJsCPSquare']['needDo']['subtitle'] = $data['titleForJsCPSquare']['all']['subtitle'];
@@ -333,6 +336,14 @@ class Chart extends CI_Controller {
 
             foreach($allIdTeam as $k=>$idOneUser)
             {
+                //создаем ячейки под проекты
+                foreach($idOneUser['id_project'] as $id_project)
+                {
+                    //создаем ячейки, для определения времени, которое затратили на определенный проект юзеры
+                    if(!isset($data['timeForProject'][$idOneUser[0]]['project_'.$id_project]))
+                        $data['timeForProject'][$idOneUser[0]]['project_'.$id_project] = ['allWorkDays'=>0, 'allWorkHours'=>0, 'allWorkMinutes'=>0, 'allWorkSeconds'=>0];
+                }
+
                 //получаем все задачи для всех юзеров, которые есть в проектах данного юзера, которые получает эту страницу
                 $taskUsers[$k] = $this->chart_model->getAllTaskForMyProjects($idOneUser[0], implode(',', $idOneUser['id_project']));
                 if(!empty($taskUsers[$k]))
@@ -343,11 +354,18 @@ class Chart extends CI_Controller {
                     {
                         //получаем имя
                         $data['timeForUser'][$idOneUser[0]]['name'] = $task['name']." (".$task['login'].")";
+
+                        //получаем все имена юзеров, для графика для конкретных проектов
+                        if(!isset($data['timeForProject'][$idOneUser[0]]['name']))
+                            $data['timeForProject'][$idOneUser[0]]['name'] = $data['timeForUser'][$idOneUser[0]]['name'];
+
                         //получаем сколько часов в день работает данный юзер
                         $data['timeForUser'][$idOneUser[0]]['hoursInDayToWork'] = $task['hoursInDayToWork'];
                         //получаем сколько дней, часов, минут, секунд он выполнял полученные задания
                         $this->_computeTimeForEnd($taskUsers[$k][$key], $data);
 
+
+                        //для всех проектов
                         //считаем сколько всего было затрачено времени на выполнение всех задач
                         $data['timeForUser'][$idOneUser[0]]['allWorkDays'] += $taskUsers[$k][$key]['howWorkDay'];
 
@@ -371,7 +389,31 @@ class Chart extends CI_Controller {
                             $data['timeForUser'][$idOneUser[0]]['allWorkMinutes']++;
                             $data['timeForUser'][$idOneUser[0]]['allWorkSeconds'] -= 60;
                         }
+
+                        //для проекта
+                        $data['timeForProject'][$idOneUser[0]]['project_'.$task['project_id']]['allWorkDays'] += $taskUsers[$k][$key]['howWorkDay'];
+                        $data['timeForProject'][$idOneUser[0]]['project_'.$task['project_id']]['allWorkHours'] += $taskUsers[$k][$key]['howHour'];
+                        if($data['timeForProject'][$idOneUser[0]]['project_'.$task['project_id']]['allWorkHours'] >= $taskUsers[$k][$key]['hoursInDayToWork'])
+                        {
+                            $data['timeForProject'][$idOneUser[0]]['project_'.$task['project_id']]['allWorkDays']++;
+                            $data['timeForProject'][$idOneUser[0]]['project_'.$task['project_id']]['allWorkHours'] -= $data['hoursInDayToWork'];
+                        }
+
+                        $data['timeForProject'][$idOneUser[0]]['project_'.$task['project_id']]['allWorkMinutes'] += $taskUsers[$k][$key]['howMinute'];
+                        if($data['timeForProject'][$idOneUser[0]]['project_'.$task['project_id']]['allWorkMinutes'] >= 60)
+                        {
+                            $data['timeForProject'][$idOneUser[0]]['project_'.$task['project_id']]['allWorkHours']++;
+                            $data['timeForProject'][$idOneUser[0]]['project_'.$task['project_id']]['allWorkMinutes'] -= 60;
+                        }
+
+                        $data['timeForProject'][$idOneUser[0]]['project_'.$task['project_id']]['allWorkSeconds'] += $taskUsers[$k][$key]['howSecond'];
+                        if($data['timeForUser'][$idOneUser[0]]['allWorkSeconds'] >= 60)
+                        {
+                            $data['timeForProject'][$idOneUser[0]]['project_'.$task['project_id']]['allWorkMinutes']++;
+                            $data['timeForProject'][$idOneUser[0]]['project_'.$task['project_id']]['allWorkSeconds'] -= 60;
+                        }
                     }
+
 
                     //высчитываем количество времени в часах, которое было потрачено на все выполненые задания в полученных проектах
                     $data['timeForUser'][$idOneUser[0]]['allTime'] = ($data['timeForUser'][$idOneUser[0]]['allWorkDays'] * $data['timeForUser'][$idOneUser[0]]['hoursInDayToWork']) + $data['timeForUser'][$idOneUser[0]]['allWorkHours'] + $data['timeForUser'][$idOneUser[0]]['allWorkMinutes']/60 + $data['timeForUser'][$idOneUser[0]]['allWorkSeconds']/3600;
@@ -404,8 +446,12 @@ class Chart extends CI_Controller {
                 else
                 {
                     //получаем логин и имя юзера
-                    $query = $this->common_model->getResult('users', 'id_user', $idOneUser[0], 'row_array', 'name, login');
+                    $query = $this->common_model->getResult('users', 'id_user', $idOneUser[0], 'row_array', 'name, login, hoursInDayToWork');
                     $data['timeForUser'][$idOneUser[0]]['name'] = $query['name']." (".$query['login'].")";
+                    $data['timeForUser'][$idOneUser[0]]['hoursInDayToWork'] = $query['hoursInDayToWork'];
+
+                    //получаем все имена юзеров, для графика для конкретных проектов
+                    $data['timeForProject'][$idOneUser[0]]['name'] = $data['timeForUser'][$idOneUser[0]]['name'];
 
                     //по порядку вставляем null для правильного отображения графика
                     $this->_addNullsToSeries($k, $data['timeForUser'][$idOneUser[0]]['name'], 0, $data);
@@ -414,6 +460,71 @@ class Chart extends CI_Controller {
                     $data['allTimesUser'][$idOneUser[0]] = "0 ".$data['task_controller'][15];
                 }
             }
+
+
+            //тут будут находиться все ид проектов, чтобы потом получить их имена
+            $tmpAllProjects = [];
+            //формируем массив для времени по каждому проекту
+            foreach($data['timeForProject'] as $id_user=>$projects)
+            {
+                foreach($projects as $nameArr=>$project)
+                {
+                    //получаем ид проекта
+                    $i_count = preg_replace("/project_/iu", "", $nameArr);
+                    if(is_array($project))
+                    {
+                        //если в массиве еще нет такого ид
+                        if(array_search($i_count, $tmpAllProjects) === false)
+                            $tmpAllProjects[] = $i_count;
+
+                        //высчитываем количество времени в часах, которое было потрачено на все выполненые задания в конкретном проекте
+                        $data['timeForProject'][$id_user]['allTime'][$i_count] = ($project['allWorkDays'] * $data['timeForUser'][$id_user]['hoursInDayToWork']) + $project['allWorkHours'] + $project['allWorkMinutes']/60 + $project['allWorkSeconds']/3600;
+                        //округляем до 3 цифр после запятой
+                        $data['timeForProject'][$id_user]['allTime'][$i_count] = round($data['timeForProject'][$id_user]['allTime'][$i_count], 3);
+
+                        unset($data['timeForProject'][$id_user][$nameArr]);
+                        if($data['timeForProject'][$id_user]['allTime'][$i_count] == 0)
+                            $data['timeForProject'][$id_user]['allTime'][$i_count] = "null";
+                    }
+                }
+
+                //сортируем по значению
+                asort($tmpAllProjects);
+            }
+
+            $data['seriesForTimeForProject'] = "";
+            //добавляем null в те ячейки, которые были не созданы
+            foreach($data['timeForProject'] as $id_user=>$times)
+            {
+                foreach($times as $time)
+                {
+                    if(is_array($time))
+                    {
+                        foreach($tmpAllProjects as $numProject)
+                        {
+                            if(!isset($time[$numProject]))
+                                $data['timeForProject'][$id_user]['allTime'][$numProject] = "null";
+                        }
+                    }
+                }
+
+                //сортируем по ключу
+                ksort($data['timeForProject'][$id_user]['allTime']);
+                //состовляем строку данных для графика
+                $data['seriesForTimeForProject'] .= "{name: '".$data['timeForProject'][$id_user]['name']."', data: [".implode(', ', $data['timeForProject'][$id_user]['allTime'])."]},";
+            }
+            //т.к. я не стал пользоваться json_encode, поэтому обязательно обнести скобками
+            $data['seriesForTimeForProject'] = "[".$data['seriesForTimeForProject']."]";
+
+            //получаем все имена проектов
+            $allTitleProjects = $this->common_model->getResult('projects', 'id_project', $tmpAllProjects, 'result_array', 'title', 'id_project', 'asc', true);
+            $stroka = "";
+            //компануем все проекты в отсортированном порядке
+            foreach($allTitleProjects as $title)
+                $stroka .= "'".$title['title']."',";
+
+            //также обносим скобками
+            $data['seriesForTimeForProjectTitle'] = "[".$stroka."]";
 
             //конвертируем в json
             $this->_jsonConvert($data, ['series']);

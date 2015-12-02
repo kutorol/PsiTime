@@ -66,6 +66,7 @@
             }
 
 
+
             //цвета графиков для "сложности"
             var colorComplexity =  <?=$colorsForJsComplexity?>;
             //цвета графиков для "приоритета"
@@ -74,12 +75,56 @@
             //языковые данные, по каждому из графиков, на том языке, который выбрал юзер в строке браузера
             var titleCircle = <?=$titleForJsCPCircle?>;
             var titleSquare = <?=$titleForJsCPSquare?>;
+
         <?php endif;?>
 
 
         $(function () {
 
             <?php if(!isset($notProject)):?>
+
+                $('#containerTimeAllProjects').highcharts({
+                    chart: {
+                        type: 'column',
+                        options3d: {
+                            enabled: true,
+                            alpha: 15,
+                            beta: 15,
+                            viewDistance: 25,
+                            depth: 40
+                        },
+                        marginTop: 80,
+                        marginRight: 40
+                    },
+                    title: {
+                        text: titleSquare.time.title
+                    },
+                    subtitle: {
+                        text: titleSquare.all.subtitle
+                    },
+                    xAxis: {
+                        categories: <?=$seriesForTimeForProjectTitle?>,
+                    },
+                    yAxis: {
+                        allowDecimals: false,
+                        min: 0,
+                        title: {
+                            text: "<?=$chart_view[12]?>"
+                        }
+                    },
+                    tooltip: {
+                        headerFormat: '<b>{point.key}</b><br>',
+                        pointFormat: '<span style="color:{series.color}">\u25CF</span> {series.name}: {point.y} <?=$task_controller[18]?>/ {point.stackTotal}<?=$task_controller[18]?>'
+                    },
+                    plotOptions: {
+                        column: {
+                            stacking: 'normal',
+                            depth: 50
+                        }
+                    },
+                    series: <?=$seriesForTimeForProject?>
+                });
+
                 //показываем вначале только графиги с сортировкой по сложности
                 $('#containerTimeAllUsers').highcharts({
                     chart: {
@@ -100,12 +145,6 @@
                     subtitle: {
                         text: '<?=$chart_view[11]?>'
                     },
-                    plotOptions: {
-                        column: {
-                            depth: 25
-                        }
-                    },
-
                     yAxis: {
                         allowDecimals: false,
                         min: 0,
@@ -186,6 +225,12 @@
                 <div class="container" >
                     <div class="row">
                         <div id="containerTimeAllUsers" style="min-width: 310px; height: 400px; max-width: 900px; margin: 0 auto"></div>
+                    </div>
+                </div>
+
+                <div class="container" >
+                    <div class="row">
+                        <div id="containerTimeAllProjects" style="min-width: 310px; height: 400px; max-width: 900px; margin: 0 auto"></div>
                     </div>
                 </div>
             </div>

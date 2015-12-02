@@ -591,6 +591,7 @@ class Lang_controller
                 0   =>  "Количественное соотношение задач в проекте",
                 1   =>  "Количественное соотношение задач в проекте, со статусом 'выполнено'",
                 2   =>  "Количественное соотношение задач в проекте, которые выполняются",
+                3   =>  "Потраченное время на каждый проект",
             ],
         ];
 
@@ -613,6 +614,7 @@ class Lang_controller
                 0   =>  "Quantitative ratio of tasks in the project",
                 1   =>  "The quantitative ratio of tasks in the project, with the status 'Completed'",
                 2   =>  "Quantitative ratio of tasks in the project which are carried out",
+                3   =>  "The time spent on each project",
             ],
         ];
 
