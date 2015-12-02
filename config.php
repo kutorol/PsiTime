@@ -19,7 +19,7 @@ define('HOST_DB', 'localhost');
  * Первоначальные данные администратора
  * Initial data administrator
  */
-define('ADMIN_EMAIL', 'admin@admin.ru'); //на email будут высылаться системные уведомления
+define('ADMIN_EMAIL', 'admin@admin.ru'); //TODO на email будут высылаться системные уведомления 
 define('ADMIN_PASS', 'admin');
 define('ADMIN_LOGIN', 'admin');
 define('ADMIN_NAME', 'Administrator');
