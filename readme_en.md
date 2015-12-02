@@ -1,6 +1,6 @@
 # System of the accounting of time for projects
 
-  - *Русская версия [Readme.md][RReadme]*
+  - *Р СѓСЃСЃРєР°СЏ РІРµСЂСЃРёСЏ [Readme.md][RReadme]*
 
 In this project I tried to make similarity of Jira, only everything consists completely of mine "crutches and bicycles". That is in a box:
 
