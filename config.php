@@ -1,6 +1,12 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 /**
+* Отображает красиво вывод массивов через d(array());
+* Displays beautiful conclusion arrays by d(array());
+*/
+require_once "vendor/autoload.php";
+
+/**
  * Если заполнено - это значит то, что человек закончил установку и то, что он вообще редактировал этот файл
  * If filled - it means that the person has finished the installation and the fact that he did edit this file
  */
@@ -28,7 +34,7 @@ define('MAX_WORK_TIME_IN_DAY', '8'); //количество рабочих ча�
 
 //!!!!!!!! вконце обязательно поставить "/", а в начале http://
 //!!!!!!!! be sure to put at the end of "/", do not forget http://
-define('SITE_URL', 'http://time.log/');
+define('SITE_URL', 'http://PsiTime.org/');
 
 /**
  * Постраничная навигация.

@@ -34,7 +34,7 @@
 
                                 <div class="form-group">
                                     <label for="textTask"><?=$task_views[39]?>:</label>
-                                    <textarea  class="form-control" placeholder="<?=$task_views[39]?>"  onkeypress="if(event.ctrlKey && event.keyCode==13) {$('#saveEditTask').click(); return false;}" rows="5" id="textTaskInfo"><?=$infoTask['text']?></textarea>
+                                    <textarea class="form-control" placeholder="<?=$task_views[39]?>"  onkeypress="if(event.ctrlKey && event.keyCode==13) {$('#saveEditTask').click(); return false;}" rows="5" id="textTaskInfo"><?=preg_replace("/<br>/iu", chr(13), $infoTask['text'])?></textarea>
                                 </div>
 
                                 <div class="form-group">

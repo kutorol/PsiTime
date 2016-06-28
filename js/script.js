@@ -71,7 +71,7 @@ function deleteData(url, selector, id, dontRemoveNext, redirect)
             ajaxRequestJSON(url);
             $.ajax({
                 // параметры запроса, передаваемые на сервер (последний - подстрока для поиска):
-                data: {id: id, redirect: redirect},
+                data: {id: id, redirect: ""+redirect},
                 // обработка успешного выполнения запроса
                 success: function(data)
                 {
@@ -983,7 +983,10 @@ function editDescTask()
             //закрываем форму редактирования задачи
             $(".editTaskA").click();
             title.val(data.newTitle);
-            $("#textTaskInfo").val(data.newText);
+            //заменяем для textarea все enter, чтобы перенести на новую строчку. g - глобально искать совпадение
+            $("#textTaskInfo").val(
+                data.newText.replace(new RegExp("<br>",'g'), String.fromCharCode(13))
+            );
 
             hideLoad();
         }

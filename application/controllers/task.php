@@ -72,9 +72,6 @@ class Task extends CI_Controller {
             unset($data['filesAttach']);
 
 
-
-
-
         $this->display_lib->display($data, $config['pathToViewDir']);
 	}
 
@@ -1487,7 +1484,9 @@ class Task extends CI_Controller {
                 $new['title']           =   $titleTask;
                 $new['priority_id']     =   $priorityLevel;
                 $new['status']          =   '0'; // 0 - пока еще только добавленна
-                $new['text']            =   preg_replace("/&amp;/iu", "&", $this->common->clear($this->input->post('descTask', true)));
+                //делаем описание задачи с переводами на новую строку
+                $new['text']            =   preg_replace("/&amp;/iu", "&", $this->common->clear($this->common->deleteSpecifityData($this->input->post('descTask', true)), "<br>"));
+                $new['text']            =   preg_replace("/&lt;br&gt;/iu", "<br>", $new['text']);
                 $new['time_add']        =   time();
                 $new['day_start']       =   date('d');
                 $new['month_start']     =   date('m');
@@ -1885,7 +1884,9 @@ class Task extends CI_Controller {
             $failDesc = false;
             if(isset($_POST['title']) != '' && isset($_POST['text']))
             {
-                $text = $this->common->clear($this->input->post('text', true));
+                //обрабатываем описание задачи, чтобы там были enter'ы
+                $text  =  preg_replace("/&amp;/iu", "&", $this->common->clear($this->common->deleteSpecifityData($this->input->post('text', true)), "<br>"));
+                $text  =  preg_replace("/&lt;br&gt;/iu", "<br>", $text);
                 $title = $this->common->clear($this->input->post('title', true));
             }
             else
@@ -1939,7 +1940,6 @@ class Task extends CI_Controller {
 
                     if(preg_match("/^[а-яА-ЯёЁa-zA-Z0-9\-_ !?()]{3,256}$/iu", $title))
                     {
-                        $text = preg_replace("/&amp;/iu", "&", $text);
                         $title = preg_replace("/&amp;/iu", "&", $title);
                         $new[$row] = $title;
                         $new[$row_2] = $text;
@@ -2085,6 +2085,7 @@ class Task extends CI_Controller {
                     //новое значение
                     $new[$row] = $num;
                 }
+
 
                 $q = $this->common_model->updateData($new, 'id_task', $idTask, 'task', true);
                 if($q > 0)

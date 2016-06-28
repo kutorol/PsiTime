@@ -254,14 +254,34 @@ class Common
 
 
     /**
+     * Получаем строку и заменяем в ней специальные символы на нужный нам тег (используется в добавлении задачи, чтобы текст переносился на новую строку
+     * We receive a line and we replace in it special characters with a tag necessary to us (it is used in adding of the task that the text was transferred to a new line)
+     * @param string $string - строка, в которой заменяем символы (line in which we replace characters)
+     * @param string $replaceOn - на что нужно заменить перенос (what it is necessary to replace transfer with)
+     * @return mixed|string
+     */
+    public function deleteSpecifityData($string = "", $replaceOn = "<br>")
+    {
+        if(trim($string) == "")
+            return "";
+
+        $string = str_replace("\r", '', $string);
+        $string = str_replace("\n", $replaceOn, $string);
+        $string = str_replace("\t", '', $string);
+
+        return $string;
+    }
+
+    /**
      * чистит данные
      * clean data
      * @param string $input
+     * @param string $exceptTags - здесь те теги, которые мы хотим оставить (there are those tags which we want to leave)
      * @return string
      */
-    public function clear($input = '')
+    public function clear($input = '', $exceptTags = '')
     {
-        return trim(strip_tags(stripslashes(mysql_real_escape_string(htmlspecialchars($input)))));
+        return trim(strip_tags(stripslashes(mysql_real_escape_string(htmlspecialchars($input)))), $exceptTags);
     }
 
     /**

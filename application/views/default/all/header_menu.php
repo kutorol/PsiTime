@@ -18,7 +18,7 @@
 
                     <li>
                         <a class="navbar-brand" href="<?=$startUrl?><?=($login != "") ? "/task" : "";?>">
-                            TimeBig <span style="color: rgb(91, 192, 222);">&beta;eta</span>
+                            PsiTime <span style="color: rgb(91, 192, 222);">&beta;eta</span>
                         </a>
                     </li>
 

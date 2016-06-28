@@ -349,8 +349,7 @@ if ( ! function_exists('log_message'))
 	{
         //если не исключить эту ошибку, то она постоянно при каждом действии будет добавляться в лог
         // if not exclude this error, it is constantly at each action will be added to the log
-        $excludeError = 'Severity: 8192  --> mysql_pconnect(): The mysql extension is deprecated and will be removed in the future: use mysqli or PDO instead Z:\home\time.log\www\system\database\drivers\mysql\mysql_driver.php 92';
-        if($excludeError != $message)
+        if(strripos($message, "mysql_pconnect(): The mysql extension is deprecated") === false)
         {
             static $_log;
 

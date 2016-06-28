@@ -149,16 +149,16 @@ class Lang_controller
          * ******************************************
          */
         $lang['lang_ru']['welcome_controller'] = [
-            0   =>  'Добро пожаловать в TimeBig',
+            0   =>  'Добро пожаловать в PsiTime',
             1   =>  $lang['input_form_lang'][0][$segment],
             2   =>  $lang['input_form_lang'][2][$segment],
             4   =>  'Вы вошли под логином - ',
             5   =>  'Пользователя с таким логином и паролем не найдено!',
             6   =>  'Введите все данные в форму!',
             7   =>  'Вы успешно вышли!',
-            8   =>  'Востановления пароля в TimeBig',
+            8   =>  'Востановления пароля в PsiTime',
             9   =>  [
-                        'Вы восстановили пароль в TimeBig. <br>Ваш логин: <b>',
+                        'Вы восстановили пароль в PsiTime. <br>Ваш логин: <b>',
                         '</b><br> Ваш новый пароль: <b><i>',
                         '</i></b>'
                     ],
@@ -167,7 +167,7 @@ class Lang_controller
             13  =>  'Ошибка! Не получилось обновить данные. Попробуйте еще раз.',
             14  =>  'Пользователя с таким email не найдено!',
             15  =>  'Введите ваш email в форму!',
-            16  =>  'Регистрация нового аккаунта в TimeBig',
+            16  =>  'Регистрация нового аккаунта в PsiTime',
             17  =>  $lang['input_form_lang'][1][$segment],
             18  =>  $lang['input_form_lang'][3][$segment],
             19  =>  [
@@ -175,7 +175,7 @@ class Lang_controller
                         '</b><br> Ваш пароль: <b><i>',
                         '</i></b>.'
                     ],
-            20  =>  ', добро пожаловать в TimeBig!',
+            20  =>  ', добро пожаловать в PsiTime!',
             21  =>  'На указанную почту было отправлено письмо с вашими данными и дальнейшими действиями!',
             22  =>  'Ошибка! Произошел сбой при регистрации. Попробуйте еще раз!',
             23  =>  'Страница изменения пароля',
@@ -203,16 +203,16 @@ class Lang_controller
          * ******************************************
          */
         $lang['lang_en']['welcome_controller'] = [
-            0   =>  'Welcome to TimeBig',
+            0   =>  'Welcome to PsiTime',
             1   =>  $lang['input_form_lang'][0][$segment],
             2   =>  $lang['input_form_lang'][2][$segment],
             4   =>  'You went under the login - ',
             5   =>  'User with such password and username are not found!',
             6   =>  'Enter data into the form!',
             7   =>  'You have successfully logout!',
-            8   =>  'Recovering password TimeBig',
+            8   =>  'Recovering password PsiTime',
             9   =>  [
-                'You have restored password TimeBig. <br>Your login: <b>',
+                'You have restored password PsiTime. <br>Your login: <b>',
                 '</b><br> Your new password: <b><i>',
                 '</i></b>'
             ],
@@ -221,15 +221,15 @@ class Lang_controller
             13  =>  'Error! It did not work to update the data. Try again.',
             14  =>  'No user with this email will not be found!',
             15  =>  'Enter your email address in the form below!',
-            16  =>  'Register a new account in TimeBig',
+            16  =>  'Register a new account in PsiTime',
             17  =>  $lang['input_form_lang'][1][$segment],
             18  =>  $lang['input_form_lang'][3][$segment],
             19  =>  [
-                ', you are logged in TimeBig. <br>Your login: <b>',
+                ', you are logged in PsiTime. <br>Your login: <b>',
                 '</b><br> Your password: <b><i>',
                 '</i></b>.'
             ],
-            20  =>  ', welcome to TimeBig!',
+            20  =>  ', welcome to PsiTime!',
             21  =>  'On the specified e-mail was sent an email with your data and further actions!',
             22  =>  'Error! There was a failure in the registration. Try again!',
             23  =>  'Change Password page',
@@ -260,7 +260,7 @@ class Lang_controller
         $lang['lang_ru']['common_library'] = [
             0   =>  'Ебанутый логин ваш!',
             1   =>  'Вы уже зашли под логином - ',
-            2   =>  'Вы уже зашли в TimeBig',
+            2   =>  'Вы уже зашли в PsiTime',
             4   =>  'Очень странная ошибка... Попробуйте заново авторизоваться!',
             5   =>  'Какие то неправильные куки! Попрошу не издеваться!',
         ];
@@ -273,7 +273,7 @@ class Lang_controller
         $lang['lang_en']['common_library'] = [
             0   =>  'Fucked your login!',
             1   =>  "You've come under a login - ",
-            2   =>  'You are already logged in TimeBig',
+            2   =>  'You are already logged in PsiTime',
             4   =>  'Very strange error ... Try again to login!',
             5   =>  'What is wrong cookies! I ask not fun!',
         ];
@@ -287,7 +287,7 @@ class Lang_controller
          * ******************************************
          */
         $lang['lang_ru']['task_controller'] = [
-            0       =>  'Личный кабинет в TimeBig пользователя: <span class="label label-success">%login%</span>',
+            0       =>  'Личный кабинет в PsiTime пользователя: <span class="label label-success">%login%</span>',
             1       =>  'Страница добавления нового проекта',
             2       =>  'Файл весит больше 60 Мб',
             3       =>  'Не удалось удалить файл!',
@@ -328,7 +328,7 @@ class Lang_controller
          * ******************************************
          */
         $lang['lang_en']['task_controller'] = [
-            0       =>  'Personal account in TimeBig user: <span class="label label-success">%login%</span>',
+            0       =>  'Personal account in PsiTime user: <span class="label label-success">%login%</span>',
             1       =>  'The page for adding a new project',
             2       =>  'The file size more than 60 MB',
             3       =>  'Failed to delete the file!',

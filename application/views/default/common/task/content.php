@@ -20,7 +20,7 @@
                     <?php foreach($allTasks as $k=>$task):?>
                         <tr class="row_task_<?=$task['id_task'];?>" id="rowTrTaskAll_<?=$task['id_task'];?>">
                             <td colspan="6" style="border-bottom: none;">
-                                <a style="<?php if($task['status'] == 2){echo "text-decoration:line-through; color: #818289; font-weight: bold;";}?>" target="_blank" href="<?=$startUrl;?>/task/view/<?=$task['id_task'];?>"><?=$task['id_task'];?> - <?=$task['title'];?></a><br>
+                                <a style="<?php if($task['status'] == 2){echo "text-decoration:line-through; color: #818289; font-weight: bold;";}?>"  href="<?=$startUrl;?>/task/view/<?=$task['id_task'];?>"><?=$task['id_task'];?> - <?=$task['title'];?></a><br>
                                 <?=$task_views[66]?> <?=$task['title_project'];?>
                                 <hr style="margin-bottom: -40px; border: none;">
                             </td>
