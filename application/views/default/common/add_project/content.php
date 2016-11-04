@@ -74,14 +74,14 @@ if(isset($iAdminCheck)):?>
                         <tr id="line_project_<?=$val['id_project']?>" class="project">
                             <td><?=$i?></td>
                             <td class="showHiddenName" >
-                                <a id="nameProject_<?=$val['id_project']?>" href="<?=$val['id_project']?>"><?=$val['title']?></a>
+                                <a id="nameProject_<?=$val['id_project']?>" href="" onclick="return false;" style="text-decoration: none; color: #333;"><?=$val['title']?></a>
                                 <input type='text' id='reName__<?=$val['id_project']?>' class='form-control' value='<?=$val['title']?>'>
                             </td>
                             <td >
 
 
                                 <div id="groupBtn_<?=$val['id_project']?>" data-id="<?=$val['id_project']?>">
-                                    <div class="btn btn-default toogle-user" ><?=$task_views[8]?></div>
+                                    <div class="btn btn-default toogle-user" data-id="<?=$val['id_project']?>"><?=$task_views[8]?></div>
                                     <div class="btn btn-info btnReName" id="reNameOpen_<?=$val['id_project']?>" data-id="<?=$val['id_project']?>"><?=$task_views[10]?></div>
                                     <div  id="delete_project_<?=$val['id_project']?>" onclick="deleteData('task/deleteProject','line_project_', <?=$val['id_project']?>);" class="btn btn-danger"><?=$task_views[9]?> <i class="fa fa-trash-o"></i></div>
                                 </div>
@@ -91,20 +91,22 @@ if(isset($iAdminCheck)):?>
                         </tr>
                         <tr style="background-color: rgb(206, 206, 206);">
                             <td colspan="3">
-                                <table class="table table-bordered hidden_my" style="display: none;" id="addUserProject_<?=$val['id_project']?>">
-                                    <thead><tr><th><?=$task_views[18]?></th></tr></thead>
-                                    <tbody>
-                                    <tr>
-                                        <td>
+                                <div class="hidden_my" style="display: none;" id="addUserProject_<?=$val['id_project']?>">
+                                    <table class="table table-bordered">
+                                        <thead><tr><th><?=$task_views[18]?></th></tr></thead>
+                                        <tbody>
+                                        <tr>
+                                            <td>
 
-                                            <span class="label label-danger error" id="tagsInputAutocompleteError_<?=$val['id_project']?>"></span>
-                                            <br><br>
-                                            <input name="addUsers" value="<?=$userForProject[$val['id_project']]?>" autocomplete="off" data-id="<?=$val['id_project']?>" id="tagsInputAutocomplete_<?=$val['id_project']?>" type="text" class="addUserProject" data-role="tagsinput" placeholder="<?=$task_views[18]?>">
-                                            <input type="submit" value="<?=$task_views[31]?>" class="delUserProject" data-id="<?=$val['id_project']?>">
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
+                                                <span class="label label-danger error" id="tagsInputAutocompleteError_<?=$val['id_project']?>"></span>
+                                                <br><br>
+                                                <input name="addUsers" value="<?=$userForProject[$val['id_project']]?>" autocomplete="off" data-id="<?=$val['id_project']?>" id="tagsInputAutocomplete_<?=$val['id_project']?>" type="text" class="addUserProject" data-role="tagsinput" placeholder="<?=$task_views[18]?>">
+                                                <input type="submit" value="<?=$task_views[31]?>" class="delUserProject" data-id="<?=$val['id_project']?>">
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </td>
                         </tr>
                     <?php $i++; endforeach;?>

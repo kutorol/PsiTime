@@ -1335,21 +1335,21 @@ $(function() {
      */
     $(".toogle-user").click(function() {
 
-        var id = $(this).parent().attr('data-id');
+        var id = $(this).attr('data-id');
         var idAttach;
         //скрываем все поля добавления юзера к проекту, кроме выбранного
         $.each($(".addUserProject"), function( index, value ) {
             idAttach = $(value).attr("data-id");
             if(idAttach != id)
-                $("#addUserProject_"+idAttach).hide(500).addClass("hidden_my");
+                $("#addUserProject_"+idAttach).slideUp(500).addClass("hidden_my");
         });
 
         //открываем поле добавления юзера или скрываем
         var selector = $("#addUserProject_"+id);
         if(selector.hasClass("hidden_my"))
-            selector.show(500).removeClass("hidden_my");
+            selector.slideDown(500).removeClass("hidden_my");
         else
-            selector.hide(500).addClass("hidden_my");
+            selector.slideUp(500).addClass("hidden_my");
 
         var inputTags = $('#tagsInputAutocomplete_'+id);
         //автокоплит юзеров
@@ -1397,7 +1397,6 @@ $(function() {
                 }
             })});
     });
-
     /**
      * Одной кнопкой удаляем все теги. Это при удалении людей из проекта
      * One button to remove all tags. It during removal of people from the project

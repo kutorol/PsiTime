@@ -336,6 +336,7 @@ class Chart extends CI_Controller {
 
             foreach($allIdTeam as $k=>$idOneUser)
             {
+
                 //создаем ячейки под проекты
                 foreach($idOneUser['id_project'] as $id_project)
                 {
@@ -365,6 +366,8 @@ class Chart extends CI_Controller {
                         $this->_computeTimeForEnd($taskUsers[$k][$key], $data);
 
 
+
+
                         //для всех проектов
                         //считаем сколько всего было затрачено времени на выполнение всех задач
                         $data['timeForUser'][$idOneUser[0]]['allWorkDays'] += $taskUsers[$k][$key]['howWorkDay'];
@@ -373,22 +376,25 @@ class Chart extends CI_Controller {
                         if($data['timeForUser'][$idOneUser[0]]['allWorkHours'] >= $taskUsers[$k][$key]['hoursInDayToWork'])
                         {
                             $data['timeForUser'][$idOneUser[0]]['allWorkDays']++;
-                            $data['timeForUser'][$idOneUser[0]]['allWorkHours'] -= $data['hoursInDayToWork'];
+                            $data['timeForUser'][$idOneUser[0]]['allWorkHours'] = 0;
                         }
 
                         $data['timeForUser'][$idOneUser[0]]['allWorkMinutes'] += $taskUsers[$k][$key]['howMinute'];
                         if($data['timeForUser'][$idOneUser[0]]['allWorkMinutes'] >= 60)
                         {
                             $data['timeForUser'][$idOneUser[0]]['allWorkHours']++;
-                            $data['timeForUser'][$idOneUser[0]]['allWorkMinutes'] -= 60;
+                            $data['timeForUser'][$idOneUser[0]]['allWorkMinutes'] = 0;
                         }
 
                         $data['timeForUser'][$idOneUser[0]]['allWorkSeconds'] += $taskUsers[$k][$key]['howSecond'];
                         if($data['timeForUser'][$idOneUser[0]]['allWorkSeconds'] >= 60)
                         {
                             $data['timeForUser'][$idOneUser[0]]['allWorkMinutes']++;
-                            $data['timeForUser'][$idOneUser[0]]['allWorkSeconds'] -= 60;
+                            $data['timeForUser'][$idOneUser[0]]['allWorkSeconds'] = 0;
                         }
+
+
+
 
                         //для проекта
                         $data['timeForProject'][$idOneUser[0]]['project_'.$task['project_id']]['allWorkDays'] += $taskUsers[$k][$key]['howWorkDay'];
@@ -396,24 +402,23 @@ class Chart extends CI_Controller {
                         if($data['timeForProject'][$idOneUser[0]]['project_'.$task['project_id']]['allWorkHours'] >= $taskUsers[$k][$key]['hoursInDayToWork'])
                         {
                             $data['timeForProject'][$idOneUser[0]]['project_'.$task['project_id']]['allWorkDays']++;
-                            $data['timeForProject'][$idOneUser[0]]['project_'.$task['project_id']]['allWorkHours'] -= $data['hoursInDayToWork'];
+                            $data['timeForProject'][$idOneUser[0]]['project_'.$task['project_id']]['allWorkHours'] = 0;
                         }
 
                         $data['timeForProject'][$idOneUser[0]]['project_'.$task['project_id']]['allWorkMinutes'] += $taskUsers[$k][$key]['howMinute'];
                         if($data['timeForProject'][$idOneUser[0]]['project_'.$task['project_id']]['allWorkMinutes'] >= 60)
                         {
                             $data['timeForProject'][$idOneUser[0]]['project_'.$task['project_id']]['allWorkHours']++;
-                            $data['timeForProject'][$idOneUser[0]]['project_'.$task['project_id']]['allWorkMinutes'] -= 60;
+                            $data['timeForProject'][$idOneUser[0]]['project_'.$task['project_id']]['allWorkMinutes'] = 0;
                         }
 
                         $data['timeForProject'][$idOneUser[0]]['project_'.$task['project_id']]['allWorkSeconds'] += $taskUsers[$k][$key]['howSecond'];
                         if($data['timeForUser'][$idOneUser[0]]['allWorkSeconds'] >= 60)
                         {
                             $data['timeForProject'][$idOneUser[0]]['project_'.$task['project_id']]['allWorkMinutes']++;
-                            $data['timeForProject'][$idOneUser[0]]['project_'.$task['project_id']]['allWorkSeconds'] -= 60;
+                            $data['timeForProject'][$idOneUser[0]]['project_'.$task['project_id']]['allWorkSeconds'] = 0;
                         }
                     }
-
 
                     //высчитываем количество времени в часах, которое было потрачено на все выполненые задания в полученных проектах
                     $data['timeForUser'][$idOneUser[0]]['allTime'] = ($data['timeForUser'][$idOneUser[0]]['allWorkDays'] * $data['timeForUser'][$idOneUser[0]]['hoursInDayToWork']) + $data['timeForUser'][$idOneUser[0]]['allWorkHours'] + $data['timeForUser'][$idOneUser[0]]['allWorkMinutes']/60 + $data['timeForUser'][$idOneUser[0]]['allWorkSeconds']/3600;
