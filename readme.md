@@ -80,7 +80,7 @@
 MIT [Лицензия][MITlicenseRus]
 
 [//]: #
-   [EReadme]: <http://english.version.com/readme_en.md>
+   [EReadme]: <https://github.com/kutorol/PsiTime/blob/master/readme_en.md>
    [HClicense]: <http://creativecommons.org/licenses/by-nc/3.0/>
    [shopHC]: <http://shop.highsoft.com/highcharts.html>
    [MITlicenseRus]: <https://ru.wikipedia.org/wiki/%D0%9B%D0%B8%D1%86%D0%B5%D0%BD%D0%B7%D0%B8%D1%8F_MIT> 
