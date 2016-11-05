@@ -1,12 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 /**
-* Отображает красиво вывод массивов через d(array());
-* Displays beautiful conclusion arrays by d(array());
-*/
-require_once "vendor/autoload.php";
-
-/**
  * Если заполнено - это значит то, что человек закончил установку и то, что он вообще редактировал этот файл
  * If filled - it means that the person has finished the installation and the fact that he did edit this file
  */
@@ -16,7 +10,7 @@ define('IS_FILL_KEY', 'a5s3d6030b');
  * Настройка базы данных
  * Setting up the database
  */
-define('NAME_DB', 'time_log_home');
+define('NAME_DB', '');
 define('USER_DB', 'root');
 define('PASSWORD_DB', '');
 define('HOST_DB', 'localhost');
@@ -34,7 +28,8 @@ define('MAX_WORK_TIME_IN_DAY', '8'); //количество рабочих ча�
 
 //!!!!!!!! вконце обязательно поставить "/", а в начале http://
 //!!!!!!!! be sure to put at the end of "/", do not forget http://
-define('SITE_URL', 'http://PsiTime.org/');
+//Ex: http://PsiTime.org/
+define('SITE_URL', '');
 
 /**
  * Постраничная навигация.
