@@ -80,7 +80,7 @@ If you were interested by this project, perhaps you want to develop it together 
 MIT [License][MITlicenseEn]
 
 [//]: #
-   [RReadme]: <http://english.version.com/readme.md>
+   [RReadme]: <https://github.com/kutorol/PsiTime>
    [HClicense]: <http://creativecommons.org/licenses/by-nc/3.0/>
    [shopHC]: <http://shop.highsoft.com/highcharts.html>
    [MITlicenseEn]: <https://opensource.org/licenses/MIT>
