@@ -43,14 +43,14 @@ It should work on 5.2.4 as well, but we strongly advise you NOT to run such old 
 	define('ENVIRONMENT', 'production');
   ```
   - In the ./application/config/database.php instead of TRUE, deliver FALSE in a line: (to disconnect error output on the screen, connected to mysql)
-  ```sh
+  ```
 	$db['default']['db_debug'] = TRUE;
   ```
   - When you fill all constants in config.php, then it is possible to launch the site.
   - If at you the database is initially not created, application will create it automatically, also all tables necessary for operation of application, will be created automatically (it is possible to view structure of tables in ./application/migrations/001_start_db.php)
   - Now you can be authorized those data which entered in ./config.php
   - If you don't need Develbar, disconnect it in ./application/config/hooks.php. Delete:
-  ```sh
+  ```
 	$hook['display_override'][] = array(
 		'class'    => 'Develbar',
 		'function'     => 'debug',
@@ -59,7 +59,7 @@ It should work on 5.2.4 as well, but we strongly advise you NOT to run such old 
 	);
   ```
   - If not to be pleasant to you the translation of words, correct it in files:
-  ```sh
+  ```
 	./application/libraries/language/lang_controller.php
 	./application/language/db_hook/
 	./application/language/russian/
