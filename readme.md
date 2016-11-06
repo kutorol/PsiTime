@@ -43,7 +43,7 @@
 	define('ENVIRONMENT', 'production');
   ```
   - В ./application/config/database.php вместо TRUE, поставьте FALSE в строчке: (чтобы отключить вывод ошибок на экран, связанных с mysql)
-  ```sh
+  ```
 	$db['default']['db_debug'] = TRUE;
   ```
   - Когда вы заполните все константы в config.php, тогда можно запускать сайт. 
@@ -59,7 +59,7 @@
 	);
   ```
   - Если вам не нравиться перевод слов, то исправьте его в файлах: 
-  ```sh
+  ```
 	./application/libraries/language/lang_controller.php
 	./application/language/db_hook/
 	./application/language/russian/
